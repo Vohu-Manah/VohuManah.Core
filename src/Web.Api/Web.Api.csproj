@@ -1,10 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <RootNamespace>VohuManah.Web.Api</RootNamespace>
+    <AssemblyName>VohuManah.Web.Api</AssemblyName>
     <UserSecretsId>7af30323-108a-4923-bd46-e13b7648968c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Keywords>VohuManah</Keywords>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Application.Abstractions.Authentication;
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
@@ -35,7 +36,9 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         // Caching services
-        services.AddSingleton<ICacheManager, MemoryCacheManager>();
+        var cacheManager = new MemoryCacheManager();
+        services.AddSingleton<Infrastructure.Caching.ICacheManager>(cacheManager);
+        services.AddSingleton<Application.Abstractions.Caching.ICacheManager>(cacheManager);
 
         // Helper services
         services.AddSingleton<IPersianCalendar, PersianCalendarService>();
@@ -50,11 +53,11 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(
             options => options
-                .UseNpgsql(connectionString, npgsqlOptions =>
-                    npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default))
-                .UseSnakeCaseNamingConvention());
+                .UseSqlServer(connectionString, sqlServerOptions =>
+                    sqlServerOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default)));
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         return services;
     }
@@ -63,7 +66,7 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
-            .AddNpgSql(configuration.GetConnectionString("Database")!);
+            .AddSqlServer(configuration.GetConnectionString("Database")!);
 
         return services;
     }
@@ -89,6 +92,7 @@ public static class DependencyInjection
         services.AddScoped<IUserContext, UserContext>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<ITokenProvider, TokenProvider>();
+                services.AddScoped<Application.Abstractions.Authentication.ILibraryTokenProvider, Infrastructure.Authentication.LibraryTokenProvider>();
 
         return services;
     }

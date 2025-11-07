@@ -22,7 +22,9 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
 
-app.MapEndpoints();
+var secured = app.MapGroup("/").RequireAuthorization();
+
+app.MapEndpoints(secured);
 
 if (app.Environment.IsDevelopment())
 {

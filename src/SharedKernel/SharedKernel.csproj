@@ -1,3 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <RootNamespace>VohuManah.SharedKernel</RootNamespace>
+    <AssemblyName>VohuManah.SharedKernel</AssemblyName>
+    <Keywords>VohuManah</Keywords>
+  </PropertyGroup>
+
 </Project>

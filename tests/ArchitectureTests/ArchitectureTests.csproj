@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RootNamespace>VohuManah.ArchitectureTests</RootNamespace>
+    <AssemblyName>VohuManah.ArchitectureTests</AssemblyName>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <Keywords>VohuManah</Keywords>
   </PropertyGroup>
 
   <ItemGroup>

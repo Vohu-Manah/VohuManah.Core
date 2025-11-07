@@ -6,20 +6,15 @@ services:
       context: .
       dockerfile: src/Web.Api/Dockerfile
     ports:
-      - 5000:8080
-      - 5001:8081
-
-  postgres:
-    image: postgres:17
-    container_name: postgres
+      - 5000:5000
+      - 5001:5001
     environment:
-      - POSTGRES_DB=base-clean-architecture-none-ddd
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - ./.containers/db:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+      - ConnectionStrings__Database=Server=192.168.8.100;Database=Library;User Id=sa;Password=#mohsen@ma78;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
+
+  # sql-server service removed; using external SQL at 192.168.8.100
 
   seq:
     image: datalust/seq:2024.3

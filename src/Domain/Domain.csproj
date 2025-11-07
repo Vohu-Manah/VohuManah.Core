@@ -1,5 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <RootNamespace>VohuManah.Domain</RootNamespace>
+    <AssemblyName>VohuManah.Domain</AssemblyName>
+    <Keywords>VohuManah</Keywords>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>

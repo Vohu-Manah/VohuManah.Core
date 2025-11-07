@@ -2,9 +2,11 @@
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 
+using Application.Abstractions.Caching;
+
 namespace Infrastructure.Caching;
 
-public sealed class MemoryCacheManager : ICacheManager
+public sealed class MemoryCacheManager : ICacheManager, Application.Abstractions.Caching.ICacheManager
 {
     private readonly ObjectCache _cache = MemoryCache.Default;
 
