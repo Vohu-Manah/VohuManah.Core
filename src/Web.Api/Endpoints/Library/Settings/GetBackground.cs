@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Settings.GetBackground;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-internal sealed class GetBackground : IEndpoint
+[RequireRole("Library.Settings.GetBackground")]
+internal sealed class GetBackground : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/settings/background/folder", async (
             IQueryHandler<GetCurrentBackgroundImageFolderQuery, string> handler,
@@ -18,6 +21,7 @@ internal sealed class GetBackground : IEndpoint
             Result<string> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
 
         app.MapGet("library/settings/background/name", async (
@@ -28,6 +32,7 @@ internal sealed class GetBackground : IEndpoint
             Result<string> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
 
         app.MapGet("library/settings/background/path", async (
@@ -38,6 +43,7 @@ internal sealed class GetBackground : IEndpoint
             Result<string> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
     }
 }

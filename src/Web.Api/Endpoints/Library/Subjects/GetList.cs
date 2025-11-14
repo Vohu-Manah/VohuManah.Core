@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Subjects.GetList;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Subjects;
 
-internal sealed class GetList : IEndpoint
+[RequireRole("Library.Subjects.GetList")]
+internal sealed class GetList : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/subjects/list", async (
             IQueryHandler<GetSubjectListQuery, List<SubjectListResponse>> handler,
@@ -20,6 +23,7 @@ internal sealed class GetList : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Subjects");
     }
 }

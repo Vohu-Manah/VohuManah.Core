@@ -1,12 +1,15 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Users.Update;
 using SharedKernel;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Users;
 
-internal sealed class Update : IEndpoint
+[RequireRole("Library.Users.Update")]
+internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
         string UserName,
@@ -14,7 +17,7 @@ internal sealed class Update : IEndpoint
         string Name,
         string LastName);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("library/users", async (
             Request request,
@@ -31,6 +34,7 @@ internal sealed class Update : IEndpoint
 
             return result.IsSuccess ? Results.Ok() : CustomResults.Problem(result);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Users");
     }
 }

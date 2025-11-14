@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Settings.GetMainTitle;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-internal sealed class GetMainTitle : IEndpoint
+[RequireRole("Library.Settings.GetMainTitle")]
+internal sealed class GetMainTitle : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/settings/main-title", async (
             IQueryHandler<GetApplicationMainTitleQuery, string> handler,
@@ -18,6 +21,7 @@ internal sealed class GetMainTitle : IEndpoint
             Result<string> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
     }
 }

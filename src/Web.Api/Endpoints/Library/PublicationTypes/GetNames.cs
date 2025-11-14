@@ -3,13 +3,16 @@ using Application.Library.PublicationTypes.GetNames;
 using Application.Library._Shared;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.PublicationTypes;
 
-internal sealed class GetNames : IEndpoint
+[RequireRole("Library.PublicationTypes.GetNames")]
+internal sealed class GetNames : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/publication-types/names", async (
             bool? addAll,
@@ -20,6 +23,7 @@ internal sealed class GetNames : IEndpoint
             Result<List<SelectItemResponse>> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.PublicationTypes");
     }
 }

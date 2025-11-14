@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Books.GetCount;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-internal sealed class GetCount : IEndpoint
+[RequireRole("Library.Books.GetCount")]
+internal sealed class GetCount : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/books/count", async (
             IQueryHandler<GetBookCountQuery, int> handler,
@@ -20,6 +23,7 @@ internal sealed class GetCount : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Books");
     }
 }

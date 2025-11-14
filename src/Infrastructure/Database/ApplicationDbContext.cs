@@ -24,6 +24,7 @@ public sealed class ApplicationDbContext(
     public DbSet<Settings> Settings { get; set; }
             public DbSet<Role> Roles { get; set; }
             public DbSet<UserRole> UserRoles { get; set; }
+            public DbSet<RolePermission> RolePermissions { get; set; }
             public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class

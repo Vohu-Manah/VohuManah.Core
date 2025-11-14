@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.Delete;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-internal sealed class Delete : IEndpoint
+[RequireRole("Library.Manuscripts.Delete")]
+internal sealed class Delete : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete("library/manuscripts/{id:int}", async (
             int id,
@@ -21,6 +24,7 @@ internal sealed class Delete : IEndpoint
 
             return result.IsSuccess ? Results.Ok() : CustomResults.Problem(result);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Manuscripts");
     }
 }

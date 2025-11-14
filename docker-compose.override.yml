@@ -1,14 +1,13 @@
 services:
   web-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5000
-      - ASPNETCORE_HTTPS_PORTS=5001
-      - ConnectionStrings__Database=Server=192.168.8.100;Database=Library;User Id=sa;Password=#mohsen@ma78;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
+      - ASPNETCORE_HTTPS_PORTS=${ASPNETCORE_HTTPS_PORTS}
+      - ConnectionStrings__Database=Server=${SQL_SERVER_HOST};Database=${SQL_SERVER_DATABASE};User Id=${SQL_SERVER_USER};Password=${SQL_SERVER_PASSWORD};TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
     ports:
-      - "5000"
-      - "5001"
+      - "${ASPNETCORE_HTTP_PORTS}"
+      - "${ASPNETCORE_HTTPS_PORTS}"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-    # no dependency on sql-server; using external SQL instance

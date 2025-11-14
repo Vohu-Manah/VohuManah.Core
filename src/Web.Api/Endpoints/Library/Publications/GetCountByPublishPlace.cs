@@ -3,13 +3,16 @@ using Application.Library.Publications.GetCountByPublishPlace;
 using Application.Library._Shared;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Publications;
 
-internal sealed class GetCountByPublishPlace : IEndpoint
+[RequireRole("Library.Publications.GetCountByPublishPlace")]
+internal sealed class GetCountByPublishPlace : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/publications/count-by-publish-place", async (
             IQueryHandler<GetPublicationCountByPublishPlaceQuery, List<ListItemResponse>> handler,
@@ -21,6 +24,7 @@ internal sealed class GetCountByPublishPlace : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Publications");
     }
 }

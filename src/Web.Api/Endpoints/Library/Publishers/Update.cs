@@ -2,11 +2,14 @@ using Application.Abstractions.Messaging;
 using Application.Library.Publishers.Update;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Publishers;
 
-internal sealed class Update : IEndpoint
+[RequireRole("Library.Publishers.Update")]
+internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
         int Id,
@@ -18,7 +21,7 @@ internal sealed class Update : IEndpoint
         string Website,
         string Email);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("library/publishers", async (
             Request request,
@@ -39,6 +42,7 @@ internal sealed class Update : IEndpoint
 
             return result.IsSuccess ? Results.Ok() : CustomResults.Problem(result);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Publishers");
     }
 }

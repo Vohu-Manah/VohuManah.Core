@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Settings.GetByName;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-internal sealed class GetByName : IEndpoint
+[RequireRole("Library.Settings.GetByName")]
+internal sealed class GetByName : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/settings/by-name/{name}", async (
             string name,
@@ -21,6 +24,7 @@ internal sealed class GetByName : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
     }
 }

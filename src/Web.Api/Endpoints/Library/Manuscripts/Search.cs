@@ -2,11 +2,14 @@ using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.Search;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-internal sealed class Search : IEndpoint
+[RequireRole("Library.Manuscripts.Search")]
+internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(
         string? Name,
@@ -22,7 +25,7 @@ internal sealed class Search : IEndpoint
         int GapId,
         string? Size);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("library/manuscripts/search", async (
             Request request,
@@ -47,6 +50,7 @@ internal sealed class Search : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Manuscripts");
     }
 }

@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Gaps.GetAll;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Gaps;
 
-internal sealed class GetAll : IEndpoint
+[RequireRole("Library.Gaps.GetAll")]
+internal sealed class GetAll : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/gaps", async (
             IQueryHandler<GetAllGapsQuery, List<GapResponse>> handler,
@@ -20,6 +23,7 @@ internal sealed class GetAll : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Gaps");
     }
 }

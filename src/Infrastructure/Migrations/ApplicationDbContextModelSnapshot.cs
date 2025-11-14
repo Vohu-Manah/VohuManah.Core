@@ -519,6 +519,30 @@ namespace Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Library.RolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EndpointName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId", "EndpointName")
+                        .IsUnique();
+
+                    b.ToTable("RolePermission", "dbo");
+                });
+
             modelBuilder.Entity("Domain.Library.Settings", b =>
                 {
                     b.Property<int>("Id")
@@ -643,7 +667,7 @@ namespace Infrastructure.Migrations
                             Id = 1L,
                             LastName = "admin",
                             Name = "admin",
-                            Password = "9843417E11AFA30B39EB2E974DC2DCB2E53D4B608E665E478A1686C065107225-71815962DF6849A69BE50976ECA3DA44",
+                            Password = "B05F1E80296568B029444A3F9DCC720EC6E333C0645504176176BD5D908C3EE3-8E32A640C561036242C9E8664803CDCA",
                             UserName = "admin"
                         });
                 });
@@ -816,6 +840,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("PublicationType");
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Domain.Library.RolePermission", b =>
+                {
+                    b.HasOne("Domain.Library.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Domain.Library.City", b =>

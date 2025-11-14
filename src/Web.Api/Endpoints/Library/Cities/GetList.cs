@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Cities.GetList;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Cities;
 
-internal sealed class GetList : IEndpoint
+[RequireRole("Library.Cities.GetList")]
+internal sealed class GetList : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/cities/list", async (
             IQueryHandler<GetCityListQuery, List<CityListResponse>> handler,
@@ -20,6 +23,7 @@ internal sealed class GetList : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Cities");
     }
 }

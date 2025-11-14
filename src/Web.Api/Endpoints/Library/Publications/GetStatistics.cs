@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Publications.GetStatistics;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Publications;
 
-internal sealed class GetStatistics : IEndpoint
+[RequireRole("Library.Publications.GetStatistics")]
+internal sealed class GetStatistics : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/publications/statistics", async (
             IQueryHandler<GetPublicationStatisticsQuery, PublicationStatisticsResponse> handler,
@@ -20,6 +23,7 @@ internal sealed class GetStatistics : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Publications");
     }
 }

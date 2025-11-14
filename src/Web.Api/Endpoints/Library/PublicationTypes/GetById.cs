@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.PublicationTypes.GetById;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.PublicationTypes;
 
-internal sealed class GetById : IEndpoint
+[RequireRole("Library.PublicationTypes.GetById")]
+internal sealed class GetById : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/publication-types/{id:int}", async (
             int id,
@@ -21,6 +24,7 @@ internal sealed class GetById : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.PublicationTypes");
     }
 }

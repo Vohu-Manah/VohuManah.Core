@@ -2,11 +2,14 @@ using Application.Abstractions.Messaging;
 using Application.Library.Publications.Update;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Publications;
 
-internal sealed class Update : IEndpoint
+[RequireRole("Library.Publications.Update")]
+internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
         int Id,
@@ -24,7 +27,7 @@ internal sealed class Update : IEndpoint
         int LanguageId,
         int SubjectId);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("library/publications", async (
             Request request,
@@ -51,6 +54,7 @@ internal sealed class Update : IEndpoint
 
             return result.IsSuccess ? Results.Ok() : CustomResults.Problem(result);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Publications");
     }
 }

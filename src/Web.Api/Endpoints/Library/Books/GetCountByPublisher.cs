@@ -3,13 +3,16 @@ using Application.Library.Books.GetCountByPublisher;
 using Application.Library._Shared;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-internal sealed class GetCountByPublisher : IEndpoint
+[RequireRole("Library.Books.GetCountByPublisher")]
+internal sealed class GetCountByPublisher : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/books/count-by-publisher", async (
             IQueryHandler<GetBookCountByPublisherQuery, List<ListItemResponse>> handler,
@@ -21,6 +24,7 @@ internal sealed class GetCountByPublisher : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Books");
     }
 }

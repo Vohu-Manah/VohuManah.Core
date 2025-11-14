@@ -2,11 +2,14 @@ using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.Create;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-internal sealed class Create : IEndpoint
+[RequireRole("Library.Manuscripts.Create")]
+internal sealed class Create : BaseEndpoint
 {
     public sealed record Request(
         string Name,
@@ -20,7 +23,7 @@ internal sealed class Create : IEndpoint
         int LanguageId,
         int SubjectId);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("library/manuscripts", async (
             Request request,
@@ -43,6 +46,7 @@ internal sealed class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Manuscripts");
     }
 }

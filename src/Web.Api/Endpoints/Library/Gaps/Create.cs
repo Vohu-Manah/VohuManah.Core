@@ -2,15 +2,18 @@ using Application.Abstractions.Messaging;
 using Application.Library.Gaps.Create;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Gaps;
 
-internal sealed class Create : IEndpoint
+[RequireRole("Library.Gaps.Create")]
+internal sealed class Create : BaseEndpoint
 {
     public sealed record Request(string Title, string Note, bool State);
 
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("library/gaps", async (
             Request request,
@@ -23,6 +26,7 @@ internal sealed class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Gaps");
     }
 }

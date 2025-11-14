@@ -2,13 +2,16 @@ using Application.Abstractions.Messaging;
 using Application.Library.Users.GetAll;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Users;
 
-internal sealed class GetAll : IEndpoint
+[RequireRole("Library.Users.GetAll")]
+internal sealed class GetAll : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/users", async (
             IQueryHandler<GetAllLibraryUsersQuery, List<LibraryUserResponse>> handler,
@@ -20,6 +23,7 @@ internal sealed class GetAll : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Users");
     }
 }

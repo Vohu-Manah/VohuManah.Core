@@ -1,25 +1,41 @@
 services:
+  sql-server:
+    image: ${SQL_SERVER_IMAGE:-mcr.microsoft.com/mssql/server:2022-latest}
+    container_name: ${SQL_SERVER_CONTAINER_NAME:-sql-server}
+    environment:
+      - ACCEPT_EULA=${SQL_SERVER_ACCEPT_EULA}
+      - MSSQL_SA_PASSWORD=${SQL_SERVER_PASSWORD}
+      - MSSQL_PID=${SQL_SERVER_PID}
+    ports:
+      - "${SQL_SERVER_PORT}:1433"
+    volumes:
+      - sql-server-data:/var/opt/mssql
+
   web-api:
-    image: ${DOCKER_REGISTRY-}webapi
-    container_name: web-api
+    image: ${DOCKER_REGISTRY:-}${WEB_API_IMAGE_NAME}
+    container_name: ${WEB_API_CONTAINER_NAME:-web-api}
     build:
       context: .
       dockerfile: src/Web.Api/Dockerfile
     ports:
-      - 5000:5000
-      - 5001:5001
+      - "${ASPNETCORE_HTTP_PORTS}:5000"
+      - "${ASPNETCORE_HTTPS_PORTS}:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5000
-      - ASPNETCORE_HTTPS_PORTS=5001
-      - ConnectionStrings__Database=Server=192.168.8.100;Database=Library;User Id=sa;Password=#mohsen@ma78;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
-
-  # sql-server service removed; using external SQL at 192.168.8.100
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
+      - ASPNETCORE_HTTPS_PORTS=${ASPNETCORE_HTTPS_PORTS}
+      - ConnectionStrings__Database=Server=${SQL_SERVER_HOST};Database=${SQL_SERVER_DATABASE};User Id=${SQL_SERVER_USER};Password=${SQL_SERVER_PASSWORD};TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
+    depends_on:
+      sql-server:
+        condition: service_started
 
   seq:
-    image: datalust/seq:2024.3
-    container_name: seq
+    image: ${SEQ_IMAGE:-datalust/seq:2024.3}
+    container_name: ${SEQ_CONTAINER_NAME:-seq}
     environment:
-      - ACCEPT_EULA=Y
+      - ACCEPT_EULA=${SEQ_ACCEPT_EULA:-Y}
     ports:
-      - 8081:80
+      - "${SEQ_PORT}:80"
+
+volumes:
+  sql-server-data:

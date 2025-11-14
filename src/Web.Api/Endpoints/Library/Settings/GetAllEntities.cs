@@ -3,13 +3,16 @@ using Application.Library.Settings.GetAllEntities;
 using Domain.Library;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-internal sealed class GetAllEntities : IEndpoint
+[RequireRole("Library.Settings.GetAllEntities")]
+internal sealed class GetAllEntities : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/settings/entities", async (
             IQueryHandler<GetAllSettingsEntitiesQuery, List<Domain.Library.Settings>> handler,
@@ -21,6 +24,7 @@ internal sealed class GetAllEntities : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Settings");
     }
 }

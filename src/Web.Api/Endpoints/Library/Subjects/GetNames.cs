@@ -3,13 +3,16 @@ using Application.Library.Subjects.GetNames;
 using Application.Library._Shared;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Subjects;
 
-internal sealed class GetNames : IEndpoint
+[RequireRole("Library.Subjects.GetNames")]
+internal sealed class GetNames : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/subjects/names", async (
             bool? addAll,
@@ -20,6 +23,7 @@ internal sealed class GetNames : IEndpoint
             Result<List<SelectItemResponse>> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Subjects");
     }
 }

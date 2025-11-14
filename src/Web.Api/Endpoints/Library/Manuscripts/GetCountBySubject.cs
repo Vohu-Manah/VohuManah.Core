@@ -3,13 +3,16 @@ using Application.Library.Manuscripts.GetCountBySubject;
 using Application.Library._Shared;
 using SharedKernel;
 using Web.Api.Extensions;
+using Web.Api.Endpoints;
+using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-internal sealed class GetCountBySubject : IEndpoint
+[RequireRole("Library.Manuscripts.GetCountBySubject")]
+internal sealed class GetCountBySubject : BaseEndpoint
 {
-    public void MapEndpoint(IEndpointRouteBuilder app)
+    public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/manuscripts/count-by-subject", async (
             IQueryHandler<GetManuscriptCountBySubjectQuery, List<ListItemResponse>> handler,
@@ -21,6 +24,7 @@ internal sealed class GetCountBySubject : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ApplyRoleAuthorization(this)
         .WithTags("Library.Manuscripts");
     }
 }
