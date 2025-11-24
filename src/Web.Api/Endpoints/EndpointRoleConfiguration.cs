@@ -1,3 +1,4 @@
+using Application.Library.Settings;
 using System.Collections.Immutable;
 using System.Collections.Generic;
 
@@ -51,34 +52,8 @@ public static class EndpointRoleConfiguration
     /// - "Library.Users.Update"
     /// - "Library.Publications.Delete"
     /// </summary>
-    public static readonly ImmutableDictionary<string, ImmutableArray<string>> RoleEndpointMapping = ImmutableDictionary<string, ImmutableArray<string>>.Empty;
-        // نقش Admin به صورت پیش‌فرض به همه endpointها دسترسی دارد
-        // برای نقش‌های دیگر، endpointهای خاص را مشخص کنید:
-        
-        // ============================================
-        // مثال: نقش Librarian
-        // ============================================
-        // RoleEndpointMapping = RoleEndpointMapping.Add("Librarian", ImmutableArray.Create(
-        //     "Library.Books.Create", 
-        //     "Library.Books.Update", 
-        //     "Library.Books.Delete",
-        //     "Library.Books.GetById",
-        //     "Library.Books.GetList",
-        //     "Library.Books.Search",
-        //     "Library.Publications.Create",
-        //     "Library.Publications.Update",
-        //     "Library.Publications.Delete"));
-        
-        // ============================================
-        // مثال: نقش User (دسترسی فقط خواندن)
-        // ============================================
-        // RoleEndpointMapping = RoleEndpointMapping.Add("User", ImmutableArray.Create(
-        //     "Library.Books.GetById", 
-        //     "Library.Books.GetList",
-        //     "Library.Books.Search",
-        //     "Library.Publications.GetById",
-        //     "Library.Publications.GetList",
-        //     "Library.Publications.Search"));
+    public static readonly ImmutableDictionary<string, ImmutableArray<string>> RoleEndpointMapping =
+        RolePermissionDefaults.RoleEndpointMapping;
 
     /// <summary>
     /// بررسی می‌کند که آیا endpoint باید AllowAnonymous باشد

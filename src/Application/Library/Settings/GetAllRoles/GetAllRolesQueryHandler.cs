@@ -11,7 +11,7 @@ internal sealed class GetAllRolesQueryHandler(
     IUnitOfWork unitOfWork,
     ICacheManager cacheManager) : IQueryHandler<GetAllRolesQuery, List<RoleResponse>>
 {
-    private const string RolesAllKey = "sdp.roles.all";
+    internal const string RolesAllKey = "sdp.roles.all";
 
     public Task<Result<List<RoleResponse>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {

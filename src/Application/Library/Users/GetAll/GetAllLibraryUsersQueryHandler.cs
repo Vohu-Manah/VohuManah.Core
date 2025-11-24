@@ -21,6 +21,7 @@ internal sealed class GetAllLibraryUsersQueryHandler(
         
         List<LibraryUserResponse> response = allUsers.Select(u => new LibraryUserResponse
         {
+            Id = u.Id,
             UserName = u.UserName,
             Name = u.Name,
             LastName = u.LastName,

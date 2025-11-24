@@ -15,13 +15,13 @@ internal sealed class AssignRoleToUser : BaseEndpoint
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("library/settings/users/{userName}/roles", async (
-            string userName,
+        app.MapPost("library/settings/users/{userId:long}/roles", async (
+            long userId,
             Request request,
             ICommandHandler<AssignRoleToUserCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new AssignRoleToUserCommand(userName, request.RoleId);
+            var command = new AssignRoleToUserCommand(userId, request.RoleId);
 
             Result result = await handler.Handle(command, cancellationToken);
 

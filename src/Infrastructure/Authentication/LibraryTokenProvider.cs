@@ -18,7 +18,7 @@ internal sealed class LibraryTokenProvider(
     public async Task<string> CreateAsync(User user, CancellationToken ct)
     {
         var userRoles = await unitOfWork.Set<UserRole>()
-            .Where(ur => ur.UserName == user.UserName)
+            .Where(ur => ur.UserId == user.Id)
             .Select(ur => ur.RoleId)
             .ToListAsync(ct);
 

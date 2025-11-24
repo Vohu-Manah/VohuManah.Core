@@ -17,7 +17,7 @@ internal sealed class CreateLibraryUserCommandHandler(
 
     public async Task<Result<string>> Handle(CreateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
+        DbSet<User> users = unitOfWork.Set<User>();
         
         if (await users.AnyAsync(u => u.UserName == command.UserName, cancellationToken))
         {
@@ -26,7 +26,7 @@ internal sealed class CreateLibraryUserCommandHandler(
 
         string passwordHash = passwordHasher.Hash(command.Password);
 
-        Domain.Library.User user = new Domain.Library.User {
+        var user = new User {
             UserName = command.UserName,
             Password = passwordHash,
             Name = command.Name,

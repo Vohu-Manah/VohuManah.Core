@@ -13,13 +13,13 @@ internal sealed class RemoveRoleFromUser : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("library/settings/users/{userName}/roles/{roleId:int}", async (
-            string userName,
+        app.MapDelete("library/settings/users/{userId:long}/roles/{roleId:int}", async (
+            long userId,
             int roleId,
             ICommandHandler<RemoveRoleFromUserCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new RemoveRoleFromUserCommand(userName, roleId);
+            var command = new RemoveRoleFromUserCommand(userId, roleId);
 
             Result result = await handler.Handle(command, cancellationToken);
 

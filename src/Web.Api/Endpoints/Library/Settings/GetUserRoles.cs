@@ -13,12 +13,12 @@ internal sealed class GetUserRoles : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("library/settings/users/{userName}/roles", async (
-            string userName,
+        app.MapGet("library/settings/users/{userId:long}/roles", async (
+            long userId,
             IQueryHandler<GetUserRolesQuery, List<UserRoleResponse>> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetUserRolesQuery(userName);
+            var query = new GetUserRolesQuery(userId);
 
             Result<List<UserRoleResponse>> result = await handler.Handle(query, cancellationToken);
 

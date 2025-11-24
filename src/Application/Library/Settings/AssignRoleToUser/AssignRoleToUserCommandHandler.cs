@@ -15,11 +15,12 @@ internal sealed class AssignRoleToUserCommandHandler(
         DbSet<Role> roles = unitOfWork.Set<Role>();
         DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
 
-        // بررسی وجود کاربر
-        bool userExists = await users.AnyAsync(u => u.UserName == command.UserName, cancellationToken);
-        if (!userExists)
+        Domain.Library.User? user = await users
+            .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
+
+        if (user is null)
         {
-            return Result.Failure(Domain.Library.UserErrors.NotFound(command.UserName));
+            return Result.Failure(Domain.Library.UserErrors.NotFound(command.UserId));
         }
 
         // بررسی وجود نقش
@@ -31,7 +32,9 @@ internal sealed class AssignRoleToUserCommandHandler(
 
         // بررسی اینکه آیا این نقش قبلاً به کاربر اختصاص داده شده است
         bool alreadyAssigned = await userRoles
-            .AnyAsync(ur => ur.UserName == command.UserName && ur.RoleId == command.RoleId, cancellationToken);
+            .AnyAsync(
+                ur => ur.UserId == command.UserId && ur.RoleId == command.RoleId,
+                cancellationToken);
         
         if (alreadyAssigned)
         {
@@ -41,7 +44,8 @@ internal sealed class AssignRoleToUserCommandHandler(
         // اختصاص نقش به کاربر
         var userRole = new UserRole
         {
-            UserName = command.UserName,
+            UserId = command.UserId,
+            UserName = user.UserName,
             RoleId = command.RoleId
         };
 

@@ -26,7 +26,9 @@ internal sealed class GetLibraryUserByUserNameQueryHandler(
             return Task.FromResult(Result.Failure<LibraryUserResponse>(UserErrors.NotFound(query.UserName)));
         }
 
-        LibraryUserResponse response = new LibraryUserResponse {
+        LibraryUserResponse response = new LibraryUserResponse
+        {
+            Id = user.Id,
             UserName = user.UserName,
             Name = user.Name,
             LastName = user.LastName,

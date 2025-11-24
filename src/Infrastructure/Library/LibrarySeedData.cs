@@ -1,24 +1,21 @@
+using Application.Library.Settings;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Authentication;
 
 namespace Infrastructure.Library;
 
 internal static class LibrarySeedData
 {
-    private static readonly PasswordHasher PasswordHasher = new();
+    private const string AdminPasswordHash = "9843417E11AFA30B39EB2E974DC2DCB2E53D4B608E665E478A1686C065107225-71815962DF6849A69BE50976ECA3DA44";
 
     public static void SeedData(ModelBuilder modelBuilder)
     {
-        // Hash password for admin user
-        string adminPasswordHash = PasswordHasher.Hash("1234");
-
         modelBuilder.Entity<Domain.Library.User>().HasData(
             new Domain.Library.User
             {
                 Id = 1,
                 UserName = "admin",
-                Password = adminPasswordHash,
+                Password = AdminPasswordHash,
                 Name = "admin",
                 LastName = "admin"
             }
@@ -96,16 +93,22 @@ internal static class LibrarySeedData
         );
 
                 // Roles
-                modelBuilder.Entity<Role>().HasData(
-                    new Role { Id = 1, Name = "Admin" },
-                    new Role { Id = 2, Name = "User" }
-                );
+        modelBuilder.Entity<Role>().HasData(
+            new Role { Id = 1, Name = "Admin" },
+            new Role { Id = 2, Name = "User" },
+            new Role { Id = 3, Name = RolePermissionDefaults.Librarian },
+            new Role { Id = 4, Name = RolePermissionDefaults.Publisher },
+            new Role { Id = 5, Name = RolePermissionDefaults.Author }
+        );
 
-                // UserRoles (assign admin to all roles)
-                modelBuilder.Entity<UserRole>().HasData(
-                    new UserRole { Id = 1, UserName = "admin", RoleId = 1 }, // Admin role
-                    new UserRole { Id = 2, UserName = "admin", RoleId = 2 }  // User role
-                );
+        // UserRoles (assign admin to all roles)
+        modelBuilder.Entity<UserRole>().HasData(
+            new UserRole { Id = 1, UserId = 1, UserName = "admin", RoleId = 1 }, // Admin role
+            new UserRole { Id = 2, UserId = 1, UserName = "admin", RoleId = 2 }, // User role
+            new UserRole { Id = 3, UserId = 1, UserName = "admin", RoleId = 3 },
+            new UserRole { Id = 4, UserId = 1, UserName = "admin", RoleId = 4 },
+            new UserRole { Id = 5, UserId = 1, UserName = "admin", RoleId = 5 }
+        );
     }
 }
 

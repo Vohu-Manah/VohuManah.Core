@@ -13,10 +13,19 @@ internal sealed class GetUserRolesQueryHandler(
     {
         DbSet<UserRole> userRoles = unitOfWork.Set<UserRole>();
         DbSet<RolePermission> rolePermissions = unitOfWork.Set<RolePermission>();
+        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
+
+        Domain.Library.User? user = await users
+            .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
+
+        if (user is null)
+        {
+            return Result.Failure<List<UserRoleResponse>>(Domain.Library.UserErrors.NotFound(query.UserId));
+        }
 
         // گرفتن تمام endpoint permissions کاربر از طریق نقش‌هایش
         var endpointPermissions = await userRoles
-            .Where(ur => ur.UserName == query.UserName)
+            .Where(ur => ur.UserId == query.UserId)
             .Join(
                 rolePermissions,
                 ur => ur.RoleId,
