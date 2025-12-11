@@ -16,7 +16,7 @@ public static class CustomResults
             detail: GetDetail(result.Error),
             type: GetType(result.Error.Type),
             statusCode: GetStatusCode(result.Error.Type),
-            extensions: GetErrors(result));
+            extensions: GetExtensions(result));
 
         static string GetTitle(Error error) =>
             error.Type switch
@@ -29,14 +29,9 @@ public static class CustomResults
             };
 
         static string GetDetail(Error error) =>
-            error.Type switch
-            {
-                ErrorType.Validation => error.Description,
-                ErrorType.Problem => error.Description,
-                ErrorType.NotFound => error.Description,
-                ErrorType.Conflict => error.Description,
-                _ => "An unexpected error occurred"
-            };
+            string.IsNullOrWhiteSpace(error.Description)
+                ? "An unexpected error occurred"
+                : error.Description;
 
         static string GetType(ErrorType errorType) =>
             errorType switch
@@ -57,17 +52,19 @@ public static class CustomResults
                 _ => StatusCodes.Status500InternalServerError
             };
 
-        static Dictionary<string, object?>? GetErrors(Result result)
+        static Dictionary<string, object?> GetExtensions(Result result)
         {
-            if (result.Error is not ValidationError validationError)
+            var extensions = new Dictionary<string, object?>
             {
-                return null;
+                { "errorMessage", GetDetail(result.Error) }
+            };
+
+            if (result.Error is ValidationError validationError)
+            {
+                extensions["errors"] = validationError.Errors;
             }
 
-            return new Dictionary<string, object?>
-            {
-                { "errors", validationError.Errors }
-            };
+            return extensions;
         }
     }
 }

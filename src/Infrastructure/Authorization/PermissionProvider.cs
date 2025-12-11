@@ -2,7 +2,7 @@
 
 internal sealed class PermissionProvider
 {
-    public Task<HashSet<string>> GetForUserIdAsync(Guid userId)
+    public Task<HashSet<string>> GetForUserIdAsync(long userId)
     {
         // BaseEntity: Here you'll implement your logic to fetch permissions.
         HashSet<string> permissionsSet = [];

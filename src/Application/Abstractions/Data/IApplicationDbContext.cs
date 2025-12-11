@@ -5,8 +5,6 @@ namespace Application.Abstractions.Data;
 
 public interface IApplicationDbContext : IUnitOfWork
 {
-            
-    // Library entities
     DbSet<Domain.Library.User> LibraryUsers { get; }
     DbSet<Book> Books { get; }
     DbSet<City> Cities { get; }

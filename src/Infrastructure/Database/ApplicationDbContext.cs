@@ -8,9 +8,6 @@ public sealed class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options)
     : DbContext(options), IApplicationDbContext
 {
-            
-    
-    // Library entities
     public DbSet<Domain.Library.User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
@@ -22,10 +19,10 @@ public sealed class ApplicationDbContext(
     public DbSet<Manuscript> Manuscripts { get; set; }
     public DbSet<Gap> Gaps { get; set; }
     public DbSet<Settings> Settings { get; set; }
-            public DbSet<Role> Roles { get; set; }
-            public DbSet<UserRole> UserRoles { get; set; }
-            public DbSet<RolePermission> RolePermissions { get; set; }
-            public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class
     {
@@ -39,7 +36,7 @@ public sealed class ApplicationDbContext(
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-                modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         modelBuilder.HasDefaultSchema(Schemas.Default);
         

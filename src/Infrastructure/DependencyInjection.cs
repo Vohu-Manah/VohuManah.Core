@@ -36,12 +36,10 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        // Caching services
         var cacheManager = new MemoryCacheManager();
         services.AddSingleton<Infrastructure.Caching.ICacheManager>(cacheManager);
         services.AddSingleton<Application.Abstractions.Caching.ICacheManager>(cacheManager);
 
-        // Helper services
         services.AddSingleton<IPersianCalendar, PersianCalendarService>();
         services.AddScoped<PersianDateTime>();
 
@@ -86,7 +84,7 @@ public static class DependencyInjection
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero,
-                    RoleClaimType = ClaimTypes.Role, // نقش‌ها از ClaimTypes.Role خوانده می‌شوند
+                    RoleClaimType = ClaimTypes.Role,
                     NameClaimType = ClaimTypes.NameIdentifier
                 };
             });
@@ -94,8 +92,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<ITokenProvider, TokenProvider>();
-                services.AddScoped<Application.Abstractions.Authentication.ILibraryTokenProvider, Infrastructure.Authentication.LibraryTokenProvider>();
+        services.AddScoped<Application.Abstractions.Authentication.ILibraryTokenProvider, Infrastructure.Authentication.LibraryTokenProvider>();
 
         return services;
     }
@@ -111,7 +108,6 @@ public static class DependencyInjection
 
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-        // سرویس برای بررسی دسترسی نقش‌ها به endpointها از دیتابیس
         services.AddScoped<Application.Abstractions.Authorization.IRolePermissionService, Authorization.RolePermissionService>();
 
         return services;

@@ -4,13 +4,15 @@ using Domain.Library;
 using Application.Abstractions.Authentication;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Library.Users.Login;
 
 internal sealed class LoginLibraryUserCommandHandler(
     IUnitOfWork unitOfWork,
     ILibraryTokenProvider tokenProvider,
-    IPasswordHasher passwordHasher) : ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse>
+    IPasswordHasher passwordHasher,
+    IConfiguration configuration) : ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse>
 {
     public async Task<Result<LoginLibraryUserResponse>> Handle(LoginLibraryUserCommand command, CancellationToken cancellationToken)
     {
@@ -26,11 +28,12 @@ internal sealed class LoginLibraryUserCommandHandler(
 
         string token = await tokenProvider.CreateAsync(user, cancellationToken);
 
-        // create refresh token
+        int refreshDays = configuration.GetValue<int>("Jwt:RefreshTokenDays", 7);
+
         RefreshToken refresh = new RefreshToken {
             UserName = user.UserName,
             Token = Guid.NewGuid().ToString("N"),
-            ExpiresAtUtc = DateTime.UtcNow.AddDays(7)
+            ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
         unitOfWork.Set<RefreshToken>().Add(refresh);
         await unitOfWork.SaveChangesAsync(cancellationToken);

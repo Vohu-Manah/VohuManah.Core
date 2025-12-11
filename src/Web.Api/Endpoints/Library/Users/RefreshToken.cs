@@ -14,11 +14,11 @@ internal sealed class RefreshToken : IEndpoint
     {
         app.MapPost("library/users/refresh-token", async (
             Request request,
-            ICommandHandler<RefreshAccessTokenCommand, string> handler,
+            ICommandHandler<RefreshAccessTokenCommand, RefreshAccessTokenResponse> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new RefreshAccessTokenCommand(request.RefreshToken);
-            Result<string> result = await handler.Handle(command, cancellationToken);
+            Result<RefreshAccessTokenResponse> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .AllowAnonymous()
