@@ -11,6 +11,13 @@ public static class DependencyInjection
 
         services.AddControllers();
 
+        services.AddCors(options =>
+            options.AddPolicy("CorsPolicy", policy =>
+                policy
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
+
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 

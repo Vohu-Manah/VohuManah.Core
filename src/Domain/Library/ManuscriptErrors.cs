@@ -6,10 +6,10 @@ public static class ManuscriptErrors
 {
     public static Error NotFound(int id) => Error.NotFound(
         "Manuscripts.NotFound",
-        $"The manuscript with the Id = '{id}' was not found");
+        $"نویسه با شناسه '{id}' یافت نشد");
 
     public static readonly Error NameNotUnique = Error.Conflict(
         "Manuscripts.NameNotUnique",
-        "A manuscript with this name already exists");
+        "نویسه با این نام از قبل وجود دارد");
 }
 

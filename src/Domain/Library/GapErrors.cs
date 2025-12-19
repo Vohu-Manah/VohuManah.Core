@@ -6,10 +6,10 @@ public static class GapErrors
 {
     public static Error NotFound(int id) => Error.NotFound(
         "Gaps.NotFound",
-        $"The gap with the Id = '{id}' was not found");
+        $"شکاف با شناسه '{id}' یافت نشد");
 
     public static readonly Error TitleNotUnique = Error.Conflict(
         "Gaps.TitleNotUnique",
-        "A gap with this title already exists");
+        "شکافی با این عنوان از قبل وجود دارد");
 }
 

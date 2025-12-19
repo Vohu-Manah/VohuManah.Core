@@ -25,12 +25,12 @@ public static class CustomResults
                 ErrorType.Problem => error.Code,
                 ErrorType.NotFound => error.Code,
                 ErrorType.Conflict => error.Code,
-                _ => "Server failure"
+                _ => "خطای سرور"
             };
 
         static string GetDetail(Error error) =>
             string.IsNullOrWhiteSpace(error.Description)
-                ? "An unexpected error occurred"
+                ? "یک خطای غیرمنتظره رخ داده است"
                 : error.Description;
 
         static string GetType(ErrorType errorType) =>

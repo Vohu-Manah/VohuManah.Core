@@ -1,68 +1,191 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+/* Shabnam Font Face Definitions */
+@font-face {
+  font-family: 'Shabnam';
+  src: url('./assets/fonts/Shabnam-Thin-FD-WOL.eot');
+  src: url('./assets/fonts/Shabnam-Thin-FD-WOL.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/Shabnam-Thin-FD-WOL.woff2') format('woff2'),
+       url('./assets/fonts/Shabnam-Thin-FD-WOL.woff') format('woff'),
+       url('./assets/fonts/Shabnam-Thin-FD-WOL.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Shabnam';
+  src: url('./assets/fonts/Shabnam-Light-FD-WOL.eot');
+  src: url('./assets/fonts/Shabnam-Light-FD-WOL.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/Shabnam-Light-FD-WOL.woff2') format('woff2'),
+       url('./assets/fonts/Shabnam-Light-FD-WOL.woff') format('woff'),
+       url('./assets/fonts/Shabnam-Light-FD-WOL.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Shabnam';
+  src: url('./assets/fonts/Shabnam-FD-WOL.eot');
+  src: url('./assets/fonts/Shabnam-FD-WOL.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/Shabnam-FD-WOL.woff2') format('woff2'),
+       url('./assets/fonts/Shabnam-FD-WOL.woff') format('woff'),
+       url('./assets/fonts/Shabnam-FD-WOL.ttf') format('truetype');
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-display: swap;
 }
 
-a {
+@font-face {
+  font-family: 'Shabnam';
+  src: url('./assets/fonts/Shabnam-Medium-FD-WOL.eot');
+  src: url('./assets/fonts/Shabnam-Medium-FD-WOL.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/Shabnam-Medium-FD-WOL.woff2') format('woff2'),
+       url('./assets/fonts/Shabnam-Medium-FD-WOL.woff') format('woff'),
+       url('./assets/fonts/Shabnam-Medium-FD-WOL.ttf') format('truetype');
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  font-style: normal;
+  font-display: swap;
 }
-a:hover {
-  color: #535bf2;
+
+@font-face {
+  font-family: 'Shabnam';
+  src: url('./assets/fonts/Shabnam-Bold-FD-WOL.eot');
+  src: url('./assets/fonts/Shabnam-Bold-FD-WOL.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/Shabnam-Bold-FD-WOL.woff2') format('woff2'),
+       url('./assets/fonts/Shabnam-Bold-FD-WOL.woff') format('woff'),
+       url('./assets/fonts/Shabnam-Bold-FD-WOL.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  background-color: #f5f6fa;
+  color: #111;
+  direction: rtl;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  direction: rtl;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* RTL fixes for Mantine components */
+[data-mantine-color-scheme] {
+  direction: rtl;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Ensure NavLink text is right-aligned */
+[data-mantine-component="NavLink"],
+.mantine-NavLink-root,
+.mantine-NavLink-root > * {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* Right-align NavLink label text */
+.mantine-NavLink-label,
+.mantine-NavLink-root .mantine-NavLink-label,
+[data-mantine-component="NavLink"] .mantine-NavLink-label {
+  text-align: right !important;
+  direction: rtl !important;
+  justify-content: flex-end !important;
+}
+
+/* Ensure NavLink body/content is right-aligned */
+.mantine-NavLink-body {
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* Right-align all text content in NavLink */
+.mantine-NavLink-root span,
+.mantine-NavLink-root div {
+  text-align: right !important;
+}
+
+/* React Multi Date Picker styles - Mantine TextInput styling */
+.custom-date-picker {
+  width: 100%;
+  direction: rtl;
+}
+
+.custom-date-picker input {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
+  /* Apply Mantine TextInput styles */
+  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  font-size: var(--mantine-font-size-sm);
+  line-height: var(--mantine-line-height);
+  color: var(--mantine-color-text);
+  background-color: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-md);
+  padding: calc(var(--mantine-spacing-xs) - 1px) calc(var(--mantine-spacing-sm) - 1px);
+  transition: border-color 100ms ease, box-shadow 100ms ease;
+}
+
+.custom-date-picker input:focus {
+  outline: none;
+  border-color: var(--mantine-primary-color-filled);
+  box-shadow: 0 0 0 1px var(--mantine-primary-color-filled);
+}
+
+.custom-date-picker input:disabled {
+  background-color: var(--mantine-color-gray-1);
+  color: var(--mantine-color-dimmed);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.custom-date-picker input::placeholder {
+  color: var(--mantine-color-dimmed);
+  opacity: 1;
+}
+
+/* Error state */
+.mantine-InputWrapper-error .custom-date-picker input {
+  border-color: var(--mantine-color-error);
+}
+
+.mantine-InputWrapper-error .custom-date-picker input:focus {
+  border-color: var(--mantine-color-error);
+  box-shadow: 0 0 0 1px var(--mantine-color-error);
+}
+
+/* RTL support for react-multi-date-picker */
+.rmdp-wrapper {
+  direction: rtl;
+}
+
+.rmdp-calendar {
+  direction: rtl;
+}
+
+.rmdp-day-picker {
+  direction: rtl;
+}
+
+.rmdp-week-day {
+  direction: rtl;
+  text-align: center;
+}
+
+.rmdp-day {
+  direction: rtl;
+  text-align: center;
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿  using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Api.Infrastructure;
@@ -11,13 +11,13 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
         Exception exception,
         CancellationToken cancellationToken)
     {
-        logger.LogError(exception, "Unhandled exception occurred");
+        logger.LogError(exception, "استثنای مدیریت نشده رخ داد");
 
         var problemDetails = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,
             Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
-            Title = "Server failure",
+            Title = "خطای سرور",
             Detail = exception.Message,
             Extensions = { ["errorMessage"] = exception.Message }
         };

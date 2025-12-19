@@ -29,6 +29,18 @@ services:
       sql-server:
         condition: service_started
 
+  web-ui:
+    build:
+      context: ./src/Web.UI
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5000}
+    container_name: ${WEB_UI_CONTAINER_NAME:-web-ui}
+    ports:
+      - "${WEB_UI_PORT:-5002}:5002"
+    depends_on:
+      - web-api
+
   seq:
     image: ${SEQ_IMAGE:-datalust/seq:2024.3}
     container_name: ${SEQ_CONTAINER_NAME:-seq}

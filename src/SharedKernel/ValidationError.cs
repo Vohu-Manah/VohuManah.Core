@@ -5,7 +5,7 @@ public sealed record ValidationError : Error
     public ValidationError(Error[] errors)
         : base(
             "Validation.General",
-            "One or more validation errors occurred",
+            "یک یا چند خطای اعتبارسنجی رخ داده است",
             ErrorType.Validation)
     {
         Errors = errors;

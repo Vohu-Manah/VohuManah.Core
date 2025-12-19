@@ -37,7 +37,7 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
         }
 
         // بررسی دسترسی برای هر نقش
-        foreach (var role in userRoles)
+        foreach (string? role in userRoles)
         {
             bool hasPermission = await rolePermissionService.HasPermissionAsync(
                 role,

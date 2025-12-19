@@ -6,11 +6,11 @@ public static class BookErrors
 {
     public static Error NotFound(long id) => Error.NotFound(
         "Books.NotFound",
-        $"The book with the Id = '{id}' was not found");
+        $"کتاب با شناسه '{id}' یافت نشد");
 
     public static readonly Error NameNotUnique = Error.Conflict(
         "Books.NameNotUnique",
-        "A book with this name already exists");
+        "کتابی با این نام از قبل وجود دارد");
 }
 
 

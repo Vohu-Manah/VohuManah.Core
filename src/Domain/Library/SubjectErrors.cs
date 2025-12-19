@@ -6,10 +6,10 @@ public static class SubjectErrors
 {
     public static Error NotFound(int id) => Error.NotFound(
         "Subjects.NotFound",
-        $"The subject with the Id = '{id}' was not found");
+        $"موضوع با شناسه '{id}' یافت نشد");
 
     public static readonly Error TitleNotUnique = Error.Conflict(
         "Subjects.TitleNotUnique",
-        "A subject with this title already exists");
+        "موضوعی با این عنوان از قبل وجود دارد");
 }
 

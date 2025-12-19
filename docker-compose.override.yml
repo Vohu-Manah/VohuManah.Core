@@ -1,13 +1,19 @@
 services:
   web-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - ASPNETCORE_HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
-      - ASPNETCORE_HTTPS_PORTS=${ASPNETCORE_HTTPS_PORTS}
-      - ConnectionStrings__Database=Server=${SQL_SERVER_HOST};Database=${SQL_SERVER_DATABASE};User Id=${SQL_SERVER_USER};Password=${SQL_SERVER_PASSWORD};TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - ConnectionStrings__Database=Server=sql-server;Database=Library;User Id=sa;Password=Str0ng!Pass;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
     ports:
-      - "${ASPNETCORE_HTTP_PORTS}"
-      - "${ASPNETCORE_HTTPS_PORTS}"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "5000:5000"
+    depends_on:
+      sql-server:
+        condition: service_started
+
+  web-ui:
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5000
+    ports:
+      - "5002:5002"
+    depends_on:
+      - web-api

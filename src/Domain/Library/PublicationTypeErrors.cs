@@ -6,10 +6,10 @@ public static class PublicationTypeErrors
 {
     public static Error NotFound(int id) => Error.NotFound(
         "PublicationTypes.NotFound",
-        $"The publication type with the Id = '{id}' was not found");
+        $"نوع انتشار با شناسه '{id}' یافت نشد");
 
     public static readonly Error TitleNotUnique = Error.Conflict(
         "PublicationTypes.TitleNotUnique",
-        "A publication type with this title already exists");
+        "نوع انتشار با این عنوان از قبل وجود دارد");
 }
 

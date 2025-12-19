@@ -12,17 +12,18 @@ internal sealed class RefreshToken : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("library/users/refresh-token", async (
-            Request request,
-            ICommandHandler<RefreshAccessTokenCommand, RefreshAccessTokenResponse> handler,
-            CancellationToken cancellationToken) =>
-        {
-            var command = new RefreshAccessTokenCommand(request.RefreshToken);
-            Result<RefreshAccessTokenResponse> result = await handler.Handle(command, cancellationToken);
-            return result.Match(Results.Ok, CustomResults.Problem);
-        })
-        .AllowAnonymous()
-        .WithTags("Library.Users");
+app.MapPost("library/users/refresh-token", async (
+    Request request,
+    ICommandHandler<RefreshAccessTokenCommand, RefreshAccessTokenResponse> handler,
+    CancellationToken cancellationToken) =>
+{
+    var command = new RefreshAccessTokenCommand(request.RefreshToken);
+    Result<RefreshAccessTokenResponse> result = await handler.Handle(command, cancellationToken);
+    return result.Match(Results.Ok, CustomResults.Problem);
+})
+.AllowAnonymous()
+.WithTags("Library.Users")
+.RequireCors("CorsPolicy");
     }
 }
 

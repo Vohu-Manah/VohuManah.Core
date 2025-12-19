@@ -32,4 +32,4 @@ RUN dotnet publish "./Web.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Web.Api.dll"]
+ENTRYPOINT ["dotnet", "VohuManah.Web.Api.dll"]

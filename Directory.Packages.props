@@ -36,5 +36,7 @@
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <!-- Web.UI -->
+    <PackageVersion Include="Microsoft.VisualStudio.JavaScript.Sdk" Version="0.5.128-alpha" />
   </ItemGroup>
 </Project>

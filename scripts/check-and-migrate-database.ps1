@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Checking SQL Server connection..." -ForegroundColor Cyan
 
-$connectionString = "Server=192.168.8.100;Database=Library;User Id=sa;Password=#mohsen@ma78;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true"
+$connectionString = "Server=192.168.8.100;Database=Library;User Id=sa;Password=Str0ng!Pass;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true"
 
 # Test connection
 try {

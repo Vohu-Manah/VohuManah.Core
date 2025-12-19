@@ -12,4 +12,7 @@ export default defineConfig({
 		strictPort: true,
 		port: 5002,
 	},
+	optimizeDeps: {
+		force: true,
+	},
 })

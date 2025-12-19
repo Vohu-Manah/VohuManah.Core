@@ -20,7 +20,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
 
         if (refresh == null || !refresh.IsActive)
         {
-            return Result.Failure<RefreshAccessTokenResponse>(Error.Conflict("Auth.InvalidRefresh", "Invalid or expired refresh token"));
+            return Result.Failure<RefreshAccessTokenResponse>(Error.Conflict("Auth.InvalidRefresh", "توکن رفرش نامعتبر یا منقضی شده است"));
         }
 
         User? user = await unitOfWork.Set<User>()
@@ -28,7 +28,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
 
         if (user == null)
         {
-            return Result.Failure<RefreshAccessTokenResponse>(Error.NotFound("Users.NotFound", "User not found"));
+            return Result.Failure<RefreshAccessTokenResponse>(Error.NotFound("Users.NotFound", "کاربر یافت نشد"));
         }
 
         refresh.RevokedAtUtc = DateTime.UtcNow;

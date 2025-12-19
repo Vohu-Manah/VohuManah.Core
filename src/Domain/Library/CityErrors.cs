@@ -6,10 +6,10 @@ public static class CityErrors
 {
     public static Error NotFound(int id) => Error.NotFound(
         "Cities.NotFound",
-        $"The city with the Id = '{id}' was not found");
+        $"شهر با شناسه '{id}' یافت نشد");
 
     public static readonly Error NameNotUnique = Error.Conflict(
         "Cities.NameNotUnique",
-        "A city with this name already exists");
+        "شهری با این نام از قبل وجود دارد");
 }
 

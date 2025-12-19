@@ -6,26 +6,26 @@ public static class UserErrors
 {
     public static Error NotFound(string userName) => Error.NotFound(
         "Users.NotFound",
-        $"The user with the UserName = '{userName}' was not found");
+        $"کاربر با نام کاربری '{userName}' یافت نشد");
 
     public static Error NotFound(long userId) => Error.NotFound(
         "Users.NotFound",
-        $"The user with the Id = '{userId}' was not found");
+        $"کاربر با شناسه '{userId}' یافت نشد");
 
     public static Error Unauthorized() => Error.Failure(
         "Users.Unauthorized",
-        "You are not authorized to perform this action.");
+        "شما مجاز به انجام این عملیات نیستید.");
 
     public static readonly Error UserNameNotUnique = Error.Conflict(
         "Users.UserNameNotUnique",
-        "The provided username is not unique");
+        "نام کاربری ارائه شده یکتا نیست");
 
     public static readonly Error InvalidCredentials = Error.Failure(
         "Users.InvalidCredentials",
-        "Invalid username or password");
+        "نام کاربری یا رمز عبور نامعتبر است");
 
     public static readonly Error CannotDeleteLastUser = Error.Failure(
         "Users.CannotDeleteLastUser",
-        "Cannot delete the last user");
+        "نمی توان آخرین کاربر را حذف کرد");
 }
 
