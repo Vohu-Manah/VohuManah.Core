@@ -19,6 +19,7 @@ public interface IApplicationDbContext : IUnitOfWork
             DbSet<Role> Roles { get; }
             DbSet<UserRole> UserRoles { get; }
             DbSet<RefreshToken> RefreshTokens { get; }
+            DbSet<Attachment> Attachments { get; }
 }
 
 public interface IUnitOfWork

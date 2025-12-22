@@ -1,5 +1,22 @@
 import type { ReactElement } from 'react';
-import { FaHome, FaUser, FaWpforms, FaBook, FaUsers, FaCog, FaShieldAlt } from 'react-icons/fa';
+import {
+  FaHome,
+  FaUser,
+  FaBook,
+  FaUsers,
+  FaCog,
+  FaNewspaper,
+  FaScroll,
+  FaCity,
+  FaLanguage,
+  FaTags,
+  FaBuilding,
+  FaSearch,
+  FaChartBar,
+  FaFileAlt,
+  FaShieldAlt,
+  FaUserShield,
+} from 'react-icons/fa';
 
 export type AppRoute = {
   path: string;
@@ -16,8 +33,38 @@ export const menuRoutes: AppRoute[] = [
     icon: <FaBook size={14} />,
     children: [
       { path: '/books', label: 'مدیریت کتاب‌ها' },
-      { path: '/books/categories', label: 'دسته‌بندی‌ها' },
-      { path: '/books/authors', label: 'نویسندگان' },
+      { path: '/books/search', label: 'جستجوی کتاب' },
+      { path: '/books/statistics', label: 'آمار کتاب‌ها' },
+    ],
+  },
+  {
+    label: 'نشریات',
+    icon: <FaNewspaper size={14} />,
+    children: [
+      { path: '/publications', label: 'مدیریت نشریات' },
+      { path: '/publications/search', label: 'جستجوی نشریه' },
+      { path: '/publications/statistics', label: 'آمار نشریات' },
+    ],
+  },
+  {
+    label: 'نسخ خطی',
+    icon: <FaScroll size={14} />,
+    children: [
+      { path: '/manuscripts', label: 'مدیریت نسخ خطی' },
+      { path: '/manuscripts/search', label: 'جستجوی نسخه خطی' },
+      { path: '/manuscripts/statistics', label: 'آمار نسخ خطی' },
+    ],
+  },
+  {
+    label: 'اطلاعات پایه',
+    icon: <FaTags size={14} />,
+    children: [
+      { path: '/cities', label: 'شهرها' },
+      { path: '/languages', label: 'زبان‌ها' },
+      { path: '/subjects', label: 'موضوعات' },
+      { path: '/publishers', label: 'ناشران' },
+      { path: '/gaps', label: 'فاصله‌ها' },
+      { path: '/publication-types', label: 'انواع نشریات' },
     ],
   },
   {
@@ -25,35 +72,29 @@ export const menuRoutes: AppRoute[] = [
     icon: <FaUsers size={14} />,
     children: [
       { path: '/users', label: 'مدیریت کاربران' },
-      { path: '/users/roles', label: 'نقش‌ها' },
-      { path: '/users/permissions', label: 'مجوزها' },
-    ],
-  },
-  {
-    label: 'فرم‌ها',
-    icon: <FaWpforms size={14} />,
-    children: [
-      { path: '/form-example', label: 'نمونه فرم پیشرفته' },
-      { path: '/forms/simple', label: 'فرم ساده' },
     ],
   },
   { path: '/profile', label: 'پروفایل', icon: <FaUser size={14} /> },
+  {
+    label: 'گزارش‌ها',
+    icon: <FaFileAlt size={14} />,
+    children: [
+      { path: '/reports', label: 'گزارش‌ها' },
+    ],
+  },
   {
     label: 'تنظیمات',
     icon: <FaCog size={14} />,
     children: [
       { path: '/settings', label: 'تنظیمات عمومی' },
-      { path: '/settings/theme', label: 'تم برنامه' },
-      { path: '/settings/notifications', label: 'اعلان‌ها' },
     ],
   },
   {
-    label: 'امنیت',
+    label: 'مدیریت ادمین',
     icon: <FaShieldAlt size={14} />,
     children: [
-      { path: '/security/2fa', label: 'فعال‌سازی ۲FA' },
-      { path: '/security/password', label: 'تغییر رمز عبور' },
-      { path: '/security/recovery', label: 'کدهای بازیابی' },
+      { path: '/admin/roles', label: 'مدیریت نقش‌ها' },
+      { path: '/admin/user-roles', label: 'نقش‌دهی به کاربران' },
     ],
   },
 ];

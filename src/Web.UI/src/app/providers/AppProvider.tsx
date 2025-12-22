@@ -14,8 +14,33 @@ import LoginPage from '../pages/LoginPage';
 import DashboardPage from '../pages/DashboardPage';
 import ProfilePage from '../pages/ProfilePage';
 import FormExamplePage from '../pages/FormExamplePage';
-import PlaceholderPage from '../pages/PlaceholderPage';
 import ProtectedRoute from '../components/common/ProtectedRoute';
+// Main entities
+import BooksPage from '../pages/BooksPage';
+import UsersPage from '../pages/UsersPage';
+import PublicationsPage from '../pages/PublicationsPage';
+import ManuscriptsPage from '../pages/ManuscriptsPage';
+// Helper entities
+import CitiesPage from '../pages/CitiesPage';
+import LanguagesPage from '../pages/LanguagesPage';
+import SubjectsPage from '../pages/SubjectsPage';
+import PublishersPage from '../pages/PublishersPage';
+import GapsPage from '../pages/GapsPage';
+import PublicationTypesPage from '../pages/PublicationTypesPage';
+// Search pages
+import SearchBookPage from '../pages/SearchBookPage';
+import SearchPublicationPage from '../pages/SearchPublicationPage';
+import SearchManuscriptPage from '../pages/SearchManuscriptPage';
+// Statistics pages (placeholders)
+import BookStatisticsPage from '../pages/BookStatisticsPage';
+import PublicationStatisticsPage from '../pages/PublicationStatisticsPage';
+import ManuscriptStatisticsPage from '../pages/ManuscriptStatisticsPage';
+// Other pages
+import ReportsPage from '../pages/ReportsPage';
+import SettingsPage from '../pages/SettingsPage';
+// Admin pages
+import RolesPage from '../pages/RolesPage';
+import UserRolesPage from '../pages/UserRolesPage';
 
 const router = createHashRouter([
   {
@@ -34,23 +59,33 @@ const router = createHashRouter([
       { path: 'profile', element: <ProfilePage /> },
       { path: 'form-example', element: <FormExamplePage /> },
       // Books routes
-      { path: 'books', element: <PlaceholderPage title="مدیریت کتاب‌ها" description="صفحه مدیریت کتاب‌ها به زودی اضافه خواهد شد." /> },
-      { path: 'books/categories', element: <PlaceholderPage title="دسته‌بندی کتاب‌ها" description="صفحه مدیریت دسته‌بندی‌ها به زودی اضافه خواهد شد." /> },
-      { path: 'books/authors', element: <PlaceholderPage title="نویسندگان" description="صفحه مدیریت نویسندگان به زودی اضافه خواهد شد." /> },
+      { path: 'books', element: <BooksPage /> },
+      { path: 'books/search', element: <SearchBookPage /> },
+      { path: 'books/statistics', element: <BookStatisticsPage /> },
+      // Publications routes
+      { path: 'publications', element: <PublicationsPage /> },
+      { path: 'publications/search', element: <SearchPublicationPage /> },
+      { path: 'publications/statistics', element: <PublicationStatisticsPage /> },
+      // Manuscripts routes
+      { path: 'manuscripts', element: <ManuscriptsPage /> },
+      { path: 'manuscripts/search', element: <SearchManuscriptPage /> },
+      { path: 'manuscripts/statistics', element: <ManuscriptStatisticsPage /> },
+      // Helper entities
+      { path: 'cities', element: <CitiesPage /> },
+      { path: 'languages', element: <LanguagesPage /> },
+      { path: 'subjects', element: <SubjectsPage /> },
+      { path: 'publishers', element: <PublishersPage /> },
+      { path: 'gaps', element: <GapsPage /> },
+      { path: 'publication-types', element: <PublicationTypesPage /> },
       // Users routes
-      { path: 'users', element: <PlaceholderPage title="مدیریت کاربران" description="صفحه مدیریت کاربران به زودی اضافه خواهد شد." /> },
-      { path: 'users/roles', element: <PlaceholderPage title="نقش‌های کاربری" description="صفحه مدیریت نقش‌ها به زودی اضافه خواهد شد." /> },
-      { path: 'users/permissions', element: <PlaceholderPage title="مجوزها" description="صفحه مدیریت مجوزها به زودی اضافه خواهد شد." /> },
-      // Forms routes
-      { path: 'forms/simple', element: <PlaceholderPage title="فرم ساده" description="صفحه فرم ساده به زودی اضافه خواهد شد." /> },
-      // Settings routes
-      { path: 'settings', element: <PlaceholderPage title="تنظیمات عمومی" description="صفحه تنظیمات عمومی به زودی اضافه خواهد شد." /> },
-      { path: 'settings/theme', element: <PlaceholderPage title="تنظیمات تم" description="صفحه تنظیمات تم به زودی اضافه خواهد شد." /> },
-      { path: 'settings/notifications', element: <PlaceholderPage title="تنظیمات اعلان‌ها" description="صفحه تنظیمات اعلان‌ها به زودی اضافه خواهد شد." /> },
-      // Security routes
-      { path: 'security/2fa', element: <PlaceholderPage title="فعال‌سازی احراز هویت دو مرحله‌ای" description="صفحه فعال‌سازی 2FA به زودی اضافه خواهد شد." /> },
-      { path: 'security/password', element: <PlaceholderPage title="تغییر رمز عبور" description="صفحه تغییر رمز عبور به زودی اضافه خواهد شد." /> },
-      { path: 'security/recovery', element: <PlaceholderPage title="کدهای بازیابی" description="صفحه مدیریت کدهای بازیابی به زودی اضافه خواهد شد." /> },
+      { path: 'users', element: <UsersPage /> },
+      // Reports
+      { path: 'reports', element: <ReportsPage /> },
+      // Settings
+      { path: 'settings', element: <SettingsPage /> },
+      // Admin
+      { path: 'admin/roles', element: <RolesPage /> },
+      { path: 'admin/user-roles', element: <UserRolesPage /> },
     ],
   },
   {

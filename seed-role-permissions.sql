@@ -143,7 +143,16 @@ USING (VALUES
     ('Library.Users.GetAllEntities'),
     ('Library.Users.GetByUserName'),
     ('Library.Users.GetFullName'),
-    ('Library.Users.Revoke')
+    ('Library.Users.Revoke'),
+    
+    -- Attachments
+    ('Library.Attachments.Upload'),
+    ('Library.Attachments.Delete'),
+    ('Library.Attachments.GetByEntity'),
+    
+    -- Note: GetRolePermissions and GetUserRoleIds use existing permissions
+    -- GetRolePermissions uses: Library.Settings.GetAllRoles
+    -- GetUserRoleIds uses: Library.Settings.GetUserRoles
 ) AS source (EndpointName)
 ON target.RoleId = @AdminRoleId AND target.EndpointName = source.EndpointName
 WHEN NOT MATCHED THEN

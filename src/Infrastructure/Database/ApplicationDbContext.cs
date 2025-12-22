@@ -23,6 +23,7 @@ public sealed class ApplicationDbContext(
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class
     {

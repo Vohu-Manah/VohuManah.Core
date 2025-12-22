@@ -3,7 +3,7 @@ import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import type { Value, DateObject } from 'react-multi-date-picker';
-import { TextInput } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import jalaliday from 'jalaliday';
 import 'dayjs/locale/fa';
@@ -108,7 +108,13 @@ export function PersianDatePicker({
     : undefined;
 
   return (
-    <TextInput.Wrapper label={label} error={error} required={required}>
+    <Stack gap={4}>
+      {label && (
+        <Text size="sm" fw={500}>
+          {label}
+          {required && <Text component="span" c="red"> *</Text>}
+        </Text>
+      )}
       <DatePicker
         value={internalValue}
         onChange={handleChange}
@@ -125,10 +131,17 @@ export function PersianDatePicker({
         style={{
           width: '100%',
           direction: 'rtl',
+          zIndex: 9999,
         }}
+        zIndex={9999}
         {...props}
       />
-    </TextInput.Wrapper>
+      {error && (
+        <Text size="xs" c="red">
+          {error}
+        </Text>
+      )}
+    </Stack>
   );
 }
 

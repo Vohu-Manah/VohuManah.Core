@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button, Card, Stack, Text, Title, TextInput, Group, Select, Checkbox, NumberInput } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
 import { useForm, isNotEmpty, isEmail, hasLength } from '@mantine/form';
 import { useAuth } from '../context/AuthContext';
+import { PersianDatePicker } from '../components/common/PersianDatePicker';
 
 interface ProfileFormValues {
   fullName: string;
@@ -110,10 +110,12 @@ export default function ProfilePage() {
                 />
               </Group>
 
-              <DatePickerInput
+              <PersianDatePicker
                 label="تاریخ تولد"
                 placeholder="تاریخ تولد خود را انتخاب کنید"
-                {...form.getInputProps('birthDate')}
+                value={form.values.birthDate}
+                onChange={(date) => form.setFieldValue('birthDate', date)}
+                error={form.errors.birthDate}
               />
 
               <TextInput

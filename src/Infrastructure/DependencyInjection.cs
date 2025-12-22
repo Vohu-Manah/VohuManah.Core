@@ -7,6 +7,7 @@ using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Caching;
 using Infrastructure.Database;
+using Infrastructure.FileStorage;
 using Infrastructure.Helper;
 using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,6 +43,7 @@ public static class DependencyInjection
 
         services.AddSingleton<IPersianCalendar, PersianCalendarService>();
         services.AddScoped<PersianDateTime>();
+        services.AddScoped<Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
 
         return services;
     }

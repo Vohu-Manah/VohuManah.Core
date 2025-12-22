@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button, Card, Stack, Title, TextInput, Select, Checkbox, NumberInput, Group, Textarea, MultiSelect, FileInput, JsonInput, Divider } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
 import { useForm, isNotEmpty, isEmail, hasLength } from '@mantine/form';
 import { PersianDatePicker } from '../components/common/PersianDatePicker';
 import { DatePickerTest } from '../components/common/DatePickerTest';
@@ -241,17 +240,12 @@ export default function FormExamplePage() {
               />
             </Group>
 
-            <DatePickerInput
-              label="تاریخ شروع همکاری (میلادی)"
-              placeholder="تاریخ شروع همکاری خود را انتخاب کنید"
-              {...form.getInputProps('availableFrom')}
-            />
-
             <PersianDatePicker
-              label="تاریخ شروع همکاری (شمسی)"
+              label="تاریخ شروع همکاری"
               placeholder="تاریخ شروع همکاری خود را انتخاب کنید"
               value={form.values.availableFrom}
               onChange={(date) => form.setFieldValue('availableFrom', date)}
+              error={typeof form.errors.availableFrom === 'string' ? form.errors.availableFrom : undefined}
             />
 
             {/* File Upload */}

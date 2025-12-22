@@ -142,6 +142,11 @@ public static class EndpointCatalog
         "Library.Users.Revoke",
         "Library.Users.Update");
 
+    public static readonly ImmutableArray<string> Attachments = ImmutableArray.Create(
+        "Library.Attachments.Upload",
+        "Library.Attachments.Delete",
+        "Library.Attachments.GetByEntity");
+
     private static readonly ImmutableArray<string> Combined = ImmutableArray.CreateRange(
         Books
             .Concat(Cities)
@@ -153,7 +158,8 @@ public static class EndpointCatalog
             .Concat(Publishers)
             .Concat(Settings)
             .Concat(Subjects)
-            .Concat(Users));
+            .Concat(Users)
+            .Concat(Attachments));
 
     public static readonly ImmutableHashSet<string> All = Combined.ToImmutableHashSet(StringComparer.OrdinalIgnoreCase);
 

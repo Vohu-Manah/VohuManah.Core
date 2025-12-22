@@ -3,6 +3,7 @@ using Application;
 using HealthChecks.UI.Client;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Web.Api;
 using Web.Api.Extensions;
@@ -29,6 +30,19 @@ app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
 app.UseCors("CorsPolicy");
+
+// Enable static files for uploaded files
+var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 
 app.UseAuthentication();
 
