@@ -1,13 +1,7 @@
-using System;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace Application.Library.Settings;
 
-/// <summary>
-/// Central registry of all secured endpoints (those decorated with role requirements).
-/// Keeping the list in one place lets us validate role-permission assignments at runtime and drive seed data.
-/// </summary>
 public static class EndpointCatalog
 {
     public static readonly ImmutableArray<string> Books = ImmutableArray.Create(
@@ -16,6 +10,7 @@ public static class EndpointCatalog
         "Library.Books.GetAll",
         "Library.Books.GetAllEntities",
         "Library.Books.GetById",
+        "Library.Books.GetProfile",
         "Library.Books.GetCount",
         "Library.Books.GetCountByLanguage",
         "Library.Books.GetCountByPublisher",
@@ -112,15 +107,21 @@ public static class EndpointCatalog
         "Library.Settings.CreateRole",
         "Library.Settings.GetAll",
         "Library.Settings.GetAllEntities",
+        "Library.Settings.GetAllEndpoints",
         "Library.Settings.GetAllRoles",
+        "Library.Settings.GetAppInfo",
         "Library.Settings.GetBackground",
         "Library.Settings.GetById",
         "Library.Settings.GetByName",
         "Library.Settings.GetMainTitle",
+        "Library.Settings.GetRolePermissions",
+        "Library.Settings.GetSystemInfo",
         "Library.Settings.GetUserRoles",
+        "Library.Settings.GetUserSettings",
         "Library.Settings.RemoveRoleFromUser",
         "Library.Settings.Update",
-        "Library.Settings.UpdateRoleEndpoints");
+        "Library.Settings.UpdateRoleEndpoints",
+        "Library.Settings.UpdateUserSettings");
 
     public static readonly ImmutableArray<string> Subjects = ImmutableArray.Create(
         "Library.Subjects.Create",
@@ -132,6 +133,7 @@ public static class EndpointCatalog
         "Library.Subjects.Update");
 
     public static readonly ImmutableArray<string> Users = ImmutableArray.Create(
+        "Library.Users.ChangePassword",
         "Library.Users.Create",
         "Library.Users.Delete",
         "Library.Users.GetAll",
@@ -140,12 +142,41 @@ public static class EndpointCatalog
         "Library.Users.GetFullName",
         "Library.Users.GetList",
         "Library.Users.Revoke",
-        "Library.Users.Update");
+        "Library.Users.Update",
+        "Library.Users.UpdateProfile");
 
     public static readonly ImmutableArray<string> Attachments = ImmutableArray.Create(
         "Library.Attachments.Upload",
         "Library.Attachments.Delete",
-        "Library.Attachments.GetByEntity");
+        "Library.Attachments.GetByEntity",
+        "Library.Attachments.Update");
+
+    public static readonly ImmutableArray<string> Menu = ImmutableArray.Create(
+        "Library.Menu.GetAll",
+        "Library.Menu.Create",
+        "Library.Menu.Update",
+        "Library.Menu.Delete",
+        "Library.Menu.Reorder",
+        "Library.Menu.ResetToDefault");
+
+    public static readonly ImmutableArray<string> Visits = ImmutableArray.Create(
+        "Library.Visits.GetStats");
+
+    public static readonly ImmutableArray<string> Backup = ImmutableArray.Create(
+        "Library.Backup.GetInfo",
+        "Library.Backup.Create",
+        "Library.Backup.Download",
+        "Library.Backup.Restore");
+
+    public static readonly ImmutableArray<string> Reports = ImmutableArray.Create(
+        "Reports.BookSearchList",
+        "Reports.PublicationSearchList",
+        "Reports.ManuscriptSearchList",
+        "Reports.ManuscriptStatistics",
+        "Reports.BookStatistics",
+        "Reports.PublicationStatistics",
+        "Reports.Export",
+        "Reports.View");
 
     private static readonly ImmutableArray<string> Combined = ImmutableArray.CreateRange(
         Books
@@ -159,11 +190,44 @@ public static class EndpointCatalog
             .Concat(Settings)
             .Concat(Subjects)
             .Concat(Users)
-            .Concat(Attachments));
+            .Concat(Attachments)
+            .Concat(Menu)
+            .Concat(Visits)
+            .Concat(Backup)
+            .Concat(Reports));
 
     public static readonly ImmutableHashSet<string> All = Combined.ToImmutableHashSet(StringComparer.OrdinalIgnoreCase);
 
     public static bool IsKnownEndpoint(string endpointName) =>
         !string.IsNullOrWhiteSpace(endpointName) && All.Contains(endpointName);
+
+    
+    
+    
+    public static Dictionary<string, List<string>> GetAllEndpointsGrouped()
+    {
+        return new Dictionary<string, List<string>>
+        {
+            { "Books", Books.ToList() },
+            { "Cities", Cities.ToList() },
+            { "Gaps", Gaps.ToList() },
+            { "Languages", Languages.ToList() },
+            { "Manuscripts", Manuscripts.ToList() },
+            { "Publications", Publications.ToList() },
+            { "PublicationTypes", PublicationTypes.ToList() },
+            { "Publishers", Publishers.ToList() },
+            { "Settings", Settings.ToList() },
+            { "Subjects", Subjects.ToList() },
+            { "Users", Users.ToList() },
+            { "Attachments", Attachments.ToList() },
+            { "Menu", Menu.ToList() },
+            { "Reports", Reports.ToList() }
+        };
+    }
+
+    
+    
+    
+    public static List<string> GetAllEndpoints() => Combined.ToList();
 }
 

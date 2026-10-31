@@ -1,14 +1,13 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Users.Update;
 using SharedKernel;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Users;
 
-[RequireRole("Library.Users.Update")]
+[RequireRole(EndpointNames.Users.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
@@ -19,12 +18,16 @@ internal sealed class Update : BaseEndpoint
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("library/users", async (
+        
+        
+        app.MapPut("library/users/{id:long}", async (
+            long id,
             Request request,
             ICommandHandler<UpdateLibraryUserCommand> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new UpdateLibraryUserCommand(
+                id,
                 request.UserName,
                 request.Password,
                 request.Name,

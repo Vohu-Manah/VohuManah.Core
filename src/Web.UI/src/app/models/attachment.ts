@@ -6,6 +6,7 @@ export type AttachmentResponse = {
   contentType: string;
   fileSize: number;
   description?: string;
+  isMain: boolean;
   createdAt: string;
 };
 

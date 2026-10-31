@@ -1,26 +1,26 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Subjects.Update;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Subjects;
 
-[RequireRole("Library.Subjects.Update")]
+[RequireRole(EndpointNames.Subjects.Update)]
 internal sealed class Update : BaseEndpoint
 {
-    public sealed record Request(int Id, string Title);
+    public sealed record Request(string Title);
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("library/subjects", async (
+        app.MapPut("library/subjects/{id:int}", async (
+            int id,
             Request request,
             ICommandHandler<UpdateSubjectCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new UpdateSubjectCommand(request.Id, request.Title);
+            var command = new UpdateSubjectCommand(id, request.Title);
 
             Result result = await handler.Handle(command, cancellationToken);
 

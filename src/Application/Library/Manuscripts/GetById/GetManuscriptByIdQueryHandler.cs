@@ -11,8 +11,8 @@ internal sealed class GetManuscriptByIdQueryHandler(
 {
     public async Task<Result<ManuscriptResponse>> Handle(GetManuscriptByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         Manuscript? manuscript = await manuscripts
             .Include(m => m.Language)
             .Include(m => m.Subject)
@@ -25,7 +25,8 @@ internal sealed class GetManuscriptByIdQueryHandler(
             return Result.Failure<ManuscriptResponse>(ManuscriptErrors.NotFound(query.Id));
         }
 
-        ManuscriptResponse response = new ManuscriptResponse {
+        ManuscriptResponse response = new ManuscriptResponse
+        {
             Id = manuscript.Id,
             Name = manuscript.Name,
             Author = manuscript.Author,

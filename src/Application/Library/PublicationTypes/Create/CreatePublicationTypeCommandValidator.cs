@@ -6,7 +6,9 @@ internal sealed class CreatePublicationTypeCommandValidator : AbstractValidator<
 {
     public CreatePublicationTypeCommandValidator()
     {
-        RuleFor(c => c.Title).NotEmpty().MaximumLength(50);
+        RuleFor(c => c.Title)
+            .NotEmpty().WithMessage("عنوان نوع نشریه الزامی است")
+            .MaximumLength(50).WithMessage("عنوان نوع نشریه باید حداکثر ۵۰ کاراکتر باشد");
     }
 }
 

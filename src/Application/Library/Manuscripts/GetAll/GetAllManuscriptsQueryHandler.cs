@@ -11,8 +11,8 @@ internal sealed class GetAllManuscriptsQueryHandler(
 {
     public async Task<Result<List<ManuscriptResponse>>> Handle(GetAllManuscriptsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         List<ManuscriptResponse> allManuscripts = await manuscripts
             .Include(m => m.City)
             .Include(m => m.Gap)

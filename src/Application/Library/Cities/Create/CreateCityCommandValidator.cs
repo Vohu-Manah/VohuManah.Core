@@ -6,7 +6,9 @@ internal sealed class CreateCityCommandValidator : AbstractValidator<CreateCityC
 {
     public CreateCityCommandValidator()
     {
-        RuleFor(c => c.Name).NotEmpty().MaximumLength(50);
+        RuleFor(c => c.Name)
+            .NotEmpty().WithMessage("نام شهر الزامی است")
+            .MaximumLength(50).WithMessage("نام شهر باید حداکثر ۵۰ کاراکتر باشد");
     }
 }
 

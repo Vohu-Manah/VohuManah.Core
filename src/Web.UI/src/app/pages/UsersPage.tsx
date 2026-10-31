@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
+import { Button, Card, Stack, Title, Group, ActionIcon, PasswordInput } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, PasswordInput } from '@mantine/core';
-import { userService } from '../services/library/userService';
-import type { LibraryUser, CreateUserRequest } from '../models/user';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { userService } from '@/app/services/library/userService';
+import type { LibraryUser, CreateUserRequest } from '@/app/models/user';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { handleApiError } from '../helpers/errorHandler';
+import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<LibraryUser[]>([]);
@@ -41,27 +41,25 @@ export default function UsersPage() {
       setLoading(true);
       const data = await userService.getList();
       setUsers(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری کاربران', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری کاربران', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
   const handleSubmit = async () => {
-    // در حالت ویرایش، password رو validate نکن اگر خالی بود
     if (editingUser && !form.values.password) {
       form.clearFieldError('password');
     }
-    
+
     if (!form.validate().hasErrors) {
       try {
         setLoading(true);
         if (editingUser) {
-          // در حالت ویرایش، password رو همیشه بفرست (backend باید handle کنه)
-          await userService.update({
+          await userService.update(editingUser.id, {
             userName: form.values.userName,
-            password: form.values.password || '', // Backend باید handle کنه
+            password: form.values.password || '',
             name: form.values.name,
             lastName: form.values.lastName,
           });
@@ -74,7 +72,7 @@ export default function UsersPage() {
         form.reset();
         setEditingUser(null);
         loadData();
-      } catch (error: any) {
+      } catch (error) {
         handleApiError(error, 'خطا در ذخیره کاربر');
       } finally {
         setLoading(false);
@@ -89,27 +87,27 @@ export default function UsersPage() {
       setEditingUser(user);
       form.setValues({
         userName: user.userName,
-        password: '', // Don't load password
+        password: '',
         name: user.name,
         lastName: user.lastName,
       });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری کاربر', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری کاربر', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (userName: string) => {
-    if (window.confirm('آیا از حذف این کاربر مطمئن هستید؟')) {
+  const handleDelete = async (id: number, userName: string) => {
+    if (window.confirm(`آیا از حذف کاربر «${userName}» مطمئن هستید؟`)) {
       try {
         setLoading(true);
-        await userService.delete(userName);
+        await userService.delete(id);
         appMessage.success('کاربر با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف کاربر', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف کاربر', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -129,7 +127,7 @@ export default function UsersPage() {
           <ActionIcon color="blue" onClick={() => handleEdit(row.userName)}>
             <FaEdit />
           </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.userName)}>
+          <ActionIcon color="red" onClick={() => handleDelete(row.id, row.userName)}>
             <FaTrash />
           </ActionIcon>
         </Group>
@@ -159,6 +157,8 @@ export default function UsersPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['userName', 'name', 'lastName', 'fullName']}
+          exportFileName="users"
+          loading={loading}
         />
       </Card>
 
@@ -173,25 +173,38 @@ export default function UsersPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput
+        <SmartTextInput
           label="نام کاربری"
           required
           readOnly={!!editingUser}
           withAsterisk
+          fieldName="userName"
           {...form.getInputProps('userName')}
         />
         <PasswordInput
           label="رمز عبور"
           required={!editingUser}
           withAsterisk={!editingUser}
+          dir="ltr"
           {...form.getInputProps('password')}
         />
         <Group grow>
-          <TextInput label="نام" required withAsterisk {...form.getInputProps('name')} />
-          <TextInput label="نام خانوادگی" required withAsterisk {...form.getInputProps('lastName')} />
+          <SmartTextInput
+            label="نام"
+            required
+            withAsterisk
+            fieldName="name"
+            {...form.getInputProps('name')}
+          />
+          <SmartTextInput
+            label="نام خانوادگی"
+            required
+            withAsterisk
+            fieldName="lastName"
+            {...form.getInputProps('lastName')}
+          />
         </Group>
       </FormModal>
     </Stack>
   );
 }
-

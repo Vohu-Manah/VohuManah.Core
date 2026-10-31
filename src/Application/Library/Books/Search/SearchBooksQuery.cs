@@ -1,4 +1,5 @@
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 
 namespace Application.Library.Books.Search;
 
@@ -17,4 +18,7 @@ public sealed record SearchBooksQuery(
     int PublishPlaceId,
     int PublisherId,
     string? FromPublishYear,
-    string? ToPublishYear) : IQuery<List<BookSearchResponse>>;
+    string? ToPublishYear,
+    int MaxResults = 5000,
+    int Page = 1,
+    int PageSize = 50) : IQuery<PagedResult<BookSearchResponse>>;

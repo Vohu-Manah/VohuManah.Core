@@ -29,6 +29,15 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
 
         builder.ToTable("Book", "dbo");
 
+        
+        
+        builder.HasIndex(b => b.Name);
+        builder.HasIndex(b => b.Author);
+        builder.HasIndex(b => b.PublishYear);
+        builder.HasIndex(b => b.Isbn);
+        builder.HasIndex(b => b.No);
+
+
         builder.HasOne(b => b.Language)
             .WithMany(l => l.Books)
             .HasForeignKey(b => b.LanguageId)

@@ -15,10 +15,10 @@ internal sealed class GetAllRolesQueryHandler(
 
     public Task<Result<List<RoleResponse>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.Set<Role>();
-        
-        List<Role> allRoles = cacheManager.Get(RolesAllKey, () => roles.ToList());
-        
+        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+
+        List<Role> allRoles = cacheManager.Retrieve(RolesAllKey, () => roles.ToList());
+
         List<RoleResponse> response = allRoles.Select(r => new RoleResponse
         {
             Id = r.Id,

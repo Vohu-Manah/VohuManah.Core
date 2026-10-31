@@ -6,8 +6,12 @@ internal sealed class LoginLibraryUserCommandValidator : AbstractValidator<Login
 {
     public LoginLibraryUserCommandValidator()
     {
-        RuleFor(c => c.UserName).NotEmpty();
-        RuleFor(c => c.Password).NotEmpty();
+        RuleFor(c => c.UserName)
+            .NotEmpty().WithMessage("نام کاربری یا ایمیل را بنویسید");
+        RuleFor(c => c.Password)
+            .NotEmpty().WithMessage("رمز عبور را بنویسید");
+        RuleFor(c => c.HumanVerifyToken)
+            .NotEmpty().WithMessage("نشان دهید که ربات نیستید");
     }
 }
 

@@ -1,10 +1,14 @@
-import axios from 'axios';
+import axios, { AxiosHeaders } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
-import { appConfig } from '../../config/app-config';
-import { toApiError } from './errors';
-import { getTokens, setTokens, clearTokens } from './tokenStore';
+import { appConfig } from '@/app/config/app-config';
+import { toApiError } from '@/app/services/api/errors';
+import { getTokens, setTokens, clearTokens } from '@/app/services/api/tokenStore';
+import { handleApiError } from '@/app/helpers/errorHandler';
 
-type ExtendedConfig = AxiosRequestConfig & { skipAuthRefresh?: boolean };
+type ExtendedConfig = AxiosRequestConfig & {
+  skipAuthRefresh?: boolean;
+  skipErrorHandling?: boolean;
+};
 
 const baseConfig = {
   baseURL: appConfig.apiBaseUrl,
@@ -13,10 +17,8 @@ const baseConfig = {
   },
 } satisfies AxiosRequestConfig;
 
-// raw client without interceptors (for login/refresh)
 export const rawClient = axios.create(baseConfig);
 
-// main client with interceptors
 export const apiClient: AxiosInstance = axios.create(baseConfig);
 
 apiClient.interceptors.request.use((config) => {
@@ -27,11 +29,13 @@ apiClient.interceptors.request.use((config) => {
       Authorization: `Bearer ${tokens.accessToken}`,
     } as AxiosRequestHeaders;
   }
-  // Don't set Content-Type for FormData - let browser set it with boundary
   if (config.data instanceof FormData) {
-    if (config.headers) {
-      delete (config.headers as any)['Content-Type'];
-    }
+    
+    
+    
+    const headers = AxiosHeaders.from(config.headers);
+    headers.delete('Content-Type');
+    config.headers = headers;
   }
   return config;
 });
@@ -43,11 +47,7 @@ apiClient.interceptors.response.use(
     const originalConfig = (error.config ?? {}) as ExtendedConfig;
 
     const tokens = getTokens();
-    if (
-      error.response?.status === 401 &&
-      tokens?.refreshToken &&
-      !originalConfig.skipAuthRefresh
-    ) {
+    if (error.response?.status === 401 && tokens?.refreshToken && !originalConfig.skipAuthRefresh) {
       try {
         const refreshed = await rawClient.post<{ accessToken: string; refreshToken: string }>(
           '/library/users/refresh-token',
@@ -69,11 +69,43 @@ apiClient.interceptors.response.use(
         return apiClient.request(originalConfig);
       } catch (refreshError) {
         clearTokens();
-        return Promise.reject(toApiError(refreshError));
+        const refreshApiError = toApiError(refreshError);
+        handleApiError(refreshApiError, 'خطا در احراز هویت');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/login';
+        }
+        return Promise.reject(refreshApiError);
       }
+    }
+
+    if (!originalConfig.skipErrorHandling) {
+      handleApiError(axiosError, 'خطا در انجام عملیات');
     }
 
     return Promise.reject(axiosError);
   },
 );
 
+
+export async function fetchAllPaged<T>(
+  fetchPage: (page: number, pageSize: number) => Promise<{ items?: unknown; totalCount?: number }>,
+  opts: { pageSize?: number; cap?: number; onProgress?: (done: number, total: number) => void } = {},
+): Promise<T[]> {
+  const { pageSize = 500, cap = 50000, onProgress } = opts;
+  const out: T[] = [];
+  let page = 1;
+  let target = cap;
+  for (;;) {
+    const res = await fetchPage(page, pageSize);
+    const raw = res?.items;
+    const items = (Array.isArray(raw) ? raw : []) as T[];
+    out.push(...items);
+    if (page === 1 && typeof res?.totalCount === 'number' && res.totalCount > 0) {
+      target = Math.min(res.totalCount, cap);
+    }
+    onProgress?.(out.length, target);
+    if (items.length < pageSize || out.length >= cap) break;
+    page += 1;
+  }
+  return out.slice(0, cap);
+}

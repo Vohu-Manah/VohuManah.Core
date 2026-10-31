@@ -1,4 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="Infrastructure.props" Condition="Exists('Infrastructure.props')" />
+  <PropertyGroup>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+  </PropertyGroup>
 
   <PropertyGroup>
     <RootNamespace>VohuManah.Infrastructure</RootNamespace>
@@ -13,6 +18,11 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="System.Runtime.Caching" />
+    <PackageReference Include="EPPlus" />
+    <PackageReference Include="QuestPDF">
+      <ExcludeAssets>contentfiles;content;build</ExcludeAssets>
+      <PrivateAssets>contentfiles;content;build</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -22,5 +32,60 @@
   <ItemGroup>
 	<InternalsVisibleTo Include="ArchitectureTests" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Html\Resources\ReportStyles.css" />
+    <EmbeddedResource Include="Reports\Html\Resources\ReportScripts.js" />
+    <EmbeddedResource Include="Reports\Html\Resources\fontawesome.all.min.css" />
+    <EmbeddedResource Include="Reports\Html\Resources\fontawesome.fa-solid-900.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fontawesome.fa-regular-400.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fontawesome.fa-brands-400.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-FD-WOL.ttf" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Bold-FD-WOL.ttf" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Light-FD-WOL.ttf" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Medium-FD-WOL.ttf" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Thin-FD-WOL.ttf" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-FD-WOL.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Bold-FD-WOL.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Light-FD-WOL.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Medium-FD-WOL.woff2" />
+    <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Thin-FD-WOL.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <Content Remove="**\LatoFont\**" />
+    <None Remove="**\LatoFont\**" />
+    <Compile Remove="**\LatoFont\**" />
+    <EmbeddedResource Remove="**\LatoFont\**" />
+  </ItemGroup>
+
+
+  <Target Name="RemoveLatoFontFiles" AfterTargets="Build">
+    <ItemGroup>
+      <LatoFontFiles Include="$(OutputPath)LatoFont\**\*" />
+    </ItemGroup>
+    <Delete Files="@(LatoFontFiles)" ContinueOnError="true" />
+    <RemoveDir Directories="$(OutputPath)LatoFont" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="ExcludeLatoFontFromProject" BeforeTargets="PrepareForBuild;BeforeBuild">
+    <ItemGroup>
+      <Content Remove="@(Content)" Condition="'%(Content.Identity)' != '' and ($([System.String]::Copy('%(Content.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(Content.Identity)').Contains('latofont')))" />
+      <None Remove="@(None)" Condition="'%(None.Identity)' != '' and ($([System.String]::Copy('%(None.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(None.Identity)').Contains('latofont')))" />
+      <Compile Remove="@(Compile)" Condition="'%(Compile.Identity)' != '' and ($([System.String]::Copy('%(Compile.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(Compile.Identity)').Contains('latofont')))" />
+      <EmbeddedResource Remove="@(EmbeddedResource)" Condition="'%(EmbeddedResource.Identity)' != '' and ($([System.String]::Copy('%(EmbeddedResource.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(EmbeddedResource.Identity)').Contains('latofont')))" />
+    </ItemGroup>
+  </Target>
+  
+
+  <Target Name="RemoveLatoFontContentFiles" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <_LatoFontContentFiles Include="@(ContentFilesFromPackages)" Condition="'%(ContentFilesFromPackages.Identity)' != '' and ($([System.String]::Copy('%(ContentFilesFromPackages.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(ContentFilesFromPackages.Identity)').Contains('latofont')))" />
+    </ItemGroup>
+    <ItemGroup>
+      <ContentFilesFromPackages Remove="@(_LatoFontContentFiles)" />
+    </ItemGroup>
+  </Target>
 
 </Project>

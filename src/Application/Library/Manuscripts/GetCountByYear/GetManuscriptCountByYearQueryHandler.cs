@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetManuscriptCountByYearQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetManuscriptCountByYearQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.Set<Manuscript>();
-        
+        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         var list = await manuscripts
             .GroupBy(m => m.Year)
             .Select(g => new ListItemResponse

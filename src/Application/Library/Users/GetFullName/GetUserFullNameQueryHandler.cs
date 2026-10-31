@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetUserFullNameQueryHandler(
 
     public Task<Result<string?>> Handle(GetUserFullNameQuery query, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.Set<User>();
-        
-        var allUsers = cacheManager.Get(UserAllKey, () => users.ToList());
-        
+        var users = unitOfWork.GetDbSet<User>();
+
+        var allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+
         var fullName = allUsers
             .Where(u => u.UserName == query.UserName)
             .Select(u => $"{u.Name} {u.LastName}")

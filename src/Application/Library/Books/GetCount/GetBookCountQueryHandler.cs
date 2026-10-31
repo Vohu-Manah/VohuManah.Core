@@ -11,8 +11,8 @@ internal sealed class GetBookCountQueryHandler(
 {
     public async Task<Result<int>> Handle(GetBookCountQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.Set<Book>();
-        
+        var books = unitOfWork.GetDbSet<Book>();
+
         int count = await books.CountAsync(cancellationToken);
 
         return Result.Success(count);

@@ -1,0 +1,17 @@
+<Project>
+  <ItemGroup>
+    <Content Remove="**\LatoFont\**" />
+    <None Remove="**\LatoFont\**" />
+    <Compile Remove="**\LatoFont\**" />
+    <EmbeddedResource Remove="**\LatoFont\**" />
+    <ContentFilesFromPackages Remove="**\LatoFont\**" />
+  </ItemGroup>
+  
+  <Target Name="ExcludeLatoFontGlobally" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <Content Remove="@(Content)" Condition="'%(Content.Identity)' != '' and ($([System.String]::Copy('%(Content.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(Content.Identity)').Contains('latofont')))" />
+      <None Remove="@(None)" Condition="'%(None.Identity)' != '' and ($([System.String]::Copy('%(None.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(None.Identity)').Contains('latofont')))" />
+    </ItemGroup>
+  </Target>
+</Project>
+

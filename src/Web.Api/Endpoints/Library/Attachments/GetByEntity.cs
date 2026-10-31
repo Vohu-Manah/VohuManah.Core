@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Attachments.GetByEntity;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Attachments;
 
-[RequireRole("Library.Attachments.GetByEntity")]
+[RequireRole(EndpointNames.Attachments.GetByEntity)]
 internal sealed class GetByEntity : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

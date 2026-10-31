@@ -11,15 +11,11 @@ internal sealed class CreateManuscriptCommandHandler(
 {
     public async Task<Result<int>> Handle(CreateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
-        string name = command.Name.Trim();
-        if (await manuscripts.AnyAsync(m => m.Name.Trim() == name, cancellationToken))
-        {
-            return Result.Failure<int>(ManuscriptErrors.NameNotUnique);
-        }
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
 
-        Manuscript manuscript = new Manuscript {
+
+        var manuscript = new Manuscript
+        {
             Name = command.Name,
             Author = command.Author,
             WritingPlaceId = command.WritingPlaceId,

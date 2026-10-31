@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 
 namespace Infrastructure.Authentication;
 
@@ -10,6 +10,6 @@ internal static class ClaimsPrincipalExtensions
 
         return long.TryParse(userId, out long parsedUserId) ?
             parsedUserId :
-            throw new ApplicationException("User id is unavailable");
+            throw new InvalidOperationException("کاربر در دسترس نیست");
     }
 }

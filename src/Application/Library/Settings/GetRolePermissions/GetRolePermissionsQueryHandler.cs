@@ -11,8 +11,8 @@ internal sealed class GetRolePermissionsQueryHandler(
 {
     public async Task<Result<List<string>>> Handle(GetRolePermissionsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<RolePermission> rolePermissions = unitOfWork.Set<RolePermission>();
-        DbSet<Role> roles = unitOfWork.Set<Role>();
+        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == query.RoleId, cancellationToken);
 

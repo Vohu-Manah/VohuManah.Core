@@ -1,7 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
-using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,9 +14,9 @@ internal sealed class GetAllSettingsEntitiesQueryHandler(
 
     public Task<Result<List<Domain.Library.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.Set<Domain.Library.Settings>();
-        
-        List<Domain.Library.Settings> allSettings = cacheManager.Get(SettingsAllKey, () => settings.ToList());
+        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+
+        List<Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
         return Task.FromResult(Result.Success(allSettings));
     }

@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,8 +15,8 @@ internal sealed class UpdateCityCommandHandler(
 
     public async Task<Result> Handle(UpdateCityCommand command, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.Set<City>();
-        
+        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+
         City? existing = await cities.SingleOrDefaultAsync(c => c.Id == command.Id, cancellationToken);
         if (existing == null)
         {
@@ -30,7 +30,7 @@ internal sealed class UpdateCityCommandHandler(
 
         existing.Name = command.Name;
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(CityPatternKey);
 
         return Result.Success();

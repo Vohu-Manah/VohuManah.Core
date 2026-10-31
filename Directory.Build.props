@@ -1,20 +1,15 @@
 <Project>
   <PropertyGroup>
-	<!--If you want to target .NET 8, uncomment the below line and adjust the Directory.Packages.props file.
-	You will also need to update the Dockerfile to use .NET 8 instead of .NET 9 - both are in Web.Api project.-->
-    <!--<TargetFramework>net8.0</TargetFramework>-->
-
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-<RuntimeIdentifiers>win;win-x64;linux-x64</RuntimeIdentifiers>
-<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <NoWarn>$(NoWarn);CA1873;NU1903</NoWarn>
+    <RuntimeIdentifiers>win;win-x64;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">
     <PackageReference Include="SonarAnalyzer.CSharp">
@@ -22,4 +17,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Content Remove="**\LatoFont\**" />
+    <None Remove="**\LatoFont\**" />
+    <Compile Remove="**\LatoFont\**" />
+    <EmbeddedResource Remove="**\LatoFont\**" />
+    <ContentFilesFromPackages Remove="**\LatoFont\**" />
+  </ItemGroup>
+  
+  <Target Name="RemoveLatoFontGlobally" BeforeTargets="PrepareForBuild;CollectPackageContent">
+    <ItemGroup>
+      <Content Remove="@(Content)" Condition="'%(Content.Identity)' != '' and ($([System.String]::Copy('%(Content.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(Content.Identity)').Contains('latofont')))" />
+      <None Remove="@(None)" Condition="'%(None.Identity)' != '' and ($([System.String]::Copy('%(None.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(None.Identity)').Contains('latofont')))" />
+      <Compile Remove="@(Compile)" Condition="'%(Compile.Identity)' != '' and ($([System.String]::Copy('%(Compile.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(Compile.Identity)').Contains('latofont')))" />
+      <EmbeddedResource Remove="@(EmbeddedResource)" Condition="'%(EmbeddedResource.Identity)' != '' and ($([System.String]::Copy('%(EmbeddedResource.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(EmbeddedResource.Identity)').Contains('latofont')))" />
+      <ContentFilesFromPackages Remove="@(ContentFilesFromPackages)" Condition="'%(ContentFilesFromPackages.Identity)' != '' and ($([System.String]::Copy('%(ContentFilesFromPackages.Identity)').Contains('LatoFont')) or $([System.String]::Copy('%(ContentFilesFromPackages.Identity)').Contains('latofont')))" />
+    </ItemGroup>
+  </Target>
 </Project>

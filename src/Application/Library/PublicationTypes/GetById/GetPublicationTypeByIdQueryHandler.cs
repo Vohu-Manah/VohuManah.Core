@@ -11,8 +11,8 @@ internal sealed class GetPublicationTypeByIdQueryHandler(
 {
     public async Task<Result<PublicationTypeResponse>> Handle(GetPublicationTypeByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.Set<PublicationType>();
-        
+        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+
         PublicationType? publicationType = await publicationTypes
             .SingleOrDefaultAsync(pt => pt.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetPublicationTypeByIdQueryHandler(
             return Result.Failure<PublicationTypeResponse>(PublicationTypeErrors.NotFound(query.Id));
         }
 
-        PublicationTypeResponse response = new PublicationTypeResponse {
+        PublicationTypeResponse response = new PublicationTypeResponse
+        {
             Id = publicationType.Id,
             Title = publicationType.Title
         };

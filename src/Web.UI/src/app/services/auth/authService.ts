@@ -1,10 +1,11 @@
-import { apiClient, rawClient } from '../api/client';
-import { setTokens, clearTokens, getTokens } from '../api/tokenStore';
-import { toApiError } from '../api/errors';
+import { apiClient, rawClient } from '@/app/services/api/client';
+import { setTokens, clearTokens, getTokens } from '@/app/services/api/tokenStore';
+import { toApiError } from '@/app/services/api/errors';
 
 export type LoginRequest = {
   userName: string;
   password: string;
+  humanVerifyToken?: string;
 };
 
 export type LoginResponse = {

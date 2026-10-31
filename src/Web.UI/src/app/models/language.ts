@@ -15,7 +15,7 @@ export type CreateLanguageRequest = {
 };
 
 export type UpdateLanguageRequest = CreateLanguageRequest & {
-  id: number;
+  id?: number;
 };
 
 

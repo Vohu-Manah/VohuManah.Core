@@ -11,8 +11,8 @@ internal sealed class GetCityByIdQueryHandler(
 {
     public async Task<Result<CityResponse>> Handle(GetCityByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.Set<City>();
-        
+        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+
         City? city = await cities
             .SingleOrDefaultAsync(c => c.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetCityByIdQueryHandler(
             return Result.Failure<CityResponse>(CityErrors.NotFound(query.Id));
         }
 
-        CityResponse response = new CityResponse {
+        CityResponse response = new CityResponse
+        {
             Id = city.Id,
             Name = city.Name
         };

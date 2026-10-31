@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/app/context/AuthContext';
 import { Loader, Center } from '@mantine/core';
 
 type Props = {

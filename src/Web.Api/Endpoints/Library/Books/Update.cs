@@ -1,18 +1,16 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Books.Update;
+using Application.Library.Settings;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.Update")]
+[RequireRole(EndpointNames.Books.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
-        long Id,
         string Name,
         string Author,
         string Translator,
@@ -31,13 +29,14 @@ internal sealed class Update : BaseEndpoint
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("library/books", async (
+        app.MapPut("library/books/{id:long}", async (
+            long id,
             Request request,
             ICommandHandler<UpdateBookCommand> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new UpdateBookCommand(
-                request.Id,
+                id,
                 request.Name,
                 request.Author,
                 request.Translator,

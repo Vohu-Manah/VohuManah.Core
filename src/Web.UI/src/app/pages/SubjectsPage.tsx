@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput } from '@mantine/core';
-import { subjectService } from '../services/library/subjectService';
-import type { Subject, CreateSubjectRequest } from '../models/subject';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { subjectService } from '@/app/services/library/subjectService';
+import type { Subject, CreateSubjectRequest } from '@/app/models/subject';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function SubjectsPage() {
@@ -34,8 +35,8 @@ export default function SubjectsPage() {
       setLoading(true);
       const data = await subjectService.getAll();
       setSubjects(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری موضوعات', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری موضوعات', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,7 @@ export default function SubjectsPage() {
       try {
         setLoading(true);
         if (editingSubject) {
-          await subjectService.update({ ...form.values, id: editingSubject.id });
+          await subjectService.update(editingSubject.id, { ...form.values });
           appMessage.success('موضوع با موفقیت به‌روزرسانی شد');
         } else {
           await subjectService.create(form.values);
@@ -56,8 +57,8 @@ export default function SubjectsPage() {
         form.reset();
         setEditingSubject(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره موضوع', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره موضوع', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -71,8 +72,8 @@ export default function SubjectsPage() {
       setEditingSubject(subject);
       form.setValues({ title: subject.title });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری موضوع', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری موضوع', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -85,8 +86,8 @@ export default function SubjectsPage() {
         await subjectService.delete(id);
         appMessage.success('موضوع با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف موضوع', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف موضوع', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -134,6 +135,8 @@ export default function SubjectsPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['title']}
+          exportFileName="subjects"
+          loading={loading}
         />
       </Card>
 
@@ -148,7 +151,7 @@ export default function SubjectsPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="عنوان موضوع" required {...form.getInputProps('title')} />
+        <SmartTextInput label="عنوان موضوع" required withAsterisk fieldName="title" {...form.getInputProps('title')} />
       </FormModal>
     </Stack>
   );

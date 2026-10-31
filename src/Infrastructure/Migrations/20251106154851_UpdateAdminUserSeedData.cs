@@ -2,14 +2,14 @@
 
 #nullable disable
 
-#pragma warning disable CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning disable CA1861 
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class UpdateAdminUserSeedData : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.UpdateData(
@@ -27,7 +27,7 @@ namespace Infrastructure.Migrations
                 values: new object[] { 2, 2, "admin" });
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(

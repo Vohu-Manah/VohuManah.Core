@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,10 +15,10 @@ internal sealed class GetAllLanguagesQueryHandler(
 
     public Task<Result<List<LanguageResponse>>> Handle(GetAllLanguagesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.Set<Language>();
-        
-        List<Language> allLanguages = cacheManager.Get(LanguageAllKey, () => languages.ToList());
-        
+        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+
+        List<Language> allLanguages = cacheManager.Retrieve(LanguageAllKey, () => languages.ToList());
+
         List<LanguageResponse> response = allLanguages.Select(l => new LanguageResponse
         {
             Id = l.Id,

@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Settings.GetMainTitle;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-[RequireRole("Library.Settings.GetMainTitle")]
+[RequireRole(EndpointNames.Settings.GetMainTitle)]
 internal sealed class GetMainTitle : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

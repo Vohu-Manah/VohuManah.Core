@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetManuscriptStatisticsQueryHandler(
 {
     public async Task<Result<ManuscriptStatisticsResponse>> Handle(GetManuscriptStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         int manuscriptCount = await manuscripts.CountAsync(cancellationToken);
 
         List<ListItemResponse> countBySubject = await manuscripts
@@ -65,7 +65,8 @@ internal sealed class GetManuscriptStatisticsQueryHandler(
             })
             .ToListAsync(cancellationToken);
 
-        ManuscriptStatisticsResponse response = new ManuscriptStatisticsResponse {
+        ManuscriptStatisticsResponse response = new ManuscriptStatisticsResponse
+        {
             ManuscriptCount = manuscriptCount,
             CountBySubject = countBySubject,
             CountByLanguage = countByLanguage,

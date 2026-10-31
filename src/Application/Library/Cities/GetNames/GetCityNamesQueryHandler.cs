@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetCityNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetCityNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.Set<City>();
+        DbSet<City> cities = unitOfWork.GetDbSet<City>();
 
         List<SelectItemResponse> items = cities
             .OrderBy(c => c.Name)

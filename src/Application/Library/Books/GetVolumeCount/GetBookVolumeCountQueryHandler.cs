@@ -11,8 +11,8 @@ internal sealed class GetBookVolumeCountQueryHandler(
 {
     public async Task<Result<int>> Handle(GetBookVolumeCountQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.Set<Book>();
-        
+        var books = unitOfWork.GetDbSet<Book>();
+
         int volumeCount = await books.SumAsync(b => (int?)b.VolumeCount, cancellationToken) ?? 0;
 
         return Result.Success(volumeCount);

@@ -1,8 +1,8 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace Infrastructure.Helper;
 
-#pragma warning disable CA1846 // Prefer 'AsSpan' over 'Substring' when span-based overloads are available
+#pragma warning disable CA1846
 
 public class PersianDateTime
 {
@@ -19,17 +19,17 @@ public class PersianDateTime
         string year = _persianCalendar.GetYear(now).ToString(CultureInfo.InvariantCulture);
         string month = _persianCalendar.GetMonth(now).ToString(CultureInfo.InvariantCulture);
         string day = _persianCalendar.GetDayOfMonth(now).ToString(CultureInfo.InvariantCulture);
-        
+
         if (month.Trim().Length == 1)
         {
             month = "0" + month.Trim();
         }
-        
+
         if (day.Trim().Length == 1)
         {
             day = "0" + day.Trim();
         }
-        
+
         return $"{year}/{month}/{day}";
     }
 
@@ -38,9 +38,9 @@ public class PersianDateTime
         try
         {
             return _persianCalendar.ToDateTime(
-                int.Parse(persianDate.Trim().Substring(0, 4), CultureInfo.InvariantCulture), 
-                int.Parse(persianDate.Trim().Substring(5, 2), CultureInfo.InvariantCulture), 
-                int.Parse(persianDate.Trim().Substring(8, 2), CultureInfo.InvariantCulture), 
+                int.Parse(persianDate.Trim().Substring(0, 4), CultureInfo.InvariantCulture),
+                int.Parse(persianDate.Trim().Substring(5, 2), CultureInfo.InvariantCulture),
+                int.Parse(persianDate.Trim().Substring(8, 2), CultureInfo.InvariantCulture),
                 0, 0, 0, 0).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
         }
         catch
@@ -57,17 +57,17 @@ public class PersianDateTime
             string year = _persianCalendar.GetYear(time).ToString(CultureInfo.InvariantCulture);
             string month = _persianCalendar.GetMonth(time).ToString(CultureInfo.InvariantCulture);
             string day = _persianCalendar.GetDayOfMonth(time).ToString(CultureInfo.InvariantCulture);
-            
+
             if (month.Trim().Length == 1)
             {
                 month = "0" + month.Trim();
             }
-            
+
             if (day.Trim().Length == 1)
             {
                 day = "0" + day.Trim();
             }
-            
+
             return $"{year}/{month}/{day}";
         }
         catch
@@ -212,9 +212,9 @@ public class PersianDateTime
             }
             num6 = 1;
         }
-        return string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", 
-            num4.ToString(CultureInfo.InvariantCulture), 
-            (num2.ToString(CultureInfo.InvariantCulture).Length == 1) ? "0" + num2.ToString(CultureInfo.InvariantCulture) : num2.ToString(CultureInfo.InvariantCulture), 
+        return string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}",
+            num4.ToString(CultureInfo.InvariantCulture),
+            (num2.ToString(CultureInfo.InvariantCulture).Length == 1) ? "0" + num2.ToString(CultureInfo.InvariantCulture) : num2.ToString(CultureInfo.InvariantCulture),
             (num6.ToString(CultureInfo.InvariantCulture).Length == 1) ? "0" + num6.ToString(CultureInfo.InvariantCulture) : num6.ToString(CultureInfo.InvariantCulture));
     }
 
@@ -239,7 +239,7 @@ public class PersianDateTime
     {
         int year = int.Parse(dates.Substring(0, 4), CultureInfo.InvariantCulture);
         byte month = Convert.ToByte(dates.Substring(5, 2), CultureInfo.InvariantCulture);
-        
+
         return month switch
         {
             <= 6 => 31,

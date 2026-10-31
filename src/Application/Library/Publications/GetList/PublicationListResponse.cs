@@ -10,6 +10,7 @@ public sealed record PublicationListResponse
     public string Year { get; init; } = string.Empty;
     public string JournalNo { get; init; } = string.Empty;
     public string PublishDate { get; init; } = string.Empty;
+    public string? TypeName { get; init; }
     public string? PublishPlaceName { get; init; }
     public string No { get; init; } = string.Empty;
     public string Period { get; init; } = string.Empty;

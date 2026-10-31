@@ -11,9 +11,9 @@ internal sealed class GetManuscriptCountQueryHandler(
 {
     public async Task<Result<int>> Handle(GetManuscriptCountQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.Set<Manuscript>();
-        
-        int count = await manuscripts.CountAsync(cancellationToken);
+        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
+        int count = await manuscripts.CountAsync(cancellationToken).ConfigureAwait(false);
 
         return Result.Success(count);
     }

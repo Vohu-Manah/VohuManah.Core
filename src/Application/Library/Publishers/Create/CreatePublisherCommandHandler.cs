@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,14 +15,15 @@ internal sealed class CreatePublisherCommandHandler(
 
     public async Task<Result<int>> Handle(CreatePublisherCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.Set<Publisher>();
-        
+        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+
         if (await publishers.AnyAsync(p => p.Name == command.Name, cancellationToken))
         {
             return Result.Failure<int>(Error.Conflict("Publishers.NameNotUnique", "A publisher with this name already exists"));
         }
 
-        Publisher publisher = new Publisher {
+        var publisher = new Publisher
+        {
             Name = command.Name,
             ManagerName = command.ManagerName,
             PlaceId = command.PlaceId,
@@ -34,7 +35,7 @@ internal sealed class CreatePublisherCommandHandler(
 
         publishers.Add(publisher);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(PublisherPatternKey);
 
         return publisher.Id;

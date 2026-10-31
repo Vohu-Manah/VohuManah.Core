@@ -1,14 +1,10 @@
 using Application.Abstractions.Authorization;
-using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
 namespace Infrastructure.Authorization;
 
-/// <summary>
-/// Handler برای بررسی دسترسی نقش‌ها به endpointها از دیتابیس
-/// </summary>
 internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serviceScopeFactory)
     : AuthorizationHandler<RoleEndpointRequirement>
 {
@@ -16,7 +12,6 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
         AuthorizationHandlerContext context,
         RoleEndpointRequirement requirement)
     {
-        // بررسی احراز هویت
         if (context.User.Identity?.IsAuthenticated != true)
         {
             return;
@@ -25,7 +20,6 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
         using IServiceScope scope = serviceScopeFactory.CreateScope();
         IRolePermissionService rolePermissionService = scope.ServiceProvider.GetRequiredService<IRolePermissionService>();
 
-        // گرفتن نقش‌های کاربر از claims
         var userRoles = context.User.Claims
             .Where(c => c.Type == ClaimTypes.Role)
             .Select(c => c.Value)
@@ -33,10 +27,9 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
 
         if (userRoles.Count == 0)
         {
-            return; // کاربر هیچ نقشی ندارد
+            return;
         }
 
-        // بررسی دسترسی برای هر نقش
         foreach (string? role in userRoles)
         {
             bool hasPermission = await rolePermissionService.HasPermissionAsync(
@@ -53,9 +46,6 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
     }
 }
 
-/// <summary>
-/// Requirement برای بررسی دسترسی نقش به endpoint
-/// </summary>
 public sealed class RoleEndpointRequirement : IAuthorizationRequirement
 {
     public RoleEndpointRequirement(string endpointName)

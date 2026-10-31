@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { Role, CreateRoleRequest, UpdateRolePermissionsRequest, UserRoleResponse } from '../../models/role';
+import { apiClient } from '@/app/services/api/client';
+import type { Role, CreateRoleRequest, UpdateRolePermissionsRequest, UserRoleResponse } from '@/app/models/role';
 
 export const roleService = {
   getAll: async (): Promise<Role[]> => {
@@ -39,6 +39,11 @@ export const roleService = {
 
   removeRoleFromUser: async (userId: number, roleId: number): Promise<void> => {
     await apiClient.delete(`/library/settings/users/${userId}/roles/${roleId}`);
+  },
+
+  getAllEndpoints: async (): Promise<Record<string, string[]>> => {
+    const response = await apiClient.get<Record<string, string[]>>('/library/settings/endpoints');
+    return response.data;
   },
 };
 

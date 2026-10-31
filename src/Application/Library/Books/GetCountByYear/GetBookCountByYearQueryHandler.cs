@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetBookCountByYearQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountByYearQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.Set<Book>();
-        
+        var books = unitOfWork.GetDbSet<Book>();
+
         var list = await books
             .GroupBy(b => b.PublishYear)
             .Select(g => new ListItemResponse

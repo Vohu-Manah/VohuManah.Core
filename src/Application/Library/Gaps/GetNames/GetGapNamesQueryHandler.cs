@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetGapNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetGapNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.Set<Gap>();
+        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
 
         List<SelectItemResponse> items = gaps
             .OrderBy(g => g.Title)

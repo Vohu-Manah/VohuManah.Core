@@ -1,4 +1,4 @@
-﻿using SharedKernel;
+using SharedKernel;
 
 namespace Web.Api.Infrastructure;
 
@@ -11,9 +11,11 @@ public static class CustomResults
             throw new InvalidOperationException();
         }
 
+        string? detail = result.Error is ValidationError ? null : GetDetail(result.Error);
+
         return Results.Problem(
             title: GetTitle(result.Error),
-            detail: GetDetail(result.Error),
+            detail: detail,
             type: GetType(result.Error.Type),
             statusCode: GetStatusCode(result.Error.Type),
             extensions: GetExtensions(result));
@@ -54,17 +56,44 @@ public static class CustomResults
 
         static Dictionary<string, object?> GetExtensions(Result result)
         {
-            var extensions = new Dictionary<string, object?>
-            {
-                { "errorMessage", GetDetail(result.Error) }
-            };
+            var extensions = new Dictionary<string, object?>();
 
             if (result.Error is ValidationError validationError)
             {
-                extensions["errors"] = validationError.Errors;
+
+                Dictionary<string, List<string>> errorsDict = new Dictionary<string, List<string>>();
+                foreach (var error in validationError.Errors)
+                {
+                    string fieldName = error.Code;
+                    if (!string.IsNullOrWhiteSpace(fieldName))
+                    {
+                        string camelCaseField = char.ToLowerInvariant(fieldName[0]) + fieldName.Substring(1);
+                        if (!errorsDict.TryGetValue(camelCaseField, out List<string>? errorList))
+                        {
+                            errorList = new List<string>();
+                            errorsDict[camelCaseField] = errorList;
+                        }
+                        errorList.Add(error.Description);
+                    }
+                }
+                Dictionary<string, string[]> finalErrorsDict = errorsDict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToArray());
+                extensions["errors"] = finalErrorsDict;
+            }
+            else
+            {
+                extensions["errorMessage"] = GetDetail(result.Error);
             }
 
             return extensions;
         }
     }
+
+    public static IResult Problem(string title, string detail, int? statusCode = null)
+    {
+        return Results.Problem(
+            title: title,
+            detail: detail,
+            statusCode: statusCode ?? StatusCodes.Status500InternalServerError);
+    }
 }
+

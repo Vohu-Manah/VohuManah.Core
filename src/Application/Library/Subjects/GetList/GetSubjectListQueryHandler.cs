@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetSubjectListQueryHandler(
 
     public Task<Result<List<SubjectListResponse>>> Handle(GetSubjectListQuery query, CancellationToken cancellationToken)
     {
-        var subjects = unitOfWork.Set<Subject>();
-        
-        var allSubjects = cacheManager.Get(SubjectAllKey, () => subjects.ToList());
-        
+        var subjects = unitOfWork.GetDbSet<Subject>();
+
+        var allSubjects = cacheManager.Retrieve(SubjectAllKey, () => subjects.ToList());
+
         var list = allSubjects.Select(s => new SubjectListResponse
         {
             Id = s.Id,

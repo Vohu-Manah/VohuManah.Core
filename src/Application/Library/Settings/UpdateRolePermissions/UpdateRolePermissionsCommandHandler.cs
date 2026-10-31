@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
@@ -13,8 +11,8 @@ internal sealed class UpdateRolePermissionsCommandHandler(
 {
     public async Task<Result> Handle(UpdateRolePermissionsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.Set<Role>();
-        DbSet<RolePermission> rolePermissions = unitOfWork.Set<RolePermission>();
+        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == command.RoleId, cancellationToken);
 
@@ -29,14 +27,13 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        List<RolePermission> existingPermissions = await rolePermissions
+        List<RoleEndpoint> existingPermissions = await rolePermissions
             .Where(rp => rp.RoleId == command.RoleId)
             .ToListAsync(cancellationToken);
 
         var endpointSet = new HashSet<string>(normalizedEndpoints, StringComparer.OrdinalIgnoreCase);
 
-        // حذف مجوزهایی که دیگر وجود ندارند
-        List<RolePermission> toRemove = existingPermissions
+        List<RoleEndpoint> toRemove = existingPermissions
             .Where(rp => !endpointSet.Contains(rp.EndpointName))
             .ToList();
 
@@ -45,7 +42,6 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             rolePermissions.RemoveRange(toRemove);
         }
 
-        // اضافه کردن مجوزهای جدید
         var existingEndpointSet = existingPermissions
             .Select(rp => rp.EndpointName)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -57,7 +53,7 @@ internal sealed class UpdateRolePermissionsCommandHandler(
                 continue;
             }
 
-            rolePermissions.Add(new RolePermission
+            rolePermissions.Add(new RoleEndpoint
             {
                 RoleId = command.RoleId,
                 EndpointName = endpoint

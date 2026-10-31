@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput } from '@mantine/core';
-import { languageService } from '../services/library/languageService';
-import type { Language, CreateLanguageRequest } from '../models/language';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { languageService } from '@/app/services/library/languageService';
+import type { Language, CreateLanguageRequest } from '@/app/models/language';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function LanguagesPage() {
@@ -36,8 +37,8 @@ export default function LanguagesPage() {
       setLoading(true);
       const data = await languageService.getAll();
       setLanguages(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری زبان‌ها', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری زبان‌ها', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -48,7 +49,7 @@ export default function LanguagesPage() {
       try {
         setLoading(true);
         if (editingLanguage) {
-          await languageService.update({ ...form.values, id: editingLanguage.id });
+          await languageService.update(editingLanguage.id, { ...form.values });
           appMessage.success('زبان با موفقیت به‌روزرسانی شد');
         } else {
           await languageService.create(form.values);
@@ -58,8 +59,8 @@ export default function LanguagesPage() {
         form.reset();
         setEditingLanguage(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره زبان', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره زبان', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -73,8 +74,8 @@ export default function LanguagesPage() {
       setEditingLanguage(language);
       form.setValues({ name: language.name, abbreviation: language.abbreviation });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری زبان', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری زبان', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -87,8 +88,8 @@ export default function LanguagesPage() {
         await languageService.delete(id);
         appMessage.success('زبان با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف زبان', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف زبان', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -137,6 +138,8 @@ export default function LanguagesPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name', 'abbreviation']}
+          exportFileName="languages"
+          loading={loading}
         />
       </Card>
 
@@ -151,8 +154,8 @@ export default function LanguagesPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام زبان" required {...form.getInputProps('name')} />
-        <TextInput label="مخفف" required {...form.getInputProps('abbreviation')} />
+        <SmartTextInput label="نام زبان" required withAsterisk fieldName="name" {...form.getInputProps('name')} />
+        <SmartTextInput label="مخفف" required withAsterisk fieldName="abbreviation" {...form.getInputProps('abbreviation')} />
       </FormModal>
     </Stack>
   );

@@ -10,4 +10,11 @@ public static class MiddlewareExtensions
 
         return app;
     }
+
+    public static IApplicationBuilder UseQueryTokenAuthentication(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<QueryTokenAuthenticationMiddleware>();
+
+        return app;
+    }
 }

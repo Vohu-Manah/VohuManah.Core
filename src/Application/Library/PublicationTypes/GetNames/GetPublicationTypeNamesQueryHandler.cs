@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetPublicationTypeNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetPublicationTypeNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> types = unitOfWork.Set<PublicationType>();
+        DbSet<PublicationType> types = unitOfWork.GetDbSet<PublicationType>();
 
         List<SelectItemResponse> items = types
             .OrderBy(t => t.Title)

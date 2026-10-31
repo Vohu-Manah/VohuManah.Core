@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Authentication;
@@ -17,5 +17,5 @@ internal sealed class UserContext : IUserContext
             .HttpContext?
             .User
             .GetUserId() ??
-        throw new ApplicationException("User context is unavailable");
+        throw new InvalidOperationException("کانتکست کاربر در دسترس نیست");
 }

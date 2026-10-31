@@ -4,13 +4,13 @@
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class SeedRolePermissionsForAdmin : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Seed RolePermission data for Admin role
+            
             migrationBuilder.Sql(@"
                 DECLARE @AdminRoleId INT = (SELECT Id FROM [dbo].[Role] WHERE [Name] = 'Admin');
                 
@@ -82,10 +82,10 @@ namespace Infrastructure.Migrations
                 value: "648E9E14DB5F5EBC7B5E3892EE6E5B4C7C49A233DBDAC3C169C33708CC95EF44-65DF715A949CBD1C8FE829424B5FD78E");
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // Remove RolePermission data for Admin role
+            
             migrationBuilder.Sql(@"
                 DECLARE @AdminRoleId INT = (SELECT Id FROM [dbo].[Role] WHERE [Name] = 'Admin');
                 

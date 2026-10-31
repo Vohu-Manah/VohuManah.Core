@@ -6,7 +6,8 @@ internal sealed class DeleteManuscriptCommandValidator : AbstractValidator<Delet
 {
     public DeleteManuscriptCommandValidator()
     {
-        RuleFor(c => c.Id).GreaterThan(0);
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه نسخه خطی نامعتبر است");
     }
 }
 

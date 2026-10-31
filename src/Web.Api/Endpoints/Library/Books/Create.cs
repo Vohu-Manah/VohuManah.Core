@@ -1,14 +1,14 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Books.Create;
+using Application.Library.Settings;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.Create")]
+[RequireRole(EndpointNames.Books.Create)]
 internal sealed class Create : BaseEndpoint
 {
     public sealed record Request(
@@ -35,6 +35,12 @@ internal sealed class Create : BaseEndpoint
             ICommandHandler<CreateBookCommand, long> handler,
             CancellationToken cancellationToken) =>
         {
+            ValidationError? typeValidationError = ModelBindingValidator.ValidateRequestTypes(request);
+            if (typeValidationError != null)
+            {
+                return CustomResults.Problem(Result.Failure(typeValidationError));
+            }
+
             var command = new CreateBookCommand(
                 request.Name,
                 request.Author,
@@ -56,6 +62,7 @@ internal sealed class Create : BaseEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
+        .ValidateRequestTypes<Request>()
         .ApplyRoleAuthorization(this)
         .WithTags("Library.Books");
     }

@@ -1,15 +1,15 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.GetCountByLanguage;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole("Library.Manuscripts.GetCountByLanguage")]
+[RequireRole(EndpointNames.Manuscripts.GetCountByLanguage)]
 internal sealed class GetCountByLanguage : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

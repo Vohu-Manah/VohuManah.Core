@@ -1,29 +1,43 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { Button, Card, Stack, Title, Group, ActionIcon, Text } from '@mantine/core';
+import {FaPlus, FaEdit, FaTrash, FaUser, FaPaperclip, FaQrcode, FaCamera } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, Select, NumberInput, FileButton, Avatar, Group as MantineGroup } from '@mantine/core';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { TableFilters, type TableFilterValues } from '@/app/components/common/TableFilters';
+import { FormModal } from '@/app/components/common/FormModal';
+import { Select, FileButton, Avatar, Group as MantineGroup } from '@mantine/core';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { SmartNumberInput } from '@/app/components/common/SmartNumberInput';
 import { FaBook } from 'react-icons/fa';
-import { bookService } from '../services/library/bookService';
-import { cityService } from '../services/library/cityService';
-import { languageService } from '../services/library/languageService';
-import { subjectService } from '../services/library/subjectService';
-import { publisherService } from '../services/library/publisherService';
-import { attachmentService } from '../services/library/attachmentService';
-import type { Book, BookList, CreateBookRequest } from '../models/book';
-import type { CityName } from '../models/city';
-import type { LanguageName } from '../models/language';
-import type { SubjectName } from '../models/subject';
-import type { PublisherName } from '../models/publisher';
-import { appMessage } from '../messages/appMessages';
+import { bookService } from '@/app/services/library/bookService';
+import { fetchAllPaged } from '@/app/services/api/client';
+import { cityService } from '@/app/services/library/cityService';
+import { languageService } from '@/app/services/library/languageService';
+import { subjectService } from '@/app/services/library/subjectService';
+import { publisherService } from '@/app/services/library/publisherService';
+import { attachmentService } from '@/app/services/library/attachmentService';
+import type { Book, BookList, CreateBookRequest } from '@/app/models/book';
+import type { CityName } from '@/app/models/city';
+import type { LanguageName } from '@/app/models/language';
+import type { SubjectName } from '@/app/models/subject';
+import type { PublisherName } from '@/app/models/publisher';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { handleApiError } from '../helpers/errorHandler';
+import { getFullImageUrl } from '@/app/helpers/imageUrl';
+import QrCodePrint from '@/app/components/common/QrCodePrint';
+import BarcodePrintModal from '@/app/components/common/BarcodePrintModal';
+import BookAttachmentsModal from '@/app/components/common/BookAttachmentsModal';
 
 export default function BooksPage() {
+  const navigate = useNavigate();
   const [books, setBooks] = useState<BookList[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [barcodeModalOpened, setBarcodeModalOpened] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [totalCount, setTotalCount] = useState(0);
+  const [filters, setFilters] = useState<TableFilterValues>({ year: '', fromDate: null, toDate: null });
   const [modalOpened, setModalOpened] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [cities, setCities] = useState<CityName[]>([]);
@@ -33,6 +47,8 @@ export default function BooksPage() {
   const [bookImageFile, setBookImageFile] = useState<File | null>(null);
   const [bookImagePreview, setBookImagePreview] = useState<string>('');
   const [bookImages, setBookImages] = useState<Record<number, string>>({});
+  const [attachmentsModalOpened, setAttachmentsModalOpened] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
 
   const form = useForm<CreateBookRequest>({
     initialValues: {
@@ -64,30 +80,59 @@ export default function BooksPage() {
 
   useEffect(() => {
     loadData();
-    loadLookups();
-  }, []);
+    
+  }, [page, filters, searchTerm]);
 
   useEffect(() => {
-    // Load images for all books
+    loadLookups();
+     
+  }, []);
+
+  const handleFilterChange = (next: TableFilterValues) => {
+    setFilters(next);
+    setPage(1);
+  };
+
+  useEffect(() => {
     const loadBookImages = async () => {
       const imageMap: Record<number, string> = {};
-      for (const book of books) {
+      
+      const imagePromises = books.map(async (book) => {
         try {
           const attachments = await attachmentService.getByEntity('Book', book.id);
-          if (attachments.length > 0) {
-            const imageUrl = attachments[0].fileUrl;
-            // Convert relative URL to absolute using apiBaseUrl
-            const fullUrl = imageUrl.startsWith('http') 
-              ? imageUrl 
-              : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${imageUrl}`;
-            imageMap[book.id] = fullUrl;
+          const isImage = (a: typeof attachments[number]) => {
+            const contentType = a.contentType?.toLowerCase() || '';
+            const originalFileName = a.originalFileName?.toLowerCase() || '';
+            const fileName = a.fileName?.toLowerCase() || '';
+            return contentType.includes('image') ||
+                   /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
+                   /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+          };
+          const mainImageAttachment =
+            attachments.find(a => a.isMain && isImage(a)) ??
+            attachments.find(isImage);
+          if (mainImageAttachment) {
+            const fullUrl = getFullImageUrl(mainImageAttachment.fileUrl);
+            if (fullUrl) {
+              return { bookId: book.id, url: fullUrl };
+            }
           }
-        } catch {
-          // Ignore errors
+        } catch (error) {
+          console.error(`Error loading image for book ${book.id}:`, error);
         }
-      }
+        return null;
+      });
+      
+      const results = await Promise.all(imagePromises);
+      results.forEach((result) => {
+        if (result) {
+          imageMap[result.bookId] = result.url;
+        }
+      });
+      
       setBookImages(imageMap);
     };
+    
     if (books.length > 0) {
       loadBookImages();
     }
@@ -96,10 +141,18 @@ export default function BooksPage() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const data = await bookService.getList();
-      setBooks(data);
-    } catch (error: any) {
-      handleApiError(error, 'خطا در بارگذاری کتاب‌ها');
+      const result = await bookService.getList({
+        page,
+        pageSize: 10,
+        search: searchTerm || undefined,
+        year: filters.year || undefined,
+        fromDate: filters.fromDate ?? undefined,
+        toDate: filters.toDate ?? undefined,
+      });
+      setBooks(result.items);
+      setTotalCount(result.totalCount);
+    } catch {
+      
     } finally {
       setLoading(false);
     }
@@ -117,13 +170,21 @@ export default function BooksPage() {
       setLanguages(languagesData);
       setSubjects(subjectsData);
       setPublishers(publishersData);
-    } catch (error: any) {
-      handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
-    }
+    } catch {
+        
+      }
   };
 
   const handleBookImageChange = (file: File | null) => {
     if (file) {
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      const fileType = file.type.toLowerCase();
+      
+      if (!allowedTypes.includes(fileType)) {
+        appMessage.error('فرمت فایل مجاز نیست. لطفاً یک فایل تصویری (JPEG, PNG, GIF, WEBP) انتخاب کنید.');
+        return;
+      }
+
       setBookImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -138,27 +199,26 @@ export default function BooksPage() {
       try {
         setLoading(true);
         if (editingBook) {
-          await bookService.update({ ...form.values, id: editingBook.id });
-          // Upload image if selected
+          await bookService.update(editingBook.id, { ...form.values });
           if (bookImageFile) {
             try {
-              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب');
+              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
-            } catch (error: any) {
-              handleApiError(error, 'خطا در آپلود عکس');
-            }
+            } catch {
+        
+      }
           }
           appMessage.success('کتاب با موفقیت به‌روزرسانی شد');
         } else {
           const newBookId = await bookService.create(form.values);
-          // Upload image if selected
           if (bookImageFile) {
             try {
-              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب');
+              
+              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
-            } catch (error: any) {
-              handleApiError(error, 'خطا در آپلود عکس');
-            }
+            } catch {
+        
+      }
           }
           appMessage.success('کتاب با موفقیت ایجاد شد');
         }
@@ -168,8 +228,8 @@ export default function BooksPage() {
         setBookImageFile(null);
         setBookImagePreview('');
         loadData();
-      } catch (error: any) {
-        handleApiError(error, 'خطا در ذخیره کتاب');
+      } catch {
+        
       } finally {
         setLoading(false);
       }
@@ -198,12 +258,34 @@ export default function BooksPage() {
         subjectId: book.subjectId,
         bookShelfRow: book.bookShelfRow,
       });
-      // TODO: Load book image when API is available
-      setBookImagePreview('');
+      
       setBookImageFile(null);
+      try {
+        const attachments = await attachmentService.getByEntity('Book', id);
+        const isImage = (a: typeof attachments[number]) => {
+          const contentType = a.contentType?.toLowerCase() || '';
+          const originalFileName = a.originalFileName?.toLowerCase() || '';
+          const fileName = a.fileName?.toLowerCase() || '';
+          return contentType.includes('image') ||
+                 /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
+                 /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+        };
+        const mainImage =
+          attachments.find(a => a.isMain && isImage(a)) ??
+          attachments.find(isImage);
+        if (mainImage) {
+          const fullUrl = getFullImageUrl(mainImage.fileUrl);
+          setBookImagePreview(fullUrl || '');
+        } else {
+          setBookImagePreview('');
+        }
+      } catch {
+        setBookImagePreview('');
+      }
+      
       setModalOpened(true);
-    } catch (error: any) {
-      handleApiError(error, 'خطا در بارگذاری کتاب');
+    } catch {
+      
     } finally {
       setLoading(false);
     }
@@ -216,8 +298,8 @@ export default function BooksPage() {
         await bookService.delete(id);
         appMessage.success('کتاب با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        handleApiError(error, 'خطا در حذف کتاب');
+      } catch {
+        
       } finally {
         setLoading(false);
       }
@@ -229,14 +311,11 @@ export default function BooksPage() {
       key: 'image',
       title: 'عکس',
       width: 80,
+      exportable: false,
       render: (row) => {
         const imageUrl = bookImages[row.id];
         return (
-          <Avatar
-            src={imageUrl}
-            size={40}
-            radius="sm"
-          >
+          <Avatar src={imageUrl} size={40} radius="sm">
             <FaBook />
           </Avatar>
         );
@@ -245,8 +324,50 @@ export default function BooksPage() {
     { key: 'name', title: 'نام کتاب' },
     { key: 'author', title: 'نویسنده' },
     { key: 'publisherName', title: 'ناشر' },
+    { key: 'publishYear', title: 'سال' },
     { key: 'no', title: 'شماره' },
     { key: 'volumeCount', title: 'تعداد جلد' },
+    {
+      key: 'qrCode',
+      title: 'بارکد',
+      exportable: false,
+      render: (row) => <QrCodePrint bookId={row.id} />,
+    },
+    {
+      key: 'profile',
+      title: 'پروفایل',
+      exportable: false,
+      render: (row) => (
+        <Button
+          variant="light"
+          color="blue"
+          leftSection={<FaUser />}
+          onClick={() => navigate(`/books/profile?id=${row.id}`)}
+          size="xs"
+        >
+          مشاهده پروفایل
+        </Button>
+      ),
+    },
+    {
+      key: 'attachments',
+      title: 'پیوست‌ها',
+      exportable: false,
+      render: (row) => (
+        <Button
+          variant="light"
+          color="orange"
+          leftSection={<FaPaperclip />}
+          onClick={() => {
+            setSelectedBookId(row.id);
+            setAttachmentsModalOpened(true);
+          }}
+          size="xs"
+        >
+          مدیریت پیوست‌ها
+        </Button>
+      ),
+    },
     {
       key: 'actions',
       title: 'عملیات',
@@ -267,18 +388,35 @@ export default function BooksPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت کتاب‌ها</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingBook(null);
-            setBookImageFile(null);
-            setBookImagePreview('');
-            setModalOpened(true);
-          }}
+        <Group>
+          <Button
+          variant="light"
+          color="grape"
+          leftSection={<FaQrcode />}
+          onClick={() => setBarcodeModalOpened(true)}
         >
-          افزودن کتاب جدید
+          چاپ بارکد
         </Button>
+          <Button
+            variant="light"
+            leftSection={<FaCamera />}
+            onClick={() => navigate('/scan')}
+          >
+            اسکن
+          </Button>
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingBook(null);
+              setBookImageFile(null);
+              setBookImagePreview('');
+              setModalOpened(true);
+            }}
+          >
+            افزودن کتاب جدید
+          </Button>
+        </Group>
       </Group>
 
       <Card withBorder>
@@ -287,6 +425,31 @@ export default function BooksPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name', 'author', 'publisherName']}
+          exportFileName="books"
+          exportLimit={50000}
+          onExportAll={(onProgress) =>
+            fetchAllPaged<BookList>(
+              (page, pageSize) =>
+                bookService.getList({
+                  page,
+                  pageSize,
+                  search: searchTerm || undefined,
+                  year: filters.year || undefined,
+                  fromDate: filters.fromDate ?? undefined,
+                  toDate: filters.toDate ?? undefined,
+                }),
+              { pageSize: 200, onProgress },
+            )
+          }
+          loading={loading}
+          serverTotal={totalCount}
+          page={page}
+          onPageChange={setPage}
+          onSearchChange={(q) => {
+            setSearchTerm(q);
+            setPage(1);
+          }}
+          filters={<TableFilters value={filters} onChange={handleFilterChange} yearSource="book" />}
         />
       </Card>
 
@@ -303,11 +466,27 @@ export default function BooksPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام کتاب" required withAsterisk {...form.getInputProps('name')} />
-        <TextInput label="نویسنده" required withAsterisk {...form.getInputProps('author')} />
-        <TextInput label="مترجم" {...form.getInputProps('translator')} />
-        <TextInput label="ویراستار" {...form.getInputProps('editor')} />
-        <TextInput label="صحاف" {...form.getInputProps('corrector')} />
+        <SmartTextInput
+          label="نام کتاب"
+          required
+          withAsterisk
+          fieldName="name"
+          {...form.getInputProps('name')}
+        />
+        <SmartTextInput
+          label="نویسنده"
+          required
+          withAsterisk
+          fieldName="author"
+          {...form.getInputProps('author')}
+        />
+        <SmartTextInput
+          label="مترجم"
+          fieldName="translator"
+          {...form.getInputProps('translator')}
+        />
+        <SmartTextInput label="ویراستار" fieldName="editor" {...form.getInputProps('editor')} />
+        <SmartTextInput label="صحاف" fieldName="corrector" {...form.getInputProps('corrector')} />
         <Group grow>
           <Select
             label="ناشر"
@@ -343,20 +522,55 @@ export default function BooksPage() {
           />
         </Group>
         <Group grow>
-          <TextInput label="سال چاپ" {...form.getInputProps('publishYear')} />
-          <TextInput label="شماره چاپ" {...form.getInputProps('publishOrder')} />
-          <TextInput label="شماره کتاب" required withAsterisk {...form.getInputProps('no')} />
+          <SmartTextInput
+            label="سال چاپ"
+            fieldName="publishYear"
+            {...form.getInputProps('publishYear')}
+          />
+          <SmartTextInput
+            label="شماره چاپ"
+            fieldName="publishOrder"
+            {...form.getInputProps('publishOrder')}
+          />
+          <SmartTextInput
+            label="شماره کتاب"
+            required
+            withAsterisk
+            fieldName="no"
+            {...form.getInputProps('no')}
+          />
         </Group>
         <Group grow>
-          <TextInput label="ISBN" {...form.getInputProps('isbn')} />
-          <NumberInput label="تعداد جلد" required withAsterisk min={1} {...form.getInputProps('volumeCount')} />
-          <TextInput label="ردیف قفسه" {...form.getInputProps('bookShelfRow')} />
+          <SmartTextInput label="ISBN" fieldName="isbn" {...form.getInputProps('isbn')} />
+          <SmartNumberInput
+            label="تعداد جلد"
+            required
+            withAsterisk
+            min={1}
+            {...form.getInputProps('volumeCount')}
+          />
+          <SmartTextInput
+            label="ردیف قفسه"
+            fieldName="bookShelfRow"
+            {...form.getInputProps('bookShelfRow')}
+          />
         </Group>
         <Stack gap="sm">
-          <TextInput label="عکس کتاب" readOnly value={bookImageFile?.name || 'هیچ فایلی انتخاب نشده'} />
+          <SmartTextInput
+            label="عکس کتاب"
+            readOnly
+            value={bookImageFile?.name || 'هیچ فایلی انتخاب نشده'}
+          />
           <MantineGroup>
-            <FileButton onChange={handleBookImageChange} accept="image/*">
-              {(props) => <Button {...props} variant="light">انتخاب عکس</Button>}
+            <FileButton
+              onChange={handleBookImageChange}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+            >
+              {(props) => (
+                <Button {...props} variant="light">
+                  انتخاب عکس
+                </Button>
+              )}
             </FileButton>
             {bookImagePreview && (
               <Avatar src={bookImagePreview} size={100} radius="sm">
@@ -364,9 +578,25 @@ export default function BooksPage() {
               </Avatar>
             )}
           </MantineGroup>
+          <Text size="xs" c="dimmed">
+            فرمت‌های مجاز: JPEG, PNG, GIF, WEBP
+          </Text>
         </Stack>
       </FormModal>
+
+      <BookAttachmentsModal
+        opened={attachmentsModalOpened}
+        onClose={() => {
+          setAttachmentsModalOpened(false);
+          setSelectedBookId(null);
+        }}
+        bookId={selectedBookId || 0}
+      />
+
+      <BarcodePrintModal
+        opened={barcodeModalOpened}
+        onClose={() => setBarcodeModalOpened(false)}
+      />
     </Stack>
   );
 }
-

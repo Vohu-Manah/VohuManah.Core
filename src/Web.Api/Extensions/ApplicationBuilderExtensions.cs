@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Builder;
-
 namespace Web.Api.Extensions;
 
 public static class ApplicationBuilderExtensions

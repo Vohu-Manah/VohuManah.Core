@@ -17,7 +17,7 @@ export type CreateGapRequest = {
 };
 
 export type UpdateGapRequest = CreateGapRequest & {
-  id: number;
+  id?: number;
 };
 
 

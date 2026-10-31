@@ -1,30 +1,44 @@
 import { useState, useEffect } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
 import { TextInput, Select } from '@mantine/core';
-import { PersianDatePickerString } from '../components/common/PersianDatePickerString';
-import { publicationService } from '../services/library/publicationService';
-import { cityService } from '../services/library/cityService';
-import { languageService } from '../services/library/languageService';
-import { subjectService } from '../services/library/subjectService';
-import { publicationTypeService } from '../services/library/publicationTypeService';
-import type { PublicationSearchRequest, PublicationSearchResponse } from '../models/publication';
-import type { CityName } from '../models/city';
-import type { LanguageName } from '../models/language';
-import type { SubjectName } from '../models/subject';
-import type { PublicationTypeName } from '../models/publicationType';
-import { appMessage } from '../messages/appMessages';
-import { handleApiError } from '../helpers/errorHandler';
+import { PersianDatePickerString } from '@/app/components/common/PersianDatePickerString';
+import { publicationService } from '@/app/services/library/publicationService';
+import { fetchAllPaged } from '@/app/services/api/client';
+import { cityService } from '@/app/services/library/cityService';
+import { languageService } from '@/app/services/library/languageService';
+import { subjectService } from '@/app/services/library/subjectService';
+import { publicationTypeService } from '@/app/services/library/publicationTypeService';
+import type { PublicationSearchRequest, PublicationSearchResponse } from '@/app/models/publication';
+import type { CityName } from '@/app/models/city';
+import type { LanguageName } from '@/app/models/language';
+import type { SubjectName } from '@/app/models/subject';
+import type { PublicationTypeName } from '@/app/models/publicationType';
+import { handleApiError } from '@/app/helpers/errorHandler';
+import { ReportModal } from '@/app/components/reports/ReportModal';
+import { YearSelect } from '@/app/components/common/YearSelect';
+import { usePagedSearch } from '@/app/hooks/usePagedSearch';
 
 export default function SearchPublicationPage() {
-  const [results, setResults] = useState<PublicationSearchResponse[]>([]);
-  const [loading, setLoading] = useState(false);
+  const {
+    items: results,
+    totalCount,
+    page,
+    loading,
+    load: loadPaged,
+    goToPage,
+  } = usePagedSearch<PublicationSearchResponse>(
+    (params) => publicationService.search(params as never),
+    50,
+  );
+
   const [cities, setCities] = useState<CityName[]>([]);
   const [languages, setLanguages] = useState<LanguageName[]>([]);
   const [subjects, setSubjects] = useState<SubjectName[]>([]);
   const [publicationTypes, setPublicationTypes] = useState<PublicationTypeName[]>([]);
+  const [reportModalOpened, setReportModalOpened] = useState(false);
 
   const form = useForm<PublicationSearchRequest>({
     initialValues: {
@@ -33,6 +47,7 @@ export default function SearchPublicationPage() {
       publishPlaceId: undefined,
       languageId: undefined,
       subjectId: undefined,
+      year: '',
       publishDate: '',
     },
   });
@@ -43,15 +58,7 @@ export default function SearchPublicationPage() {
   }, []);
 
   const loadAllData = async () => {
-    try {
-      setLoading(true);
-      const data = await publicationService.search({});
-      setResults(data);
-    } catch (error: any) {
-      handleApiError(error, 'خطا در بارگذاری نشریات');
-    } finally {
-      setLoading(false);
-    }
+    await loadPaged({}, true);
   };
 
   const loadLookups = async () => {
@@ -66,32 +73,28 @@ export default function SearchPublicationPage() {
       setLanguages(languagesData);
       setSubjects(subjectsData);
       setPublicationTypes(typesData);
-    } catch (error: any) {
+    } catch (error) {
       handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
     }
   };
 
+  const buildParams = (): PublicationSearchRequest => {
+    const params: PublicationSearchRequest = {};
+    if (form.values.name?.trim()) params.name = form.values.name.trim();
+    if (form.values.typeId) params.typeId = form.values.typeId;
+    if (form.values.publishPlaceId) params.publishPlaceId = form.values.publishPlaceId;
+    if (form.values.languageId) params.languageId = form.values.languageId;
+    if (form.values.subjectId) params.subjectId = form.values.subjectId;
+    if (form.values.year?.trim()) params.year = form.values.year.trim();
+    if (form.values.publishDate?.trim()) params.publishDate = form.values.publishDate.trim();
+    return params;
+  };
+
   const handleSearch = async () => {
     try {
-      setLoading(true);
-      const params: PublicationSearchRequest = {};
-      if (form.values.name?.trim()) params.name = form.values.name.trim();
-      if (form.values.typeId) params.typeId = form.values.typeId;
-      if (form.values.publishPlaceId) params.publishPlaceId = form.values.publishPlaceId;
-      if (form.values.languageId) params.languageId = form.values.languageId;
-      if (form.values.subjectId) params.subjectId = form.values.subjectId;
-      if (form.values.publishDate?.trim()) params.publishDate = form.values.publishDate.trim();
-
-      if (Object.keys(params).length === 0) {
-        await loadAllData();
-      } else {
-        const data = await publicationService.search(params);
-        setResults(data);
-      }
-    } catch (error: any) {
+      await loadPaged(buildParams(), true);
+    } catch (error) {
       handleApiError(error, 'خطا در جستجو');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -126,7 +129,9 @@ export default function SearchPublicationPage() {
               data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
               clearable
               value={form.values.publishPlaceId ? String(form.values.publishPlaceId) : null}
-              onChange={(value) => form.setFieldValue('publishPlaceId', value ? Number(value) : undefined)}
+              onChange={(value) =>
+                form.setFieldValue('publishPlaceId', value ? Number(value) : undefined)
+              }
             />
           </Group>
           <Group grow>
@@ -135,14 +140,24 @@ export default function SearchPublicationPage() {
               data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
               clearable
               value={form.values.languageId ? String(form.values.languageId) : null}
-              onChange={(value) => form.setFieldValue('languageId', value ? Number(value) : undefined)}
+              onChange={(value) =>
+                form.setFieldValue('languageId', value ? Number(value) : undefined)
+              }
             />
             <Select
               label="موضوع"
               data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
               clearable
               value={form.values.subjectId ? String(form.values.subjectId) : null}
-              onChange={(value) => form.setFieldValue('subjectId', value ? Number(value) : undefined)}
+              onChange={(value) =>
+                form.setFieldValue('subjectId', value ? Number(value) : undefined)
+              }
+            />
+            <YearSelect
+              label="سال"
+              source="publication"
+              value={form.values.year || null}
+              onChange={(year) => form.setFieldValue('year', year ?? '')}
             />
             <PersianDatePickerString
               label="تاریخ انتشار"
@@ -155,10 +170,13 @@ export default function SearchPublicationPage() {
             <Button leftSection={<FaSearch />} onClick={handleSearch} loading={loading}>
               اعمال فیلتر
             </Button>
-            <Button variant="subtle" onClick={() => {
-              form.reset();
-              loadAllData();
-            }}>
+            <Button
+              variant="subtle"
+              onClick={() => {
+                form.reset();
+                loadAllData();
+              }}
+            >
               نمایش همه
             </Button>
           </Group>
@@ -166,11 +184,61 @@ export default function SearchPublicationPage() {
       </Card>
 
       <Card withBorder>
-        <Title order={4} mb="md">
-          نتایج ({results.length})
-        </Title>
-        <ProTable data={results} columns={columns} exportFileName="نشریات" />
+        <Group justify="space-between" mb="md">
+          <Title order={4}>نتایج ({results.length})</Title>
+          <Button
+            leftSection={<FaFilePdf />}
+            onClick={() => setReportModalOpened(true)}
+            disabled={results.length === 0 || loading}
+            variant="light"
+          >
+            مشاهده گزارش
+          </Button>
+        </Group>
+        <ProTable
+          data={results}
+          columns={columns}
+          exportFileName="نشریات"
+          exportLimit={50000}
+          onExportAll={(onProgress) =>
+            fetchAllPaged<PublicationSearchResponse>(
+              (page, pageSize) => publicationService.search({ ...buildParams(), page, pageSize }),
+              { pageSize: 500, onProgress },
+            )
+          }
+          loading={loading}
+          serverTotal={totalCount}
+          page={page}
+          pageSize={50}
+          onPageChange={goToPage}
+        />
       </Card>
+
+      <ReportModal
+        opened={reportModalOpened}
+        onClose={() => setReportModalOpened(false)}
+        reportRequest={{
+          reportType: 'publication',
+          searchCriteria: {
+            name: form.values.name || null,
+            publicationTypeId: form.values.typeId || 0,
+            concessionaire: null,
+            responsibleDirector: null,
+            editor: null,
+            fromYear: form.values.year || null,
+            toYear: form.values.year || null,
+            no: null,
+            publishDate: form.values.publishDate || null,
+            publishPlaceId: form.values.publishPlaceId || 0,
+            journalNo: null,
+            languageId: form.values.languageId || 0,
+            subjectId: form.values.subjectId || 0,
+            fromPeriod: null,
+            toPeriod: null,
+          },
+        }}
+        title="گزارش لیست نشریات"
+      />
     </Stack>
   );
 }

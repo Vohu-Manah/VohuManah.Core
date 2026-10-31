@@ -8,7 +8,7 @@ namespace Web.Api.Endpoints.Library.Users;
 
 internal sealed class Login : IEndpoint
 {
-    public sealed record Request(string UserName, string Password);
+    public sealed record Request(string UserName, string Password, string? HumanVerifyToken);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -17,7 +17,7 @@ internal sealed class Login : IEndpoint
             ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new LoginLibraryUserCommand(request.UserName, request.Password);
+            var command = new LoginLibraryUserCommand(request.UserName, request.Password, request.HumanVerifyToken);
 
             Result<LoginLibraryUserResponse> result = await handler.Handle(command, cancellationToken);
 

@@ -2,22 +2,23 @@ namespace Application.Abstractions.Caching;
 
 public static class CacheExtensions
 {
-    public static T Get<T>(this ICacheManager cacheManager, string key, Func<T> acquire)
+    public static T Retrieve<T>(this ICacheManager cacheManager, string key, Func<T> acquire)
     {
-        return cacheManager.Get(key, 60, acquire);
+        return cacheManager.Retrieve(key, 60, acquire);
     }
 
-    public static T Get<T>(this ICacheManager cacheManager, string key, int cacheTime, Func<T> acquire)
+    public static T Retrieve<T>(this ICacheManager cacheManager, string key, int cacheTime, Func<T> acquire)
     {
         if (cacheManager.IsSet(key))
         {
-            return cacheManager.Get<T>(key) ?? acquire();
+            return cacheManager.Retrieve<T>(key) ?? acquire();
         }
 
         T result = acquire();
-        cacheManager.Set(key, result, cacheTime);
+        cacheManager.Store(key, result, cacheTime);
         return result;
     }
 }
+
 
 

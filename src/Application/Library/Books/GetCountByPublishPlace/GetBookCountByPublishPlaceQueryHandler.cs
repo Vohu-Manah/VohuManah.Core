@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetBookCountByPublishPlaceQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountByPublishPlaceQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.Set<Book>();
-        
+        var books = unitOfWork.GetDbSet<Book>();
+
         var list = await books
             .Include(b => b.City)
             .GroupBy(b => new { b.PublishPlaceId, CityName = b.City != null ? b.City.Name : "" })

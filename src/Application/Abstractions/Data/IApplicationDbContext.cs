@@ -16,15 +16,20 @@ public interface IApplicationDbContext : IUnitOfWork
     DbSet<Manuscript> Manuscripts { get; }
     DbSet<Gap> Gaps { get; }
     DbSet<Settings> Settings { get; }
-            DbSet<Role> Roles { get; }
-            DbSet<UserRole> UserRoles { get; }
-            DbSet<RefreshToken> RefreshTokens { get; }
-            DbSet<Attachment> Attachments { get; }
+    DbSet<Role> Roles { get; }
+    DbSet<UserRole> UserRoles { get; }
+    DbSet<RoleEndpoint> RoleEndpoints { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<Attachment> Attachments { get; }
+    DbSet<UserSettings> UserSettings { get; }
+    DbSet<AppInfo> AppInfos { get; }
+    DbSet<MenuItem> MenuItems { get; }
+    DbSet<VisitLog> VisitLogs { get; }
 }
 
 public interface IUnitOfWork
 {
-    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+    DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class;
     int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

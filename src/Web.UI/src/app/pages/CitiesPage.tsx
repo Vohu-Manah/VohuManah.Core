@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput } from '@mantine/core';
-import { cityService } from '../services/library/cityService';
-import type { City, CreateCityRequest } from '../models/city';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { cityService } from '@/app/services/library/cityService';
+import type { City, CreateCityRequest } from '@/app/models/city';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function CitiesPage() {
@@ -34,8 +35,8 @@ export default function CitiesPage() {
       setLoading(true);
       const data = await cityService.getAll();
       setCities(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری شهرها', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری شهرها', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,7 @@ export default function CitiesPage() {
       try {
         setLoading(true);
         if (editingCity) {
-          await cityService.update({ ...form.values, id: editingCity.id });
+          await cityService.update(editingCity.id, { ...form.values });
           appMessage.success('شهر با موفقیت به‌روزرسانی شد');
         } else {
           await cityService.create(form.values);
@@ -56,8 +57,8 @@ export default function CitiesPage() {
         form.reset();
         setEditingCity(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره شهر', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره شهر', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -71,8 +72,8 @@ export default function CitiesPage() {
       setEditingCity(city);
       form.setValues({ name: city.name });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری شهر', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری شهر', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -85,8 +86,8 @@ export default function CitiesPage() {
         await cityService.delete(id);
         appMessage.success('شهر با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف شهر', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف شهر', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -134,6 +135,8 @@ export default function CitiesPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name']}
+          exportFileName="cities"
+          loading={loading}
         />
       </Card>
 
@@ -148,7 +151,7 @@ export default function CitiesPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام شهر" required {...form.getInputProps('name')} />
+        <SmartTextInput label="نام شهر" required withAsterisk fieldName="name" {...form.getInputProps('name')} />
       </FormModal>
     </Stack>
   );

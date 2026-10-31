@@ -8,33 +8,20 @@ import dayjs from 'dayjs';
 import jalaliday from 'jalaliday';
 import 'dayjs/locale/fa';
 
-// Extend dayjs with jalaliday
 dayjs.extend(jalaliday);
 
-export interface PersianDatePickerProps {
-  /** The selected date value */
+export type PersianDatePickerProps = {
   value?: Date | null;
-  /** Callback when date changes */
   onChange?: (value: Date | null) => void;
-  /** Placeholder text */
   placeholder?: string;
-  /** Label text */
   label?: string;
-  /** Error message */
   error?: string;
-  /** Whether the input is required */
   required?: boolean;
-  /** Whether the input is disabled */
   disabled?: boolean;
-  /** Whether the input is read-only */
   readOnly?: boolean;
-  /** Minimum selectable date */
   minDate?: Date;
-  /** Maximum selectable date */
   maxDate?: Date;
-  /** Additional props */
-  [key: string]: any;
-}
+};
 
 export function PersianDatePicker({
   value,
@@ -51,7 +38,6 @@ export function PersianDatePicker({
 }: PersianDatePickerProps) {
   const [internalValue, setInternalValue] = useState<Value>(null);
 
-  // Convert Date to Jalali date string for react-multi-date-picker
   useEffect(() => {
     if (value) {
       const jalaliDate = dayjs(value).calendar('jalali').locale('fa');
@@ -64,14 +50,12 @@ export function PersianDatePicker({
 
   const handleChange = (date: Value) => {
     setInternalValue(date);
-    
+
     if (onChange) {
       if (date) {
-        // react-multi-date-picker returns a DateObject or string
         let jalaliDate: dayjs.Dayjs;
-        
+
         if (typeof date === 'string') {
-          // Parse string format YYYY/MM/DD
           const [year, month, day] = date.split('/').map(Number);
           jalaliDate = dayjs()
             .calendar('jalali')
@@ -79,7 +63,6 @@ export function PersianDatePicker({
             .month(month - 1)
             .date(day);
         } else if (date && typeof date === 'object' && 'year' in date) {
-          // DateObject
           jalaliDate = dayjs()
             .calendar('jalali')
             .year((date as DateObject).year)
@@ -89,8 +72,7 @@ export function PersianDatePicker({
           onChange(null);
           return;
         }
-        
-        // Convert Jalali date to Gregorian Date
+
         const gregorianDate = jalaliDate.calendar('gregory').toDate();
         onChange(gregorianDate);
       } else {
@@ -99,7 +81,6 @@ export function PersianDatePicker({
     }
   };
 
-  // Convert minDate and maxDate to Jalali strings
   const minJalaliDate = minDate
     ? dayjs(minDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
     : undefined;
@@ -112,7 +93,12 @@ export function PersianDatePicker({
       {label && (
         <Text size="sm" fw={500}>
           {label}
-          {required && <Text component="span" c="red"> *</Text>}
+          {required && (
+            <Text component="span" c="red">
+              {' '}
+              *
+            </Text>
+          )}
         </Text>
       )}
       <DatePicker
@@ -128,10 +114,10 @@ export function PersianDatePicker({
         format="YYYY/MM/DD"
         containerClassName="custom-date-picker"
         inputClass="mantine-Input-input mantine-TextInput-input"
+        portal
         style={{
           width: '100%',
           direction: 'rtl',
-          zIndex: 9999,
         }}
         zIndex={9999}
         {...props}

@@ -11,8 +11,8 @@ internal sealed class DeletePublicationCommandHandler(
 {
     public async Task<Result> Handle(DeletePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         Publication? publication = await publications
             .SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
 

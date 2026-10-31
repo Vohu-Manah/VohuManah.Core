@@ -11,8 +11,8 @@ internal sealed class DeleteManuscriptCommandHandler(
 {
     public async Task<Result> Handle(DeleteManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         Manuscript? manuscript = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
 

@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,20 +15,21 @@ internal sealed class CreateLanguageCommandHandler(
 
     public async Task<Result<int>> Handle(CreateLanguageCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.Set<Language>();
-        
+        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+
         if (await languages.AnyAsync(l => l.Name == command.Name, cancellationToken))
         {
             return Result.Failure<int>(Error.Conflict("Languages.NameNotUnique", "A language with this name already exists"));
         }
 
-        Language language = new Language { 
+        var language = new Language
+        {
             Name = command.Name,
             Abbreviation = command.Abbreviation
         };
         languages.Add(language);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(LanguagePatternKey);
 
         return language.Id;

@@ -1,10 +1,10 @@
+using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Authentication;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
 using Microsoft.Extensions.Configuration;
+using SharedKernel;
 
 namespace Application.Library.Users.Tokens;
 
@@ -15,7 +15,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
 {
     public async Task<Result<RefreshAccessTokenResponse>> Handle(RefreshAccessTokenCommand command, CancellationToken cancellationToken)
     {
-        RefreshToken? refresh = await unitOfWork.Set<RefreshToken>()
+        RefreshToken? refresh = await unitOfWork.GetDbSet<RefreshToken>()
             .SingleOrDefaultAsync(r => r.Token == command.RefreshToken, cancellationToken);
 
         if (refresh == null || !refresh.IsActive)
@@ -23,7 +23,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
             return Result.Failure<RefreshAccessTokenResponse>(Error.Conflict("Auth.InvalidRefresh", "توکن رفرش نامعتبر یا منقضی شده است"));
         }
 
-        User? user = await unitOfWork.Set<User>()
+        User? user = await unitOfWork.GetDbSet<User>()
             .SingleOrDefaultAsync(u => u.UserName == refresh.UserName, cancellationToken);
 
         if (user == null)
@@ -44,7 +44,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
             ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
 
-        unitOfWork.Set<RefreshToken>().Add(newRefresh);
+        unitOfWork.GetDbSet<RefreshToken>().Add(newRefresh);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         var response = new RefreshAccessTokenResponse(accessToken, newRefresh.Token);

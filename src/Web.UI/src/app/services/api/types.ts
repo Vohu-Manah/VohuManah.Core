@@ -10,6 +10,7 @@ export type ProblemDetails = {
 export type ApiError = {
   status: number;
   message: string;
+  title?: string;
   detail?: string;
   errors?: Record<string, string[]>;
   raw?: unknown;

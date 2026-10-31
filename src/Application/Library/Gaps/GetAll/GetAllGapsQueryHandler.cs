@@ -15,10 +15,10 @@ internal sealed class GetAllGapsQueryHandler(
 
     public Task<Result<List<GapResponse>>> Handle(GetAllGapsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.Set<Gap>();
-        
-        List<Gap> allGaps = cacheManager.Get(GapAllKey, () => gaps.OrderBy(g => g.Id).ToList());
-        
+        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+
+        List<Gap> allGaps = cacheManager.Retrieve(GapAllKey, () => gaps.OrderByDescending(g => g.Id).ToList());
+
         List<GapResponse> response = allGaps.Select(g => new GapResponse
         {
             Id = g.Id,

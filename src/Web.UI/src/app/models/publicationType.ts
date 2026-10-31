@@ -13,7 +13,7 @@ export type CreatePublicationTypeRequest = {
 };
 
 export type UpdatePublicationTypeRequest = CreatePublicationTypeRequest & {
-  id: number;
+  id?: number;
 };
 
 

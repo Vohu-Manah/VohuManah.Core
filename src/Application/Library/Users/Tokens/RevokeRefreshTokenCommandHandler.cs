@@ -11,7 +11,7 @@ internal sealed class RevokeRefreshTokenCommandHandler(
 {
     public async Task<Result> Handle(RevokeRefreshTokenCommand command, CancellationToken cancellationToken)
     {
-        RefreshToken? refresh = await unitOfWork.Set<RefreshToken>()
+        RefreshToken? refresh = await unitOfWork.GetDbSet<RefreshToken>()
             .SingleOrDefaultAsync(r => r.Token == command.RefreshToken, cancellationToken);
 
         if (refresh == null)

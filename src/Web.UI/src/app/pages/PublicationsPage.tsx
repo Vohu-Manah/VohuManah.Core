@@ -2,26 +2,33 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, Select } from '@mantine/core';
-import { PersianDatePickerString } from '../components/common/PersianDatePickerString';
-import { publicationService } from '../services/library/publicationService';
-import { cityService } from '../services/library/cityService';
-import { languageService } from '../services/library/languageService';
-import { subjectService } from '../services/library/subjectService';
-import { publicationTypeService } from '../services/library/publicationTypeService';
-import type { Publication, CreatePublicationRequest } from '../models/publication';
-import type { CityName } from '../models/city';
-import type { LanguageName } from '../models/language';
-import type { SubjectName } from '../models/subject';
-import type { PublicationTypeName } from '../models/publicationType';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { TableFilters, type TableFilterValues } from '@/app/components/common/TableFilters';
+import { FormModal } from '@/app/components/common/FormModal';
+import { Select } from '@mantine/core';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { PersianDatePickerString } from '@/app/components/common/PersianDatePickerString';
+import { publicationService } from '@/app/services/library/publicationService';
+import { fetchAllPaged } from '@/app/services/api/client';
+import { cityService } from '@/app/services/library/cityService';
+import { languageService } from '@/app/services/library/languageService';
+import { subjectService } from '@/app/services/library/subjectService';
+import { publicationTypeService } from '@/app/services/library/publicationTypeService';
+import type { Publication, CreatePublicationRequest } from '@/app/models/publication';
+import type { CityName } from '@/app/models/city';
+import type { LanguageName } from '@/app/models/language';
+import type { SubjectName } from '@/app/models/subject';
+import type { PublicationTypeName } from '@/app/models/publicationType';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function PublicationsPage() {
   const [publications, setPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [totalCount, setTotalCount] = useState(0);
+  const [filters, setFilters] = useState<TableFilterValues>({ year: '', fromDate: null, toDate: null });
   const [modalOpened, setModalOpened] = useState(false);
   const [editingPublication, setEditingPublication] = useState<Publication | null>(null);
   const [cities, setCities] = useState<CityName[]>([]);
@@ -47,21 +54,50 @@ export default function PublicationsPage() {
     },
     validate: {
       name: isNotEmpty('نام نشریه الزامی است'),
+      typeId: (value) => (value <= 0 ? 'انتخاب نوع نشریه الزامی است' : null),
+      publishPlaceId: (value) => (value <= 0 ? 'انتخاب محل چاپ الزامی است' : null),
+      concessionaire: isNotEmpty('امتیازدار الزامی است'),
+      responsibleDirector: isNotEmpty('مدیر مسئول الزامی است'),
+      editor: isNotEmpty('ویراستار الزامی است'),
+      year: isNotEmpty('سال الزامی است'),
+      journalNo: isNotEmpty('شماره مجله الزامی است'),
+      publishDate: isNotEmpty('تاریخ انتشار الزامی است'),
+      no: isNotEmpty('شماره الزامی است'),
+      languageId: (value) => (value <= 0 ? 'انتخاب زبان الزامی است' : null),
+      subjectId: (value) => (value <= 0 ? 'انتخاب موضوع الزامی است' : null),
     },
   });
 
   useEffect(() => {
     loadData();
+    
+  }, [page, filters, searchTerm]);
+
+  useEffect(() => {
     loadLookups();
+     
   }, []);
+
+  const handleFilterChange = (next: TableFilterValues) => {
+    setFilters(next);
+    setPage(1);
+  };
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const data = await publicationService.getList();
-      setPublications(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری نشریات', error.message);
+      const result = await publicationService.getList({
+        page,
+        pageSize: 10,
+        search: searchTerm || undefined,
+        year: filters.year || undefined,
+        fromDate: filters.fromDate ?? undefined,
+        toDate: filters.toDate ?? undefined,
+      });
+      setPublications(result.items);
+      setTotalCount(result.totalCount);
+    } catch {
+      
     } finally {
       setLoading(false);
     }
@@ -79,9 +115,9 @@ export default function PublicationsPage() {
       setLanguages(languagesData);
       setSubjects(subjectsData);
       setPublicationTypes(typesData);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری داده‌های کمکی', error.message);
-    }
+    } catch {
+        
+      }
   };
 
   const handleSubmit = async () => {
@@ -89,7 +125,7 @@ export default function PublicationsPage() {
       try {
         setLoading(true);
         if (editingPublication) {
-          await publicationService.update({ ...form.values, id: editingPublication.id });
+          await publicationService.update(editingPublication.id, { ...form.values });
           appMessage.success('نشریه با موفقیت به‌روزرسانی شد');
         } else {
           await publicationService.create(form.values);
@@ -99,8 +135,8 @@ export default function PublicationsPage() {
         form.reset();
         setEditingPublication(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره نشریه', error.message);
+      } catch {
+        
       } finally {
         setLoading(false);
       }
@@ -128,8 +164,8 @@ export default function PublicationsPage() {
         subjectId: publication.subjectId,
       });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری نشریه', error.message);
+    } catch {
+      
     } finally {
       setLoading(false);
     }
@@ -142,8 +178,8 @@ export default function PublicationsPage() {
         await publicationService.delete(id);
         appMessage.success('نشریه با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف نشریه', error.message);
+      } catch {
+        
       } finally {
         setLoading(false);
       }
@@ -155,6 +191,7 @@ export default function PublicationsPage() {
     { key: 'typeName', title: 'نوع' },
     { key: 'publishPlaceName', title: 'محل چاپ' },
     { key: 'publishDate', title: 'تاریخ انتشار' },
+    { key: 'year', title: 'سال' },
     { key: 'journalNo', title: 'شماره مجله' },
     {
       key: 'actions',
@@ -194,6 +231,31 @@ export default function PublicationsPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name', 'typeName', 'publishPlaceName']}
+          exportFileName="publications"
+          exportLimit={50000}
+          onExportAll={(onProgress) =>
+            fetchAllPaged<Publication>(
+              (page, pageSize) =>
+                publicationService.getList({
+                  page,
+                  pageSize,
+                  search: searchTerm || undefined,
+                  year: filters.year || undefined,
+                  fromDate: filters.fromDate ?? undefined,
+                  toDate: filters.toDate ?? undefined,
+                }),
+              { pageSize: 200, onProgress },
+            )
+          }
+          loading={loading}
+          serverTotal={totalCount}
+          page={page}
+          onPageChange={setPage}
+          onSearchChange={(q) => {
+            setSearchTerm(q);
+            setPage(1);
+          }}
+          filters={<TableFilters value={filters} onChange={handleFilterChange} yearSource="publication" />}
         />
       </Card>
 
@@ -208,53 +270,101 @@ export default function PublicationsPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام نشریه" required {...form.getInputProps('name')} />
+        <SmartTextInput label="نام نشریه" required withAsterisk {...form.getInputProps('name')} />
         <Group grow>
           <Select
             label="نوع نشریه"
+            required
+            withAsterisk
             data={publicationTypes.map((t) => ({ value: String(t.id), label: t.title }))}
-            {...form.getInputProps('typeId', { type: 'number' })}
+            value={form.values.typeId ? String(form.values.typeId) : null}
+            onChange={(v: string | null) => form.setFieldValue('typeId', v ? Number(v) : 0)}
           />
           <Select
             label="محل چاپ"
+            required
+            withAsterisk
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
-            {...form.getInputProps('publishPlaceId', { type: 'number' })}
+            value={form.values.publishPlaceId ? String(form.values.publishPlaceId) : null}
+            onChange={(v: string | null) => form.setFieldValue('publishPlaceId', v ? Number(v) : 0)}
           />
         </Group>
         <Group grow>
-          <TextInput label="امتیازدار" {...form.getInputProps('concessionaire')} />
-          <TextInput label="مدیر مسئول" {...form.getInputProps('responsibleDirector')} />
+          <SmartTextInput
+            label="امتیازدار"
+            required
+            withAsterisk
+            fieldName="concessionaire"
+            {...form.getInputProps('concessionaire')}
+          />
+          <SmartTextInput
+            label="مدیر مسئول"
+            required
+            withAsterisk
+            fieldName="responsibleDirector"
+            {...form.getInputProps('responsibleDirector')}
+          />
         </Group>
-        <TextInput label="ویراستار" {...form.getInputProps('editor')} />
+        <SmartTextInput
+          label="ویراستار"
+          required
+          withAsterisk
+          fieldName="editor"
+          {...form.getInputProps('editor')}
+        />
         <Group grow>
-          <TextInput label="سال" {...form.getInputProps('year')} />
-          <TextInput label="شماره مجله" {...form.getInputProps('journalNo')} />
+          <SmartTextInput
+            label="سال"
+            required
+            withAsterisk
+            fieldName="year"
+            {...form.getInputProps('year')}
+          />
+          <SmartTextInput
+            label="شماره مجله"
+            required
+            withAsterisk
+            fieldName="journalNo"
+            {...form.getInputProps('journalNo')}
+          />
           <PersianDatePickerString
             label="تاریخ انتشار"
+            required
             placeholder="تاریخ انتشار را انتخاب کنید"
             value={form.values.publishDate || null}
             onChange={(date) => form.setFieldValue('publishDate', date || '')}
-            error={form.errors.publishDate}
+            error={form.errors.publishDate?.toString()}
           />
         </Group>
         <Group grow>
-          <TextInput label="شماره" {...form.getInputProps('no')} />
-          <TextInput label="دوره" {...form.getInputProps('period')} />
+          <SmartTextInput
+            label="شماره"
+            required
+            withAsterisk
+            fieldName="no"
+            {...form.getInputProps('no')}
+          />
+          <SmartTextInput label="دوره" fieldName="period" {...form.getInputProps('period')} />
         </Group>
         <Group grow>
           <Select
             label="زبان"
+            required
+            withAsterisk
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
-            {...form.getInputProps('languageId', { type: 'number' })}
+            value={form.values.languageId ? String(form.values.languageId) : null}
+            onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
           />
           <Select
             label="موضوع"
+            required
+            withAsterisk
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
-            {...form.getInputProps('subjectId', { type: 'number' })}
+            value={form.values.subjectId ? String(form.values.subjectId) : null}
+            onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}
           />
         </Group>
       </FormModal>
     </Stack>
   );
 }
-

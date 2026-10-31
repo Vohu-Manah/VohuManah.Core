@@ -1,5 +1,4 @@
 using Application.Abstractions.Messaging;
-using Domain.Library;
 
 namespace Application.Library.Settings.GetAllEntities;
 

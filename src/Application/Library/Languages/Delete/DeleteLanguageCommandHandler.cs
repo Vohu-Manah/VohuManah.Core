@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,8 +15,8 @@ internal sealed class DeleteLanguageCommandHandler(
 
     public async Task<Result> Handle(DeleteLanguageCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.Set<Language>();
-        
+        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+
         Language? existing = await languages.SingleOrDefaultAsync(l => l.Id == command.Id, cancellationToken);
         if (existing == null)
         {
@@ -25,7 +25,7 @@ internal sealed class DeleteLanguageCommandHandler(
 
         languages.Remove(existing);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(LanguagePatternKey);
 
         return Result.Success();

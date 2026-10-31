@@ -6,7 +6,8 @@ internal sealed class DeleteLibraryUserCommandValidator : AbstractValidator<Dele
 {
     public DeleteLibraryUserCommandValidator()
     {
-        RuleFor(c => c.UserName).NotEmpty();
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه کاربر الزامی است");
     }
 }
 

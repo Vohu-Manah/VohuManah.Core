@@ -1,4 +1,4 @@
-﻿using Infrastructure.Authentication;
+using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,10 +11,8 @@ internal sealed class PermissionAuthorizationHandler(IServiceScopeFactory servic
         AuthorizationHandlerContext context,
         PermissionRequirement requirement)
     {
-        // BaseEntity: You definitely want to reject unauthenticated users here.
         if (context.User is { Identity.IsAuthenticated: true })
         {
-            // BaseEntity: Remove this call when you implement the PermissionProvider.GetForUserIdAsync
             context.Succeed(requirement);
 
             return;

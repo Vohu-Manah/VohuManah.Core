@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,8 +15,8 @@ internal sealed class UpdatePublisherCommandHandler(
 
     public async Task<Result> Handle(UpdatePublisherCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.Set<Publisher>();
-        
+        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+
         Publisher? existing = await publishers.SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
         if (existing == null)
         {
@@ -37,7 +37,7 @@ internal sealed class UpdatePublisherCommandHandler(
         existing.Website = command.Website;
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(PublisherPatternKey);
 
         return Result.Success();

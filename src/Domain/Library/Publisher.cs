@@ -6,7 +6,6 @@ public sealed class Publisher : Entity
 {
     public Publisher()
     {
-        Books = new List<Book>();
     }
 
     public int Id { get; set; }
@@ -18,7 +17,7 @@ public sealed class Publisher : Entity
     public string Website { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
-    public ICollection<Book> Books { get; set; }
+    public ICollection<Book> Books { get; } = new List<Book>();
 }
 
 

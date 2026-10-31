@@ -4,10 +4,10 @@
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class EnsureAdminUserExists : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
@@ -50,7 +50,7 @@ namespace Infrastructure.Migrations
             ");
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"

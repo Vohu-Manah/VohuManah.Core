@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetPublicationStatisticsQueryHandler(
 {
     public async Task<Result<PublicationStatisticsResponse>> Handle(GetPublicationStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         int publicationCount = await publications.CountAsync(cancellationToken);
 
         List<ListItemResponse> countBySubject = await publications
@@ -65,7 +65,8 @@ internal sealed class GetPublicationStatisticsQueryHandler(
             })
             .ToListAsync(cancellationToken);
 
-        PublicationStatisticsResponse response = new PublicationStatisticsResponse {
+        PublicationStatisticsResponse response = new PublicationStatisticsResponse
+        {
             PublicationCount = publicationCount,
             CountBySubject = countBySubject,
             CountByLanguage = countByLanguage,

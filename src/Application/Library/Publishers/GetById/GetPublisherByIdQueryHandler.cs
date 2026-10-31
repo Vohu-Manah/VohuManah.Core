@@ -11,8 +11,8 @@ internal sealed class GetPublisherByIdQueryHandler(
 {
     public async Task<Result<PublisherResponse>> Handle(GetPublisherByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.Set<Publisher>();
-        
+        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+
         Publisher? publisher = await publishers
             .SingleOrDefaultAsync(p => p.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetPublisherByIdQueryHandler(
             return Result.Failure<PublisherResponse>(PublisherErrors.NotFound(query.Id));
         }
 
-        PublisherResponse response = new PublisherResponse {
+        PublisherResponse response = new PublisherResponse
+        {
             Id = publisher.Id,
             Name = publisher.Name,
             ManagerName = publisher.ManagerName,

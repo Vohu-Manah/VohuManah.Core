@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace Application.Library.Settings;
 
-/// <summary>
-/// Default role definitions along with the endpoints each role should be allowed to access.
-/// </summary>
 public static class RolePermissionDefaults
 {
     public const string Admin = "Admin";
@@ -37,6 +32,7 @@ public static class RolePermissionDefaults
         "Library.Books.GetAll",
         "Library.Books.GetAllEntities",
         "Library.Books.GetById",
+        "Library.Books.GetProfile",
         "Library.Books.GetCount",
         "Library.Books.GetCountByLanguage",
         "Library.Books.GetCountByPublisher",

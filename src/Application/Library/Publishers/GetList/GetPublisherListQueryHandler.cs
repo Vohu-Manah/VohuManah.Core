@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetPublisherListQueryHandler(
 
     public Task<Result<List<PublisherListResponse>>> Handle(GetPublisherListQuery query, CancellationToken cancellationToken)
     {
-        var publishers = unitOfWork.Set<Publisher>();
-        
-        var allPublishers = cacheManager.Get(PublisherAllKey, () => publishers.OrderBy(p => p.Name).ToList());
-        
+        var publishers = unitOfWork.GetDbSet<Publisher>();
+
+        var allPublishers = cacheManager.Retrieve(PublisherAllKey, () => publishers.OrderBy(p => p.Name).ToList());
+
         var list = allPublishers.Select(p => new PublisherListResponse
         {
             Id = p.Id,

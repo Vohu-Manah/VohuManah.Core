@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Settings.UpdateRolePermissions;
 using SharedKernel;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-[RequireRole("Library.Settings.UpdateRoleEndpoints")]
+[RequireRole(EndpointNames.Settings.UpdateRoleEndpoints)]
 internal sealed class UpdateRoleEndpoints : BaseEndpoint
 {
     public sealed record Request(List<string>? EndpointNames);

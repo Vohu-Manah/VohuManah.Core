@@ -11,8 +11,8 @@ internal sealed class GetAllPublicationsQueryHandler(
 {
     public async Task<Result<List<PublicationResponse>>> Handle(GetAllPublicationsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         List<PublicationResponse> allPublications = await publications
             .Include(p => p.City)
             .Select(p => new PublicationResponse

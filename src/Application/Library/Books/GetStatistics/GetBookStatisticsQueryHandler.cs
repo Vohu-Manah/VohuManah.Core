@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,71 +12,73 @@ internal sealed class GetBookStatisticsQueryHandler(
 {
     public async Task<Result<BookStatisticsResponse>> Handle(GetBookStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         
-        int bookCount = await books.CountAsync(cancellationToken);
-        int volumeCount = await books.SumAsync(b => (int?)b.VolumeCount, cancellationToken) ?? 0;
-
-        List<ListItemResponse> countBySubject = await books
-            .Include(b => b.Subject)
-            .GroupBy(b => new { b.SubjectId, SubjectTitle = b.Subject != null ? b.Subject.Title : "" })
-            .Select(g => new ListItemResponse
+        
+        var grouped = await books
+            .GroupBy(b => new
             {
-                Text = g.Key.SubjectTitle,
-                Value = g.Count()
+                b.SubjectId,
+                b.LanguageId,
+                b.PublisherId,
+                b.PublishPlaceId,
+                b.PublishYear,
+            })
+            .Select(g => new
+            {
+                g.Key.SubjectId,
+                g.Key.LanguageId,
+                g.Key.PublisherId,
+                g.Key.PublishPlaceId,
+                g.Key.PublishYear,
+                Count = g.LongCount(),
+                VolumeSum = g.Sum(b => (long)b.VolumeCount),
             })
             .ToListAsync(cancellationToken);
 
-        List<ListItemResponse> countByLanguage = await books
-            .Include(b => b.Language)
-            .GroupBy(b => new { b.LanguageId, LanguageName = b.Language != null ? b.Language.Name : "" })
-            .Select(g => new ListItemResponse
-            {
-                Text = g.Key.LanguageName,
-                Value = g.Count()
-            })
-            .ToListAsync(cancellationToken);
+        long bookCount = grouped.Sum(g => g.Count);
+        long volumeCount = grouped.Sum(g => g.VolumeSum);
 
-        List<ListItemResponse> countByPublisher = await books
-            .Include(b => b.Publisher)
-            .GroupBy(b => new { b.PublisherId, PublisherName = b.Publisher != null ? b.Publisher.Name : "" })
-            .Select(g => new ListItemResponse
-            {
-                Text = g.Key.PublisherName,
-                Value = g.Count()
-            })
-            .ToListAsync(cancellationToken);
+        
+        var subjectNames = await unitOfWork.GetDbSet<Subject>()
+            .ToDictionaryAsync(s => s.Id, s => s.Title, cancellationToken);
+        var languageNames = await unitOfWork.GetDbSet<Language>()
+            .ToDictionaryAsync(l => l.Id, l => l.Name, cancellationToken);
+        var publisherNames = await unitOfWork.GetDbSet<Publisher>()
+            .ToDictionaryAsync(p => p.Id, p => p.Name, cancellationToken);
+        var cityNames = await unitOfWork.GetDbSet<City>()
+            .ToDictionaryAsync(c => c.Id, c => c.Name, cancellationToken);
 
-        List<ListItemResponse> countByPublishPlace = await books
-            .Include(b => b.City)
-            .GroupBy(b => new { b.PublishPlaceId, CityName = b.City != null ? b.City.Name : "" })
-            .Select(g => new ListItemResponse
-            {
-                Text = g.Key.CityName,
-                Value = g.Count()
-            })
-            .ToListAsync(cancellationToken);
-
-        List<ListItemResponse> countByYear = await books
-            .GroupBy(b => b.PublishYear)
-            .Select(g => new ListItemResponse
-            {
-                Text = g.Key,
-                Value = g.Count()
-            })
-            .ToListAsync(cancellationToken);
-
-        BookStatisticsResponse response = new BookStatisticsResponse
+        return Result.Success(new BookStatisticsResponse
         {
-            BookCount = bookCount,
-            VolumeCount = volumeCount,
-            CountBySubject = countBySubject,
-            CountByLanguage = countByLanguage,
-            CountByPublisher = countByPublisher,
-            CountByPublishPlace = countByPublishPlace,
-            CountByYear = countByYear
-        };
+            BookCount = (int)Math.Min(bookCount, int.MaxValue),
+            VolumeCount = (int)Math.Min(volumeCount, int.MaxValue),
+            CountBySubject = Aggregate(grouped.Select(g => (g.SubjectId, g.Count)),
+                id => subjectNames.TryGetValue(id, out string? n) ? n : string.Empty),
+            CountByLanguage = Aggregate(grouped.Select(g => (g.LanguageId, g.Count)),
+                id => languageNames.TryGetValue(id, out string? n) ? n : string.Empty),
+            CountByPublisher = Aggregate(grouped.Select(g => (g.PublisherId, g.Count)),
+                id => publisherNames.TryGetValue(id, out string? n) ? n : string.Empty),
+            CountByPublishPlace = Aggregate(grouped.Select(g => (g.PublishPlaceId, g.Count)),
+                id => cityNames.TryGetValue(id, out string? n) ? n : string.Empty),
+            CountByYear = Aggregate(grouped.Select(g => (g.PublishYear, g.Count)),
+                id => id),
+        });
+    }
 
-        return Result.Success(response);
+    private static List<ListItemResponse> Aggregate<TKey>(
+        IEnumerable<(TKey Key, long Count)> source,
+        Func<TKey, string> nameResolver)
+    {
+        return source
+            .GroupBy(x => x.Key)
+            .Select(g => new ListItemResponse
+            {
+                Text = nameResolver(g.Key),
+                Value = g.Sum(x => x.Count),
+            })
+            .OrderByDescending(x => x.Value)
+            .ToList();
     }
 }

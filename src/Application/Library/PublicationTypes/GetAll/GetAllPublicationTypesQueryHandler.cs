@@ -15,10 +15,10 @@ internal sealed class GetAllPublicationTypesQueryHandler(
 
     public Task<Result<List<PublicationTypeResponse>>> Handle(GetAllPublicationTypesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.Set<PublicationType>();
-        
-        List<PublicationType> allPublicationTypes = cacheManager.Get(PublicationTypeAllKey, () => publicationTypes.ToList());
-        
+        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+
+        List<PublicationType> allPublicationTypes = cacheManager.Retrieve(PublicationTypeAllKey, () => publicationTypes.ToList());
+
         List<PublicationTypeResponse> response = allPublicationTypes.Select(pt => new PublicationTypeResponse
         {
             Id = pt.Id,

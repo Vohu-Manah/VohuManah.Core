@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import type { LoginRequest } from '../services/auth/authService';
-import { login, refresh, revoke } from '../services/auth/authService';
-import { clearTokens, getTokens } from '../services/api/tokenStore';
-import { appMessage } from '../messages/appMessages';
-import type { UserProfile } from '../models/user';
+import type { LoginRequest } from '@/app/services/auth/authService';
+import { login, refresh, revoke } from '@/app/services/auth/authService';
+import { clearTokens, getTokens } from '@/app/services/api/tokenStore';
+import { appMessage } from '@/app/messages/appMessages';
+import type { UserProfile } from '@/app/models/user';
 
 type AuthState = {
   user: UserProfile | null;
@@ -46,6 +46,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
       .catch(() => {
         clearTokens();
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/login';
+        }
       })
       .finally(() => setLoading(false));
   }, []);
@@ -86,4 +89,3 @@ export function useAuth() {
   }
   return ctx;
 }
-

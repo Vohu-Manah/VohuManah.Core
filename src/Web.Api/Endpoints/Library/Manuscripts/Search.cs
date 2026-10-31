@@ -1,14 +1,15 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Application.Library.Manuscripts.Search;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole("Library.Manuscripts.Search")]
+[RequireRole(EndpointNames.Manuscripts.Search)]
 internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(
@@ -23,13 +24,16 @@ internal sealed class Search : BaseEndpoint
         int LanguageId,
         int SubjectId,
         int GapId,
-        string? Size);
+        string? Size,
+        int MaxResults = 5000,
+        int Page = 1,
+        int PageSize = 50);
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("library/manuscripts/search", async (
             Request request,
-            IQueryHandler<SearchManuscriptsQuery, List<ManuscriptSearchResponse>> handler,
+            IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchManuscriptsQuery(
@@ -44,9 +48,9 @@ internal sealed class Search : BaseEndpoint
                 request.LanguageId,
                 request.SubjectId,
                 request.GapId,
-                request.Size);
+                request.Size, request.MaxResults, request.Page, request.PageSize);
 
-            Result<List<ManuscriptSearchResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedResult<ManuscriptSearchResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

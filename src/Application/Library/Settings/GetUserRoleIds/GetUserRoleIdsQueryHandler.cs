@@ -11,8 +11,8 @@ internal sealed class GetUserRoleIdsQueryHandler(
 {
     public async Task<Result<List<int>>> Handle(GetUserRoleIdsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.Set<UserRole>();
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
+        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
+        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
 
         Domain.Library.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);

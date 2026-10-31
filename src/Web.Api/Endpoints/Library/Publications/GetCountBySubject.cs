@@ -1,15 +1,15 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Publications.GetCountBySubject;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Publications;
 
-[RequireRole("Library.Publications.GetCountBySubject")]
+[RequireRole(EndpointNames.Publications.GetCountBySubject)]
 internal sealed class GetCountBySubject : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

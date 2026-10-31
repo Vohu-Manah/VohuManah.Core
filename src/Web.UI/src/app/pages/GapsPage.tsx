@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, Textarea, Switch } from '@mantine/core';
-import { gapService } from '../services/library/gapService';
-import type { Gap, CreateGapRequest } from '../models/gap';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { Textarea, Switch } from '@mantine/core';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { gapService } from '@/app/services/library/gapService';
+import type { Gap, CreateGapRequest } from '@/app/models/gap';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function GapsPage() {
@@ -36,8 +38,8 @@ export default function GapsPage() {
       setLoading(true);
       const data = await gapService.getAll();
       setGaps(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری فاصله‌ها', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری فاصله‌ها', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ export default function GapsPage() {
       try {
         setLoading(true);
         if (editingGap) {
-          await gapService.update({ ...form.values, id: editingGap.id });
+          await gapService.update(editingGap.id, { ...form.values });
           appMessage.success('فاصله با موفقیت به‌روزرسانی شد');
         } else {
           await gapService.create(form.values);
@@ -58,8 +60,8 @@ export default function GapsPage() {
         form.reset();
         setEditingGap(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره فاصله', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره فاصله', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -77,8 +79,8 @@ export default function GapsPage() {
         state: gap.state,
       });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری فاصله', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری فاصله', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -91,8 +93,8 @@ export default function GapsPage() {
         await gapService.delete(id);
         appMessage.success('فاصله با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف فاصله', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف فاصله', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -146,6 +148,8 @@ export default function GapsPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['title', 'note']}
+          exportFileName="gaps"
+          loading={loading}
         />
       </Card>
 
@@ -160,8 +164,8 @@ export default function GapsPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="عنوان" required {...form.getInputProps('title')} />
-        <Textarea label="یادداشت" {...form.getInputProps('note')} />
+        <SmartTextInput label="عنوان" required withAsterisk fieldName="title" {...form.getInputProps('title')} />
+        <Textarea label="یادداشت" dir="rtl" {...form.getInputProps('note')} />
         <Switch label="وضعیت فعال" {...form.getInputProps('state', { type: 'checkbox' })} />
       </FormModal>
     </Stack>

@@ -1,13 +1,19 @@
-﻿using Application.Abstractions.Data;
+using Application.Abstractions.Data;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database;
 
-public sealed class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options), IApplicationDbContext
+public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+        
+        
+        Database.SetCommandTimeout(TimeSpan.FromMinutes(5));
+    }
+
     public DbSet<Domain.Library.User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
@@ -21,26 +27,23 @@ public sealed class ApplicationDbContext(
     public DbSet<Settings> Settings { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<RoleEndpoint> RoleEndpoints { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
-
-    public new DbSet<TEntity> Set<TEntity>() where TEntity : class
-    {
-        return base.Set<TEntity>();
-    }
-
-    int IUnitOfWork.SaveChanges()
-    {
-        return SaveChanges();
-    }
+    public DbSet<UserSettings> UserSettings { get; set; }
+    public DbSet<AppInfo> AppInfos { get; set; }
+    public DbSet<MenuItem> MenuItems { get; set; }
+    public DbSet<VisitLog> VisitLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        modelBuilder.HasDefaultSchema(Schemas.Default);
-        
-        Infrastructure.Library.LibrarySeedData.SeedData(modelBuilder);
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class
+    {
+        return Set<TEntity>();
     }
 }

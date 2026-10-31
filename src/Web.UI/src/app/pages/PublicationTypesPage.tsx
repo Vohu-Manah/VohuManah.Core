@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput } from '@mantine/core';
-import { publicationTypeService } from '../services/library/publicationTypeService';
-import type { PublicationType, CreatePublicationTypeRequest } from '../models/publicationType';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { publicationTypeService } from '@/app/services/library/publicationTypeService';
+import type { PublicationType, CreatePublicationTypeRequest } from '@/app/models/publicationType';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function PublicationTypesPage() {
@@ -34,8 +35,8 @@ export default function PublicationTypesPage() {
       setLoading(true);
       const data = await publicationTypeService.getAll();
       setPublicationTypes(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری انواع نشریات', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری انواع نشریات', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,7 @@ export default function PublicationTypesPage() {
       try {
         setLoading(true);
         if (editingType) {
-          await publicationTypeService.update({ ...form.values, id: editingType.id });
+          await publicationTypeService.update(editingType.id, { ...form.values });
           appMessage.success('نوع نشریه با موفقیت به‌روزرسانی شد');
         } else {
           await publicationTypeService.create(form.values);
@@ -56,8 +57,8 @@ export default function PublicationTypesPage() {
         form.reset();
         setEditingType(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره نوع نشریه', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره نوع نشریه', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -71,8 +72,8 @@ export default function PublicationTypesPage() {
       setEditingType(type);
       form.setValues({ title: type.title });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری نوع نشریه', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری نوع نشریه', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -85,8 +86,8 @@ export default function PublicationTypesPage() {
         await publicationTypeService.delete(id);
         appMessage.success('نوع نشریه با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف نوع نشریه', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف نوع نشریه', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -134,6 +135,8 @@ export default function PublicationTypesPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['title']}
+          exportFileName="publication-types"
+          loading={loading}
         />
       </Card>
 
@@ -148,7 +151,7 @@ export default function PublicationTypesPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="عنوان" required {...form.getInputProps('title')} />
+        <SmartTextInput label="عنوان" required withAsterisk fieldName="title" {...form.getInputProps('title')} />
       </FormModal>
     </Stack>
   );

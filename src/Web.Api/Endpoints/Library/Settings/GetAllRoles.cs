@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
+using Application.Library.Settings;
 using Application.Library.Settings.GetAllRoles;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Settings;
 
-[RequireRole("Library.Settings.GetAllRoles")]
+[RequireRole(EndpointNames.Settings.GetAllRoles)]
 internal sealed class GetAllRoles : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

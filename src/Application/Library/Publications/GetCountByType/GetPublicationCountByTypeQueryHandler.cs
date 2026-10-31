@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetPublicationCountByTypeQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetPublicationCountByTypeQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.Set<Publication>();
-        
+        var publications = unitOfWork.GetDbSet<Publication>();
+
         var list = await publications
             .Include(p => p.PublicationType)
             .GroupBy(p => new { p.TypeId, TypeTitle = p.PublicationType != null ? p.PublicationType.Title : "" })

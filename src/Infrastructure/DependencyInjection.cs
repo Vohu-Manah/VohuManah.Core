@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using System.Text;
 using Application.Abstractions.Authentication;
-using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
@@ -9,15 +6,19 @@ using Infrastructure.Caching;
 using Infrastructure.Database;
 using Infrastructure.FileStorage;
 using Infrastructure.Helper;
+using Infrastructure.Reports;
 using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SharedKernel;
+using System.Security.Claims;
+using System.Text;
 
 namespace Infrastructure;
 
@@ -37,20 +38,56 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        var cacheManager = new MemoryCacheManager();
-        services.AddSingleton<Infrastructure.Caching.ICacheManager>(cacheManager);
-        services.AddSingleton<Application.Abstractions.Caching.ICacheManager>(cacheManager);
+        services.AddSingleton<Application.Abstractions.Caching.ICacheManager, MemoryCacheManager>();
 
         services.AddSingleton<IPersianCalendar, PersianCalendarService>();
         services.AddScoped<PersianDateTime>();
         services.AddScoped<Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
+
+        services.AddScoped<Application.Abstractions.Backup.IBackupService, Backup.SqlBackupService>();
+        services.AddSingleton<Application.Abstractions.HumanVerification.IHumanVerificationService, Infrastructure.HumanVerification.HumanVerificationService>();
+        services.AddHostedService<Backup.DailyBackupJob>();
+        services.AddHostedService<Backup.BackupCleanupJob>();
+        services.AddHostedService<Database.Maintenance.DatabaseMaintenanceJob>();
+
+        return AddReportServices(services);
+    }
+
+    private static IServiceCollection AddReportServices(this IServiceCollection services)
+    {
+        services.AddSingleton<Infrastructure.Reports.Html.IReportResourceLoader, Infrastructure.Reports.Html.ReportResourceLoader>();
+        services.AddTransient<Infrastructure.Reports.Html.IHtmlBuilder, Infrastructure.Reports.Html.HtmlBuilder>();
+        services.AddScoped<Infrastructure.Reports.Html.IReportHtmlWrapper>(sp =>
+        {
+            var resourceLoader = sp.GetRequiredService<Infrastructure.Reports.Html.IReportResourceLoader>();
+            var htmlBuilderFactory = new Func<Infrastructure.Reports.Html.IHtmlBuilder>(() =>
+                sp.GetRequiredService<Infrastructure.Reports.Html.IHtmlBuilder>());
+            return new Infrastructure.Reports.Html.ReportHtmlWrapper(resourceLoader, htmlBuilderFactory);
+        });
+        services.AddScoped<Infrastructure.Reports.Html.IReportTableGenerator>(sp =>
+        {
+            var htmlBuilderFactory = new Func<Infrastructure.Reports.Html.IHtmlBuilder>(() =>
+                sp.GetRequiredService<Infrastructure.Reports.Html.IHtmlBuilder>());
+            return new Infrastructure.Reports.Html.ReportTableGenerator(htmlBuilderFactory);
+        });
+
+        services.AddScoped<Infrastructure.Reports.IReportLocalReportFactory>(sp =>
+        {
+            var environment = sp.GetRequiredService<IWebHostEnvironment>();
+            var persianDateTime = sp.GetRequiredService<PersianDateTime>();
+            var reportsPath = Path.Combine(environment.WebRootPath, "Reports");
+            return new Infrastructure.Reports.ReportLocalReportFactory(reportsPath, persianDateTime);
+        });
+
+        services.AddScoped<Infrastructure.Reports.IReportRenderer, Infrastructure.Reports.ReportRenderer>();
+        services.AddScoped<IReportService, RdlcReportService>();
 
         return services;
     }
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("Database");
+        var connectionString = configuration.GetConnectionString("Database");
 
         services.AddDbContext<ApplicationDbContext>(
             options => options
@@ -110,7 +147,7 @@ public static class DependencyInjection
 
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-        services.AddScoped<Application.Abstractions.Authorization.IRolePermissionService, Authorization.RolePermissionService>();
+        services.AddScoped<Application.Abstractions.Authorization.IRolePermissionService, Authorization.RoleEndpointService>();
 
         return services;
     }

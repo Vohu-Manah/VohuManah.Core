@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, Select } from '@mantine/core';
-import { publisherService } from '../services/library/publisherService';
-import { cityService } from '../services/library/cityService';
-import type { Publisher, CreatePublisherRequest } from '../models/publisher';
-import type { CityName } from '../models/city';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { FormModal } from '@/app/components/common/FormModal';
+import { Select } from '@mantine/core';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { publisherService } from '@/app/services/library/publisherService';
+import { cityService } from '@/app/services/library/cityService';
+import type { Publisher, CreatePublisherRequest } from '@/app/models/publisher';
+import type { CityName } from '@/app/models/city';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function PublishersPage() {
@@ -25,6 +27,8 @@ export default function PublishersPage() {
       managerName: '',
       telephone: '',
       address: '',
+      website: '',
+      email: '',
       cityId: 0,
     },
     validate: {
@@ -42,8 +46,8 @@ export default function PublishersPage() {
       setLoading(true);
       const data = await publisherService.getAll();
       setPublishers(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری ناشران', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری ناشران', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -53,8 +57,8 @@ export default function PublishersPage() {
     try {
       const data = await cityService.getNames();
       setCities(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری شهرها', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری شهرها', getErrorMessage(error));
     }
   };
 
@@ -63,7 +67,7 @@ export default function PublishersPage() {
       try {
         setLoading(true);
         if (editingPublisher) {
-          await publisherService.update({ ...form.values, id: editingPublisher.id });
+          await publisherService.update(editingPublisher.id, { ...form.values });
           appMessage.success('ناشر با موفقیت به‌روزرسانی شد');
         } else {
           await publisherService.create(form.values);
@@ -73,8 +77,8 @@ export default function PublishersPage() {
         form.reset();
         setEditingPublisher(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره ناشر', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره ناشر', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -91,11 +95,13 @@ export default function PublishersPage() {
         managerName: publisher.managerName,
         telephone: publisher.telephone,
         address: publisher.address,
+        website: publisher.website || '',
+        email: publisher.email || '',
         cityId: publisher.cityId || 0,
       });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری ناشر', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری ناشر', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -108,8 +114,8 @@ export default function PublishersPage() {
         await publisherService.delete(id);
         appMessage.success('ناشر با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف ناشر', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف ناشر', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -160,6 +166,8 @@ export default function PublishersPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name', 'managerName']}
+          exportFileName="publishers"
+          loading={loading}
         />
       </Card>
 
@@ -174,20 +182,34 @@ export default function PublishersPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام ناشر" required {...form.getInputProps('name')} />
+        <SmartTextInput
+          label="نام ناشر"
+          required
+          withAsterisk
+          fieldName="name"
+          {...form.getInputProps('name')}
+        />
         <Group grow>
-          <TextInput label="نام مدیر" {...form.getInputProps('managerName')} />
-          <TextInput label="تلفن" {...form.getInputProps('telephone')} />
+          <SmartTextInput
+            label="نام مدیر"
+            fieldName="managerName"
+            {...form.getInputProps('managerName')}
+          />
+          <SmartTextInput label="تلفن" fieldName="telephone" {...form.getInputProps('telephone')} />
         </Group>
-        <TextInput label="آدرس" {...form.getInputProps('address')} />
+        <SmartTextInput label="آدرس" fieldName="address" {...form.getInputProps('address')} />
+        <Group grow>
+          <SmartTextInput label="وبسایت" fieldName="website" {...form.getInputProps('website')} />
+          <SmartTextInput label="ایمیل" fieldName="email" type="email" {...form.getInputProps('email')} />
+        </Group>
         <Select
           label="شهر"
           data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
-          {...form.getInputProps('cityId', { type: 'number' })}
+          value={form.values.cityId ? String(form.values.cityId) : null}
+          onChange={(value) => form.setFieldValue('cityId', value ? Number(value) : 0)}
+          error={form.errors.cityId}
         />
       </FormModal>
     </Stack>
   );
 }
-
-

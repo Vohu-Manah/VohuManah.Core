@@ -15,8 +15,8 @@ internal sealed class UpdatePublicationTypeCommandHandler(
 
     public async Task<Result> Handle(UpdatePublicationTypeCommand command, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.Set<PublicationType>();
-        
+        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+
         PublicationType? existing = await publicationTypes
             .SingleOrDefaultAsync(pt => pt.Id == command.Id, cancellationToken);
 
@@ -31,9 +31,9 @@ internal sealed class UpdatePublicationTypeCommandHandler(
         }
 
         existing.Title = command.Title;
-        
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(PublicationTypePatternKey);
 
         return Result.Success();

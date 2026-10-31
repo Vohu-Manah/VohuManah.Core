@@ -6,7 +6,6 @@ public sealed class Gap : Entity
 {
     public Gap()
     {
-        Manuscripts = new List<Manuscript>();
     }
 
     public int Id { get; set; }
@@ -14,7 +13,7 @@ public sealed class Gap : Entity
     public string Title { get; set; } = string.Empty;
     public string Note { get; set; } = string.Empty;
 
-    public ICollection<Manuscript> Manuscripts { get; set; }
+    public ICollection<Manuscript> Manuscripts { get; } = new List<Manuscript>();
 }
 
 

@@ -1,8 +1,9 @@
 using Application.Abstractions.Messaging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Library.Settings.UpdateRolePermissions;
 
 public sealed record UpdateRolePermissionsCommand(
-    int RoleId,
-    IReadOnlyCollection<string> EndpointNames) : ICommand;
+    [Display(Name = "شناسه نقش")] int RoleId,
+    [Display(Name = "نام های endpoint")] IReadOnlyCollection<string> EndpointNames) : ICommand;
 

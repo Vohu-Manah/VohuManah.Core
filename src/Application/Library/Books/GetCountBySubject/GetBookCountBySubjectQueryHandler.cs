@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetBookCountBySubjectQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountBySubjectQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.Set<Book>();
-        
+        var books = unitOfWork.GetDbSet<Book>();
+
         var list = await books
             .Include(b => b.Subject)
             .GroupBy(b => new { b.SubjectId, SubjectTitle = b.Subject != null ? b.Subject.Title : "" })

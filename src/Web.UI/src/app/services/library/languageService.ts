@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { Language, LanguageName, CreateLanguageRequest, UpdateLanguageRequest } from '../../models/language';
+import { apiClient } from '@/app/services/api/client';
+import type { Language, LanguageName, CreateLanguageRequest, UpdateLanguageRequest } from '@/app/models/language';
 
 export const languageService = {
   getAll: async (): Promise<Language[]> => {
@@ -27,8 +27,8 @@ export const languageService = {
     return response.data;
   },
 
-  update: async (data: UpdateLanguageRequest): Promise<void> => {
-    await apiClient.put('/library/languages', data);
+  update: async (id: number, data: UpdateLanguageRequest): Promise<void> => {
+    await apiClient.put(`/library/languages/${id}`, { ...data, id } as UpdateLanguageRequest);
   },
 
   delete: async (id: number): Promise<void> => {

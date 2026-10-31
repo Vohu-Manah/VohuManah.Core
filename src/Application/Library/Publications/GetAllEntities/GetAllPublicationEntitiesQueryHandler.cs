@@ -11,9 +11,9 @@ internal sealed class GetAllPublicationEntitiesQueryHandler(
 {
     public async Task<Result<List<Publication>>> Handle(GetAllPublicationEntitiesQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.Set<Publication>();
-        
-        var allPublications = await publications.ToListAsync(cancellationToken);
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
+        List<Publication> allPublications = await publications.ToListAsync(cancellationToken);
 
         return Result.Success(allPublications);
     }

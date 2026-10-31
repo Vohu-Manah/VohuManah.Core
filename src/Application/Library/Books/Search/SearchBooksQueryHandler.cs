@@ -1,5 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -7,12 +8,12 @@ using SharedKernel;
 namespace Application.Library.Books.Search;
 
 internal sealed class SearchBooksQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<SearchBooksQuery, List<BookSearchResponse>>
+    IUnitOfWork unitOfWork) : IQueryHandler<SearchBooksQuery, PagedResult<BookSearchResponse>>
 {
-    public async Task<Result<List<BookSearchResponse>>> Handle(SearchBooksQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<BookSearchResponse>>> Handle(SearchBooksQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         IQueryable<Book> queryable = books.AsQueryable();
 
         if (!string.IsNullOrEmpty(query.Name))
@@ -47,12 +48,12 @@ internal sealed class SearchBooksQueryHandler(
 
         if (!string.IsNullOrEmpty(query.FromPublishYear))
         {
-            queryable = queryable.Where(b => string.Compare(b.PublishYear, query.FromPublishYear, StringComparison.Ordinal) >= 0);
+            queryable = queryable.Where(b => b.PublishYear.CompareTo(query.FromPublishYear) >= 0);
         }
 
         if (!string.IsNullOrEmpty(query.ToPublishYear))
         {
-            queryable = queryable.Where(b => string.Compare(b.PublishYear, query.ToPublishYear, StringComparison.Ordinal) <= 0);
+            queryable = queryable.Where(b => b.PublishYear.CompareTo(query.ToPublishYear) <= 0);
         }
 
         if (query.FromVolumeCount != 0)
@@ -85,38 +86,74 @@ internal sealed class SearchBooksQueryHandler(
             queryable = queryable.Where(b => b.PublisherId == query.PublisherId);
         }
 
-        if (!string.IsNullOrEmpty(query.Corrector))
-        {
-            queryable = queryable.Where(b => b.Corrector != null && b.Corrector.Contains(query.Corrector));
-        }
+        
+        
+        queryable = queryable.OrderBy(b => b.Name).ThenBy(b => b.Id);
 
-        queryable = queryable.OrderBy(b => b.Name);
+        
+        
+        int page = Math.Max(1, query.Page);
+        int pageSize = Math.Clamp(query.PageSize, 1, 50000);
 
-        List<BookSearchResponse> results = await queryable
-            .Include(b => b.Publisher)
-            .Include(b => b.Subject)
-            .Include(b => b.Language)
-            .Include(b => b.City)
-            .Select(b => new BookSearchResponse
+        
+        
+        
+        var rows = await queryable
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(b => new
             {
-                Name = b.Name,
-                No = b.No,
-                Author = b.Author,
-                Editor = b.Editor ?? string.Empty,
-                Translator = b.Translator ?? string.Empty,
-                Isbn = b.Isbn,
+                TotalCount = 0L,
+                b.Id,
+                b.Name,
+                b.No,
+                b.Author,
+                b.Editor,
+                b.Translator,
+                b.Isbn,
                 Subject = b.Subject != null ? b.Subject.Title : string.Empty,
                 PublishPlaceName = b.City != null ? b.City.Name : string.Empty,
-                VolumeCount = b.VolumeCount,
-                PublishYear = b.PublishYear,
+                b.VolumeCount,
+                b.PublishYear,
                 Language = b.Language != null ? b.Language.Name : string.Empty,
-                PublishOrder = b.PublishOrder,
+                b.PublishOrder,
                 PublisherName = b.Publisher != null ? b.Publisher.Name : string.Empty,
-                BookShelfRow = b.BookShelfRow,
-                Corrector = b.Corrector ?? string.Empty
+                b.BookShelfRow,
+                b.Corrector,
             })
             .ToListAsync(cancellationToken);
 
-        return Result.Success(results);
+        
+        long totalCount = await queryable.LongCountAsync(cancellationToken);
+
+        List<BookSearchResponse> items = rows
+            .Select(r => new BookSearchResponse
+            {
+                Id = r.Id,
+                Name = r.Name,
+                No = r.No,
+                Author = r.Author,
+                Editor = r.Editor ?? string.Empty,
+                Translator = r.Translator ?? string.Empty,
+                Isbn = r.Isbn,
+                Subject = r.Subject,
+                PublishPlaceName = r.PublishPlaceName,
+                VolumeCount = r.VolumeCount,
+                PublishYear = r.PublishYear,
+                Language = r.Language,
+                PublishOrder = r.PublishOrder,
+                PublisherName = r.PublisherName,
+                BookShelfRow = r.BookShelfRow,
+                Corrector = r.Corrector ?? string.Empty,
+            })
+            .ToList();
+
+        return Result.Success(new PagedResult<BookSearchResponse>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize,
+        });
     }
 }

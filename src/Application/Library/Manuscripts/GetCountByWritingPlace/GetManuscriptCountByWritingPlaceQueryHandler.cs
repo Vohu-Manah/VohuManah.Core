@@ -1,6 +1,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,8 +12,8 @@ internal sealed class GetManuscriptCountByWritingPlaceQueryHandler(
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetManuscriptCountByWritingPlaceQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.Set<Manuscript>();
-        
+        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         var list = await manuscripts
             .Include(m => m.City)
             .GroupBy(m => new { m.WritingPlaceId, CityName = m.City != null ? m.City.Name : "" })

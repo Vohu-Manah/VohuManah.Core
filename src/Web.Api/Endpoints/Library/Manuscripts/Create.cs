@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.Create;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole("Library.Manuscripts.Create")]
+[RequireRole(EndpointNames.Manuscripts.Create)]
 internal sealed class Create : BaseEndpoint
 {
     public sealed record Request(

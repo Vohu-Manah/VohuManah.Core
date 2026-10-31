@@ -1,26 +1,35 @@
 import { useState, useEffect } from 'react';
+import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
-import { ProTable, type ProTableColumn } from '../components/common/ProTable';
-import { FormModal } from '../components/common/FormModal';
-import { TextInput, Select, NumberInput } from '@mantine/core';
-import { manuscriptService } from '../services/library/manuscriptService';
-import { cityService } from '../services/library/cityService';
-import { languageService } from '../services/library/languageService';
-import { subjectService } from '../services/library/subjectService';
-import { gapService } from '../services/library/gapService';
-import type { Manuscript, CreateManuscriptRequest } from '../models/manuscript';
-import type { CityName } from '../models/city';
-import type { LanguageName } from '../models/language';
-import type { SubjectName } from '../models/subject';
-import type { GapName } from '../models/gap';
-import { appMessage } from '../messages/appMessages';
+import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
+import { TableFilters, type TableFilterValues } from '@/app/components/common/TableFilters';
+import { FormModal } from '@/app/components/common/FormModal';
+import { Select } from '@mantine/core';
+import { SmartTextInput } from '@/app/components/common/SmartTextInput';
+import { SmartNumberInput } from '@/app/components/common/SmartNumberInput';
+import { manuscriptService } from '@/app/services/library/manuscriptService';
+import { fetchAllPaged } from '@/app/services/api/client';
+import { cityService } from '@/app/services/library/cityService';
+import { languageService } from '@/app/services/library/languageService';
+import { subjectService } from '@/app/services/library/subjectService';
+import { gapService } from '@/app/services/library/gapService';
+import type { Manuscript, CreateManuscriptRequest } from '@/app/models/manuscript';
+import type { CityName } from '@/app/models/city';
+import type { LanguageName } from '@/app/models/language';
+import type { SubjectName } from '@/app/models/subject';
+import type { GapName } from '@/app/models/gap';
+import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 
 export default function ManuscriptsPage() {
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [totalCount, setTotalCount] = useState(0);
+  const [filters, setFilters] = useState<TableFilterValues>({ year: '', fromDate: null, toDate: null });
   const [modalOpened, setModalOpened] = useState(false);
   const [editingManuscript, setEditingManuscript] = useState<Manuscript | null>(null);
   const [cities, setCities] = useState<CityName[]>([]);
@@ -48,16 +57,34 @@ export default function ManuscriptsPage() {
 
   useEffect(() => {
     loadData();
+    
+  }, [page, filters, searchTerm]);
+
+  useEffect(() => {
     loadLookups();
+     
   }, []);
+
+  const handleFilterChange = (next: TableFilterValues) => {
+    setFilters(next);
+    setPage(1);
+  };
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const data = await manuscriptService.getList();
-      setManuscripts(data);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری نسخ خطی', error.message);
+      const result = await manuscriptService.getList({
+        page,
+        pageSize: 10,
+        search: searchTerm || undefined,
+        year: filters.year || undefined,
+        fromDate: filters.fromDate ?? undefined,
+        toDate: filters.toDate ?? undefined,
+      });
+      setManuscripts(result.items);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری نسخ خطی', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -75,8 +102,8 @@ export default function ManuscriptsPage() {
       setLanguages(languagesData);
       setSubjects(subjectsData);
       setGaps(gapsData);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری داده‌های کمکی', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
   };
 
@@ -85,7 +112,7 @@ export default function ManuscriptsPage() {
       try {
         setLoading(true);
         if (editingManuscript) {
-          await manuscriptService.update({ ...form.values, id: editingManuscript.id });
+          await manuscriptService.update(editingManuscript.id, { ...form.values });
           appMessage.success('نسخه خطی با موفقیت به‌روزرسانی شد');
         } else {
           await manuscriptService.create(form.values);
@@ -95,8 +122,8 @@ export default function ManuscriptsPage() {
         form.reset();
         setEditingManuscript(null);
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در ذخیره نسخه خطی', error.message);
+      } catch (error) {
+        appMessage.error('خطا در ذخیره نسخه خطی', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -111,6 +138,8 @@ export default function ManuscriptsPage() {
       form.setValues({
         name: manuscript.name,
         author: manuscript.author,
+        
+        
         writingPlaceId: manuscript.writingPlaceId,
         year: manuscript.year,
         pageCount: manuscript.pageCount,
@@ -121,8 +150,8 @@ export default function ManuscriptsPage() {
         subjectId: manuscript.subjectId,
       });
       setModalOpened(true);
-    } catch (error: any) {
-      appMessage.error('خطا در بارگذاری نسخه خطی', error.message);
+    } catch (error) {
+      appMessage.error('خطا در بارگذاری نسخه خطی', getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -135,8 +164,8 @@ export default function ManuscriptsPage() {
         await manuscriptService.delete(id);
         appMessage.success('نسخه خطی با موفقیت حذف شد');
         loadData();
-      } catch (error: any) {
-        appMessage.error('خطا در حذف نسخه خطی', error.message);
+      } catch (error) {
+        appMessage.error('خطا در حذف نسخه خطی', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -188,6 +217,31 @@ export default function ManuscriptsPage() {
           columns={columns}
           onRefresh={loadData}
           searchableKeys={['name', 'author', 'gapTitle']}
+          exportFileName="manuscripts"
+          exportLimit={50000}
+          onExportAll={(onProgress) =>
+            fetchAllPaged<Manuscript>(
+              (page, pageSize) =>
+                manuscriptService.getList({
+                  page,
+                  pageSize,
+                  search: searchTerm || undefined,
+                  year: filters.year || undefined,
+                  fromDate: filters.fromDate ?? undefined,
+                  toDate: filters.toDate ?? undefined,
+                }),
+              { pageSize: 200, onProgress },
+            )
+          }
+          loading={loading}
+          serverTotal={totalCount}
+          page={page}
+          onPageChange={setPage}
+          onSearchChange={(q) => {
+            setSearchTerm(q);
+            setPage(1);
+          }}
+          filters={<TableFilters value={filters} onChange={handleFilterChange} yearSource="manuscript" />}
         />
       </Card>
 
@@ -202,41 +256,53 @@ export default function ManuscriptsPage() {
         onSubmit={handleSubmit}
         loading={loading}
       >
-        <TextInput label="نام نسخه خطی" required {...form.getInputProps('name')} />
-        <TextInput label="نویسنده" {...form.getInputProps('author')} />
+        <SmartTextInput
+          label="نام نسخه خطی"
+          required
+          withAsterisk
+          fieldName="name"
+          {...form.getInputProps('name')}
+        />
+        <SmartTextInput label="نویسنده" fieldName="author" {...form.getInputProps('author')} />
         <Group grow>
           <Select
             label="فاصله"
             data={gaps.map((g) => ({ value: String(g.id), label: g.title }))}
-            {...form.getInputProps('gapId', { type: 'number' })}
+            value={form.values.gapId ? String(form.values.gapId) : null}
+            onChange={(v: string | null) => form.setFieldValue('gapId', v ? Number(v) : 0)}
           />
           <Select
             label="محل نگارش"
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
-            {...form.getInputProps('writingPlaceId', { type: 'number' })}
+            value={form.values.writingPlaceId ? String(form.values.writingPlaceId) : null}
+            onChange={(v: string | null) => form.setFieldValue('writingPlaceId', v ? Number(v) : 0)}
           />
         </Group>
         <Group grow>
-          <TextInput label="سال" {...form.getInputProps('year')} />
-          <NumberInput label="تعداد صفحات" min={0} {...form.getInputProps('pageCount')} />
-          <TextInput label="اندازه" {...form.getInputProps('size')} />
+          <SmartTextInput label="سال" fieldName="year" {...form.getInputProps('year')} />
+          <SmartNumberInput label="تعداد صفحات" min={0} {...form.getInputProps('pageCount')} />
+          <SmartTextInput label="اندازه" fieldName="size" {...form.getInputProps('size')} />
         </Group>
-        <TextInput label="شماره نسخه" {...form.getInputProps('versionNo')} />
+        <SmartTextInput
+          label="شماره نسخه"
+          fieldName="versionNo"
+          {...form.getInputProps('versionNo')}
+        />
         <Group grow>
           <Select
             label="زبان"
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
-            {...form.getInputProps('languageId', { type: 'number' })}
+            value={form.values.languageId ? String(form.values.languageId) : null}
+            onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
           />
           <Select
             label="موضوع"
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
-            {...form.getInputProps('subjectId', { type: 'number' })}
+            value={form.values.subjectId ? String(form.values.subjectId) : null}
+            onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}
           />
         </Group>
       </FormModal>
     </Stack>
   );
 }
-
-

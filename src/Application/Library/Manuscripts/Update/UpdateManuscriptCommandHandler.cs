@@ -11,8 +11,8 @@ internal sealed class UpdateManuscriptCommandHandler(
 {
     public async Task<Result> Handle(UpdateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.Set<Manuscript>();
-        
+        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+
         Manuscript? existing = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
 
@@ -21,11 +21,6 @@ internal sealed class UpdateManuscriptCommandHandler(
             return Result.Failure(ManuscriptErrors.NotFound(command.Id));
         }
 
-        string name = command.Name.Trim();
-        if (await manuscripts.AnyAsync(m => m.Id != command.Id && m.Name.Trim() == name, cancellationToken))
-        {
-            return Result.Failure(ManuscriptErrors.NameNotUnique);
-        }
 
         existing.Name = command.Name;
         existing.Author = command.Author;

@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { Gap, GapName, CreateGapRequest, UpdateGapRequest } from '../../models/gap';
+import { apiClient } from '@/app/services/api/client';
+import type { Gap, GapName, CreateGapRequest, UpdateGapRequest } from '@/app/models/gap';
 
 export const gapService = {
   getAll: async (): Promise<Gap[]> => {
@@ -27,8 +27,8 @@ export const gapService = {
     return response.data;
   },
 
-  update: async (data: UpdateGapRequest): Promise<void> => {
-    await apiClient.put('/library/gaps', data);
+  update: async (id: number, data: UpdateGapRequest): Promise<void> => {
+    await apiClient.put(`/library/gaps/${id}`, { ...data, id } as UpdateGapRequest);
   },
 
   delete: async (id: number): Promise<void> => {

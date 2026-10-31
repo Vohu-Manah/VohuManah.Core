@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Languages.Create;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Languages;
 
-[RequireRole("Library.Languages.Create")]
+[RequireRole(EndpointNames.Languages.Create)]
 internal sealed class Create : BaseEndpoint
 {
     public sealed record Request(string Name, string Abbreviation);

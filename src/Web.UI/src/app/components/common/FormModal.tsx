@@ -23,14 +23,7 @@ export function FormModal({
   loading = false,
 }: FormModalProps) {
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title={title}
-      size="lg"
-      centered
-      dir="rtl"
-    >
+    <Modal opened={opened} onClose={onClose} title={title} size="lg" centered dir="rtl">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -54,5 +47,3 @@ export function FormModal({
     </Modal>
   );
 }
-
-

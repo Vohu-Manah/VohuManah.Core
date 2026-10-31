@@ -6,8 +6,12 @@ internal sealed class CreateLanguageCommandValidator : AbstractValidator<CreateL
 {
     public CreateLanguageCommandValidator()
     {
-        RuleFor(c => c.Name).NotEmpty().MaximumLength(30);
-        RuleFor(c => c.Abbreviation).NotEmpty().MaximumLength(5);
+        RuleFor(c => c.Name)
+            .NotEmpty().WithMessage("نام زبان الزامی است")
+            .MaximumLength(30).WithMessage("نام زبان باید حداکثر ۳۰ کاراکتر باشد");
+        RuleFor(c => c.Abbreviation)
+            .NotEmpty().WithMessage("مخفف الزامی است")
+            .MaximumLength(5).WithMessage("مخفف باید حداکثر ۵ کاراکتر باشد");
     }
 }
 

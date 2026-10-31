@@ -1,15 +1,15 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Books.GetCountByPublisher;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.GetCountByPublisher")]
+[RequireRole(EndpointNames.Books.GetCountByPublisher)]
 internal sealed class GetCountByPublisher : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

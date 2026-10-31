@@ -15,8 +15,8 @@ internal sealed class DeleteGapCommandHandler(
 
     public async Task<Result> Handle(DeleteGapCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.Set<Gap>();
-        
+        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+
         Gap? gap = await gaps
             .SingleOrDefaultAsync(g => g.Id == command.Id, cancellationToken);
 
@@ -27,7 +27,7 @@ internal sealed class DeleteGapCommandHandler(
 
         gaps.Remove(gap);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(GapPatternKey);
 
         return Result.Success();

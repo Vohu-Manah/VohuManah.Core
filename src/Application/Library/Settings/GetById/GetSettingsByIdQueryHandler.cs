@@ -11,8 +11,8 @@ internal sealed class GetSettingsByIdQueryHandler(
 {
     public async Task<Result<SettingsResponse>> Handle(GetSettingsByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.Set<Domain.Library.Settings>();
-        
+        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+
         Domain.Library.Settings? setting = await settings
             .SingleOrDefaultAsync(s => s.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetSettingsByIdQueryHandler(
             return Result.Failure<SettingsResponse>(SettingsErrors.NotFound(query.Id));
         }
 
-        SettingsResponse response = new SettingsResponse {
+        SettingsResponse response = new SettingsResponse
+        {
             Id = setting.Id,
             Name = setting.Name,
             Value = setting.Value

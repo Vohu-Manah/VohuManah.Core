@@ -13,7 +13,7 @@ internal sealed class GetAttachmentsByEntityQueryHandler(
 {
     public async Task<Result<List<AttachmentResponse>>> Handle(GetAttachmentsByEntityQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.Set<Attachment>();
+        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
 
         List<Attachment> results = await attachments
             .Where(a => a.EntityType == query.EntityType && a.EntityId == query.EntityId)
@@ -29,6 +29,7 @@ internal sealed class GetAttachmentsByEntityQueryHandler(
             ContentType = a.ContentType,
             FileSize = a.FileSize,
             Description = a.Description,
+            IsMain = a.IsMain,
             CreatedAt = a.CreatedAt
         }).ToList();
 

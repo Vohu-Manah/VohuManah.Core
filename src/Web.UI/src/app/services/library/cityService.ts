@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { City, CityName, CreateCityRequest, UpdateCityRequest } from '../../models/city';
+import { apiClient } from '@/app/services/api/client';
+import type { City, CityName, CreateCityRequest, UpdateCityRequest } from '@/app/models/city';
 
 export const cityService = {
   getAll: async (): Promise<City[]> => {
@@ -27,8 +27,8 @@ export const cityService = {
     return response.data;
   },
 
-  update: async (data: UpdateCityRequest): Promise<void> => {
-    await apiClient.put('/library/cities', data);
+  update: async (id: number, data: UpdateCityRequest): Promise<void> => {
+    await apiClient.put(`/library/cities/${id}`, { ...data, id } as UpdateCityRequest);
   },
 
   delete: async (id: number): Promise<void> => {

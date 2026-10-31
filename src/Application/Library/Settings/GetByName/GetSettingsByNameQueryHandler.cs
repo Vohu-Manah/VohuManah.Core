@@ -15,10 +15,10 @@ internal sealed class GetSettingsByNameQueryHandler(
 
     public Task<Result<SettingsResponse>> Handle(GetSettingsByNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.Set<Domain.Library.Settings>();
-        
-        List<Domain.Library.Settings> allSettings = cacheManager.Get(SettingsAllKey, () => settings.ToList());
-        
+        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+
+        List<Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+
         Domain.Library.Settings? setting = allSettings.SingleOrDefault(s => s.Name.Trim() == query.Name.Trim());
 
         if (setting == null)
@@ -26,7 +26,8 @@ internal sealed class GetSettingsByNameQueryHandler(
             return Task.FromResult(Result.Failure<SettingsResponse>(SettingsErrors.NotFound(query.Name)));
         }
 
-        SettingsResponse response = new SettingsResponse {
+        SettingsResponse response = new SettingsResponse
+        {
             Id = setting.Id,
             Name = setting.Name,
             Value = setting.Value

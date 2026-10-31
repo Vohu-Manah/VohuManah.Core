@@ -4,6 +4,8 @@ export type Publisher = {
   managerName: string;
   telephone: string;
   address: string;
+  website?: string;
+  email?: string;
   cityId?: number;
   cityName?: string;
 };
@@ -18,11 +20,13 @@ export type CreatePublisherRequest = {
   managerName: string;
   telephone: string;
   address: string;
+  website?: string;
+  email?: string;
   cityId: number;
 };
 
 export type UpdatePublisherRequest = CreatePublisherRequest & {
-  id: number;
+  id?: number;
 };
 
 

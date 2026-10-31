@@ -6,7 +6,8 @@ internal sealed class DeleteBookCommandValidator : AbstractValidator<DeleteBookC
 {
     public DeleteBookCommandValidator()
     {
-        RuleFor(c => c.Id).GreaterThan(0);
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه کتاب نامعتبر است");
     }
 }
 

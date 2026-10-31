@@ -1,8 +1,8 @@
+using Application.Abstractions.Authentication;
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
-using Application.Abstractions.Authentication;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -17,8 +17,8 @@ internal sealed class CreateLibraryUserCommandHandler(
 
     public async Task<Result<string>> Handle(CreateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<User> users = unitOfWork.Set<User>();
-        
+        DbSet<User> users = unitOfWork.GetDbSet<User>();
+
         if (await users.AnyAsync(u => u.UserName == command.UserName, cancellationToken))
         {
             return Result.Failure<string>(UserErrors.UserNameNotUnique);
@@ -26,7 +26,8 @@ internal sealed class CreateLibraryUserCommandHandler(
 
         string passwordHash = passwordHasher.Hash(command.Password);
 
-        var user = new User {
+        var user = new User
+        {
             UserName = command.UserName,
             Password = passwordHash,
             Name = command.Name,
@@ -35,7 +36,7 @@ internal sealed class CreateLibraryUserCommandHandler(
 
         users.Add(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(UserPatternKey);
 
         return user.UserName;

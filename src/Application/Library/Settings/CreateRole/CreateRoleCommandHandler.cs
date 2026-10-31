@@ -1,9 +1,7 @@
-using System;
 using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Library.Settings.GetAllRoles;
-using Application.Library.Settings;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -17,13 +15,13 @@ internal sealed class CreateRoleCommandHandler(
 
     public async Task<Result<RoleResponse>> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.Set<Role>();
+        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
 
         string normalizedName = command.Name.Trim();
 
         bool exists = await roles.AnyAsync(
             r => r.Name.Equals(normalizedName, StringComparison.OrdinalIgnoreCase),
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
         if (exists)
         {
@@ -36,22 +34,22 @@ internal sealed class CreateRoleCommandHandler(
         };
 
         roles.Add(role);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (RolePermissionDefaults.TryGetDefaults(role.Name, out var defaultEndpoints) && defaultEndpoints.Length > 0)
         {
-            DbSet<RolePermission> rolePermissions = unitOfWork.Set<RolePermission>();
+            DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
 
             foreach (string endpoint in defaultEndpoints)
             {
-                rolePermissions.Add(new RolePermission
+                rolePermissions.Add(new RoleEndpoint
                 {
                     RoleId = role.Id,
                     EndpointName = endpoint
                 });
             }
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         cacheManager.Remove(GetAllRolesQueryHandler.RolesAllKey);

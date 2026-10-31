@@ -1,8 +1,9 @@
 using Application.Abstractions.Messaging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Library.Settings.RemoveRoleFromUser;
 
 public sealed record RemoveRoleFromUserCommand(
-    long UserId,
-    int RoleId) : ICommand;
+    [Display(Name = "شناسه کاربر")] long UserId,
+    [Display(Name = "شناسه نقش")] int RoleId) : ICommand;
 

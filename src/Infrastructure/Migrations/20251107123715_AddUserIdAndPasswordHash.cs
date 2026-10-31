@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-#pragma warning disable CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning disable CA1861 
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class AddUserIdAndPasswordHash : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropPrimaryKey(
@@ -62,7 +62,7 @@ namespace Infrastructure.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropPrimaryKey(
@@ -112,4 +112,4 @@ namespace Infrastructure.Migrations
         }
     }
 }
-#pragma warning restore CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning restore CA1861 

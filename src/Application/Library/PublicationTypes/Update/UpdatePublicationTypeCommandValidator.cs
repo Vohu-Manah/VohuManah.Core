@@ -6,8 +6,11 @@ internal sealed class UpdatePublicationTypeCommandValidator : AbstractValidator<
 {
     public UpdatePublicationTypeCommandValidator()
     {
-        RuleFor(c => c.Id).GreaterThan(0);
-        RuleFor(c => c.Title).NotEmpty().MaximumLength(50);
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه نوع نشریه نامعتبر است");
+        RuleFor(c => c.Title)
+            .NotEmpty().WithMessage("عنوان نوع نشریه الزامی است")
+            .MaximumLength(50).WithMessage("عنوان نوع نشریه باید حداکثر ۵۰ کاراکتر باشد");
     }
 }
 

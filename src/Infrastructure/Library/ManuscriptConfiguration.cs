@@ -23,6 +23,13 @@ internal sealed class ManuscriptConfiguration : IEntityTypeConfiguration<Manuscr
 
         builder.ToTable("Manuscript", "dbo");
 
+        
+        builder.HasIndex(m => m.Name);
+        builder.HasIndex(m => m.Author);
+        builder.HasIndex(m => m.Year);
+        builder.HasIndex(m => m.VersionNo);
+
+
         builder.HasOne(m => m.Language)
             .WithMany(l => l.Manuscripts)
             .HasForeignKey(m => m.LanguageId)

@@ -1,15 +1,15 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Books.GetAllEntities;
+using Application.Library.Settings;
 using Domain.Library;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.GetAllEntities")]
+[RequireRole(EndpointNames.Books.GetAllEntities)]
 internal sealed class GetAllEntities : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

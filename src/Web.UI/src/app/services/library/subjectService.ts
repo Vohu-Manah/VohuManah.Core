@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { Subject, SubjectName, CreateSubjectRequest, UpdateSubjectRequest } from '../../models/subject';
+import { apiClient } from '@/app/services/api/client';
+import type { Subject, SubjectName, CreateSubjectRequest, UpdateSubjectRequest } from '@/app/models/subject';
 
 export const subjectService = {
   getAll: async (): Promise<Subject[]> => {
@@ -27,8 +27,8 @@ export const subjectService = {
     return response.data;
   },
 
-  update: async (data: UpdateSubjectRequest): Promise<void> => {
-    await apiClient.put('/library/subjects', data);
+  update: async (id: number, data: UpdateSubjectRequest): Promise<void> => {
+    await apiClient.put(`/library/subjects/${id}`, { ...data, id } as UpdateSubjectRequest);
   },
 
   delete: async (id: number): Promise<void> => {

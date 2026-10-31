@@ -1,14 +1,13 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Cities.Delete;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Cities;
 
-[RequireRole("Library.Cities.Delete")]
+[RequireRole(EndpointNames.Cities.Delete)]
 internal sealed class Delete : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

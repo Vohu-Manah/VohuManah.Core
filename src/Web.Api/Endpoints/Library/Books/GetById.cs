@@ -1,14 +1,14 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Books.GetById;
+using Application.Library.Settings;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.GetById")]
+[RequireRole(EndpointNames.Books.GetById)]
 internal sealed class GetById : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

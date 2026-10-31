@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Users.GetByUserName;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Users;
 
-[RequireRole("Library.Users.GetByUserName")]
+[RequireRole(EndpointNames.Users.GetByUserName)]
 internal sealed class GetByUserName : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

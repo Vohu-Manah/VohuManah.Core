@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,8 +15,8 @@ internal sealed class UpdateSubjectCommandHandler(
 
     public async Task<Result> Handle(UpdateSubjectCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.Set<Subject>();
-        
+        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+
         Subject? existing = await subjects.SingleOrDefaultAsync(s => s.Id == command.Id, cancellationToken);
         if (existing == null)
         {
@@ -30,7 +30,7 @@ internal sealed class UpdateSubjectCommandHandler(
 
         existing.Title = command.Title;
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(SubjectPatternKey);
 
         return Result.Success();

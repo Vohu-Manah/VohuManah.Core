@@ -26,6 +26,13 @@ internal sealed class PublicationConfiguration : IEntityTypeConfiguration<Public
 
         builder.ToTable("Publication", "dbo");
 
+        
+        builder.HasIndex(p => p.Name);
+        builder.HasIndex(p => p.Year);
+        builder.HasIndex(p => p.No);
+        builder.HasIndex(p => p.JournalNo);
+
+
         builder.HasOne(p => p.Language)
             .WithMany(l => l.Publications)
             .HasForeignKey(p => p.LanguageId)

@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Attachments.Upload;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Attachments;
 
-[RequireRole("Library.Attachments.Upload")]
+[RequireRole(EndpointNames.Attachments.Upload)]
 internal sealed class Upload : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
@@ -20,20 +20,21 @@ internal sealed class Upload : BaseEndpoint
         {
             if (!request.HasFormContentType)
             {
-                return Results.BadRequest("Request must be multipart/form-data");
+                return Results.BadRequest("Ù†ÙˆØ¹ Ø¨Ø§ÛŒØ¯ Ø§Ø² multipart/form-data");
             }
 
             IFormCollection form = await request.ReadFormAsync(cancellationToken);
-            
+
             if (!form.TryGetValue("entityType", out var entityType) ||
                 !form.TryGetValue("entityId", out var entityId) ||
                 form.Files.Count == 0)
             {
-                return Results.BadRequest("Missing required fields: entityType, entityId, or file");
+                return Results.BadRequest("ÙˆØ±ÙˆØ¯ÛŒ Ù†Ø§Ù‚Øµ Ø§Ø³Øª");
             }
 
             IFormFile file = form.Files[0];
             string? description = form.TryGetValue("description", out var desc) ? desc.ToString() : null;
+            bool isMain = form.TryGetValue("isMain", out var isMainValue) && bool.TryParse(isMainValue.ToString(), out bool parsedIsMain) && parsedIsMain;
             string? createdBy = request.HttpContext.User.Identity?.Name;
 
             if (string.IsNullOrEmpty(createdBy))
@@ -43,11 +44,11 @@ internal sealed class Upload : BaseEndpoint
 
             if (!long.TryParse(entityId, out long entityIdLong))
             {
-                return Results.BadRequest("Invalid entityId");
+                return Results.BadRequest("Ø´Ù†Ø§Ø³Ù‡ Ù†Ø§Ù…Ø¹ØªØ¨Ø±");
             }
 
             await using Stream fileStream = file.OpenReadStream();
-            
+
             var command = new UploadAttachmentCommand(
                 entityType.ToString()!,
                 entityIdLong,
@@ -56,7 +57,8 @@ internal sealed class Upload : BaseEndpoint
                 file.Length,
                 fileStream,
                 description,
-                createdBy);
+                createdBy,
+                isMain);
 
             Result<long> result = await handler.Handle(command, cancellationToken);
 
@@ -64,7 +66,7 @@ internal sealed class Upload : BaseEndpoint
         })
         .ApplyRoleAuthorization(this)
         .WithTags("Library.Attachments")
-        .DisableAntiforgery(); // File uploads may need this
+        .DisableAntiforgery();
     }
 }
 

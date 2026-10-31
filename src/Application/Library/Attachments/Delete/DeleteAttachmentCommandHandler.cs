@@ -13,7 +13,7 @@ internal sealed class DeleteAttachmentCommandHandler(
 {
     public async Task<Result> Handle(DeleteAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.Set<Attachment>();
+        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
 
         Attachment? attachment = await attachments
             .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
@@ -25,10 +25,8 @@ internal sealed class DeleteAttachmentCommandHandler(
 
         try
         {
-            // Delete file from storage
             await fileStorageService.DeleteFileAsync(attachment.FilePath, cancellationToken);
 
-            // Delete record from database
             attachments.Remove(attachment);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -1,20 +1,21 @@
 using Application.Abstractions.Messaging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Library.Publications.Update;
 
 public sealed record UpdatePublicationCommand(
-    int Id,
-    string Name,
-    int TypeId,
-    string Concessionaire,
-    string ResponsibleDirector,
-    string Editor,
-    string Year,
-    string JournalNo,
-    string PublishDate,
-    int PublishPlaceId,
-    string No,
-    string Period,
-    int LanguageId,
-    int SubjectId) : ICommand;
+    [Display(Name = "شناسه")] int Id,
+    [Display(Name = "نام نشریه")] string Name,
+    [Display(Name = "نوع نشریه")] int TypeId,
+    [Display(Name = "امتیازدار")] string Concessionaire,
+    [Display(Name = "مدیر مسئول")] string ResponsibleDirector,
+    [Display(Name = "ویراستار")] string Editor,
+    [Display(Name = "سال")] string Year,
+    [Display(Name = "شماره مجله")] string JournalNo,
+    [Display(Name = "تاریخ انتشار")] string PublishDate,
+    [Display(Name = "محل چاپ")] int PublishPlaceId,
+    [Display(Name = "شماره")] string No,
+    [Display(Name = "دوره")] string Period,
+    [Display(Name = "زبان")] int LanguageId,
+    [Display(Name = "موضوع")] int SubjectId) : ICommand;
 

@@ -30,7 +30,7 @@ export type CreateManuscriptRequest = {
 };
 
 export type UpdateManuscriptRequest = CreateManuscriptRequest & {
-  id: number;
+  id?: number;
 };
 
 export type ManuscriptSearchRequest = {

@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetCityListQueryHandler(
 
     public Task<Result<List<CityListResponse>>> Handle(GetCityListQuery query, CancellationToken cancellationToken)
     {
-        var cities = unitOfWork.Set<City>();
-        
-        var allCities = cacheManager.Get(CityAllKey, () => cities.OrderBy(c => c.Name).ToList());
-        
+        var cities = unitOfWork.GetDbSet<City>();
+
+        var allCities = cacheManager.Retrieve(CityAllKey, () => cities.OrderBy(c => c.Name).ToList());
+
         var list = allCities.Select(c => new CityListResponse
         {
             Id = c.Id,

@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-#pragma warning disable CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning disable CA1861 
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class AddRolePermissionTable : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -48,9 +48,9 @@ namespace Infrastructure.Migrations
                 columns: new[] { "RoleId", "EndpointName" },
                 unique: true);
         }
-#pragma warning restore CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning restore CA1861 
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

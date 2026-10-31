@@ -1,21 +1,22 @@
 using Application.Abstractions.Messaging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Library.Books.Create;
 
 public sealed record CreateBookCommand(
-    string Name,
-    string Author,
-    string Translator,
-    string Editor,
-    string Corrector,
-    int PublisherId,
-    int PublishPlaceId,
-    string PublishYear,
-    string PublishOrder,
-    string Isbn,
-    string No,
-    int VolumeCount,
-    int LanguageId,
-    int SubjectId,
-    string BookShelfRow) : ICommand<long>;
+    [Display(Name = "نام کتاب")] string Name,
+    [Display(Name = "نویسنده")] string Author,
+    [Display(Name = "مترجم")] string Translator,
+    [Display(Name = "ویراستار")] string Editor,
+    [Display(Name = "مصحح")] string Corrector,
+    [Display(Name = "ناشر")] int PublisherId,
+    [Display(Name = "محل چاپ")] int PublishPlaceId,
+    [Display(Name = "سال انتشار")] string PublishYear,
+    [Display(Name = "ترتیب انتشار")] string PublishOrder,
+    [Display(Name = "شابک")] string Isbn,
+    [Display(Name = "شماره")] string No,
+    [Display(Name = "تعداد جلد")] int VolumeCount,
+    [Display(Name = "زبان")] int LanguageId,
+    [Display(Name = "موضوع")] int SubjectId,
+    [Display(Name = "ردیف قفسه")] string BookShelfRow) : ICommand<long>;
 

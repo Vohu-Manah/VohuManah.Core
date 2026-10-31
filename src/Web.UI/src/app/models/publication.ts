@@ -36,7 +36,7 @@ export type CreatePublicationRequest = {
 };
 
 export type UpdatePublicationRequest = CreatePublicationRequest & {
-  id: number;
+  id?: number;
 };
 
 export type PublicationSearchRequest = {
@@ -45,6 +45,7 @@ export type PublicationSearchRequest = {
   publishPlaceId?: number;
   languageId?: number;
   subjectId?: number;
+  year?: string;
   publishDate?: string;
 };
 

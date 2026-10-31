@@ -11,8 +11,8 @@ internal sealed class GetAllBookEntitiesQueryHandler(
 {
     public async Task<Result<List<Book>>> Handle(GetAllBookEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         List<Book> allBooks = await books.ToListAsync(cancellationToken);
 
         return Result.Success(allBooks);

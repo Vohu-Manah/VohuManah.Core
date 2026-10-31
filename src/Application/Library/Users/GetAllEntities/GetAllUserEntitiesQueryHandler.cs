@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -15,9 +15,9 @@ internal sealed class GetAllUserEntitiesQueryHandler(
 
     public Task<Result<List<User>>> Handle(GetAllUserEntitiesQuery query, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.Set<User>();
-        
-        var allUsers = cacheManager.Get(UserAllKey, () => users.ToList());
+        DbSet<User> users = unitOfWork.GetDbSet<User>();
+
+        List<User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 
         return Task.FromResult(Result.Success(allUsers));
     }

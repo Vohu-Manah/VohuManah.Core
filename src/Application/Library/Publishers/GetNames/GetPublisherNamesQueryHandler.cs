@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetPublisherNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetPublisherNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.Set<Publisher>();
+        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
 
         List<SelectItemResponse> items = publishers
             .OrderBy(p => p.Name)

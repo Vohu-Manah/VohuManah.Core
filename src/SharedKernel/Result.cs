@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SharedKernel;
 
@@ -9,7 +9,7 @@ public class Result
         if (isSuccess && error != Error.None ||
             !isSuccess && error == Error.None)
         {
-            throw new ArgumentException("Invalid error", nameof(error));
+            throw new ArgumentException("خطای نا معتبر", nameof(error));
         }
 
         IsSuccess = isSuccess;
@@ -31,6 +31,10 @@ public class Result
 
     public static Result<TValue> Failure<TValue>(Error error) =>
         new(default, false, error);
+
+    public static Result<TValue> ValidationFailure<TValue>(Error error) =>
+        new(default, false, error);
+
 }
 
 public class Result<TValue> : Result
@@ -46,11 +50,13 @@ public class Result<TValue> : Result
     [NotNull]
     public TValue Value => IsSuccess
         ? _value!
-        : throw new InvalidOperationException("The value of a failure result can't be accessed.");
+        : throw new InvalidOperationException("درسترسی به نتایج ناموفقق امکان نبود.");
 
     public static implicit operator Result<TValue>(TValue? value) =>
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 
-    public static Result<TValue> ValidationFailure(Error error) =>
-        new(default, false, error);
+    [SuppressMessage("Design", "CA1000:Do not declare static members on generic types",
+        Justification = "Required for CA2225 compliance")]
+    public static Result<TValue> FromTValue(TValue? value) =>
+        value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 }

@@ -7,19 +7,13 @@ import {
   FaCog,
   FaNewspaper,
   FaScroll,
-  FaCity,
-  FaLanguage,
   FaTags,
-  FaBuilding,
-  FaSearch,
-  FaChartBar,
   FaFileAlt,
   FaShieldAlt,
-  FaUserShield,
 } from 'react-icons/fa';
 
 export type AppRoute = {
-  path: string;
+  path?: string;
   label: string;
   icon?: ReactElement;
   exact?: boolean;
@@ -79,7 +73,12 @@ export const menuRoutes: AppRoute[] = [
     label: 'گزارش‌ها',
     icon: <FaFileAlt size={14} />,
     children: [
-      { path: '/reports', label: 'گزارش‌ها' },
+      { path: '/books/search', label: 'جستجوی کتاب' },
+      { path: '/manuscripts/search', label: 'جستجوی نسخه خطی' },
+      { path: '/publications/search', label: 'جستجوی نشریه' },
+      { path: '/books/statistics', label: 'گزارشات آماری کتاب' },
+      { path: '/manuscripts/statistics', label: 'گزارشات آماری نسخ خطی' },
+      { path: '/publications/statistics', label: 'گزارشات آماری نشریه' },
     ],
   },
   {
@@ -87,6 +86,7 @@ export const menuRoutes: AppRoute[] = [
     icon: <FaCog size={14} />,
     children: [
       { path: '/settings', label: 'تنظیمات عمومی' },
+      { path: '/settings#menu-settings', label: 'تنظیمات منو' },
     ],
   },
   {

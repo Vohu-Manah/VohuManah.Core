@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Gaps.GetById;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Gaps;
 
-[RequireRole("Library.Gaps.GetById")]
+[RequireRole(EndpointNames.Gaps.GetById)]
 internal sealed class GetById : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

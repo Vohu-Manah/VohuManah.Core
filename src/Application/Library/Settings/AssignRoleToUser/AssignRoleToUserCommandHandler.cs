@@ -11,9 +11,9 @@ internal sealed class AssignRoleToUserCommandHandler(
 {
     public async Task<Result> Handle(AssignRoleToUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.Set<UserRole>();
-        DbSet<Role> roles = unitOfWork.Set<Role>();
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
+        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
+        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
 
         Domain.Library.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -22,26 +22,22 @@ internal sealed class AssignRoleToUserCommandHandler(
         {
             return Result.Failure(Domain.Library.UserErrors.NotFound(command.UserId));
         }
-
-        // بررسی وجود نقش
         bool roleExists = await roles.AnyAsync(r => r.Id == command.RoleId, cancellationToken);
         if (!roleExists)
         {
             return Result.Failure(Error.NotFound("Role.NotFound", "نقش یافت نشد"));
         }
 
-        // بررسی اینکه آیا این نقش قبلاً به کاربر اختصاص داده شده است
         bool alreadyAssigned = await userRoles
             .AnyAsync(
                 ur => ur.UserId == command.UserId && ur.RoleId == command.RoleId,
                 cancellationToken);
-        
+
         if (alreadyAssigned)
         {
             return Result.Failure(Error.Conflict("UserRole.AlreadyExists", "این نقش قبلاً به کاربر اختصاص داده شده است"));
         }
 
-        // اختصاص نقش به کاربر
         var userRole = new UserRole
         {
             UserId = command.UserId,

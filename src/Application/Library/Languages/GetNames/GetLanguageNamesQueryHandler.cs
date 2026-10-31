@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetLanguageNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetLanguageNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.Set<Language>();
+        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
 
         List<SelectItemResponse> items = languages
             .OrderBy(l => l.Name)

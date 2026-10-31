@@ -11,8 +11,8 @@ internal sealed class GetLanguageByIdQueryHandler(
 {
     public async Task<Result<LanguageResponse>> Handle(GetLanguageByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.Set<Language>();
-        
+        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+
         Language? language = await languages
             .SingleOrDefaultAsync(l => l.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetLanguageByIdQueryHandler(
             return Result.Failure<LanguageResponse>(LanguageErrors.NotFound(query.Id));
         }
 
-        LanguageResponse response = new LanguageResponse {
+        LanguageResponse response = new LanguageResponse
+        {
             Id = language.Id,
             Name = language.Name,
             Abbreviation = language.Abbreviation

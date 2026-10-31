@@ -1,11 +1,11 @@
-/* Shabnam Font Face Definitions */
 @font-face {
   font-family: 'Shabnam';
-  src: url('./assets/fonts/Shabnam-Thin-FD-WOL.eot');
-  src: url('./assets/fonts/Shabnam-Thin-FD-WOL.eot?#iefix') format('embedded-opentype'),
-       url('./assets/fonts/Shabnam-Thin-FD-WOL.woff2') format('woff2'),
-       url('./assets/fonts/Shabnam-Thin-FD-WOL.woff') format('woff'),
-       url('./assets/fonts/Shabnam-Thin-FD-WOL.ttf') format('truetype');
+  src: url('./assets/fonts/shabnam/Shabnam-Thin-FD-WOL.eot');
+  src:
+    url('./assets/fonts/shabnam/Shabnam-Thin-FD-WOL.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/shabnam/Shabnam-Thin-FD-WOL.woff2') format('woff2'),
+    url('./assets/fonts/shabnam/Shabnam-Thin-FD-WOL.woff') format('woff'),
+    url('./assets/fonts/shabnam/Shabnam-Thin-FD-WOL.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -13,11 +13,12 @@
 
 @font-face {
   font-family: 'Shabnam';
-  src: url('./assets/fonts/Shabnam-Light-FD-WOL.eot');
-  src: url('./assets/fonts/Shabnam-Light-FD-WOL.eot?#iefix') format('embedded-opentype'),
-       url('./assets/fonts/Shabnam-Light-FD-WOL.woff2') format('woff2'),
-       url('./assets/fonts/Shabnam-Light-FD-WOL.woff') format('woff'),
-       url('./assets/fonts/Shabnam-Light-FD-WOL.ttf') format('truetype');
+  src: url('./assets/fonts/shabnam/Shabnam-Light-FD-WOL.eot');
+  src:
+    url('./assets/fonts/shabnam/Shabnam-Light-FD-WOL.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/shabnam/Shabnam-Light-FD-WOL.woff2') format('woff2'),
+    url('./assets/fonts/shabnam/Shabnam-Light-FD-WOL.woff') format('woff'),
+    url('./assets/fonts/shabnam/Shabnam-Light-FD-WOL.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -25,11 +26,12 @@
 
 @font-face {
   font-family: 'Shabnam';
-  src: url('./assets/fonts/Shabnam-FD-WOL.eot');
-  src: url('./assets/fonts/Shabnam-FD-WOL.eot?#iefix') format('embedded-opentype'),
-       url('./assets/fonts/Shabnam-FD-WOL.woff2') format('woff2'),
-       url('./assets/fonts/Shabnam-FD-WOL.woff') format('woff'),
-       url('./assets/fonts/Shabnam-FD-WOL.ttf') format('truetype');
+  src: url('./assets/fonts/shabnam/Shabnam-FD-WOL.eot');
+  src:
+    url('./assets/fonts/shabnam/Shabnam-FD-WOL.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/shabnam/Shabnam-FD-WOL.woff2') format('woff2'),
+    url('./assets/fonts/shabnam/Shabnam-FD-WOL.woff') format('woff'),
+    url('./assets/fonts/shabnam/Shabnam-FD-WOL.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -37,11 +39,12 @@
 
 @font-face {
   font-family: 'Shabnam';
-  src: url('./assets/fonts/Shabnam-Medium-FD-WOL.eot');
-  src: url('./assets/fonts/Shabnam-Medium-FD-WOL.eot?#iefix') format('embedded-opentype'),
-       url('./assets/fonts/Shabnam-Medium-FD-WOL.woff2') format('woff2'),
-       url('./assets/fonts/Shabnam-Medium-FD-WOL.woff') format('woff'),
-       url('./assets/fonts/Shabnam-Medium-FD-WOL.ttf') format('truetype');
+  src: url('./assets/fonts/shabnam/Shabnam-Medium-FD-WOL.eot');
+  src:
+    url('./assets/fonts/shabnam/Shabnam-Medium-FD-WOL.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/shabnam/Shabnam-Medium-FD-WOL.woff2') format('woff2'),
+    url('./assets/fonts/shabnam/Shabnam-Medium-FD-WOL.woff') format('woff'),
+    url('./assets/fonts/shabnam/Shabnam-Medium-FD-WOL.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -49,18 +52,19 @@
 
 @font-face {
   font-family: 'Shabnam';
-  src: url('./assets/fonts/Shabnam-Bold-FD-WOL.eot');
-  src: url('./assets/fonts/Shabnam-Bold-FD-WOL.eot?#iefix') format('embedded-opentype'),
-       url('./assets/fonts/Shabnam-Bold-FD-WOL.woff2') format('woff2'),
-       url('./assets/fonts/Shabnam-Bold-FD-WOL.woff') format('woff'),
-       url('./assets/fonts/Shabnam-Bold-FD-WOL.ttf') format('truetype');
+  src: url('./assets/fonts/shabnam/Shabnam-Bold-FD-WOL.eot');
+  src:
+    url('./assets/fonts/shabnam/Shabnam-Bold-FD-WOL.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/shabnam/Shabnam-Bold-FD-WOL.woff2') format('woff2'),
+    url('./assets/fonts/shabnam/Shabnam-Bold-FD-WOL.woff') format('woff'),
+    url('./assets/fonts/shabnam/Shabnam-Bold-FD-WOL.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
-  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, 'Segoe UI', sans-serif;
   background-color: #f5f6fa;
   color: #111;
   direction: rtl;
@@ -68,14 +72,14 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, 'Segoe UI', sans-serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   direction: rtl;
-  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, 'Segoe UI', sans-serif;
 }
 
 a {
@@ -83,41 +87,74 @@ a {
   text-decoration: none;
 }
 
-/* RTL fixes for Mantine components */
 [data-mantine-color-scheme] {
   direction: rtl;
 }
 
-/* Ensure NavLink text is right-aligned */
-[data-mantine-component="NavLink"],
+[data-mantine-component='NavLink'],
 .mantine-NavLink-root,
 .mantine-NavLink-root > * {
   direction: rtl !important;
   text-align: right !important;
 }
 
-/* Right-align NavLink label text */
 .mantine-NavLink-label,
 .mantine-NavLink-root .mantine-NavLink-label,
-[data-mantine-component="NavLink"] .mantine-NavLink-label {
+[data-mantine-component='NavLink'] .mantine-NavLink-label {
   text-align: right !important;
   direction: rtl !important;
   justify-content: flex-end !important;
 }
 
-/* Ensure NavLink body/content is right-aligned */
 .mantine-NavLink-body {
   text-align: right !important;
   direction: rtl !important;
 }
 
-/* Right-align all text content in NavLink */
 .mantine-NavLink-root span,
 .mantine-NavLink-root div {
   text-align: right !important;
 }
 
-/* React Multi Date Picker styles - Mantine TextInput styling */
+
+
+.mantine-NavLink-root {
+  
+  color: color-mix(in srgb, var(--mantine-color-text) 80%, transparent) !important;
+  border-radius: var(--mantine-radius-md);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.mantine-NavLink-root .mantine-NavLink-label,
+.mantine-NavLink-root .mantine-NavLink-section,
+.mantine-NavLink-root .mantine-NavLink-description {
+  color: inherit !important;
+  opacity: 0.8;
+}
+
+.mantine-NavLink-root .mantine-NavLink-label,
+.mantine-NavLink-root .mantine-NavLink-section {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.mantine-NavLink-root:hover {
+  color: color-mix(in srgb, var(--mantine-color-text) 80%, transparent) !important;
+  background-color: color-mix(in srgb, var(--mantine-color-text) 6%, transparent);
+}
+
+.mantine-NavLink-root[data-active='true'],
+.mantine-NavLink-root[data-active] {
+  color: color-mix(in srgb, var(--mantine-color-text) 80%, transparent) !important;
+  background-color: color-mix(in srgb, var(--mantine-primary-color-filled) 10%, transparent);
+}
+
+.mantine-NavLink-root[data-active='true'] .mantine-NavLink-label,
+.mantine-NavLink-root[data-active] .mantine-NavLink-label {
+  color: inherit;
+  font-weight: 500;
+}
+
 .custom-date-picker {
   width: 100%;
   direction: rtl;
@@ -127,8 +164,7 @@ a {
   width: 100%;
   direction: rtl;
   text-align: right;
-  /* Apply Mantine TextInput styles */
-  font-family: 'Shabnam', IRANSans, Vazirmatn, "Segoe UI", sans-serif;
+  font-family: 'Shabnam', IRANSans, Vazirmatn, 'Segoe UI', sans-serif;
   font-size: var(--mantine-font-size-sm);
   line-height: var(--mantine-line-height);
   color: var(--mantine-color-text);
@@ -136,7 +172,9 @@ a {
   border: 1px solid var(--mantine-color-gray-4);
   border-radius: var(--mantine-radius-md);
   padding: calc(var(--mantine-spacing-xs) - 1px) calc(var(--mantine-spacing-sm) - 1px);
-  transition: border-color 100ms ease, box-shadow 100ms ease;
+  transition:
+    border-color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 .custom-date-picker input:focus {
@@ -157,7 +195,6 @@ a {
   opacity: 1;
 }
 
-/* Error state */
 .mantine-InputWrapper-error .custom-date-picker input {
   border-color: var(--mantine-color-error);
 }
@@ -167,7 +204,6 @@ a {
   box-shadow: 0 0 0 1px var(--mantine-color-error);
 }
 
-/* RTL support for react-multi-date-picker */
 .rmdp-wrapper {
   direction: rtl;
 }
@@ -188,4 +224,426 @@ a {
 .rmdp-day {
   direction: rtl;
   text-align: center;
+}
+
+.rmdp-container {
+  z-index: 10000 !important;
+}
+
+.rmdp-calendar {
+  z-index: 10000 !important;
+}
+
+.rmdp-wrapper,
+.rmdp-calendar,
+.rmdp-day-picker {
+  overflow: visible !important;
+}
+
+.mantine-Notification-root {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.mantine-Notification-root:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+.mantine-Notification-body {
+  max-height: 450px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 !important;
+}
+
+.mantine-Notification-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mantine-Notification-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.mantine-Notification-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.mantine-Notification-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+
+.mantine-Notification-root[data-error] {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%) !important;
+  border-left: 4px solid #fa5252 !important;
+}
+
+.mantine-Notification-title {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 0 !important;
+  border-bottom: none !important;
+}
+
+.mantine-Notification-description {
+  line-height: 1.6 !important;
+  font-size: 12px !important;
+  padding: 8px 0 !important;
+  border-top: none !important;
+  margin-top: 0 !important;
+  color: #6b7280 !important;
+}
+
+.mantine-Notification-title::after,
+.mantine-Notification-title::before,
+.mantine-Notification-description::after,
+.mantine-Notification-description::before {
+  display: none !important;
+  content: none !important;
+}
+
+.mantine-Notification-body::after,
+.mantine-Notification-body::before {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+}
+
+.mantine-Table-th {
+  text-align: right !important;
+  padding: 12px !important;
+  font-weight: 600 !important;
+}
+
+.mantine-Table-td {
+  text-align: right !important;
+  padding: 12px !important;
+}
+
+div[data-smart-input-direction='ltr'] .mantine-TextInput-input,
+div[data-smart-input-direction='ltr'] .mantine-PasswordInput-input,
+div[data-smart-input-direction='ltr'] .mantine-Input-input {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+div[data-smart-input-direction='rtl'] .mantine-TextInput-input,
+div[data-smart-input-direction='rtl'] .mantine-PasswordInput-input,
+div[data-smart-input-direction='rtl'] .mantine-Input-input {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+div[data-smart-input-direction] .mantine-TextInput-rightSection,
+div[data-smart-input-direction] .mantine-PasswordInput-rightSection,
+div[data-smart-input-direction] .mantine-Input-rightSection {
+  width: 2.5rem !important;
+  min-width: 2.5rem !important;
+  max-width: 2.5rem !important;
+}
+
+div[data-smart-input-direction] .mantine-TextInput-leftSection,
+div[data-smart-input-direction] .mantine-PasswordInput-leftSection,
+div[data-smart-input-direction] .mantine-Input-leftSection {
+  width: 2.5rem !important;
+  min-width: 2.5rem !important;
+  max-width: 2.5rem !important;
+}
+
+div[data-smart-input-direction] .mantine-TextInput-wrapper,
+div[data-smart-input-direction] .mantine-PasswordInput-wrapper,
+div[data-smart-input-direction] .mantine-Input-wrapper {
+  direction: rtl !important;
+}
+
+.mantine-PasswordInput-section[data-position='right'] {
+  right: 0 !important;
+  left: auto !important;
+}
+
+div[data-smart-input-direction] .mantine-TextInput-rightSection,
+div[data-smart-input-direction] .mantine-PasswordInput-rightSection,
+div[data-smart-input-direction] .mantine-Input-rightSection,
+div[data-smart-input-direction] .mantine-TextInput-leftSection,
+div[data-smart-input-direction] .mantine-PasswordInput-leftSection,
+div[data-smart-input-direction] .mantine-Input-leftSection {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+div[data-smart-input-direction='ltr'] .mantine-TextInput-rightSection,
+div[data-smart-input-direction='ltr'] .mantine-Input-rightSection {
+  left: 0 !important;
+  right: auto !important;
+}
+
+div[data-smart-input-direction='rtl'] .mantine-TextInput-rightSection,
+div[data-smart-input-direction='rtl'] .mantine-Input-rightSection {
+  right: 0 !important;
+  left: auto !important;
+}
+
+div[data-smart-input-direction='ltr'] .mantine-TextInput-leftSection,
+div[data-smart-input-direction='ltr'] .mantine-PasswordInput-leftSection,
+div[data-smart-input-direction='ltr'] .mantine-Input-leftSection {
+  right: 0 !important;
+  left: auto !important;
+}
+
+div[data-smart-input-direction='rtl'] .mantine-TextInput-leftSection,
+div[data-smart-input-direction='rtl'] .mantine-PasswordInput-leftSection,
+div[data-smart-input-direction='rtl'] .mantine-Input-leftSection {
+  left: 0 !important;
+  right: auto !important;
+}
+
+
+
+
+.mantine-Stack-root[data-page],
+main .mantine-Stack-root {
+  animation: page-enter 240ms ease both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+.mantine-Card-root.with-border,
+.mantine-Card-root[data-with-border] {
+  box-shadow:
+    0 1px 2px rgba(18, 22, 33, 0.04),
+    0 6px 16px -8px rgba(18, 22, 33, 0.1);
+  border-color: color-mix(in srgb, var(--mantine-color-default-border) 80%, transparent);
+}
+
+
+.mantine-Table-tr:hover > .mantine-Table-td {
+  background-color: var(--mantine-color-gray-0);
+  transition: background-color 120ms ease;
+}
+
+
+.mantine-Modal-root .mantine-Modal-content,
+.mantine-Drawer-root .mantine-Drawer-content {
+  animation: overlay-enter 180ms ease both;
+}
+
+@keyframes overlay-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+.mantine-Button-root:active {
+  transform: scale(0.98);
+  transition: transform 80ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mantine-Stack-root[data-page],
+  main .mantine-Stack-root,
+  .mantine-Modal-root .mantine-Modal-content,
+  .mantine-Drawer-root .mantine-Drawer-content,
+  .mantine-Card-root.with-border,
+  .mantine-Card-root[data-with-border],
+  .mantine-Button-root:active {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+
+
+
+.mantine-AppShell-header {
+  background-color: color-mix(in srgb, var(--mantine-color-body) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.05),
+    0 8px 24px -12px rgba(16, 24, 40, 0.18);
+  z-index: 100;
+}
+
+
+.mantine-AppShell-navbar {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--mantine-primary-color-filled) 4%, var(--mantine-color-body)) 0%,
+    var(--mantine-color-body) 120px
+  );
+  border-inline-end: 1px solid var(--mantine-color-default-border);
+  box-shadow:
+    -1px 0 2px rgba(16, 24, 40, 0.04),
+    -12px 0 28px -20px rgba(16, 24, 40, 0.25);
+}
+
+
+.mantine-AppShell-main {
+  background-image: radial-gradient(
+    1100px 420px at 100% 0%,
+    color-mix(in srgb, var(--mantine-primary-color-filled) 7%, transparent),
+    transparent 70%
+  );
+}
+
+
+.mantine-Card-root.with-border,
+.mantine-Card-root[data-with-border] {
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.04),
+    0 6px 16px -8px rgba(16, 24, 40, 0.1);
+  border-color: color-mix(in srgb, var(--mantine-color-default-border) 80%, transparent);
+}
+
+
+.mantine-Table-table {
+  background-color: var(--mantine-color-body);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--mantine-color-default-border);
+}
+
+.mantine-Table-th {
+  background-color: color-mix(in srgb, var(--mantine-color-gray-0) 70%, var(--mantine-color-body));
+}
+
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mantine-color-default-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--mantine-color-default-border);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mantine-color-gray-5);
+}
+
+
+
+@keyframes shiny-sweep {
+  0% { background-position: 220% 0; }
+  100% { background-position: -220% 0; }
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-enter {
+  animation: fade-slide-up 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-enter,
+  [style*='shiny-sweep'] {
+    animation: none !important;
+  }
+}
+
+
+
+.mantine-Table-thead .pro-table-th,
+.mantine-Table-thead .pro-table-th > * {
+  text-align: center !important;
+}
+
+
+
+.mantine-Table-td .pro-table-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.mantine-Table-td .pro-table-actions .mantine-ActionIcon-root,
+.mantine-Table-td .pro-table-actions .mantine-Button-root {
+  transition: transform 150ms ease;
+}
+
+.mantine-Table-td .pro-table-actions .mantine-ActionIcon-root:hover,
+.mantine-Table-td .pro-table-actions .mantine-Button-root:hover {
+  transform: translateY(-1px);
+}
+
+
+
+
+.mantine-Table-tbody td:not(:has(.pro-table-actions)) {
+  color: color-mix(in srgb, var(--mantine-color-text) 72%, transparent);
+  font-weight: 400;
+}
+
+.mantine-Table-thead th:not(.pro-table-th-actions) {
+  color: color-mix(in srgb, var(--mantine-color-text) 65%, transparent);
+  font-weight: 500;
+}
+
+
+
+.mantine-Table-table {
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--mantine-color-default-border);
+  background-color: var(--mantine-color-body);
+}
+
+.mantine-Table-thead th {
+  background-color: color-mix(in srgb, var(--mantine-color-gray-0) 70%, var(--mantine-color-body));
+  font-weight: 500;
+}
+
+
+
+.mantine-AppShell-navbar .mantine-ScrollArea-viewport > div {
+  padding-inline-end: 10px;
 }

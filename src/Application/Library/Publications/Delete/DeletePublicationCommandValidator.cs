@@ -6,7 +6,8 @@ internal sealed class DeletePublicationCommandValidator : AbstractValidator<Dele
 {
     public DeletePublicationCommandValidator()
     {
-        RuleFor(c => c.Id).GreaterThan(0);
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه نشریه نامعتبر است");
     }
 }
 

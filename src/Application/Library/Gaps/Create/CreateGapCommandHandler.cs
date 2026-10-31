@@ -15,14 +15,15 @@ internal sealed class CreateGapCommandHandler(
 
     public async Task<Result<int>> Handle(CreateGapCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.Set<Gap>();
-        
+        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+
         if (await gaps.AnyAsync(g => g.Title == command.Title, cancellationToken))
         {
             return Result.Failure<int>(GapErrors.TitleNotUnique);
         }
 
-        Gap gap = new Gap {
+        var gap = new Gap
+        {
             Title = command.Title,
             Note = command.Note,
             State = command.State
@@ -30,7 +31,7 @@ internal sealed class CreateGapCommandHandler(
 
         gaps.Add(gap);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(GapPatternKey);
 
         return gap.Id;

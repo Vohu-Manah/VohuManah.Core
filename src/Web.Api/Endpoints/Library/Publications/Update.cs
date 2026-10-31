@@ -1,18 +1,16 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Publications.Update;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Publications;
 
-[RequireRole("Library.Publications.Update")]
+[RequireRole(EndpointNames.Publications.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
-        int Id,
         string Name,
         int TypeId,
         string Concessionaire,
@@ -29,13 +27,14 @@ internal sealed class Update : BaseEndpoint
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("library/publications", async (
+        app.MapPut("library/publications/{id:int}", async (
+            int id,
             Request request,
             ICommandHandler<UpdatePublicationCommand> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new UpdatePublicationCommand(
-                request.Id,
+                id,
                 request.Name,
                 request.TypeId,
                 request.Concessionaire,

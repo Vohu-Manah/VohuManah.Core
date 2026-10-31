@@ -13,7 +13,7 @@ export type CreateCityRequest = {
 };
 
 export type UpdateCityRequest = CreateCityRequest & {
-  id: number;
+  id?: number;
 };
 
 

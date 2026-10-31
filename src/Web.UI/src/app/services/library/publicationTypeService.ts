@@ -1,5 +1,5 @@
-import { apiClient } from '../api/client';
-import type { PublicationType, PublicationTypeName, CreatePublicationTypeRequest, UpdatePublicationTypeRequest } from '../../models/publicationType';
+import { apiClient } from '@/app/services/api/client';
+import type { PublicationType, PublicationTypeName, CreatePublicationTypeRequest, UpdatePublicationTypeRequest } from '@/app/models/publicationType';
 
 export const publicationTypeService = {
   getAll: async (): Promise<PublicationType[]> => {
@@ -27,8 +27,8 @@ export const publicationTypeService = {
     return response.data;
   },
 
-  update: async (data: UpdatePublicationTypeRequest): Promise<void> => {
-    await apiClient.put('/library/publication-types', data);
+  update: async (id: number, data: UpdatePublicationTypeRequest): Promise<void> => {
+    await apiClient.put(`/library/publication-types/${id}`, { ...data, id } as UpdatePublicationTypeRequest);
   },
 
   delete: async (id: number): Promise<void> => {

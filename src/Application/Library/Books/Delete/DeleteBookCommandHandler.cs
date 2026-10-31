@@ -11,8 +11,8 @@ internal sealed class DeleteBookCommandHandler(
 {
     public async Task<Result> Handle(DeleteBookCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         Book? book = await books
             .Include(b => b.Publisher)
             .Include(b => b.Subject)

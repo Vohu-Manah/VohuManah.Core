@@ -11,8 +11,8 @@ internal sealed class GetGapByIdQueryHandler(
 {
     public async Task<Result<GapResponse>> Handle(GetGapByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.Set<Gap>();
-        
+        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+
         Gap? gap = await gaps
             .SingleOrDefaultAsync(g => g.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetGapByIdQueryHandler(
             return Result.Failure<GapResponse>(GapErrors.NotFound(query.Id));
         }
 
-        GapResponse response = new GapResponse {
+        GapResponse response = new GapResponse
+        {
             Id = gap.Id,
             Title = gap.Title,
             Note = gap.Note,

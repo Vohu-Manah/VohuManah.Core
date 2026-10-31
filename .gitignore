@@ -402,3 +402,9 @@ FodyWeavers.xsd
 # Environment variables
 .env
 !.env.settings
+
+.migrate/
+
+/src/Web.Api/wwwroot/uploads
+/.docs
+/.scripts

@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetPublicationTypeListQueryHandler(
 
     public Task<Result<List<PublicationTypeListResponse>>> Handle(GetPublicationTypeListQuery query, CancellationToken cancellationToken)
     {
-        var publicationTypes = unitOfWork.Set<PublicationType>();
-        
-        var allPublicationTypes = cacheManager.Get(PublicationTypeAllKey, () => publicationTypes.ToList());
-        
+        var publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+
+        var allPublicationTypes = cacheManager.Retrieve(PublicationTypeAllKey, () => publicationTypes.ToList());
+
         var list = allPublicationTypes.Select(pt => new PublicationTypeListResponse
         {
             Id = pt.Id,

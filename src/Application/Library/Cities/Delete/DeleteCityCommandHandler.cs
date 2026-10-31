@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,17 +15,17 @@ internal sealed class DeleteCityCommandHandler(
 
     public async Task<Result> Handle(DeleteCityCommand command, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.Set<City>();
-        
+        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+
         City? existing = await cities.SingleOrDefaultAsync(c => c.Id == command.Id, cancellationToken);
         if (existing == null)
         {
-            return Result.Failure(Error.NotFound("Cities.NotFound", $"City with Id {command.Id} not found"));
+            return Result.Failure(Error.NotFound("Cities.NotFound", $"شهر با شناسه {command.Id} یافت نشد"));
         }
 
         cities.Remove(existing);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(CityPatternKey);
 
         return Result.Success();

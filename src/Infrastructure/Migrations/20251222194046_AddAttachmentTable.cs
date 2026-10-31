@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class AddAttachmentTable : Migration
     {
         private static readonly string[] IndexColumns = { "EntityType", "EntityId" };
 
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -43,7 +43,7 @@ namespace Infrastructure.Migrations
                 columns: IndexColumns);
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

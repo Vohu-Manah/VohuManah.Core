@@ -13,28 +13,42 @@ internal sealed class UploadAttachmentCommandHandler(
 {
     public async Task<Result<long>> Handle(UploadAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.Set<Attachment>();
+        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
 
         try
         {
-            // Save file to storage
             string savedFileName = await fileStorageService.SaveFileAsync(
                 command.FileStream,
                 command.FileName,
                 command.ContentType,
+                command.EntityType,
                 cancellationToken);
 
-            // Create attachment record
+            if (command.IsMain)
+            {
+                List<Attachment> existingMainAttachments = await attachments
+                    .Where(a => a.EntityType == command.EntityType &&
+                               a.EntityId == command.EntityId &&
+                               a.IsMain)
+                    .ToListAsync(cancellationToken);
+
+                foreach (Attachment existingMain in existingMainAttachments)
+                {
+                    existingMain.IsMain = false;
+                }
+            }
+
             Attachment attachment = new Attachment
             {
                 FileName = savedFileName,
                 OriginalFileName = command.FileName,
-                FilePath = savedFileName, // Relative path
+                FilePath = savedFileName,
                 ContentType = command.ContentType,
                 FileSize = command.FileSize,
                 EntityType = command.EntityType,
                 EntityId = command.EntityId,
                 Description = command.Description,
+                IsMain = command.IsMain,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = command.CreatedBy
             };

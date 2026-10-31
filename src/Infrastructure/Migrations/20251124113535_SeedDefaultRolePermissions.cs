@@ -8,17 +8,17 @@ using System.Linq;
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class SeedDefaultRolePermissions : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             SeedRoleEndpoints(migrationBuilder, RolePermissionDefaults.Librarian, RolePermissionDefaults.LibrarianEndpoints);
             SeedRoleEndpoints(migrationBuilder, RolePermissionDefaults.Publisher, RolePermissionDefaults.PublisherEndpoints);
             SeedRoleEndpoints(migrationBuilder, RolePermissionDefaults.Author, RolePermissionDefaults.AuthorEndpoints);
 
-            // Ensure Admin role has access to the new role-management endpoints
+            
             var adminEndpoints = new[]
             {
                 "Library.Settings.CreateRole",
@@ -28,7 +28,7 @@ namespace Infrastructure.Migrations
             SeedRoleEndpoints(migrationBuilder, RolePermissionDefaults.Admin, adminEndpoints);
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             RemoveRoleEndpoints(migrationBuilder, RolePermissionDefaults.Librarian);

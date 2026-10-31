@@ -2,17 +2,18 @@ services:
   web-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - ASPNETCORE_HTTP_PORTS=5000
       - ConnectionStrings__Database=Server=sql-server;Database=Library;User Id=sa;Password=Str0ng!Pass;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
+      - Serilog__WriteTo__1__Args__ServerUrl=http://seq:80
     ports:
       - "5000:5000"
     depends_on:
       sql-server:
         condition: service_started
+      seq:
+        condition: service_started
 
   web-ui:
-    environment:
-      - VITE_API_BASE_URL=http://localhost:5000
     ports:
       - "5002:5002"
     depends_on:

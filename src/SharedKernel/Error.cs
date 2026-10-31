@@ -1,5 +1,8 @@
-﻿namespace SharedKernel;
+using System.Diagnostics.CodeAnalysis;
 
+namespace SharedKernel;
+
+[SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Error is appropriate name for this domain concept")]
 public record Error
 {
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);

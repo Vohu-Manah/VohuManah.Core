@@ -11,8 +11,8 @@ internal sealed class GetBookByIdQueryHandler(
 {
     public async Task<Result<BookResponse>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         Book? book = await books
             .Include(b => b.Publisher)
             .Include(b => b.Subject)

@@ -11,8 +11,8 @@ internal sealed class GetSubjectByIdQueryHandler(
 {
     public async Task<Result<SubjectResponse>> Handle(GetSubjectByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.Set<Subject>();
-        
+        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+
         Subject? subject = await subjects
             .SingleOrDefaultAsync(s => s.Id == query.Id, cancellationToken);
 
@@ -21,7 +21,8 @@ internal sealed class GetSubjectByIdQueryHandler(
             return Result.Failure<SubjectResponse>(SubjectErrors.NotFound(query.Id));
         }
 
-        SubjectResponse response = new SubjectResponse {
+        SubjectResponse response = new SubjectResponse
+        {
             Id = subject.Id,
             Title = subject.Title
         };

@@ -1,7 +1,7 @@
-﻿using System.Reflection;
 using Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Reflection;
 using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 
@@ -39,10 +39,6 @@ public static class EndpointExtensions
         return app;
     }
 
-    /// <summary>
-    /// اعمال خودکار نقش‌ها از RequireRoleAttribute روی کلاس endpoint
-    /// این method از دیتابیس برای بررسی دسترسی استفاده می‌کند
-    /// </summary>
     public static RouteHandlerBuilder ApplyRoleAuthorization(
         this RouteHandlerBuilder builder,
         IEndpoint endpoint)
@@ -55,7 +51,6 @@ public static class EndpointExtensions
             return builder;
         }
 
-        // استفاده از دیتابیس برای بررسی دسترسی
         if (!string.IsNullOrEmpty(roleAttribute.EndpointName))
         {
             var policy = new AuthorizationPolicyBuilder()
@@ -65,15 +60,14 @@ public static class EndpointExtensions
             return builder.RequireAuthorization(policy);
         }
 
-        // اگر SkipDatabaseCheck true باشد، از روش قدیمی استفاده می‌کنیم (backward compatibility)
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 
         if (roleAttribute.SkipDatabaseCheck && roleAttribute.Roles.Length > 0)
         {
             return roleAttribute.RequireAll
                 ? builder.RequireAllRoles(roleAttribute.Roles)
                 : builder.RequireRole(roleAttribute.Roles);
         }
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 
         return builder;
     }
@@ -83,32 +77,56 @@ public static class EndpointExtensions
         return app.RequireAuthorization(permission);
     }
 
-    /// <summary>
-    /// Requires the user to have at least one of the specified roles.
-    /// Roles are checked from JWT token claims (ClaimTypes.Role).
-    /// </summary>
     public static RouteHandlerBuilder RequireRole(this RouteHandlerBuilder builder, params string[] roles)
     {
         var policy = new AuthorizationPolicyBuilder()
             .RequireRole(roles)
             .Build();
-        
+
         return builder.RequireAuthorization(policy);
     }
 
-    /// <summary>
-    /// Requires the user to have all of the specified roles.
-    /// Roles are checked from JWT token claims (ClaimTypes.Role).
-    /// </summary>
     public static RouteHandlerBuilder RequireAllRoles(this RouteHandlerBuilder builder, params string[] roles)
     {
         var policyBuilder = new AuthorizationPolicyBuilder();
-        
+
         foreach (var role in roles)
         {
             policyBuilder.RequireRole(role);
         }
-        
+
         return builder.RequireAuthorization(policyBuilder.Build());
+    }
+
+    public static RouteHandlerBuilder ValidateRequestTypes<TRequest>(this RouteHandlerBuilder builder)
+        where TRequest : class
+    {
+        return builder.AddEndpointFilter(async (context, next) =>
+        {
+            var requestParameter = context.Arguments.OfType<TRequest>().FirstOrDefault();
+
+            if (requestParameter != null)
+            {
+                var validationError = Infrastructure.ModelBindingValidator.ValidateRequestTypes(requestParameter);
+                if (validationError != null)
+                {
+                    return Results.Problem(
+                        title: "خطای اعتبارسنجی",
+                        detail: null,
+                        type: "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                        statusCode: StatusCodes.Status400BadRequest,
+                        extensions: new Dictionary<string, object?>
+                        {
+                            ["errors"] = validationError.Errors
+                                .GroupBy(e => char.ToLowerInvariant(e.Code[0]) + e.Code.Substring(1))
+                                .ToDictionary(
+                                    g => g.Key,
+                                    g => g.Select(e => e.Description).ToArray())
+                        });
+                }
+            }
+
+            return await next(context);
+        });
     }
 }

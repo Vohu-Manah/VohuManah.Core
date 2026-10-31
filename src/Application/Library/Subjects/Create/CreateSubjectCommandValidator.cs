@@ -6,7 +6,9 @@ internal sealed class CreateSubjectCommandValidator : AbstractValidator<CreateSu
 {
     public CreateSubjectCommandValidator()
     {
-        RuleFor(c => c.Title).NotEmpty().MaximumLength(50);
+        RuleFor(c => c.Title)
+            .NotEmpty().WithMessage("عنوان موضوع الزامی است")
+            .MaximumLength(50).WithMessage("عنوان موضوع باید حداکثر ۵۰ کاراکتر باشد");
     }
 }
 

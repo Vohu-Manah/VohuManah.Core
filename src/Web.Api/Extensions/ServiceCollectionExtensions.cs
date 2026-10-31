@@ -1,6 +1,3 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-
 namespace Web.Api.Extensions;
 
 internal static class ServiceCollectionExtensions
@@ -9,36 +6,22 @@ internal static class ServiceCollectionExtensions
     {
         services.AddSwaggerGen(o =>
         {
-            o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
-
-            var securityScheme = new OpenApiSecurityScheme
+            o.CustomSchemaIds(type =>
             {
-                Name = "JWT Authentication",
-                Description = "Enter your JWT token in this field",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = JwtBearerDefaults.AuthenticationScheme,
-                BearerFormat = "JWT"
-            };
-
-            o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-
-            var securityRequirement = new OpenApiSecurityRequirement
-            {
+                if (type.IsGenericType)
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = JwtBearerDefaults.AuthenticationScheme
-                        }
-                    },
-                    []
+                    
+                    
+                    
+                    string genericArgs = string.Join(
+                        "_",
+                        type.GenericTypeArguments.Select(a => a.FullName!.Replace('+', '-')));
+                    string typeName = type.Name.Split('`')[0];
+                    return $"{typeName}Of{genericArgs}";
                 }
-            };
 
-            o.AddSecurityRequirement(securityRequirement);
+                return type.FullName!.Replace('+', '-');
+            });
         });
 
         return services;

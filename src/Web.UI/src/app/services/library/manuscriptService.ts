@@ -1,5 +1,7 @@
-import { apiClient } from '../api/client';
-import type { Manuscript, CreateManuscriptRequest, UpdateManuscriptRequest, ManuscriptSearchRequest, ManuscriptSearchResponse } from '../../models/manuscript';
+import { apiClient } from '@/app/services/api/client';
+import type { PagedList, ListQueryParams, PagedResult } from '@/app/models/paged';
+import type { ManuscriptStatistics } from '@/app/models/statistics';
+import type { Manuscript, CreateManuscriptRequest, UpdateManuscriptRequest, ManuscriptSearchRequest, ManuscriptSearchResponse } from '@/app/models/manuscript';
 
 export const manuscriptService = {
   getAll: async (): Promise<Manuscript[]> => {
@@ -7,8 +9,8 @@ export const manuscriptService = {
     return response.data;
   },
 
-  getList: async (): Promise<Manuscript[]> => {
-    const response = await apiClient.get<Manuscript[]>('/library/manuscripts/list');
+  async getList(params?: ListQueryParams): Promise<PagedList<Manuscript>> {
+    const response = await apiClient.get<PagedList<Manuscript>>('/library/manuscripts/list', { params });
     return response.data;
   },
 
@@ -22,20 +24,29 @@ export const manuscriptService = {
     return response.data;
   },
 
-  update: async (data: UpdateManuscriptRequest): Promise<void> => {
-    await apiClient.put('/library/manuscripts', data);
+  update: async (id: number, data: UpdateManuscriptRequest): Promise<void> => {
+    await apiClient.put(`/library/manuscripts/${id}`, { ...data, id } as UpdateManuscriptRequest);
   },
 
   delete: async (id: number): Promise<void> => {
     await apiClient.delete(`/library/manuscripts/${id}`);
   },
 
-  search: async (params: ManuscriptSearchRequest): Promise<ManuscriptSearchResponse[]> => {
-    const response = await apiClient.post<ManuscriptSearchResponse[]>('/library/manuscripts/search', params);
+  search: async (
+    params: ManuscriptSearchRequest & { page?: number; pageSize?: number },
+  ): Promise<PagedResult<ManuscriptSearchResponse>> => {
+    const { year, page, pageSize, ...rest } = params;
+    const response = await apiClient.post<PagedResult<ManuscriptSearchResponse>>('/library/manuscripts/search', {
+      ...rest,
+      fromYear: year || null,
+      toYear: year || null,
+      page: page ?? 1,
+      pageSize: pageSize ?? 50,
+    });
     return response.data;
   },
 
-  getStatistics: async (): Promise<any> => {
+  getStatistics: async (): Promise<ManuscriptStatistics> => {
     const response = await apiClient.get('/library/manuscripts/statistics');
     return response.data;
   },

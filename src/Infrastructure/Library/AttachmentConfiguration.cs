@@ -19,12 +19,12 @@ internal sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachm
         builder.Property(a => a.EntityType).IsRequired().HasMaxLength(50);
         builder.Property(a => a.EntityId).IsRequired();
         builder.Property(a => a.Description).HasMaxLength(500);
+        builder.Property(a => a.IsMain).IsRequired().HasDefaultValue(false);
         builder.Property(a => a.CreatedAt).IsRequired();
         builder.Property(a => a.CreatedBy).HasMaxLength(100);
 
         builder.ToTable("Attachment", "dbo");
 
-        // Index for faster lookups
         builder.HasIndex(a => new { a.EntityType, a.EntityId });
     }
 }

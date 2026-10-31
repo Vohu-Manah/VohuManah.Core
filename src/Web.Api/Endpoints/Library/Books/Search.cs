@@ -1,14 +1,16 @@
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Application.Library.Books.Search;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.Search")]
+using Application.Library.Settings;
+
+[RequireRole(EndpointNames.Books.Search)]
 internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(
@@ -26,13 +28,16 @@ internal sealed class Search : BaseEndpoint
         int PublishPlaceId,
         int PublisherId,
         string? FromPublishYear,
-        string? ToPublishYear);
+        string? ToPublishYear,
+        int MaxResults = 5000,
+        int Page = 1,
+        int PageSize = 50);
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("library/books/search", async (
             Request request,
-            IQueryHandler<SearchBooksQuery, List<BookSearchResponse>> handler,
+            IQueryHandler<SearchBooksQuery, PagedResult<BookSearchResponse>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchBooksQuery(
@@ -50,9 +55,9 @@ internal sealed class Search : BaseEndpoint
                 request.PublishPlaceId,
                 request.PublisherId,
                 request.FromPublishYear,
-                request.ToPublishYear);
+                request.ToPublishYear, request.MaxResults, request.Page, request.PageSize);
 
-            Result<List<BookSearchResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedResult<BookSearchResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

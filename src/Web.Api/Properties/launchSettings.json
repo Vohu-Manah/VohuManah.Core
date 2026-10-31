@@ -1,5 +1,16 @@
 {
   "profiles": {
+    "http-with-local-sql": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "ConnectionStrings__Database": "Data Source=.;Initial Catalog=Library;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"
+        },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000"
+    },
     "http": {
       "commandName": "Project",
       "launchBrowser": true,

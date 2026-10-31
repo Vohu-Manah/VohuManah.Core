@@ -1,10 +1,11 @@
+using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
+using Application.Abstractions.HumanVerification;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Authentication;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
 using Microsoft.Extensions.Configuration;
+using SharedKernel;
 
 namespace Application.Library.Users.Login;
 
@@ -12,14 +13,22 @@ internal sealed class LoginLibraryUserCommandHandler(
     IUnitOfWork unitOfWork,
     ILibraryTokenProvider tokenProvider,
     IPasswordHasher passwordHasher,
-    IConfiguration configuration) : ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse>
+    IConfiguration configuration,
+    IHumanVerificationService humanVerification) : ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse>
 {
     public async Task<Result<LoginLibraryUserResponse>> Handle(LoginLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
-        
+        if (string.IsNullOrEmpty(command.HumanVerifyToken) ||
+            !await humanVerification.ConfirmTokenValidAsync(command.HumanVerifyToken, cancellationToken))
+        {
+            return Result.Failure<LoginLibraryUserResponse>(HumanVerifyErrors.InvalidOrExpired);
+        }
+
+        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+
+        string loginInput = command.UserName.Trim();
         Domain.Library.User? user = await users
-            .SingleOrDefaultAsync(u => u.UserName == command.UserName.Trim(), cancellationToken);
+            .FirstOrDefaultAsync(u => u.UserName == loginInput || (u.Email != null && u.Email == loginInput), cancellationToken);
 
         if (user == null || !passwordHasher.Verify(command.Password.Trim(), user.Password))
         {
@@ -30,15 +39,17 @@ internal sealed class LoginLibraryUserCommandHandler(
 
         int refreshDays = configuration.GetValue<int>("Jwt:RefreshTokenDays", 7);
 
-        RefreshToken refresh = new RefreshToken {
+        RefreshToken refresh = new RefreshToken
+        {
             UserName = user.UserName,
             Token = Guid.NewGuid().ToString("N"),
             ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
-        unitOfWork.Set<RefreshToken>().Add(refresh);
+        unitOfWork.GetDbSet<RefreshToken>().Add(refresh);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        LoginLibraryUserResponse response = new LoginLibraryUserResponse {
+        LoginLibraryUserResponse response = new LoginLibraryUserResponse
+        {
             UserName = user.UserName,
             FullName = $"{user.Name} {user.LastName}",
             AccessToken = token,

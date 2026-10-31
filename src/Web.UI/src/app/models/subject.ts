@@ -13,7 +13,7 @@ export type CreateSubjectRequest = {
 };
 
 export type UpdateSubjectRequest = CreateSubjectRequest & {
-  id: number;
+  id?: number;
 };
 
 

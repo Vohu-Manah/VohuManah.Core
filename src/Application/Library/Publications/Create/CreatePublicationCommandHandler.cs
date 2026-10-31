@@ -11,14 +11,15 @@ internal sealed class CreatePublicationCommandHandler(
 {
     public async Task<Result<int>> Handle(CreatePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         if (await publications.AnyAsync(p => p.No == command.No, cancellationToken))
         {
             return Result.Failure<int>(PublicationErrors.NoNotUnique);
         }
 
-        Publication publication = new Publication {
+        var publication = new Publication
+        {
             Name = command.Name,
             TypeId = command.TypeId,
             Concessionaire = command.Concessionaire,

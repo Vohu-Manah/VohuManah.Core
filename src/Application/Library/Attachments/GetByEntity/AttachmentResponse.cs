@@ -9,6 +9,7 @@ public sealed record AttachmentResponse
     public string ContentType { get; init; } = string.Empty;
     public long FileSize { get; init; }
     public string? Description { get; init; }
+    public bool IsMain { get; init; }
     public DateTime CreatedAt { get; init; }
 }
 

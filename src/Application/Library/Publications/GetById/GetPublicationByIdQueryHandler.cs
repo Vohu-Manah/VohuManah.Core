@@ -11,8 +11,8 @@ internal sealed class GetPublicationByIdQueryHandler(
 {
     public async Task<Result<PublicationResponse>> Handle(GetPublicationByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         Publication? publication = await publications
             .Include(p => p.PublicationType)
             .Include(p => p.Language)
@@ -25,7 +25,8 @@ internal sealed class GetPublicationByIdQueryHandler(
             return Result.Failure<PublicationResponse>(PublicationErrors.NotFound(query.Id));
         }
 
-        PublicationResponse response = new PublicationResponse {
+        PublicationResponse response = new PublicationResponse
+        {
             Id = publication.Id,
             Name = publication.Name,
             TypeId = publication.TypeId,

@@ -11,8 +11,8 @@ internal sealed class GetAllBooksQueryHandler(
 {
     public async Task<Result<List<BookResponse>>> Handle(GetAllBooksQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+
         List<BookResponse> allBooks = await books
             .Include(b => b.Publisher)
             .Select(b => new BookResponse

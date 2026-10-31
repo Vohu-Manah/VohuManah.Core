@@ -1,7 +1,6 @@
 using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,8 +14,8 @@ internal sealed class GetCurrentBackgroundImageNameQueryHandler(
 
     public Task<Result<string>> Handle(GetCurrentBackgroundImageNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.Set<Domain.Library.Settings>();
-        List<Domain.Library.Settings> all = cacheManager.Get(SettingsAllKey, () => settings.ToList());
+        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        List<Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string name = all.Where(s => s.Name == "CurrentBackgroundImageName").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
         return Task.FromResult(Result.Success(name));
     }

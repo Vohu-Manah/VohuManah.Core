@@ -11,8 +11,8 @@ internal sealed class UpdatePublicationCommandHandler(
 {
     public async Task<Result> Handle(UpdatePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.Set<Publication>();
-        
+        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+
         Publication? existing = await publications
             .SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
 

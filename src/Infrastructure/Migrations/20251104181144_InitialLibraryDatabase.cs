@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-#pragma warning disable CA1861 // Prefer 'static readonly' fields over constant array arguments
+#pragma warning disable CA1814 
+#pragma warning disable CA1861 
 
 namespace Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class InitialLibraryDatabase : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
@@ -508,7 +508,7 @@ namespace Infrastructure.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

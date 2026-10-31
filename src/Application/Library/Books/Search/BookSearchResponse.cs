@@ -2,6 +2,9 @@ namespace Application.Library.Books.Search;
 
 public sealed record BookSearchResponse
 {
+    
+    public long Id { get; init; }
+
     public string Name { get; init; } = string.Empty;
     public string Author { get; init; } = string.Empty;
     public string PublisherName { get; init; } = string.Empty;

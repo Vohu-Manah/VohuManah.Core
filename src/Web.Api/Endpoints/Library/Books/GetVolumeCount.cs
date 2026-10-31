@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Books.GetVolumeCount;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.GetVolumeCount")]
+[RequireRole(EndpointNames.Books.GetVolumeCount)]
 internal sealed class GetVolumeCount : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

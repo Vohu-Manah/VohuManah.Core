@@ -1,24 +1,23 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Users.Delete;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Users;
 
-[RequireRole("Library.Users.Delete")]
+[RequireRole(EndpointNames.Users.Delete)]
 internal sealed class Delete : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("library/users/{userName}", async (
-            string userName,
+        app.MapDelete("library/users/{id:long}", async (
+            long id,
             ICommandHandler<DeleteLibraryUserCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new DeleteLibraryUserCommand(userName);
+            var command = new DeleteLibraryUserCommand(id);
 
             Result result = await handler.Handle(command, cancellationToken);
 

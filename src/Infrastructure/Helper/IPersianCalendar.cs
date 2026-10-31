@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace Infrastructure.Helper;
 
 public interface IPersianCalendar

@@ -15,8 +15,8 @@ internal sealed class UpdateSettingsCommandHandler(
 
     public async Task<Result> Handle(UpdateSettingsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.Set<Domain.Library.Settings>();
-        
+        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+
         Domain.Library.Settings? existing = await settings
             .SingleOrDefaultAsync(s => s.Name.Trim() == command.Name.Trim(), cancellationToken);
 
@@ -26,9 +26,9 @@ internal sealed class UpdateSettingsCommandHandler(
         }
 
         existing.Value = command.Value;
-        
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         cacheManager.RemoveByPattern(SettingsPatternKey);
 
         return Result.Success();

@@ -1,7 +1,7 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Library;
-using Application.Abstractions.Caching;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -15,12 +15,12 @@ internal sealed class GetLibraryUserByUserNameQueryHandler(
 
     public Task<Result<LibraryUserResponse>> Handle(GetLibraryUserByUserNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
-        
-        List<Domain.Library.User> allUsers = cacheManager.Get(UserAllKey, () => users.ToList());
-        
+        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+
+        List<Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+
         Domain.Library.User? user = allUsers.SingleOrDefault(u => u.UserName == query.UserName);
-        
+
         if (user == null)
         {
             return Task.FromResult(Result.Failure<LibraryUserResponse>(UserErrors.NotFound(query.UserName)));

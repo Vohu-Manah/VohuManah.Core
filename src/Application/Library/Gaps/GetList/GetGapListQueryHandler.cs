@@ -1,6 +1,6 @@
+using Application.Abstractions.Caching;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Application.Abstractions.Caching;
 using Domain.Library;
 using SharedKernel;
 
@@ -14,10 +14,10 @@ internal sealed class GetGapListQueryHandler(
 
     public Task<Result<List<GapListResponse>>> Handle(GetGapListQuery query, CancellationToken cancellationToken)
     {
-        var gaps = unitOfWork.Set<Gap>();
-        
-        var allGaps = cacheManager.Get(GapAllKey, () => gaps.OrderBy(g => g.Id).ToList());
-        
+        var gaps = unitOfWork.GetDbSet<Gap>();
+
+        var allGaps = cacheManager.Retrieve(GapAllKey, () => gaps.OrderByDescending(g => g.Id).ToList());
+
         var list = allGaps.Select(g => new GapListResponse
         {
             Id = g.Id,

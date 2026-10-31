@@ -11,15 +11,10 @@ internal sealed class CreateBookCommandHandler(
 {
     public async Task<Result<long>> Handle(CreateBookCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.Set<Book>();
-        
-        string name = command.Name.Trim();
-        if (await books.AnyAsync(b => b.Name.Trim() == name, cancellationToken))
-        {
-            return Result.Failure<long>(BookErrors.NameNotUnique);
-        }
+        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
 
-        Book book = new Book
+
+        var book = new Book
         {
             Name = command.Name,
             Author = command.Author,
@@ -35,7 +30,9 @@ internal sealed class CreateBookCommandHandler(
             VolumeCount = command.VolumeCount,
             LanguageId = command.LanguageId,
             SubjectId = command.SubjectId,
-            BookShelfRow = command.BookShelfRow
+            
+            
+            BookShelfRow = string.IsNullOrWhiteSpace(command.BookShelfRow) ? "-" : command.BookShelfRow
         };
 
         books.Add(book);

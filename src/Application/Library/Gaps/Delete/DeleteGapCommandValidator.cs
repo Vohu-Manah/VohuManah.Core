@@ -6,7 +6,8 @@ internal sealed class DeleteGapCommandValidator : AbstractValidator<DeleteGapCom
 {
     public DeleteGapCommandValidator()
     {
-        RuleFor(c => c.Id).GreaterThan(0);
+        RuleFor(c => c.Id)
+            .GreaterThan(0).WithMessage("شناسه فاصله نامعتبر است");
     }
 }
 

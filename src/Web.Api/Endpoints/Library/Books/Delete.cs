@@ -1,14 +1,13 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Books.Delete;
+using Application.Library.Settings;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Library.Books;
 
-[RequireRole("Library.Books.Delete")]
+[RequireRole(EndpointNames.Books.Delete)]
 internal sealed class Delete : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

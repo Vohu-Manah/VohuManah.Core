@@ -1,18 +1,16 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.Update;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole("Library.Manuscripts.Update")]
+[RequireRole(EndpointNames.Manuscripts.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(
-        int Id,
         string Name,
         string Author,
         int WritingPlaceId,
@@ -26,13 +24,14 @@ internal sealed class Update : BaseEndpoint
 
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("library/manuscripts", async (
+        app.MapPut("library/manuscripts/{id:int}", async (
+            int id,
             Request request,
             ICommandHandler<UpdateManuscriptCommand> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new UpdateManuscriptCommand(
-                request.Id,
+                id,
                 request.Name,
                 request.Author,
                 request.WritingPlaceId,

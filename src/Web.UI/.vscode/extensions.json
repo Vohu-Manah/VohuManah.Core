@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "firefox-devtools.vscode-firefox-debug",
+    "ms-vscode.vscode-chrome-debug"
+  ]
+}
+

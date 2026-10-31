@@ -12,5 +12,6 @@ public sealed record BookListResponse
     public string Isbn { get; init; } = string.Empty;
     public int VolumeCount { get; init; }
     public string BookShelfRow { get; init; } = string.Empty;
+    public string PublishYear { get; init; } = string.Empty;
 }
 

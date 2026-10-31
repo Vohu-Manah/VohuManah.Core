@@ -17,19 +17,19 @@ internal static class LoggingDecorator
         {
             string commandName = typeof(TCommand).Name;
 
-            logger.LogInformation("Processing command {Command}", commandName);
+            logger.LogInformation("در حال پردازش فرمان {Command}", commandName);
 
             Result<TResponse> result = await innerHandler.Handle(command, cancellationToken);
 
             if (result.IsSuccess)
             {
-                logger.LogInformation("Completed command {Command}", commandName);
+                logger.LogInformation("فرمان {Command} با موفقیت تکمیل شد", commandName);
             }
             else
             {
                 using (LogContext.PushProperty("Error", result.Error, true))
                 {
-                    logger.LogError("Completed command {Command} with error", commandName);
+                    logger.LogError("فرمان {Command} با خطا تکمیل شد", commandName);
                 }
             }
 
@@ -47,19 +47,19 @@ internal static class LoggingDecorator
         {
             string commandName = typeof(TCommand).Name;
 
-            logger.LogInformation("Processing command {Command}", commandName);
+            logger.LogInformation("در حال پردازش فرمان {Command}", commandName);
 
             Result result = await innerHandler.Handle(command, cancellationToken);
 
             if (result.IsSuccess)
             {
-                logger.LogInformation("Completed command {Command}", commandName);
+                logger.LogInformation("فرمان {Command} با موفقیت تکمیل شد", commandName);
             }
             else
             {
                 using (LogContext.PushProperty("Error", result.Error, true))
                 {
-                    logger.LogError("Completed command {Command} with error", commandName);
+                    logger.LogError("فرمان {Command} با خطا تکمیل شد", commandName);
                 }
             }
 
@@ -77,19 +77,19 @@ internal static class LoggingDecorator
         {
             string queryName = typeof(TQuery).Name;
 
-            logger.LogInformation("Processing query {Query}", queryName);
+            logger.LogInformation("در حال پردازش کوئری {Query}", queryName);
 
             Result<TResponse> result = await innerHandler.Handle(query, cancellationToken);
 
             if (result.IsSuccess)
             {
-                logger.LogInformation("Completed query {Query}", queryName);
+                logger.LogInformation("کوئری {Query} با موفقیت تکمیل شد", queryName);
             }
             else
             {
                 using (LogContext.PushProperty("Error", result.Error, true))
                 {
-                    logger.LogError("Completed query {Query} with error", queryName);
+                    logger.LogError("کوئری {Query} با خطا تکمیل شد", queryName);
                 }
             }
 

@@ -1,6 +1,6 @@
-using Application.Library._Shared;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Library.Shared;
 using Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,7 +12,7 @@ internal sealed class GetSubjectNamesQueryHandler(
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetSubjectNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.Set<Subject>();
+        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
 
         List<SelectItemResponse> items = subjects
             .OrderBy(s => s.Title)

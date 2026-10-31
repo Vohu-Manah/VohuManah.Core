@@ -11,8 +11,8 @@ internal sealed class RemoveRoleFromUserCommandHandler(
 {
     public async Task<Result> Handle(RemoveRoleFromUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.Set<UserRole>();
-        DbSet<Domain.Library.User> users = unitOfWork.Set<Domain.Library.User>();
+        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
+        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
 
         Domain.Library.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -22,7 +22,6 @@ internal sealed class RemoveRoleFromUserCommandHandler(
             return Result.Failure(Domain.Library.UserErrors.NotFound(command.UserId));
         }
 
-        // پیدا کردن UserRole
         UserRole? userRole = await userRoles
             .FirstOrDefaultAsync(
                 ur => ur.UserId == command.UserId && ur.RoleId == command.RoleId,
@@ -33,7 +32,6 @@ internal sealed class RemoveRoleFromUserCommandHandler(
             return Result.Failure(Error.NotFound("UserRole.NotFound", "این نقش به کاربر اختصاص داده نشده است"));
         }
 
-        // حذف نقش از کاربر
         userRoles.Remove(userRole);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

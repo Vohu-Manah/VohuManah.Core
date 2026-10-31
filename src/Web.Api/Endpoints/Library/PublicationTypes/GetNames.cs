@@ -1,15 +1,15 @@
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Library.PublicationTypes.GetNames;
-using Application.Library._Shared;
+using Application.Library.Shared;
 using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Endpoints;
 using Web.Api.Endpoints.Attributes;
+using Web.Api.Extensions;
 using Web.Api.Infrastructure;
+using Application.Library.Settings;
 
 namespace Web.Api.Endpoints.Library.PublicationTypes;
 
-[RequireRole("Library.PublicationTypes.GetNames")]
+[RequireRole(EndpointNames.PublicationTypes.GetNames)]
 internal sealed class GetNames : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

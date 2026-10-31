@@ -2,9 +2,9 @@ namespace Application.Abstractions.Caching;
 
 public interface ICacheManager
 {
-    T? Get<T>(string key);
+    T? Retrieve<T>(string key);
 
-    void Set(string key, object? data, int cacheTime);
+    void Store(string key, object? data, int cacheTime);
 
     bool IsSet(string key);
 
