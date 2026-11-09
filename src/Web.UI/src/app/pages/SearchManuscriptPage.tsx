@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -20,6 +20,9 @@ import { ReportModal } from '@/app/components/reports/ReportModal';
 import { YearSelect } from '@/app/components/common/YearSelect';
 import { usePagedSearch } from '@/app/hooks/usePagedSearch';
 
+const searchManuscripts = (params: { page?: number; pageSize?: number }) =>
+  manuscriptService.search(params as never);
+
 export default function SearchManuscriptPage() {
   const {
     items: results,
@@ -28,10 +31,7 @@ export default function SearchManuscriptPage() {
     loading,
     load: loadPaged,
     goToPage,
-  } = usePagedSearch<ManuscriptSearchResponse>(
-    (params) => manuscriptService.search(params as never),
-    50,
-  );
+  } = usePagedSearch<ManuscriptSearchResponse>(searchManuscripts, 50);
 
   const [cities, setCities] = useState<CityName[]>([]);
   const [languages, setLanguages] = useState<LanguageName[]>([]);
@@ -51,16 +51,11 @@ export default function SearchManuscriptPage() {
     },
   });
 
-  useEffect(() => {
-    loadLookups();
-    loadAllData();
-  }, []);
 
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
-  };
-
-  const loadLookups = async () => {
+ }, [loadPaged]);
+  const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, gapsData] = await Promise.all([
         cityService.getNames(),
@@ -75,7 +70,15 @@ export default function SearchManuscriptPage() {
     } catch (error) {
       handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
     }
-  };
+ }, []);
+
+  useEffect(() => {
+
+    void loadLookups();
+    void loadAllData();
+  }, [loadLookups, loadAllData]);
+
+
 
   const buildParams = (): ManuscriptSearchRequest => {
     const params: ManuscriptSearchRequest = {};

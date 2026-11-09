@@ -1,6 +1,23 @@
 import { appMessage } from '@/app/messages/appMessages';
 import type { ApiError } from '@/app/services/api/types';
 
+const STATUS_MESSAGES: Record<number, string> = {
+  400: 'درخواست نامعتبر است',
+  401: 'احراز هویت شما ناموفق بود',
+  403: 'شما مجاز به دسترسی به این بخش نیستید',
+  404: 'مورد درخواستی یافت نشد',
+  405: 'روش درخواست مجاز نیست',
+  409: 'تعارض در داده‌ها رخ داد',
+  415: 'نوع داده ارسال‌شده پشتیبانی نمی‌شود',
+  422: 'داده‌های ارسال‌شده نامعتبر هستند',
+  500: 'خطای سرور رخ داد',
+  502: 'درگاه نامعتبر است',
+  503: 'سرویس در دسترس نیست',
+  504: 'مهلت پاسخ‌گویی سرویس به پایان رسید',
+};
+
+const AXIOS_GENERIC = /^Request failed with status code \d+$/;
+
 function extractDescription(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
@@ -17,14 +34,38 @@ function extractDescription(value: unknown): string {
   return String(value);
 }
 
+export function getStatusMessage(status: number | undefined): string | null {
+  return typeof status === 'number' && STATUS_MESSAGES[status] ? STATUS_MESSAGES[status] : null;
+}
+
 export function getErrorMessage(error: unknown, fallback = 'خطای نامشخص'): string {
   if (error && typeof error === 'object') {
-    const { message, detail } = error as { message?: unknown; detail?: unknown };
-    if (typeof message === 'string' && message.trim()) {
+    const err = error as { message?: unknown; detail?: unknown; title?: unknown; status?: unknown };
+
+    
+    if (typeof err.detail === 'string' && err.detail.trim()) {
+      return err.detail;
+    }
+
+    
+    const message = typeof err.message === 'string' ? err.message.trim() : '';
+    if (message && !AXIOS_GENERIC.test(message)) {
       return message;
     }
-    if (typeof detail === 'string' && detail.trim()) {
-      return detail;
+
+    
+    const status = typeof err.status === 'number' ? err.status : undefined;
+    const statusMessage = getStatusMessage(status);
+    if (statusMessage) {
+      return statusMessage;
+    }
+
+    
+    if (typeof err.title === 'string' && err.title.trim()) {
+      return err.title;
+    }
+    if (message) {
+      return message;
     }
   }
   return fallback;
@@ -72,29 +113,24 @@ export function handleApiError(error: unknown, defaultMessage = 'خطا در ا�
     }
   }
 
+  const specificMessage = apiError.detail?.trim() || apiError.message?.trim();
+
   if (
-    apiError.message &&
-    apiError.message.trim() &&
-    apiError.message !== 'یک یا چند خطای اعتبارسنجی رخ داده است'
+    specificMessage &&
+    specificMessage !== 'یک یا چند خطای اعتبارسنجی رخ داده است' &&
+    !AXIOS_GENERIC.test(specificMessage)
   ) {
     const fullMessage =
       apiError.title && apiError.title.trim()
-        ? `${apiError.title}\n${apiError.message}`
-        : apiError.message;
+        ? `${apiError.title}\n${specificMessage}`
+        : specificMessage;
     appMessage.error(defaultMessage, fullMessage);
     return;
   }
 
-  if (
-    apiError.detail &&
-    apiError.detail.trim() &&
-    apiError.detail !== 'یک یا چند خطای اعتبارسنجی رخ داده است'
-  ) {
-    const fullDetail =
-      apiError.title && apiError.title.trim()
-        ? `${apiError.title}\n${apiError.detail}`
-        : apiError.detail;
-    appMessage.error(defaultMessage, fullDetail);
+  const statusMessage = getStatusMessage(apiError.status);
+  if (statusMessage) {
+    appMessage.error(defaultMessage, statusMessage);
     return;
   }
 

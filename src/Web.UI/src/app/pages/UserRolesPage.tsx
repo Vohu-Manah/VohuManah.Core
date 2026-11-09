@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { userService } from '@/app/services/library/userService';
 import { roleService } from '@/app/services/library/roleService';
@@ -20,12 +20,8 @@ export default function UserRolesPage() {
   const [selectedUsers, setSelectedUsers] = useState<LibraryUser[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
 
-  useEffect(() => {
-    loadData();
-  }, []);
 
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [usersData, rolesData] = await Promise.all([
@@ -39,7 +35,12 @@ export default function UserRolesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const loadUserRoles = async (userId: number) => {
     if (!userId || userId === undefined || userId === null) {
@@ -153,7 +154,7 @@ export default function UserRolesPage() {
           <Stack gap="md">
             <Group justify="space-between">
               <div>
-                <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>کاربر انتخاب شده:</div>
+                <div className="fw-bold mb-4">کاربر انتخاب شده:</div>
                 <div>
                   {selectedUser.fullName || `${selectedUser.name || ''} ${selectedUser.lastName || ''}`.trim()} ({selectedUser.userName}) - شناسه: {selectedUser.id || 'نامشخص'}
                 </div>

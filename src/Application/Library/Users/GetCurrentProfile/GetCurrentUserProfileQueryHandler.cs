@@ -12,7 +12,6 @@ internal sealed class GetCurrentUserProfileQueryHandler(
     public async Task<Result<UserProfileResponse>> Handle(GetCurrentUserProfileQuery query, CancellationToken cancellationToken)
     {
         var users = unitOfWork.GetDbSet<User>();
-
         var user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
 
@@ -20,6 +19,18 @@ internal sealed class GetCurrentUserProfileQueryHandler(
         {
             return Result.Failure<UserProfileResponse>(UserErrors.NotFound(query.UserId));
         }
+
+        var roleIds = await unitOfWork.GetDbSet<UserRole>()
+            .Where(ur => ur.UserId == query.UserId)
+            .Select(ur => ur.RoleId)
+            .ToListAsync(cancellationToken);
+
+        var permissions = await unitOfWork.GetDbSet<RoleEndpoint>()
+            .Where(rp => roleIds.Contains(rp.RoleId))
+            .Select(rp => rp.EndpointName)
+            .Distinct()
+            .OrderBy(ep => ep)
+            .ToListAsync(cancellationToken);
 
         var response = new UserProfileResponse
         {
@@ -29,7 +40,8 @@ internal sealed class GetCurrentUserProfileQueryHandler(
             LastName = user.LastName,
             FullName = $"{user.Name} {user.LastName}".Trim(),
             Email = user.Email,
-            PhoneNumber = user.PhoneNumber
+            PhoneNumber = user.PhoneNumber,
+            Permissions = permissions
         };
 
         return Result.Success(response);

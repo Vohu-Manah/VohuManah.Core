@@ -80,12 +80,12 @@ export default function QrCodePrint({ bookId }: Props) {
         title="بارکد کتاب"
         size="sm"
       >
-        <div ref={printRef} style={{ textAlign: 'center', padding: '20px' }}>
+        <div ref={printRef} className="qr-print">
           <div className="qr-container">
             <div className="qr-code">
               <QRCodeSVG value={getQrCodeUrl()} size={200} />
             </div>
-            <p style={{ marginTop: '20px', fontSize: '14px' }}>
+            <p className="mt-20 fs-14">
               شناسه کتاب: {bookId}
             </p>
           </div>

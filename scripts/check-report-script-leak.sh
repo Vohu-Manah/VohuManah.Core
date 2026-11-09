@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# بازرسی نشت اسکریپت گزارش — فایل‌های منابع گزارش به HTML bedsiz نباشند
+
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

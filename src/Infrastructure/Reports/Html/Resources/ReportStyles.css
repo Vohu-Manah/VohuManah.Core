@@ -158,22 +158,70 @@ body {
 }
 
 .report-container {
-    padding: 20px;
+    padding: 24px 28px;
     background: white;
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    overflow: auto;
-    min-height: 100vh;
-    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    width: calc(100% - 40px);
     flex: 1;
-    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
 }
 
 .report-content {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
     transition: transform 0.2s ease;
-    transform-origin: top center;
+    transform-origin: top center !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+ 
+#oReportDiv {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+#oReportDiv .ap {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+#oReportDiv table {
+    margin: 0;
+}
+
+#oReportDiv td[class*="c"] {
+    vertical-align: middle !important;
+    padding: 4px 6px !important;
+}
+
+ 
+#oReportDiv img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+}
+
+ 
+#oReportDiv td[style*="text-align:center"],
+#oReportDiv td.a6,
+#oReportDiv .a6 {
+    text-align: center !important;
 }
 
 .divider {

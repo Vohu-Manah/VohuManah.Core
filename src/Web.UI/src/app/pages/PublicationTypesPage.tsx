@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -10,8 +10,11 @@ import { publicationTypeService } from '@/app/services/library/publicationTypeSe
 import type { PublicationType, CreatePublicationTypeRequest } from '@/app/models/publicationType';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 export default function PublicationTypesPage() {
+  const { can } = useAuth();
   const [publicationTypes, setPublicationTypes] = useState<PublicationType[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -26,13 +29,8 @@ export default function PublicationTypesPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await publicationTypeService.getAll();
       setPublicationTypes(data);
     } catch (error) {
@@ -40,7 +38,12 @@ export default function PublicationTypesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -102,12 +105,16 @@ export default function PublicationTypesPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.PublicationType.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.PublicationType.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -117,16 +124,18 @@ export default function PublicationTypesPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت انواع نشریات</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingType(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن نوع جدید
-        </Button>
+        {can(PERM.PublicationType.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingType(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن نوع جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>
@@ -156,5 +165,4 @@ export default function PublicationTypesPage() {
     </Stack>
   );
 }
-
 

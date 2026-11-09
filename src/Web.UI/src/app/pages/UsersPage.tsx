@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group, ActionIcon, PasswordInput } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -10,8 +10,11 @@ import type { LibraryUser, CreateUserRequest } from '@/app/models/user';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 export default function UsersPage() {
+  const { can } = useAuth();
   const [users, setUsers] = useState<LibraryUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -32,13 +35,8 @@ export default function UsersPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await userService.getList();
       setUsers(data);
     } catch (error) {
@@ -46,7 +44,12 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const handleSubmit = async () => {
     if (editingUser && !form.values.password) {
@@ -124,12 +127,16 @@ export default function UsersPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.userName)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id, row.userName)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.User.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.userName)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.User.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id, row.userName)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -139,16 +146,18 @@ export default function UsersPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت کاربران</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingUser(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن کاربر جدید
-        </Button>
+        {can(PERM.User.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingUser(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن کاربر جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Xml.Linq;
 
 namespace Infrastructure.Reports.Definition;

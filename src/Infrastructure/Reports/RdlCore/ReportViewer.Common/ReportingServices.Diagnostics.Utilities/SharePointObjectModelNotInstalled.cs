@@ -1,0 +1,14 @@
+using System;
+using System.Runtime.Serialization;
+
+namespace ReportingServices.Diagnostics.Utilities
+{
+	[Serializable]
+	internal sealed class SharePointObjectModelNotInstalled : ReportCatalogException
+	{
+		public SharePointObjectModelNotInstalled(Exception sharePointObjectModelLoadException)
+			: base(ErrorCode.rsSharePointObjectModelNotInstalled, ErrorStrings.rsSharePointObjectModelNotInstalled((sharePointObjectModelLoadException != null) ? sharePointObjectModelLoadException.ToString() : string.Empty), sharePointObjectModelLoadException, null)
+		{
+		}
+	}
+}

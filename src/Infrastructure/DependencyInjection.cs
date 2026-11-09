@@ -1,3 +1,5 @@
+using System.IO;
+using System;
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Infrastructure.Authentication;
@@ -5,9 +7,7 @@ using Infrastructure.Authorization;
 using Infrastructure.Caching;
 using Infrastructure.Database;
 using Infrastructure.FileStorage;
-using Infrastructure.Helper;
 using Infrastructure.Reports;
-using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +19,10 @@ using Microsoft.IdentityModel.Tokens;
 using SharedKernel;
 using System.Security.Claims;
 using System.Text;
+using VohuManah.Infrastructure.Database.SqlBackup;
+using VohuManah.Infrastructure.Helper.Time;
+using VohuManah.Infrastructure.Helper.HumanVerification;
+using VohuManah.Infrastructure.Helper.PersianCalendar;
 
 namespace Infrastructure;
 
@@ -44,10 +48,10 @@ public static class DependencyInjection
         services.AddScoped<PersianDateTime>();
         services.AddScoped<Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
 
-        services.AddScoped<Application.Abstractions.Backup.IBackupService, Backup.SqlBackupService>();
-        services.AddSingleton<Application.Abstractions.HumanVerification.IHumanVerificationService, Infrastructure.HumanVerification.HumanVerificationService>();
-        services.AddHostedService<Backup.DailyBackupJob>();
-        services.AddHostedService<Backup.BackupCleanupJob>();
+        services.AddScoped<Application.Abstractions.Backup.IBackupService, SqlBackupService>();
+        services.AddSingleton<Application.Abstractions.HumanVerification.IHumanVerificationService, HumanVerificationService>();
+        services.AddHostedService<DailyBackupJob>();
+        services.AddHostedService<BackupCleanupJob>();
         services.AddHostedService<Database.Maintenance.DatabaseMaintenanceJob>();
 
         return AddReportServices(services);

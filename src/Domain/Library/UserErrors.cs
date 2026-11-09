@@ -20,6 +20,10 @@ public static class UserErrors
         "Users.UserNameNotUnique",
         "نام کاربری ارائه شده یکتا نیست");
 
+    public static readonly Error EmailNotUnique = Error.Conflict(
+        "Users.EmailNotUnique",
+        "این ایمیل قبلاً توسط کاربر دیگر وارد گردیده است");
+
     public static readonly Error InvalidCredentials = Error.Failure(
         "Users.InvalidCredentials",
         "نام کاربری یا رمز عبور نامعتبر است");
