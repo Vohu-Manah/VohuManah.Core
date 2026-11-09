@@ -91,8 +91,8 @@ const router = createHashRouter([
 function ThemedApp() {
   const { colorScheme } = useColorScheme();
   const { isAuthenticated } = useAuth();
-
-
+  
+  
   const [dynamicTheme, setDynamicTheme] = useState(() => createMantineTheme(theme, DEFAULT_THEME.primary));
 
   useEffect(() => {
@@ -105,7 +105,6 @@ function ThemedApp() {
         })
         .catch(() => {});
     } else {
-
       setDynamicTheme(createMantineTheme(theme, DEFAULT_THEME.primary));
     }
     const onThemeChange = (e: Event) => {
@@ -134,6 +133,7 @@ function ThemedApp() {
 export default function AppProvider() {
   return (
     <ColorSchemeProvider>
+      {}
       <AuthProvider>
         <UserSettingsProvider>
           <ThemedApp />

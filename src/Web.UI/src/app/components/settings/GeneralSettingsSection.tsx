@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Stack, Title, Group, Button, ColorInput, FileButton, Avatar } from '@mantine/core';
 import { SmartTextInput } from '@/app/components/common/SmartTextInput';
 import { useForm } from '@mantine/form';
@@ -24,7 +24,11 @@ export default function GeneralSettingsSection() {
     },
   });
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
     try {
       setLoading(true);
       const [settingsData, title] = await Promise.all([
@@ -42,12 +46,7 @@ export default function GeneralSettingsSection() {
     } finally {
       setLoading(false);
     }
-  }, [form]);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
+  };
 
   const handleSaveMainTitle = async () => {
     if (!form.validate().hasErrors) {
@@ -166,4 +165,5 @@ export default function GeneralSettingsSection() {
     </>
   );
 }
+
 

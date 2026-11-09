@@ -71,7 +71,12 @@ export default function ChangePasswordSection() {
           label="رمز عبور فعلی"
           withAsterisk
           dir="ltr"
-          className="password-input-ltr" 
+          styles={{
+            input: {
+              textAlign: 'left',
+              direction: 'ltr',
+            },
+          }}
           {...form.getInputProps('currentPassword')}
         />
 
@@ -79,7 +84,12 @@ export default function ChangePasswordSection() {
           label="رمز عبور جدید"
           withAsterisk
           dir="ltr"
-          className="password-input-ltr" 
+          styles={{
+            input: {
+              textAlign: 'left',
+              direction: 'ltr',
+            },
+          }}
           {...form.getInputProps('newPassword')}
         />
 
@@ -87,7 +97,12 @@ export default function ChangePasswordSection() {
           label="تکرار رمز عبور جدید"
           withAsterisk
           dir="ltr"
-          className="password-input-ltr" 
+          styles={{
+            input: {
+              textAlign: 'left',
+              direction: 'ltr',
+            },
+          }}
           {...form.getInputProps('confirmPassword')}
         />
 

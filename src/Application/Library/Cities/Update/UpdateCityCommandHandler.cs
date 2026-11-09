@@ -25,7 +25,7 @@ internal sealed class UpdateCityCommandHandler(
 
         if (await cities.AnyAsync(c => c.Id != command.Id && c.Name == command.Name, cancellationToken))
         {
-            return Result.Failure(CityErrors.NameNotUnique);
+            return Result.Failure(Error.Conflict("Cities.NameNotUnique", "A city with this name already exists"));
         }
 
         existing.Name = command.Name;

@@ -1,6 +1,4 @@
 
-import type { MantineColorsTuple, MantineThemeOverride } from '@mantine/core';
-
 export type ThemeColors = {
   primary: string;
   secondary: string;
@@ -117,10 +115,10 @@ function hexToShades(hex: string): string[] {
 }
 
 
-export function createMantineTheme(baseTheme: MantineThemeOverride, primaryColor: string): MantineThemeOverride {
-
+export function createMantineTheme(baseTheme: any, primaryColor: string): any {
   
-  const palette = hexToShades(primaryColor) as unknown as MantineColorsTuple;
+  
+  const palette = hexToShades(primaryColor);
 
   return {
     ...baseTheme,

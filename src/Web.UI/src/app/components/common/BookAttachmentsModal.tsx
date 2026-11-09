@@ -43,6 +43,11 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
   const [viewerUrl, setViewerUrl] = useState<string>('');
   const [viewerType, setViewerType] = useState<'pdf' | 'word'>('pdf');
 
+  useEffect(() => {
+    if (opened) {
+      loadAttachments();
+    }
+  }, [opened, bookId]);
 
   const loadAttachments = async () => {
     try {
@@ -55,15 +60,6 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (opened) {
-
-      loadAttachments();
-    }
-
-  }, [opened, bookId]);
-
 
   const handleUpload = async () => {
     if (!uploadFile) {
@@ -270,7 +266,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
                   <Card key={attachment.id} withBorder p="md">
                     <Stack gap="sm">
                       <Group justify="space-between" align="flex-start">
-                        <Stack gap="xs" className="flex-1">
+                        <Stack gap="xs" style={{ flex: 1 }}>
                           {isEditing ? (
                             <TextInput
                               value={editDescription}
@@ -373,3 +369,4 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
     </>
   );
 }
+

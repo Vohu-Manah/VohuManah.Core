@@ -1,4 +1,3 @@
-using System.Threading;
 using Application.Abstractions.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;

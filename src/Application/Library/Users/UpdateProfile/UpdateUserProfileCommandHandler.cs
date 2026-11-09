@@ -21,12 +21,6 @@ internal sealed class UpdateUserProfileCommandHandler(
             return Result.Failure(UserErrors.NotFound(command.UserId));
         }
 
-        if (!string.IsNullOrWhiteSpace(command.Email) &&
-            await users.AnyAsync(u => u.Email == command.Email && u.Id != command.UserId, cancellationToken))
-        {
-            return Result.Failure(UserErrors.EmailNotUnique);
-        }
-
         user.Name = command.Name;
         user.LastName = command.LastName;
         user.Email = command.Email;

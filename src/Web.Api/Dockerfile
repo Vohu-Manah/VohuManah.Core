@@ -31,7 +31,6 @@ RUN apt-get update && \
     fonts-dejavu \
     fonts-dejavu-core \
     fonts-dejavu-extra \
-    libfontconfig1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=publish /app/publish .

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -10,11 +10,8 @@ import { cityService } from '@/app/services/library/cityService';
 import type { City, CreateCityRequest } from '@/app/models/city';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 
 export default function CitiesPage() {
-  const { can } = useAuth();
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -29,8 +26,13 @@ export default function CitiesPage() {
     },
   });
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
     try {
+      setLoading(true);
       const data = await cityService.getAll();
       setCities(data);
     } catch (error) {
@@ -38,12 +40,7 @@ export default function CitiesPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
+  };
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -105,16 +102,12 @@ export default function CitiesPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          {can(PERM.City.update) && (
-            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-              <FaEdit />
-            </ActionIcon>
-          )}
-          {can(PERM.City.del) && (
-            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-              <FaTrash />
-            </ActionIcon>
-          )}
+          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+            <FaEdit />
+          </ActionIcon>
+          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+            <FaTrash />
+          </ActionIcon>
         </Group>
       ),
     },
@@ -124,18 +117,16 @@ export default function CitiesPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت شهرها</Title>
-        {can(PERM.City.create) && (
-          <Button
-            leftSection={<FaPlus />}
-            onClick={() => {
-              form.reset();
-              setEditingCity(null);
-              setModalOpened(true);
-            }}
-          >
-            افزودن شهر جدید
-          </Button>
-        )}
+        <Button
+          leftSection={<FaPlus />}
+          onClick={() => {
+            form.reset();
+            setEditingCity(null);
+            setModalOpened(true);
+          }}
+        >
+          افزودن شهر جدید
+        </Button>
       </Group>
 
       <Card withBorder>
@@ -165,4 +156,5 @@ export default function CitiesPage() {
     </Stack>
   );
 }
+
 

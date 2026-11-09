@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Box, LoadingOverlay, Stack, Text, Alert, ActionIcon } from '@mantine/core';
 import { FaExpand, FaCompress } from 'react-icons/fa';
-import { reportService, type ReportExportRequest } from '@/app/services/reports/reportService';
+import { reportService } from '@/app/services/reports/reportService';
 import { appMessage } from '@/app/messages/appMessages';
 import { getTokens } from '@/app/services/api/tokenStore';
 
@@ -23,7 +23,6 @@ export function ReportViewer({
   const [error, setError] = useState<string | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
 
   
   useEffect(() => {
@@ -34,40 +33,6 @@ export function ReportViewer({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [fullscreen]);
-
-  const handleExport = useCallback(
-    async (format: 'pdf' | 'excel') => {
-      const request: ReportExportRequest = { reportName, datasourceName, format, parameters };
-      try {
-        await reportService.exportReport(request);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'خطا در خروجی‌گرفتن گزارش';
-        appMessage.error('خطا در خروجی‌گرفتن گزارش', errorMessage);
-      }
-    },
-    [reportName, datasourceName, parameters],
-  );
-
-  useEffect(() => {
-    const el = boxRef.current;
-    if (el && !fullscreen) el.style.height = height;
-  }, [height, fullscreen]);
-
-  useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
-      switch (event.data?.type) {
-        case 'report:export':
-          void handleExport(event.data.format === 'excel' ? 'excel' : 'pdf');
-          break;
-        case 'report:print':
-          void handleExport('pdf');
-          break;
-      }
-    };
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [handleExport]);
 
   const buildReportUrl = useCallback(() => {
     return reportService.buildReportUrl({
@@ -170,16 +135,26 @@ export function ReportViewer({
   return (
     <Stack gap="md">
       <Box
-        ref={boxRef}
         pos="relative"
-        className={fullscreen ? 'report-fullscreen' : undefined}
+        style={
+          fullscreen
+            ? {
+                position: 'fixed',
+                inset: 0,
+                zIndex: 2000,
+                backgroundColor: '#fff',
+                padding: '8px',
+                height: '100vh',
+              }
+            : { height }
+        }
       >
         <ActionIcon
           variant="subtle"
           color="gray"
           title={fullscreen ? 'خروج از تمام‌صفحه' : 'نمایش تمام‌صفحه'}
           onClick={() => setFullscreen((v) => !v)}
-          className="report-fullscreen-btn"
+          style={{ position: 'absolute', top: 12, left: 12, zIndex: 1 }}
         >
           {fullscreen ? <FaCompress size={16} /> : <FaExpand size={16} />}
         </ActionIcon>
@@ -188,7 +163,19 @@ export function ReportViewer({
             color="red"
             title="خطا در بارگذاری گزارش"
             icon={<Text>⚠️</Text>}
-            className="report-alert"
+            styles={{
+              root: {
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                direction: 'rtl',
+              },
+              message: {
+                textAlign: 'center',
+                fontSize: '16px',
+              },
+            }}
           >
             <Text size="lg" fw={500}>
               {error}
@@ -203,7 +190,13 @@ export function ReportViewer({
               src={buildReportUrl()}
               onLoad={handleLoad}
               onError={handleError}
-              className="iframe-panel"
+              style={{
+                width: '100%',
+                height: '100%',
+                border: '1px solid #dee2e6',
+                borderRadius: '4px',
+                backgroundColor: '#fff',
+              }}
               title={`گزارش ${reportName}`}
             />
           </>

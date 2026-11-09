@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getFaIcon } from '@/app/helpers/faIcons';
 import { Button, Card, Stack, Title, Group, ActionIcon, Badge, Switch, Text, Box } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash, FaGripVertical, FaChevronDown, FaChevronRight, FaUndo } from 'react-icons/fa';
@@ -8,8 +8,6 @@ import { menuService } from '@/app/services/library/menuService';
 import type { MenuItem, CreateMenuItemRequest, UpdateMenuItemRequest } from '@/app/models/menu';
 import { appMessage } from '@/app/messages/appMessages';
 import { handleApiError } from '@/app/helpers/errorHandler';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 
 type FlatMenuItem = MenuItem & { level: number };
 
@@ -70,7 +68,6 @@ type DraggedItem = {
 };
 
 export default function MenuSettingsPage() {
-  const { can } = useAuth();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -125,8 +122,13 @@ export default function MenuSettingsPage() {
     isActive: true,
   });
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
     try {
+      setLoading(true);
       const data = await menuService.getAll();
       setMenuItems(data);
       
@@ -146,12 +148,7 @@ export default function MenuSettingsPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -523,13 +520,21 @@ export default function MenuSettingsPage() {
     };
 
     
+    const indentWidth = 30; 
+    const currentIndent = level * indentWidth;
+
     return (
-      <Box key={item.id} className={`menu-item-indent-${Math.min(level, 6)}`}>
+      <Box key={item.id} style={{ marginLeft: `${currentIndent}px` }}>
         <Card
           p="sm"
           mb="xs"
-          className={`menu-drag-item ${draggedItem?.id === item.id ? "is-dragging" : ""} ${dragOverIndex === flatIndex ? "drag-over" : "drag-default"} ${(item.isSystem || isSystemMenuOrChild(item, menuItems)) ? "cursor-not-allowed" : "cursor-move"}`}
-          draggable={can(PERM.Menu.reorder) && !item.isSystem && !isSystemMenuOrChild(item, menuItems)}
+          style={{
+            opacity: draggedItem?.id === item.id ? 0.5 : 1,
+            border: dragOverIndex === flatIndex ? '2px solid var(--mantine-color-blue-6)' : '1px solid var(--mantine-color-gray-3)',
+            cursor: (item.isSystem || isSystemMenuOrChild(item, menuItems)) ? 'not-allowed' : 'move',
+            position: 'relative',
+          }}
+          draggable={!item.isSystem && !isSystemMenuOrChild(item, menuItems)}
           onDragStart={(e) => handleDragStart(e, item, flatIndex)}
           onDragOver={(e) => handleDragOver(e, flatIndex, item, level)}
           onDragLeave={(e) => {
@@ -559,9 +564,7 @@ export default function MenuSettingsPage() {
               ) : (
                 <Box w={20} />
               )}
-              {can(PERM.Menu.reorder) && (
-                <FaGripVertical size={14} className={(item.isSystem || isSystemMenuOrChild(item, menuItems)) ? "cursor-not-allowed" : "cursor-grab"} />
-              )}
+              <FaGripVertical size={14} style={{ cursor: (item.isSystem || isSystemMenuOrChild(item, menuItems)) ? 'not-allowed' : 'grab' }} />
               {getIconComponent(item.icon)}
               <Text size="sm" fw={500}>
                 {item.label}
@@ -581,26 +584,22 @@ export default function MenuSettingsPage() {
                 disabled={item.isSystem || isSystemMenuOrChild(item, menuItems)}
                 size="sm"
               />
-              {can(PERM.Menu.update) && (
-                <ActionIcon
-                  variant="light"
-                  color="blue"
-                  onClick={() => handleEdit(item)}
-                  disabled={item.isSystem || isSystemMenuOrChild(item, menuItems)}
-                >
-                  <FaEdit size={14} />
-                </ActionIcon>
-              )}
-              {can(PERM.Menu.del) && (
-                <ActionIcon
-                  variant="light"
-                  color="red"
-                  onClick={() => handleDelete(item)}
-                  disabled={item.isSystem || isSystemMenuOrChild(item, menuItems)}
-                >
-                  <FaTrash size={14} />
-                </ActionIcon>
-              )}
+              <ActionIcon
+                variant="light"
+                color="blue"
+                onClick={() => handleEdit(item)}
+                disabled={item.isSystem || isSystemMenuOrChild(item, menuItems)}
+              >
+                <FaEdit size={14} />
+              </ActionIcon>
+              <ActionIcon
+                variant="light"
+                color="red"
+                onClick={() => handleDelete(item)}
+                disabled={item.isSystem || isSystemMenuOrChild(item, menuItems)}
+              >
+                <FaTrash size={14} />
+              </ActionIcon>
             </Group>
           </Group>
         </Card>
@@ -618,36 +617,32 @@ export default function MenuSettingsPage() {
       <Group justify="space-between">
         <Title order={2}>تنظیمات منو</Title>
         <Group gap="xs">
-          {can(PERM.Menu.reset) && (
-            <Button
-              variant="outline"
-              color="red"
-              leftSection={<FaUndo size={14} />}
-              onClick={handleResetToDefault}
-              loading={loading}
-            >
-              بازگشت به منوی پیشفرض
-            </Button>
-          )}
-          {can(PERM.Menu.create) && (
-            <Button
-              leftSection={<FaPlus size={14} />}
-              onClick={() => {
-                setEditingItem(null);
-                setFormData({
-                  label: '',
-                  path: undefined,
-                  icon: undefined,
-                  parentId: undefined,
-                  displayOrder: flattenMenuItems(menuItems).length,
-                  isActive: true,
-                });
-                setModalOpened(true);
-              }}
-            >
-              افزودن منو
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            color="red"
+            leftSection={<FaUndo size={14} />}
+            onClick={handleResetToDefault}
+            loading={loading}
+          >
+            بازگشت به منوی پیشفرض
+          </Button>
+          <Button
+            leftSection={<FaPlus size={14} />}
+            onClick={() => {
+              setEditingItem(null);
+              setFormData({
+                label: '',
+                path: undefined,
+                icon: undefined,
+                parentId: undefined,
+                displayOrder: flattenMenuItems(menuItems).length,
+                isActive: true,
+              });
+              setModalOpened(true);
+            }}
+          >
+            افزودن منو
+          </Button>
         </Group>
       </Group>
 
@@ -683,3 +678,4 @@ export default function MenuSettingsPage() {
     </Stack>
   );
 }
+

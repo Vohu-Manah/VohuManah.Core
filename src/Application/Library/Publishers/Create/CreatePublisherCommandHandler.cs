@@ -19,7 +19,7 @@ internal sealed class CreatePublisherCommandHandler(
 
         if (await publishers.AnyAsync(p => p.Name == command.Name, cancellationToken))
         {
-            return Result.Failure<int>(PublisherErrors.NameNotUnique);
+            return Result.Failure<int>(Error.Conflict("Publishers.NameNotUnique", "A publisher with this name already exists"));
         }
 
         var publisher = new Publisher

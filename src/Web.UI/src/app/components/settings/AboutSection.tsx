@@ -1,38 +1,33 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Stack, Title, Text, Group, Divider, Badge } from '@mantine/core';
 import { settingsService } from '@/app/services/library/settingsService';
 import { handleApiError } from '@/app/helpers/errorHandler';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 import type { AppInfo, SystemInfo } from '@/app/models/settings';
 
 export default function AboutSection() {
-  const { can } = useAuth();
-  const canSeeSystem = can(PERM.Settings.systemInfo);
   const [, setLoading] = useState(false);
   const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
     try {
       setLoading(true);
-      const appData = await settingsService.getAppInfo();
+      const [appData, systemData] = await Promise.all([
+        settingsService.getAppInfo(),
+        settingsService.getSystemInfo(),
+      ]);
       setAppInfo(appData);
-      if (canSeeSystem) {
-        const systemData = await settingsService.getSystemInfo();
-        setSystemInfo(systemData);
-      }
+      setSystemInfo(systemData);
     } catch (error) {
       handleApiError(error, 'خطا در بارگذاری اطلاعات');
     } finally {
       setLoading(false);
     }
-  }, [canSeeSystem]);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
+  };
 
   return (
     <Card withBorder>
@@ -56,7 +51,7 @@ export default function AboutSection() {
             {appInfo.description && (
               <Group justify="space-between" align="flex-start">
                 <Text fw={600}>توضیحات:</Text>
-                <Text className="flex-1 ta-right">{appInfo.description}</Text>
+                <Text style={{ flex: 1, textAlign: 'right' }}>{appInfo.description}</Text>
               </Group>
             )}
             {appInfo.lastUpdateDate && (
@@ -136,4 +131,5 @@ export default function AboutSection() {
     </Card>
   );
 }
+
 

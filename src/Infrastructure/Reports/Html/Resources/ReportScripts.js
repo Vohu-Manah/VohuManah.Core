@@ -46,52 +46,17 @@ function exportExcel(reportName, params) {
 }
 
 function zoomIn() {
-    const next = currentZoom === 0 || currentZoom === fitZoom
-        ? Math.round(fitZoom * 1.15)
-        : currentZoom + 10;
-    currentZoom = Math.min(next, 200);
+    currentZoom = Math.min(currentZoom + 10, 200);
     applyZoom();
 }
 
 function zoomOut() {
-    const next = currentZoom - 10;
-    currentZoom = Math.max(next, 50);
+    currentZoom = Math.max(currentZoom - 10, 50);
     applyZoom();
 }
 
 function resetZoom() {
-    currentZoom = fitZoom;
-    applyZoom();
-}
-
-
-let fitZoom = 100;
-
-function autoFit() {
-    
-    
-    
-    
-    const reportContent = document.getElementById('reportContent');
-    if (!reportContent) return;
-    const parent = reportContent.parentElement;
-    if (!parent) return;
-    const ps = getComputedStyle(parent);
-    const availW = parent.clientWidth - (parseFloat(ps.paddingLeft) || 0) - (parseFloat(ps.paddingRight) || 0);
-    let naturalW = 1;
-    const active = reportPages.length ? reportPages[currentPage - 1] : null;
-    const scope = active || reportContent;
-    const tables = scope.querySelectorAll('table');
-    for (const t of tables) {
-        if (t.scrollWidth > naturalW) naturalW = t.scrollWidth;
-    }
-    if (availW <= 0) return;
-    fitZoom = 100;
-    if (naturalW > availW) {
-        fitZoom = Math.round(100 * availW / naturalW);
-        fitZoom = Math.max(50, Math.min(200, fitZoom));
-    }
-    currentZoom = fitZoom;
+    currentZoom = 100;
     applyZoom();
 }
 
@@ -99,9 +64,6 @@ function applyZoom() {
     const reportContent = document.getElementById('reportContent');
     if (reportContent) {
         reportContent.style.transform = `scale(${currentZoom / 100})`;
-        
-        
-        
         reportContent.style.transformOrigin = 'top center';
         const zoomValue = document.getElementById('zoomValue');
         if (zoomValue) {
@@ -204,43 +166,66 @@ function initPagination() {
     }
 }
 
-
-
-function getReportPages() {
-    const reportContent = document.getElementById('reportContent');
-    if (!reportContent) return [];
-    return Array.from(reportContent.children).filter(el =>
-        el.tagName === 'DIV' && el.querySelector('table') !== null
-    );
-}
-
-let reportPages = [];
-
 function showPage(page) {
-    if (!reportPages.length) reportPages = getReportPages();
-    const n = reportPages.length || 1;
-    currentPage = Math.max(1, Math.min(n, page));
     const reportContent = document.getElementById('reportContent');
-    if (reportContent) {
+    if (!reportContent) return;
+    
+    
+    if (allRowsCache.length === 0) {
+        const tables = reportContent.querySelectorAll('table');
+        if (tables.length === 0) return;
         
-        
-        const active = reportPages[currentPage - 1];
-        Array.from(reportContent.children).forEach(child => {
-            child.style.display = (child === active) ? '' : 'none';
-        });
+        allRowsCache = Array.from(tables).flatMap(table => 
+            Array.from(table.querySelectorAll('tbody tr'))
+        );
     }
-    updatePaginationUI();
-}
-
-function initViewportPagination() {
     
     
-    reportPages = getReportPages();
-    const n = reportPages.length;
-    totalPages = Math.max(1, n);
-    currentPage = 1;
+    const visibleRows = allRowsCache.filter(row => 
+        !row.classList.contains('search-hidden')
+    );
+    
+    if (visibleRows.length === 0) {
+        
+        allRowsCache.forEach(row => {
+            if (!row.classList.contains('search-hidden')) {
+                row.style.display = '';
+            }
+        });
+        currentPage = 1;
+        totalPages = 1;
+        updatePaginationUI();
+        return;
+    }
+    
+    
+    totalPages = Math.max(1, Math.ceil(visibleRows.length / itemsPerPage));
+    
+    
+    if (page < 1) page = 1;
+    if (page > totalPages) page = totalPages;
+    
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    
+    
+    allRowsCache.forEach(row => {
+        if (row.classList.contains('search-hidden')) {
+            
+            row.style.display = 'none';
+        } else {
+            
+            const rowIndex = visibleRows.indexOf(row);
+            if (rowIndex >= startIndex && rowIndex < endIndex) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+    
+    currentPage = page;
     updatePaginationUI();
-    showPage(1);
 }
 
 function updatePaginationUI() {
@@ -403,9 +388,14 @@ function performSearch() {
     }
     
     
-    allRowsCache.forEach(row => row.classList.remove('search-hidden'));
-    
-    
+    allRowsCache.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+        if (!rowText.includes(searchTerm.toLowerCase())) {
+            row.classList.add('search-hidden');
+        } else {
+            row.classList.remove('search-hidden');
+        }
+    });
     
     
     highlightMatches();
@@ -657,8 +647,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 function initializeReportFeatures() {
-    initViewportPagination();
-    autoFit();
+    applyZoom();
     initPagination();
     initSearch();
 }
@@ -707,93 +696,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
-window.addEventListener('resize', function() { setTimeout(function() { autoFit(); initViewportPagination(); }, 80); });
-
- 
-function adjustReportLayoutDynamically() {
-    const pages = document.querySelectorAll('#reportContent, #oReportDiv');
-    if (!pages.length) return;
-
-    pages.forEach(page => {
-        page.style.width = '100%';
-        page.style.boxSizing = 'border-box';
-
-        const style = window.getComputedStyle(page);
-        const paddingLeft = parseFloat(style.paddingLeft) || 24;
-        const paddingRight = parseFloat(style.paddingRight) || 24;
-        const availableWidth = page.clientWidth - paddingLeft - paddingRight;
-
-        if (availableWidth <= 0) return;
-
-        const tables = page.querySelectorAll('table');
-        tables.forEach(table => {
-            const originalTableWidth = table.offsetWidth || parseFloat(table.style.width) || availableWidth;
-            table.style.width = '100%';
-            table.style.maxWidth = '100%';
-
-            const firstRow = table.querySelector('tr');
-            if (firstRow && originalTableWidth > 0) {
-                const cells = Array.from(firstRow.children);
-                const totalCellWidth = cells.reduce((sum, cell) => sum + (cell.offsetWidth || parseFloat(cell.style.width) || 0), 0);
-                if (totalCellWidth > 0) {
-                    cells.forEach(cell => {
-                        const cellW = cell.offsetWidth || parseFloat(cell.style.width) || 0;
-                        const percentage = ((cellW / totalCellWidth) * 100).toFixed(2);
-                        cell.style.width = `${percentage}%`;
-                    });
-                }
-            }
-
-            const cols = table.querySelectorAll('col');
-            if (cols.length) {
-                const totalColWidth = Array.from(cols).reduce((sum, col) => sum + (parseFloat(col.style.width) || col.offsetWidth || 0), 0);
-                if (totalColWidth > 0) {
-                    cols.forEach(col => {
-                        const colW = parseFloat(col.style.width) || col.offsetWidth || 0;
-                        col.style.width = `${((colW / totalColWidth) * 100).toFixed(2)}%`;
-                    });
-                }
-            }
-        });
-
-        const absElements = Array.from(page.querySelectorAll('*')).filter(el => {
-            return window.getComputedStyle(el).position === 'absolute';
-        });
-
-        if (absElements.length > 0) {
-            let minX = Infinity;
-            let maxX = 0;
-
-            absElements.forEach(el => {
-                if (!el.dataset.origLeft) {
-                    el.dataset.origLeft = parseFloat(el.style.left) || el.offsetLeft || 0;
-                    el.dataset.origWidth = parseFloat(el.style.width) || el.offsetWidth || 0;
-                }
-                const left = parseFloat(el.dataset.origLeft);
-                const width = parseFloat(el.dataset.origWidth);
-                if (left < minX) minX = left;
-                if (left + width > maxX) maxX = left + width;
-            });
-
-            const originalContentSpan = maxX - (minX < Infinity ? minX : 0);
-            if (originalContentSpan > 0) {
-                const scaleX = availableWidth / originalContentSpan;
-                absElements.forEach(el => {
-                    const origLeft = parseFloat(el.dataset.origLeft);
-                    const origWidth = parseFloat(el.dataset.origWidth);
-                    const newLeft = paddingLeft + (origLeft - minX) * scaleX;
-                    const newWidth = origWidth * scaleX;
-                    el.style.left = `${newLeft}px`;
-                    if (el.tagName !== 'IMG' && !el.querySelector('img')) {
-                        el.style.width = `${newWidth}px`;
-                    }
-                });
-            }
-        }
-    });
-}
-
-window.addEventListener('DOMContentLoaded', adjustReportLayoutDynamically);
-window.addEventListener('load', adjustReportLayoutDynamically);
-window.addEventListener('resize', adjustReportLayoutDynamically);

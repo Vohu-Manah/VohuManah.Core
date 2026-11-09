@@ -1,4 +1,3 @@
-using System;
 using Application.Abstractions.Authentication;
 using System.Security.Cryptography;
 

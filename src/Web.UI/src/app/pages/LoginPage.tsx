@@ -94,17 +94,64 @@ export default function LoginPage() {
   };
 
   return (
-    <Box className="login-shell">
-      <Box className="login-image-section">
+    <Box
+      style={{
+        display: 'flex',
+        minHeight: '100vh',
+        direction: 'ltr',
+      }}
+    >
+      <Box
+        style={{
+          flex: 1,
+          position: 'relative',
+          display: 'none',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: rem(40),
+          overflow: 'hidden',
+        }}
+        className="login-image-section"
+      >
         {slideshowImages.map((img, index) => (
           <Box
             key={index}
-            className={`login-slide ${index === currentSlide ? 'login-slide--active' : ''}`}
-            style={{ backgroundImage: `url(${img})` }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url(${img})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: index === currentSlide ? 1 : 0,
+              transition: 'opacity 1s ease-in-out',
+              zIndex: 1,
+            }}
           />
         ))}
-        <Box className="login-overlay" />
-        <Box className="login-hero">
+        <Box
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background:
+              'linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%)',
+            zIndex: 2,
+          }}
+        />
+        <Box
+          style={{
+            textAlign: 'center',
+            color: 'white',
+            direction: 'rtl',
+            position: 'relative',
+            zIndex: 3,
+          }}
+        >
           <Title className="login-hero-title" order={1} size={rem(48)} fw={900} mb="lg">
             به پنل مدیریتی خوش آمدید!
           </Title>
@@ -114,7 +161,16 @@ export default function LoginPage() {
         </Box>
       </Box>
 
-      <Container size={420} className="login-form-col">
+      <Container
+        size={420}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: rem(40),
+          direction: 'rtl',
+        }}
+      >
         <Group justify="center" gap="xs" mb="md">
           <Image src={favicon} alt="favicon" width={45} height={45} />
           <Title ta="center" fw={900}>
@@ -124,74 +180,73 @@ export default function LoginPage() {
 
         <StarBorder
           as="div"
-          className="star-border--card star-border--login login-form-shell"
-          theme="light"
+          className="star-border--card star-border--login"
+          theme="dark"
           color="#111827"
           trailColor="#4b5563"
-          backgroundColor="#f1f5f9"
           thickness={2.5}
           radius={12}
           stars={2}
           duration={5}
-          trailLength={0.22}
-          glow={0.55}
+          glow={0.35}
           sparkle={false}
           hover="lap"
           clickPulse={false}
+          style={{ marginTop: 30, height: 'auto' }}
         >
-          <Paper withBorder shadow="md" p={30} radius="md" className="login-paper">
+          <Paper withBorder shadow="md" p={30} radius="md" style={{ color: '#1a1a1a' }}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-              <SmartTextInput
-                label="نام کاربری یا ایمیل"
-                placeholder="نام کاربری یا ایمیل خود را وارد کنید"
-                required
-                fieldName="userName"
-                {...form.getInputProps('userName')}
+            <SmartTextInput
+              label="نام کاربری یا ایمیل"
+              placeholder="نام کاربری یا ایمیل خود را وارد کنید"
+              required
+              fieldName="userName"
+              {...form.getInputProps('userName')}
+            />
+
+            <PasswordInput
+              label="رمز عبور"
+              placeholder="رمز عبور خود را وارد کنید"
+              required
+              mt="md"
+              dir="ltr"
+              {...form.getInputProps('password')}
+            />
+
+            <Group justify="space-between" mt="lg">
+              <Checkbox
+                label="مرا به خاطر بسپار"
+                checked={keepLoggedIn}
+                onChange={(event) => setKeepLoggedIn(event.currentTarget.checked)}
               />
-
-              <PasswordInput
-                label="رمز عبور"
-                placeholder="رمز عبور خود را وارد کنید"
-                required
-                mt="md"
-                dir="ltr"
-                {...form.getInputProps('password')}
-              />
-
-              <Group justify="space-between" mt="lg">
-                <Checkbox
-                  label="مرا به خاطر بسپار"
-                  checked={keepLoggedIn}
-                  onChange={(event) => setKeepLoggedIn(event.currentTarget.checked)}
-                />
-                <Anchor
-                  component="button"
-                  type="button"
-                  size="sm"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                >
-                  رمز عبور را فراموش کرده‌اید؟
-                </Anchor>
-              </Group>
-
-              <HumanVerifyButton onVerified={setHumanToken} resetKey={submitAttempt} />
-              {!humanToken && (
-                <Text size="xs" c="dimmed" ta="center" mt="xs">
-                  برای ورود، گامِ پذیرش انسانی را برآورده کنید
-                </Text>
-              )}
-              <Button
-                fullWidth
-                mt="xl"
-                type="submit"
-                loading={form.submitting}
-                disabled={!humanToken}
-                color="#000"
+              <Anchor
+                component="button"
+                type="button"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
               >
-                ورود
-              </Button>
+                رمز عبور را فراموش کرده‌اید؟
+              </Anchor>
+            </Group>
+
+            <HumanVerifyButton onVerified={setHumanToken} resetKey={submitAttempt} />
+            {!humanToken && (
+              <Text size="xs" c="dimmed" ta="center" mt="xs">
+                برای ورود، گامِ پذیرش انسانی را برآورده کنید
+              </Text>
+            )}
+            <Button
+              fullWidth
+              mt="xl"
+              type="submit"
+              loading={form.submitting}
+              disabled={!humanToken}
+              color="#000"
+            >
+              ورود
+            </Button>
             </form>
           </Paper>
         </StarBorder>

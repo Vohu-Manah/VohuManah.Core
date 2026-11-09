@@ -1,30 +1,10 @@
 import { useMemo, useState, useEffect, isValidElement, cloneElement } from 'react';
 import {
-  ActionIcon,
-  Box,
-  Group,
-  Table,
-  TextInput,
-  Tooltip,
-  Loader,
-  Center,
-  Pagination,
-  Checkbox,
-  Radio,
-  Stack,
-  Text,
-  Paper,
+  ActionIcon, Box, Group, Table, TextInput, Tooltip, Loader, Center, Pagination, Checkbox, Radio,
+  Stack, Text, Paper,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import {
-  FaSearch,
-  FaSyncAlt,
-  FaFileExcel,
-  FaFilePdf,
-  FaSortUp,
-  FaTable,
-  FaListUl,
-} from 'react-icons/fa';
+import { FaSearch, FaSyncAlt, FaFileExcel, FaFilePdf, FaSortUp, FaTable, FaListUl } from 'react-icons/fa';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import vazirFontUrl from '@/assets/fonts/vazir/Vazirmatn-Regular.ttf?url';
@@ -39,7 +19,7 @@ export type ProTableColumn<T> = {
   render?: (row: T) => React.ReactNode;
   width?: string | number;
   exportValue?: (row: T) => string | number;
-
+  
   exportable?: boolean;
 };
 
@@ -59,29 +39,29 @@ type ProTableProps<T> = {
   getRowId?: (row: T) => string | number;
   enableExcelExport?: boolean;
   enablePdfExport?: boolean;
-
+  
   serverTotal?: number;
-
+  
   page?: number;
-
+  
   mobileCards?: boolean;
-
+  
   pageSize?: number;
-
+  
   onPageChange?: (page: number) => void;
-
+  
   filters?: React.ReactNode;
-
+  
   sortBy?: string;
-
+  
   sortDirection?: 'asc' | 'desc';
-
+  
   onSortChange?: (columnKey: string, direction: 'asc' | 'desc') => void;
-
+  
   onSearchChange?: (query: string) => void;
-
+  
   exportLimit?: number;
-
+  
   onExportAll?: (onProgress?: (done: number, total: number) => void) => Promise<T[]>;
 };
 
@@ -114,23 +94,19 @@ export function ProTable<T extends Record<string, unknown>>({
 }: ProTableProps<T>) {
   const [query, setQuery] = useState('');
   const [activePage, setActivePage] = useState(1);
-
+  
   const isMobile = useMediaQuery('(max-width: 48em)');
   const [showTable, setShowTable] = useState(false);
-  const [exportState, setExportState] = useState<{
-    kind: 'excel' | 'pdf';
-    done: number;
-    total: number;
-  } | null>(null);
+  const [exportState, setExportState] = useState<{ kind: 'excel' | 'pdf'; done: number; total: number } | null>(null);
 
   const useCards = mobileCards && isMobile;
-
+  
+  
   const [localSort, setLocalSort] = useState<{ key: string; dir: 'asc' | 'desc' } | null>(null);
   const [internalSelectedRows, setInternalSelectedRows] = useState<T[]>([]);
-
-  const selectedRows =
-    controlledSelectedRows !== undefined ? controlledSelectedRows : internalSelectedRows;
-
+  
+  const selectedRows = controlledSelectedRows !== undefined ? controlledSelectedRows : internalSelectedRows;
+  
   const setSelectedRows = (rows: T[]) => {
     if (controlledSelectedRows === undefined) {
       setInternalSelectedRows(rows);
@@ -146,14 +122,12 @@ export function ProTable<T extends Record<string, unknown>>({
     if (query.trim() && searchableKeys?.length) {
       const q = query.toLowerCase();
       rows = rows.filter((row) =>
-        searchableKeys.some((k) =>
-          String(row[k] ?? '')
-            .toLowerCase()
-            .includes(q),
-        ),
+        searchableKeys.some((k) => String(row[k] ?? '').toLowerCase().includes(q)),
       );
     }
 
+    
+    
     if (localSort && !onSortChange) {
       const { key, dir } = localSort;
       const factor = dir === 'asc' ? 1 : -1;
@@ -170,6 +144,7 @@ export function ProTable<T extends Record<string, unknown>>({
     return rows;
   }, [data, query, searchableKeys, localSort, onSortChange]);
 
+  
   const paginatedData = useMemo(() => {
     if (serverMode) {
       return filtered;
@@ -179,8 +154,13 @@ export function ProTable<T extends Record<string, unknown>>({
     return filtered.slice(start, end);
   }, [filtered, activePage, itemsPerPage, serverMode]);
 
+  
+  
+  
+
   const currentPage = serverMode ? (controlledPage ?? 1) : activePage;
 
+  
   const effectivePageSize = serverMode ? (pageSize ?? itemsPerPage) : itemsPerPage;
   const totalPages = serverMode
     ? Math.ceil((serverTotal ?? 0) / effectivePageSize)
@@ -211,10 +191,8 @@ export function ProTable<T extends Record<string, unknown>>({
   };
 
   const exportToExcel = async () => {
-    const exportableColumns = columns.filter(
-      (col) => col.exportable !== false && col.key !== 'actions',
-    );
-
+    const exportableColumns = columns.filter((col) => col.exportable !== false && col.key !== 'actions');
+    
     const headers = exportableColumns.map((col) => col.title).join(',');
     const rows = (await resolveExportRows('excel')).map((row) =>
       exportableColumns
@@ -222,9 +200,7 @@ export function ProTable<T extends Record<string, unknown>>({
           const value = col.exportValue
             ? col.exportValue(row)
             : col.render
-              ? String(col.render(row))
-                  .replace(/,/g, ';')
-                  .replace(/\[object Object\]/g, '')
+              ? String(col.render(row)).replace(/,/g, ';').replace(/\[object Object\]/g, '')
               : String(row[col.key as keyof T] ?? '');
           return `"${value}"`;
         })
@@ -239,10 +215,8 @@ export function ProTable<T extends Record<string, unknown>>({
   };
 
   const exportToPDF = async () => {
-    const exportableColumns = columns.filter(
-      (col) => col.exportable !== false && col.key !== 'actions',
-    );
-
+    const exportableColumns = columns.filter((col) => col.exportable !== false && col.key !== 'actions');
+    
     if (!vazirFontLoaded) {
       if (vazirFontPromise) {
         await vazirFontPromise;
@@ -250,13 +224,11 @@ export function ProTable<T extends Record<string, unknown>>({
         vazirFontPromise = (async () => {
           try {
             const fontResponse = await fetch(vazirFontUrl);
-
+            
             if (!fontResponse.ok) {
-              throw new Error(
-                `Font fetch failed: ${fontResponse.status} ${fontResponse.statusText}`,
-              );
+              throw new Error(`Font fetch failed: ${fontResponse.status} ${fontResponse.statusText}`);
             }
-
+            
             const fontArrayBuffer = await fontResponse.arrayBuffer();
             const bytes = new Uint8Array(fontArrayBuffer);
             let binary = '';
@@ -264,7 +236,7 @@ export function ProTable<T extends Record<string, unknown>>({
               binary += String.fromCharCode(bytes[i]);
             }
             const fontBase64 = btoa(binary);
-
+            
             vazirFontData = fontBase64;
             vazirFontLoaded = true;
           } catch (error) {
@@ -273,7 +245,7 @@ export function ProTable<T extends Record<string, unknown>>({
             throw error;
           }
         })();
-
+        
         await vazirFontPromise;
       }
     }
@@ -287,7 +259,7 @@ export function ProTable<T extends Record<string, unknown>>({
           }
           if (col.render) {
             const rendered = col.render(row);
-
+            
             const extractText = (element: React.ReactNode): string => {
               if (element === null || element === undefined) {
                 return '';
@@ -332,7 +304,7 @@ export function ProTable<T extends Record<string, unknown>>({
 
               return '';
             };
-
+            
             return extractText(rendered).replace(/<[^>]*>/g, '');
           }
           const value = row[col.key as keyof T];
@@ -340,9 +312,10 @@ export function ProTable<T extends Record<string, unknown>>({
         } catch {
           return '';
         }
-      }),
+      })
     );
 
+    
     const sampleCap = Math.min(rows.length, 60);
     const widths = exportableColumns.map((_, ci) => {
       let longest = headers[ci].length;
@@ -353,9 +326,10 @@ export function ProTable<T extends Record<string, unknown>>({
       return Math.min(Math.max(6 + longest * 1.7, 14), 75);
     });
 
+    
     const totalWidth = widths.reduce((a, b) => a + b, 0);
-    const landscape = totalWidth > 170;
-    const usable = landscape ? 273 : 170;
+    const landscape = totalWidth > 170; 
+    const usable = landscape ? 273 : 170; 
     let finalWidths = widths;
     if (totalWidth > usable) {
       const k = usable / totalWidth;
@@ -388,7 +362,9 @@ export function ProTable<T extends Record<string, unknown>>({
       align: 'right',
     });
 
-    const tableData = rows.map((row) => row.map((cell) => cell || ''));
+    const tableData = rows.map((row) => 
+      row.map((cell) => cell || '')
+    );
 
     autoTable(doc, {
       head: [headers],
@@ -429,10 +405,10 @@ export function ProTable<T extends Record<string, unknown>>({
 
   const handleRowSelection = (row: T) => {
     if (selectionMode === 'none') return;
-
+    
     const rowId = getRowId(row);
     const isSelected = isRowSelected(row);
-
+    
     if (selectionMode === 'single') {
       setSelectedRows(isSelected ? [] : [row]);
     } else if (selectionMode === 'multi') {
@@ -446,7 +422,7 @@ export function ProTable<T extends Record<string, unknown>>({
 
   const handleSelectAll = () => {
     if (selectionMode !== 'multi') return;
-
+    
     const allSelected = paginatedData.every((row) => isRowSelected(row));
     if (allSelected) {
       const rowIds = paginatedData.map((r) => getRowId(r));
@@ -457,12 +433,11 @@ export function ProTable<T extends Record<string, unknown>>({
     }
   };
 
-  const allSelected =
-    selectionMode === 'multi' &&
-    paginatedData.length > 0 &&
-    paginatedData.every((row) => isRowSelected(row));
+  const allSelected = selectionMode === 'multi' && paginatedData.length > 0 && paginatedData.every((row) => isRowSelected(row));
   const someSelected = selectionMode === 'multi' && paginatedData.some((row) => isRowSelected(row));
 
+
+  
   const mapButtonVariant =
     (targetVariant: 'filled' | 'light') =>
     (node: React.ReactNode): React.ReactNode => {
@@ -471,7 +446,9 @@ export function ProTable<T extends Record<string, unknown>>({
       const props = node.props as Record<string, unknown>;
       const children = props.children as React.ReactNode;
 
-      const isButton = typeof props.variant === 'string' || typeof props.color === 'string';
+      
+      const isButton =
+        typeof props.variant === 'string' || typeof props.color === 'string';
       const hasChildren = Array.isArray(children);
 
       if (isButton && !hasChildren) {
@@ -481,6 +458,8 @@ export function ProTable<T extends Record<string, unknown>>({
       }
 
       if (hasChildren) {
+        
+        
         return cloneElement(node as React.ReactElement<Record<string, unknown>>, {
           wrap: 'nowrap',
           children: (children as React.ReactNode[]).map(mapButtonVariant(targetVariant)),
@@ -490,17 +469,23 @@ export function ProTable<T extends Record<string, unknown>>({
       return node;
     };
 
+  
   const cellContent = (col: ProTableColumn<T>, row: T): React.ReactNode => {
     if (String(col.key) === 'actions' && col.render) {
       const content = col.render(row);
-      return <Box className="pro-table-actions">{mapButtonVariant('filled')(content)}</Box>;
+      return (
+        <Box className="pro-table-actions">
+          {mapButtonVariant('filled')(content)}
+        </Box>
+      );
     }
-
+    
     if (col.render) return mapButtonVariant('light')(col.render(row));
     const value = row[col.key as keyof T];
     return value === null || value === undefined || value === '' ? '—' : String(value);
   };
 
+  
   const mobileCardsView = (
     <Stack gap="xs">
       {paginatedData.map((row) => {
@@ -516,21 +501,29 @@ export function ProTable<T extends Record<string, unknown>>({
                   aria-label="انتخاب ردیف"
                 />
               )}
-              <Stack gap="sm" className="flex-1-min">
+              <Stack gap="sm" style={{ flex: 1, minWidth: 0 }}>
                 {columns.map((col) => {
                   const key = String(col.key);
                   const isAction = key === 'actions';
-
+                  
+                  
                   if (key === 'image' || key === 'avatar') return null;
                   return (
+                    
+                    
                     <Group key={key} gap="md" justify="space-between" wrap="nowrap">
-                      <Text size="xs" c="dimmed" className="flex-shrink-0">
+                      <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
                         {col.title}
                       </Text>
                       <Text
                         size="sm"
                         truncate
-                        className={`flex-1-min ta-left ${isAction ? 'fw-400' : 'fw-500'}`}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          textAlign: 'left',
+                          fontWeight: isAction ? 400 : 500,
+                        }}
                       >
                         {cellContent(col, row)}
                       </Text>
@@ -550,109 +543,163 @@ export function ProTable<T extends Record<string, unknown>>({
     </Stack>
   );
 
+  
   const tableView = (
-    <Box className="ox-auto" hidden={useCards && !showTable}>
-      {loading ? (
-        <Center className="h-200">
-          <Loader size="lg" />
-        </Center>
-      ) : (
-        <Table striped highlightOnHover className="w-100-table-auto">
-          <Table.Thead>
-            <Table.Tr>
-              {selectionMode !== 'none' && (
-                <Table.Th className="th-checkbox">
-                  {selectionMode === 'multi' && (
-                    <Checkbox
-                      checked={allSelected}
-                      indeterminate={someSelected && !allSelected}
-                      onChange={handleSelectAll}
-                    />
-                  )}
-                </Table.Th>
-              )}
-              {columns.map((col) => {
-                const key = String(col.key);
-                const effectiveSort = onSortChange
-                  ? { key: sortBy, dir: sortDirection }
-                  : localSort;
-                const isSorted = effectiveSort?.key === key;
-                const currentDir = isSorted ? effectiveSort.dir : undefined;
-                const nextDir = isSorted && currentDir === 'asc' ? 'desc' : 'asc';
-                return (
-                  <Table.Th
-                    key={key}
-                    className="pro-table-th th-sortable"
-                    onClick={() => {
-                      if (onSortChange) {
-                        onSortChange(key, nextDir);
-                      } else {
-                        setLocalSort((prev) =>
-                          prev?.key === key
-                            ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' }
-                            : { key, dir: 'asc' },
-                        );
-                      }
-                    }}
-                  >
-                    <Group gap={4} justify="center" wrap="nowrap">
-                      <span>{col.title}</span>
-                      {isSorted && (
-                        <FaSortUp
-                          size={12}
-                          className={`sort-arrow ${currentDir === 'desc' ? 'sort-arrow-down' : ''}`}
-                        />
-                      )}
-                    </Group>
-                  </Table.Th>
-                );
-              })}
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {paginatedData.length === 0 ? (
+      <Box style={{ overflowX: 'auto', overflowY: 'hidden', maxWidth: '100%' }} hidden={useCards && !showTable}>
+        {loading ? (
+          <Center style={{ height: 200 }}>
+            <Loader size="lg" />
+          </Center>
+        ) : (
+          <Table
+            striped
+            highlightOnHover
+            
+            
+            
+            
+            
+            style={{
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              width: '100%',
+              tableLayout: 'auto',
+            }}
+          >
+            <Table.Thead>
               <Table.Tr>
-                <Table.Td
-                  colSpan={columns.length + (selectionMode !== 'none' ? 1 : 0)}
-                  className="ta-center"
-                >
-                  داده‌ای یافت نشد
-                </Table.Td>
-              </Table.Tr>
-            ) : (
-              paginatedData.map((row, idx) => {
-                const rowSelected = isRowSelected(row);
-                return (
-                  <Table.Tr key={idx} className={rowSelected ? 'row-selected' : undefined}>
-                    {selectionMode !== 'none' && (
-                      <Table.Td className="td-select">
-                        {selectionMode === 'single' ? (
-                          <Radio checked={rowSelected} onChange={() => handleRowSelection(row)} />
-                        ) : (
-                          <Checkbox
-                            checked={rowSelected}
-                            onChange={() => handleRowSelection(row)}
+                {selectionMode !== 'none' && (
+                  <Table.Th style={{ width: 44, textAlign: 'center', padding: '8px 6px' }}>
+                    {selectionMode === 'multi' && (
+                      <Checkbox
+                        checked={allSelected}
+                        indeterminate={someSelected && !allSelected}
+                        onChange={handleSelectAll}
+                      />
+                  )}
+                  </Table.Th>
+              )}
+                {columns.map((col) => {
+                  const key = String(col.key);
+                  const effectiveSort = onSortChange
+                    ? { key: sortBy, dir: sortDirection }
+                    : localSort;
+                  const isSorted = effectiveSort?.key === key;
+                  const currentDir = isSorted ? effectiveSort.dir : undefined;
+                  const nextDir = isSorted && currentDir === 'asc' ? 'desc' : 'asc';
+                  return (
+                    <Table.Th
+                      key={key}
+                      className="pro-table-th"
+                      style={{
+                        textAlign: 'center',
+                        padding: '8px 7px',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: 0,
+                      }}
+                      onClick={() => {
+                        if (onSortChange) {
+                          onSortChange(key, nextDir);
+                        } else {
+                          setLocalSort((prev) =>
+                            prev?.key === key
+                              ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' }
+                              : { key, dir: 'asc' },
+                          );
+                        }
+                      }}
+                    >
+                      <Group gap={4} justify="center" wrap="nowrap">
+                        <span>{col.title}</span>
+                        {isSorted && (
+                          <FaSortUp
+                            size={12}
+                            style={{
+                              transform: currentDir === 'desc' ? 'rotate(180deg)' : 'none',
+                              transition: 'transform 150ms ease',
+                            }}
                           />
+                      )}
+                      </Group>
+                    </Table.Th>
+                  );
+                })}
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {paginatedData.length === 0 ? (
+                <Table.Tr>
+                  <Table.Td colSpan={columns.length + (selectionMode !== 'none' ? 1 : 0)} style={{ textAlign: 'center' }}>
+                    داده‌ای یافت نشد
+                  </Table.Td>
+                </Table.Tr>
+              ) : (
+                paginatedData.map((row, idx) => {
+                  const rowSelected = isRowSelected(row);
+                  return (
+                    <Table.Tr
+                      key={idx}
+                      style={rowSelected ? { backgroundColor: 'var(--mantine-color-blue-0)' } : undefined}
+                    >
+                      {selectionMode !== 'none' && (
+                        <Table.Td style={{ textAlign: 'center', padding: '8px 6px' }}>
+                          {selectionMode === 'single' ? (
+                            <Radio checked={rowSelected} onChange={() => handleRowSelection(row)} />
+                          ) : (
+                            <Checkbox checked={rowSelected} onChange={() => handleRowSelection(row)} />
                         )}
-                      </Table.Td>
+                        </Table.Td>
                     )}
-                    {columns.map((col) => (
-                      <Table.Td key={String(col.key)} className="td-cell-right">
-                        {String(col.key) === 'actions' ? (
-                          cellContent(col, row)
-                        ) : (
-                          <Box className="truncate-block">{cellContent(col, row)}</Box>
-                        )}
-                      </Table.Td>
-                    ))}
-                  </Table.Tr>
-                );
-              })
+                      {columns.map((col) => (
+                        <Table.Td
+                          key={String(col.key)}
+                          style={{
+                            textAlign: 'right',
+                            padding: '8px 7px',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          {String(col.key) === 'actions' ? (
+                            
+                            
+                            cellContent(col, row)
+                          ) : (
+                            
+                            
+                            
+                            <Box
+                              style={{
+                                display: 'block',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {cellContent(col, row)}
+                            </Box>
+                          )}
+                        </Table.Td>
+                      ))}
+                    </Table.Tr>
+                  );
+                })
             )}
-          </Table.Tbody>
-        </Table>
+            </Table.Tbody>
+          </Table>
       )}
-    </Box>
+      </Box>
   );
 
   return (
@@ -671,7 +718,8 @@ export function ProTable<T extends Record<string, unknown>>({
               } else {
                 onPageChange?.(1);
               }
-
+              
+              
               onSearchChange?.(value);
             }}
             w="240px"
@@ -680,15 +728,11 @@ export function ProTable<T extends Record<string, unknown>>({
         </Group>
         <Group gap="xs">
           {exportState && (
-            <Group gap={6} bg="var(--mantine-color-blue-0)" px="sm" py={4} className="radius-8">
+            <Group gap={6} bg="var(--mantine-color-blue-0)" px="sm" py={4} style={{ borderRadius: 8 }}>
               <Loader size="xs" color="blue" />
               <Text size="xs" c="blue">
                 خروجی…{' '}
-                {Math.min(
-                  100,
-                  Math.round((exportState.done / Math.max(1, exportState.total)) * 100),
-                )}
-                ٪
+                {Math.min(100, Math.round((exportState.done / Math.max(1, exportState.total)) * 100))}٪
               </Text>
             </Group>
           )}
@@ -718,10 +762,11 @@ export function ProTable<T extends Record<string, unknown>>({
 
       {exportLimit !== undefined && (
         <Text size="xs" c="dimmed" mb="xs">
-          خروجی حداکثر {exportLimit.toLocaleString('fa-IR')} رکورد را پشتیبانی می‌کند؛ برای خروجی
-          کامل، جدول را فیلتر کنید.
+          خروجی حداکثر {exportLimit.toLocaleString('fa-IR')} رکورد را پشتیبانی می‌کند؛ برای خروجی کامل، جدول را فیلتر کنید.
         </Text>
       )}
+
+      {}
       {useCards && (
         <Group justify="flex-end" mb="xs">
           <ActionIcon
@@ -735,7 +780,11 @@ export function ProTable<T extends Record<string, unknown>>({
           </ActionIcon>
         </Group>
       )}
+
       {useCards && !showTable && !loading && mobileCardsView}
+
+      {}
+      {}
       {tableView}
       {totalPages > 1 && (
         <Group justify="center" mt="md">
@@ -747,6 +796,7 @@ export function ProTable<T extends Record<string, unknown>>({
           />
         </Group>
       )}
+
     </Box>
   );
 }

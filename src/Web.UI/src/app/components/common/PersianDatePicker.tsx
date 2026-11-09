@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import DatePicker from './reactMultiDatePicker';
+import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import type { Value, DateObject } from 'react-multi-date-picker';
@@ -114,7 +114,11 @@ export function PersianDatePicker({
         format="YYYY/MM/DD"
         containerClassName="custom-date-picker"
         inputClass="mantine-Input-input mantine-TextInput-input"
-        className="w-100-dir-rtl"
+        portal
+        style={{
+          width: '100%',
+          direction: 'rtl',
+        }}
         zIndex={9999}
         {...props}
       />

@@ -108,9 +108,6 @@
                   <Width>0.75534in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.02228in</Width>
-                </TablixColumn>
-                <TablixColumn>
                   <Width>1.1in</Width>
                 </TablixColumn>
                 <TablixColumn>
@@ -120,10 +117,13 @@
                   <Width>1.1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.11898in</Width>
+                  <Width>1.1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.02564in</Width>
+                  <Width>1.31041in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.6419in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.41667in</Width>
@@ -144,8 +144,6 @@
                                 <TextRun>
                                   <Value>سال چاپ</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -180,8 +178,6 @@
                                 <TextRun>
                                   <Value>شماره شابک</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -216,8 +212,6 @@
                                 <TextRun>
                                   <Value>تعداد نسخه</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -252,8 +246,6 @@
                                 <TextRun>
                                   <Value>نوبت چاپ</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -288,8 +280,6 @@
                                 <TextRun>
                                   <Value>ردیف قفسه</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -324,8 +314,6 @@
                                 <TextRun>
                                   <Value>ناشر</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -360,8 +348,6 @@
                                 <TextRun>
                                   <Value>مصحح</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -396,8 +382,6 @@
                                 <TextRun>
                                   <Value>مترجم</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -432,8 +416,6 @@
                                 <TextRun>
                                   <Value>نویسنده</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -468,8 +450,6 @@
                                 <TextRun>
                                   <Value>عنوان</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -504,8 +484,6 @@
                                 <TextRun>
                                   <Value>شماره کتاب</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -540,8 +518,6 @@
                                 <TextRun>
                                   <Value>ردیف</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -581,7 +557,7 @@
                                 <TextRun>
                                   <Value>=Fields!PublishYear.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -615,7 +591,7 @@
                                 <TextRun>
                                   <Value>=Fields!Isbn.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -649,7 +625,7 @@
                                 <TextRun>
                                   <Value>=Fields!VolumeCount.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -683,7 +659,7 @@
                                 <TextRun>
                                   <Value>=Fields!PublishOrder.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -717,7 +693,7 @@
                                 <TextRun>
                                   <Value>=Fields!BookShelfRow.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -751,7 +727,7 @@
                                 <TextRun>
                                   <Value>=Fields!PublisherName.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -785,7 +761,7 @@
                                 <TextRun>
                                   <Value>=Fields!Corrector.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -819,7 +795,7 @@
                                 <TextRun>
                                   <Value>=Fields!Translator.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -853,7 +829,7 @@
                                 <TextRun>
                                   <Value>=Fields!Author.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -887,7 +863,7 @@
                                 <TextRun>
                                   <Value>=Fields!Name.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -921,7 +897,7 @@
                                 <TextRun>
                                   <Value>=Fields!No.Value</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -955,7 +931,7 @@
                                 <TextRun>
                                   <Value>=RowNumber("DsBooks")</Value>
                                   <Style>
-                                    <FontFamily>tahoma</FontFamily>
+                                    <FontFamily>Tahoma</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1012,7 +988,7 @@
             <Top>0.14583in</Top>
             <Left>0.35875in</Left>
             <Height>0.5in</Height>
-            <Width>10.73043in</Width>
+            <Width>10.61584in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1026,7 +1002,7 @@
       <Width>11.23333in</Width>
       <Page>
         <PageHeader>
-          <Height>1.11334in</Height>
+          <Height>1.09667in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1037,9 +1013,8 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>لیست کتاب ها</Value>
+                      <Value>لیست کتابها</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
                         <FontSize>18pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1075,7 +1050,7 @@
                     <TextRun>
                       <Value>تاریخ گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Tahoma</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1111,7 +1086,7 @@
                     <TextRun>
                       <Value>ساعت گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Tahoma</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1147,7 +1122,7 @@
                     <TextRun>
                       <Value>=Parameters!Today.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Tahoma</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1183,7 +1158,7 @@
                     <TextRun>
                       <Value>=FormatDateTime(Globals!ExecutionTime,DateFormat.ShortTime)</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Tahoma</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1215,9 +1190,9 @@
               <Value>Vohumanah</Value>
               <Sizing>FitProportional</Sizing>
               <Top>0.25in</Top>
-              <Left>9.41394in</Left>
+              <Left>8.60561in</Left>
               <Height>0.5in</Height>
-              <Width>1.56065in</Width>
+              <Width>1.55in</Width>
               <ZIndex>5</ZIndex>
               <Style>
                 <Border>

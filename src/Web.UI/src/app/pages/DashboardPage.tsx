@@ -74,7 +74,9 @@ export default function DashboardPage() {
           {nowJalali('YYYY/MM/DD')}
         </Badge>
       </Group>
-      <Grid gap="md" align="stretch">
+
+      {}
+      <Grid gutter="md" align="stretch">
         <Grid.Col span={{ base: 12, md: 6 }}>
           <StarBorder
             as="div"
@@ -137,7 +139,8 @@ export default function DashboardPage() {
           <Card
             withBorder
             h="100%"
-            className="card-enter flex-center"
+            className="card-enter"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <AnalogClock size={140} label={nowJalali('HH:mm')} />
           </Card>
@@ -177,7 +180,7 @@ export default function DashboardPage() {
                     leftSection={<FaStar size={14} />}
                     size="xs"
                     variant="light"
-                    className="inline-flex"
+                    style={{ display: 'inline-flex' }}
                   >
                     ستاره دادن
                   </Button>
@@ -189,7 +192,7 @@ export default function DashboardPage() {
                     leftSection={<FaHeart size={14} />}
                     size="xs"
                     variant="subtle"
-                    className="inline-flex"
+                    style={{ display: 'inline-flex' }}
                   >
                     گزارش مشکل
                   </Button>
@@ -199,6 +202,8 @@ export default function DashboardPage() {
           </StarBorder>
         </Grid.Col>
       </Grid>
+
+      {}
       <Card withBorder radius="md" p="md" mb="md" className="card-enter">
         <Group justify="space-between" wrap="nowrap">
           <Stack gap={2}>
@@ -212,7 +217,9 @@ export default function DashboardPage() {
           </Button>
         </Group>
       </Card>
-      <Grid gap="md" align="stretch">
+
+      {}
+      <Grid gutter="md" align="stretch">
         <Grid.Col span={{ base: 12, md: 6 }}>
           <ChartViewer
             title="میزان بازدید (۳۰ روز اخیر)"

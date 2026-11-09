@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Threading;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Authorization;

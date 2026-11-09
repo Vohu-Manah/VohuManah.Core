@@ -17,16 +17,11 @@ type HumanVerifyButtonProps = {
   onVerified?: (token: string) => void;
   onError?: (message: string) => void;
   disabled?: boolean;
-
+  
   resetKey?: number | string;
 };
 
-export default function HumanVerifyButton({
-  onVerified,
-  onError,
-  disabled,
-  resetKey,
-}: HumanVerifyButtonProps) {
+export default function HumanVerifyButton({ onVerified, onError, disabled, resetKey }: HumanVerifyButtonProps) {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   const [attempt, setAttempt] = useState(0);
@@ -94,10 +89,7 @@ export default function HumanVerifyButton({
       setErrorMsg(null);
       onVerified?.(token.verifiedToken);
     } catch (error) {
-      const message = getErrorMessage(
-        error,
-        'پذیرش انسانی پذیرفته نشد؛ نگه دارید و دوباره تلاش کنید',
-      );
+      const message = getErrorMessage(error, 'پذیرش انسانی پذیرفته نشد؛ نگه دارید و دوباره تلاش کنید');
       setErrorMsg(message);
       onError?.(message);
       setAttempt((n) => n + 1);
@@ -115,7 +107,7 @@ export default function HumanVerifyButton({
         name="website"
         tabIndex={-1}
         autoComplete="off"
-        className="hidden-verify-input"
+        style={{ position: 'fixed', left: 0, top: 0, opacity: 0, height: 0, width: 0, pointerEvents: 'none' }}
         aria-hidden="true"
       />
 
@@ -147,7 +139,7 @@ export default function HumanVerifyButton({
           }}
           doneIcon={<CheckMark />}
           doneLabel="پذیرفته شد"
-          className="w-100"
+          style={{ width: '100%' }}
         >
           نشان دهید که ربات نیستید
         </HoldButton>

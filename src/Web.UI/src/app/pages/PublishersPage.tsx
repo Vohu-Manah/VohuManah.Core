@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -13,11 +13,8 @@ import type { Publisher, CreatePublisherRequest } from '@/app/models/publisher';
 import type { CityName } from '@/app/models/city';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 
 export default function PublishersPage() {
-  const { can } = useAuth();
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -39,8 +36,14 @@ export default function PublishersPage() {
     },
   });
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+    loadCities();
+  }, []);
+
+  const loadData = async () => {
     try {
+      setLoading(true);
       const data = await publisherService.getAll();
       setPublishers(data);
     } catch (error) {
@@ -48,22 +51,16 @@ export default function PublishersPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  const loadCities = useCallback(async () => {
+  const loadCities = async () => {
     try {
       const data = await cityService.getNames();
       setCities(data);
     } catch (error) {
       appMessage.error('خطا در بارگذاری شهرها', getErrorMessage(error));
     }
-  }, []);
-
-  useEffect(() => {
-
-    void loadData();
-    void loadCities();
-  }, [loadData, loadCities]);
+  };
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -136,16 +133,12 @@ export default function PublishersPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          {can(PERM.Publisher.update) && (
-            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-              <FaEdit />
-            </ActionIcon>
-          )}
-          {can(PERM.Publisher.del) && (
-            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-              <FaTrash />
-            </ActionIcon>
-          )}
+          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+            <FaEdit />
+          </ActionIcon>
+          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+            <FaTrash />
+          </ActionIcon>
         </Group>
       ),
     },
@@ -155,18 +148,16 @@ export default function PublishersPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت ناشران</Title>
-        {can(PERM.Publisher.create) && (
-          <Button
-            leftSection={<FaPlus />}
-            onClick={() => {
-              form.reset();
-              setEditingPublisher(null);
-              setModalOpened(true);
-            }}
-          >
-            افزودن ناشر جدید
-          </Button>
-        )}
+        <Button
+          leftSection={<FaPlus />}
+          onClick={() => {
+            form.reset();
+            setEditingPublisher(null);
+            setModalOpened(true);
+          }}
+        >
+          افزودن ناشر جدید
+        </Button>
       </Group>
 
       <Card withBorder>

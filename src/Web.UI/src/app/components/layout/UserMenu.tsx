@@ -18,11 +18,11 @@ export default function UserMenu() {
     <Menu shadow="md" position="bottom-end" opened={opened} onChange={setOpened}>
       <Menu.Target>
         <UnstyledButton>
-          <Group gap="xs" className="dir-rtl">
+          <Group gap="xs" style={{ direction: 'rtl' }}>
             <Avatar src={profileImageUrl} radius="xl" color="blue">
               {!profileImageUrl && initials}
             </Avatar>
-            <div className="ta-right flex-1">
+            <div style={{ textAlign: 'right', flex: 1 }}>
               <Text size="sm" fw={600} truncate>
                 {user?.fullName ?? 'کاربر'}
               </Text>
@@ -32,17 +32,21 @@ export default function UserMenu() {
             </div>
             <FaChevronDown
               size={12}
-              className={`chevron ${opened ? "chevron-open" : ""}`}
+              style={{
+                opacity: 0.7,
+                transform: opened ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease',
+              }}
             />
           </Group>
         </UnstyledButton>
       </Menu.Target>
-      <Menu.Dropdown className="dir-rtl">
-        <Menu.Item onClick={() => navigate('/settings')} className="ta-right">
+      <Menu.Dropdown style={{ direction: 'rtl' }}>
+        <Menu.Item onClick={() => navigate('/settings')} style={{ textAlign: 'right' }}>
           تنظیمات
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item color="red" onClick={() => logout()} className="ta-right">
+        <Menu.Item color="red" onClick={() => logout()} style={{ textAlign: 'right' }}>
           خروج
         </Menu.Item>
       </Menu.Dropdown>

@@ -1,5 +1,3 @@
-using System.Threading;
-using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -2,18 +2,14 @@ services:
   sql-server:
     image: ${SQL_SERVER_IMAGE:-mcr.microsoft.com/mssql/server:2022-latest}
     container_name: ${SQL_SERVER_CONTAINER_NAME:-sql-server}
-    user: root
     environment:
       - ACCEPT_EULA=${SQL_SERVER_ACCEPT_EULA}
       - MSSQL_SA_PASSWORD=${SQL_SERVER_PASSWORD}
       - MSSQL_PID=${SQL_SERVER_PID}
-      - SQL_BACKUP_FOLDER=${SQL_BACKUP_FOLDER:-/var/opt/mssql/backups}
-    entrypoint: ["/bin/bash", "-c", "mkdir -p \"$SQL_BACKUP_FOLDER\" && chown -R mssql:mssql \"$SQL_BACKUP_FOLDER\" && exec setpriv --reuid=10001 --regid=10001 --clear-groups /opt/mssql/bin/launch_sqlservr.sh /opt/mssql/bin/sqlservr"]
     ports:
       - "${SQL_SERVER_PORT}:1433"
     volumes:
-      - ${SQL_SERVER_VOLUME_NAME}:/var/opt/mssql
-      - ${BACKUP_VOLUME_NAME}:${SQL_BACKUP_FOLDER:-/var/opt/mssql/backups}
+      - sql-server-data:/var/opt/mssql
 
   web-api:
     image: ${DOCKER_REGISTRY:-}${WEB_API_IMAGE_NAME}
@@ -27,15 +23,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_HTTP_PORTS=5000
       - ConnectionStrings__Database=Server=${SQL_SERVER_HOST};Database=${SQL_SERVER_DATABASE};User Id=${SQL_SERVER_USER};Password=${SQL_SERVER_PASSWORD};TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
-      - SQL_BACKUP_FOLDER=${SQL_BACKUP_FOLDER:-/var/opt/mssql/backups}
       - Serilog__WriteTo__1__Args__ServerUrl=http://seq:80
     depends_on:
       sql-server:
         condition: service_started
       seq:
         condition: service_started
-    volumes:
-      - ${BACKUP_VOLUME_NAME}:/app/App_Data/sqlBackups
 
   web-ui:
     build:
@@ -59,4 +52,3 @@ services:
 
 volumes:
   sql-server-data:
-  backup-data:

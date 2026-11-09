@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -22,11 +22,8 @@ import type { SubjectName } from '@/app/models/subject';
 import type { GapName } from '@/app/models/gap';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 
 export default function ManuscriptsPage() {
-  const { can } = useAuth();
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -58,8 +55,22 @@ export default function ManuscriptsPage() {
     },
   });
 
+  useEffect(() => {
+    loadData();
+    
+  }, [page, filters, searchTerm]);
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadLookups();
+     
+  }, []);
+
+  const handleFilterChange = (next: TableFilterValues) => {
+    setFilters(next);
+    setPage(1);
+  };
+
+  const loadData = async () => {
     try {
       setLoading(true);
       const result = await manuscriptService.getList({
@@ -77,8 +88,9 @@ export default function ManuscriptsPage() {
     } finally {
       setLoading(false);
     }
- }, [page, searchTerm, filters]);
-  const loadLookups = useCallback(async () => {
+  };
+
+  const loadLookups = async () => {
     try {
       const [citiesData, languagesData, subjectsData, gapsData] = await Promise.all([
         cityService.getNames(),
@@ -93,24 +105,7 @@ export default function ManuscriptsPage() {
     } catch (error) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
- }, []);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
-
-  useEffect(() => {
-
-    void loadLookups();
-  }, [loadLookups]);
-
-  const handleFilterChange = (next: TableFilterValues) => {
-    setFilters(next);
-    setPage(1);
   };
-
-
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -189,16 +184,12 @@ export default function ManuscriptsPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          {can(PERM.Manuscript.update) && (
-            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-              <FaEdit />
-            </ActionIcon>
-          )}
-          {can(PERM.Manuscript.del) && (
-            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-              <FaTrash />
-            </ActionIcon>
-          )}
+          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+            <FaEdit />
+          </ActionIcon>
+          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+            <FaTrash />
+          </ActionIcon>
         </Group>
       ),
     },
@@ -208,18 +199,16 @@ export default function ManuscriptsPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت نسخ خطی</Title>
-        {can(PERM.Manuscript.create) && (
-          <Button
-            leftSection={<FaPlus />}
-            onClick={() => {
-              form.reset();
-              setEditingManuscript(null);
-              setModalOpened(true);
-            }}
-          >
-            افزودن نسخه خطی جدید
-          </Button>
-        )}
+        <Button
+          leftSection={<FaPlus />}
+          onClick={() => {
+            form.reset();
+            setEditingManuscript(null);
+            setModalOpened(true);
+          }}
+        >
+          افزودن نسخه خطی جدید
+        </Button>
       </Group>
 
       <Card withBorder>

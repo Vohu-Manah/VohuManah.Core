@@ -71,9 +71,7 @@ export default function ScanPage() {
           st.pending = undefined;
           
           if (disposed || token !== tokenRef.current) {
-            try { await st.ins.stop(); } catch {
-    
-  }
+            try { await st.ins.stop(); } catch {  }
           }
         } catch {
           st.pending = undefined;
@@ -84,11 +82,8 @@ export default function ScanPage() {
 
     return () => {
       disposed = true;
-      try { void st.ins.stop().catch(() => {}); } catch {
-    
-  }
+      try { void st.ins.stop().catch(() => {}); } catch {  }
     };
-
   }, [mode, cameraSupported]);
 
   
@@ -131,7 +126,7 @@ export default function ScanPage() {
       try {
         scanner.clear();
       } catch {
-  
+        
       }
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
@@ -194,7 +189,7 @@ export default function ScanPage() {
               type="file"
               accept="image/*"
               capture="environment"
-              className="d-none"
+              style={{ display: 'none' }}
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) void handleFile(file);
@@ -208,7 +203,7 @@ export default function ScanPage() {
             >
               {imageBusy ? 'در حال پردازش تصویر…' : 'انتخاب تصویر بارکد'}
             </Button>
-            <div id={IMAGE_READER_ID} className="d-none" />
+            <div id={IMAGE_READER_ID} style={{ display: 'none' }} />
             <Text size="xs" c="dimmed">
               تصویری که بارکد در آن واضح باشد انتخاب کنید (قالب‌های JPG/PNG).
             </Text>
@@ -220,7 +215,7 @@ export default function ScanPage() {
         <form onSubmit={handleManualSubmit}>
           <Stack gap="xs">
             <Text fw={600} size="sm">
-              <FaKeyboard className="m-i-end-6" />
+              <FaKeyboard style={{ marginInlineEnd: 6 }} />
               ورود دستی
             </Text>
             <Text size="xs" c="dimmed">
@@ -228,7 +223,7 @@ export default function ScanPage() {
             </Text>
             <Group gap="xs">
               <TextInput
-                className="flex-1"
+                style={{ flex: 1 }}
                 placeholder="مثلاً: 20015000 یا app://books/profile?id=20015000"
                 value={manualValue}
                 onChange={(e) => setManualValue(e.currentTarget.value)}

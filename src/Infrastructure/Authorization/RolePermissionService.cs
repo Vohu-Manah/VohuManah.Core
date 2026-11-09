@@ -1,4 +1,3 @@
-using System.Threading;
 using Application.Abstractions.Authorization;
 using Application.Abstractions.Data;
 using Domain.Library;

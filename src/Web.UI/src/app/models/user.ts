@@ -1,7 +1,6 @@
 export type UserProfile = {
   userName: string;
   fullName: string;
-  permissions?: string[];
 };
 
 export type LibraryUser = {

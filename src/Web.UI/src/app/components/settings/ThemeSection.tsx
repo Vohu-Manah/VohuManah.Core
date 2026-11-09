@@ -17,7 +17,6 @@ export default function ThemeSection() {
   useEffect(() => {
     if (userSettings) {
       if (userSettings.themePrimaryColor) {
-
         setPrimaryColor(userSettings.themePrimaryColor);
       }
       if (userSettings.themeSecondaryColor) {
@@ -86,7 +85,7 @@ export default function ThemeSection() {
         accent: userSettings.themeAccentColor || accentColor,
       });
     }
-  }, [userSettings, primaryColor, secondaryColor, accentColor]);
+  }, [userSettings]);
 
   return (
     <Card withBorder>
@@ -113,7 +112,7 @@ export default function ThemeSection() {
                 }
               }}
               placeholder="#228be6"
-              className="flex-1"
+              style={{ flex: 1 }}
             />
           </Group>
         </Stack>
@@ -138,7 +137,7 @@ export default function ThemeSection() {
                 }
               }}
               placeholder="#868e96"
-              className="flex-1"
+              style={{ flex: 1 }}
             />
           </Group>
         </Stack>
@@ -163,7 +162,7 @@ export default function ThemeSection() {
                 }
               }}
               placeholder="#fd7e14"
-              className="flex-1"
+              style={{ flex: 1 }}
             />
           </Group>
         </Stack>
@@ -180,3 +179,4 @@ export default function ThemeSection() {
     </Card>
   );
 }
+

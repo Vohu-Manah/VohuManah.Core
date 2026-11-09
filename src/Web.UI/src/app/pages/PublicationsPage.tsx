@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -21,11 +21,8 @@ import type { SubjectName } from '@/app/models/subject';
 import type { PublicationTypeName } from '@/app/models/publicationType';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
-import { useAuth } from '@/app/context/AuthContext';
-import { PERM } from '@/app/models/permissions';
 
 export default function PublicationsPage() {
-  const { can } = useAuth();
   const [publications, setPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -71,8 +68,22 @@ export default function PublicationsPage() {
     },
   });
 
+  useEffect(() => {
+    loadData();
+    
+  }, [page, filters, searchTerm]);
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadLookups();
+     
+  }, []);
+
+  const handleFilterChange = (next: TableFilterValues) => {
+    setFilters(next);
+    setPage(1);
+  };
+
+  const loadData = async () => {
     try {
       setLoading(true);
       const result = await publicationService.getList({
@@ -86,12 +97,13 @@ export default function PublicationsPage() {
       setPublications(result.items);
       setTotalCount(result.totalCount);
     } catch {
-  
+      
     } finally {
       setLoading(false);
     }
- }, [page, searchTerm, filters]);
-  const loadLookups = useCallback(async () => {
+  };
+
+  const loadLookups = async () => {
     try {
       const [citiesData, languagesData, subjectsData, typesData] = await Promise.all([
         cityService.getNames(),
@@ -104,26 +116,9 @@ export default function PublicationsPage() {
       setSubjects(subjectsData);
       setPublicationTypes(typesData);
     } catch {
-  
+        
       }
- }, []);
-
-  useEffect(() => {
-
-    void loadData();
-  }, [loadData]);
-
-  useEffect(() => {
-
-    void loadLookups();
-  }, [loadLookups]);
-
-  const handleFilterChange = (next: TableFilterValues) => {
-    setFilters(next);
-    setPage(1);
   };
-
-
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -141,7 +136,7 @@ export default function PublicationsPage() {
         setEditingPublication(null);
         loadData();
       } catch {
-  
+        
       } finally {
         setLoading(false);
       }
@@ -170,7 +165,7 @@ export default function PublicationsPage() {
       });
       setModalOpened(true);
     } catch {
-  
+      
     } finally {
       setLoading(false);
     }
@@ -184,7 +179,7 @@ export default function PublicationsPage() {
         appMessage.success('نشریه با موفقیت حذف شد');
         loadData();
       } catch {
-  
+        
       } finally {
         setLoading(false);
       }
@@ -203,16 +198,12 @@ export default function PublicationsPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          {can(PERM.Publication.update) && (
-            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-              <FaEdit />
-            </ActionIcon>
-          )}
-          {can(PERM.Publication.del) && (
-            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-              <FaTrash />
-            </ActionIcon>
-          )}
+          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+            <FaEdit />
+          </ActionIcon>
+          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+            <FaTrash />
+          </ActionIcon>
         </Group>
       ),
     },
@@ -222,18 +213,16 @@ export default function PublicationsPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت نشریات</Title>
-        {can(PERM.Publication.create) && (
-          <Button
-            leftSection={<FaPlus />}
-            onClick={() => {
-              form.reset();
-              setEditingPublication(null);
-              setModalOpened(true);
-            }}
-          >
-            افزودن نشریه جدید
-          </Button>
-        )}
+        <Button
+          leftSection={<FaPlus />}
+          onClick={() => {
+            form.reset();
+            setEditingPublication(null);
+            setModalOpened(true);
+          }}
+        >
+          افزودن نشریه جدید
+        </Button>
       </Group>
 
       <Card withBorder>

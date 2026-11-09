@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Stack, Title, Group, Button, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { userService } from '@/app/services/library/userService';
@@ -31,7 +31,11 @@ export default function UserInfoSection() {
     },
   });
 
-  const loadUserProfile = useCallback(async () => {
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
     try {
       setLoadingData(true);
       const profile = await userService.getCurrentProfile();
@@ -47,12 +51,7 @@ export default function UserInfoSection() {
     } finally {
       setLoadingData(false);
     }
-  }, [form]);
-
-  useEffect(() => {
-
-    void loadUserProfile();
-  }, [loadUserProfile]);
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -142,3 +141,4 @@ export default function UserInfoSection() {
     </Card>
   );
 }
+

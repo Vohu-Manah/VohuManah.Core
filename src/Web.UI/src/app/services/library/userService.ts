@@ -41,8 +41,8 @@ export const userService = {
     await apiClient.put('/library/users/change-password', data);
   },
 
-  getCurrentProfile: async (): Promise<{ id: number; userName: string; name: string; lastName: string; fullName: string; email?: string; phoneNumber?: string; permissions?: string[] }> => {
-    const response = await apiClient.get<{ id: number; userName: string; name: string; lastName: string; fullName: string; email?: string; phoneNumber?: string; permissions?: string[] }>('/library/users/profile');
+  getCurrentProfile: async (): Promise<{ id: number; userName: string; name: string; lastName: string; fullName: string; email?: string; phoneNumber?: string }> => {
+    const response = await apiClient.get<{ id: number; userName: string; name: string; lastName: string; fullName: string; email?: string; phoneNumber?: string }>('/library/users/profile');
     return response.data;
   },
 };

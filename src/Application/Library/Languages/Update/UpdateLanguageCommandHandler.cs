@@ -25,7 +25,7 @@ internal sealed class UpdateLanguageCommandHandler(
 
         if (await languages.AnyAsync(l => l.Id != command.Id && l.Name == command.Name, cancellationToken))
         {
-            return Result.Failure(LanguageErrors.NameNotUnique);
+            return Result.Failure(Error.Conflict("Languages.NameNotUnique", "A language with this name already exists"));
         }
 
         existing.Name = command.Name;

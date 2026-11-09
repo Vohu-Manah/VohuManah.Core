@@ -71,7 +71,6 @@ export default function BackupSection() {
   }, []);
 
   useEffect(() => {
-
     loadInfo();
     return () => {
       if (pollRef.current) {
@@ -290,7 +289,7 @@ export default function BackupSection() {
             value={uploadFile}
             onChange={setUploadFile}
             accept=".bak"
-            className="flex-1"
+            style={{ flex: 1 }}
           />
           <Button
             color="red"
@@ -361,7 +360,7 @@ export default function BackupSection() {
 
               {logLines.length > 0 && (
                 <ScrollArea.Autosize mah={140} w="100%" type="auto">
-                  <Code block className="fs-11 ws-pre-wrap ta-left">
+                  <Code block style={{ fontSize: 11, whiteSpace: 'pre-wrap', textAlign: 'left' }}>
                     {logLines.join('\n')}
                   </Code>
                 </ScrollArea.Autosize>

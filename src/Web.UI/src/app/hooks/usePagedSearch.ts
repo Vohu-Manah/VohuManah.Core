@@ -47,13 +47,11 @@ export function usePagedSearch<T>(searchFn: SearchFn<T>, pageSize = 50) {
       if (reset) {
         bufferRef.current.clear();
         pendingRef.current.clear();
+        setPage(1);
       }
 
-      queueMicrotask(() => {
-        if (reset) setPage(1);
-        setLoading(true);
-        setError(null);
-      });
+      setLoading(true);
+      setError(null);
 
       try {
         const targetPage = reset ? 1 : page;
@@ -73,7 +71,7 @@ export function usePagedSearch<T>(searchFn: SearchFn<T>, pageSize = 50) {
         setLoading(false);
       }
     },
-    [fetchPage, page, pageSize],
+    [fetchPage, page],
   );
 
   const goToPage = useCallback(
@@ -95,17 +93,16 @@ export function usePagedSearch<T>(searchFn: SearchFn<T>, pageSize = 50) {
         setLoading(false);
       }
     },
-    [fetchPage, pageSize],
+    [fetchPage],
   );
 
   useEffect(() => {
-    const buffer = bufferRef.current;
-    const pending = pendingRef.current;
     return () => {
-      buffer.clear();
-      pending.clear();
+      bufferRef.current.clear();
+      pendingRef.current.clear();
     };
   }, []);
+
   return {
     items,
     totalCount,

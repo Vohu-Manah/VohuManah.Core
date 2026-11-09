@@ -39,29 +39,16 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
         {
             var sqlException = dbUpdateException.InnerException as SqlException;
 
-            if (sqlException != null)
+            if (sqlException != null && sqlException.Number == 547)
             {
-                if (sqlException.Number == 547)
-                {
-                    return (
-                        StatusCodes.Status409Conflict,
-                        "خطای وابستگی",
-                        "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست.",
-                        "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست."
-                    );
-                }
-
-                if (sqlException.Number is 2601 or 2627)
-                {
-                    return (
-                        StatusCodes.Status409Conflict,
-                        "خطای یکتا بودن",
-                        "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است.",
-                        "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است."
-                    );
-                }
+                return (
+                    StatusCodes.Status409Conflict,
+                    "خطای وابستگی",
+                    "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست.",
+                    "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست."
+                );
             }
-            }
+        }
 
         if (exception.InnerException is SqlException sqlEx && sqlEx.Number == 547)
         {

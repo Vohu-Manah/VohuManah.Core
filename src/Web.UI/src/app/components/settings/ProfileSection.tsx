@@ -28,7 +28,6 @@ export default function ProfileSection() {
   useEffect(() => {
     if (userSettings?.profileImageUrl) {
       const fullUrl = getFullImageUrl(userSettings.profileImageUrl);
-
       setProfileImagePreview(fullUrl || '');
     } else if (!profileImageFile) {
       setProfileImagePreview('');
@@ -147,3 +146,4 @@ export default function ProfileSection() {
     </Card>
   );
 }
+

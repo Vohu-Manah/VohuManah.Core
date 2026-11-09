@@ -25,7 +25,7 @@ internal sealed class UpdatePublisherCommandHandler(
 
         if (await publishers.AnyAsync(p => p.Id != command.Id && p.Name == command.Name, cancellationToken))
         {
-            return Result.Failure(PublisherErrors.NameNotUnique);
+            return Result.Failure(Error.Conflict("Publishers.NameNotUnique", "A publisher with this name already exists"));
         }
 
         existing.Name = command.Name;

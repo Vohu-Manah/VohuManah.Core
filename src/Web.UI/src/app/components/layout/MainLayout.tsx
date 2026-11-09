@@ -7,6 +7,7 @@ import {
   Avatar,
   Stack,
   Code,
+  rem,
   Switch,
   Image,
 } from '@mantine/core';
@@ -37,7 +38,8 @@ export default function MainLayout() {
   const { user, isAuthenticated } = useAuth();
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const [version, setVersion] = useState<string>('v1.0.0');
-
+  
+  
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   useEffect(() => {
     if (!isAuthenticated) {
@@ -58,10 +60,14 @@ export default function MainLayout() {
 
   const { pathname } = useLocation();
 
+  
+  
   useEffect(() => {
     if (opened) close();
-  }, [pathname, opened, close]);
+    
+  }, [pathname]);
 
+  
   useEffect(() => {
     if (pathname && pathname !== '/') {
       visitService.record(pathname);
@@ -123,9 +129,9 @@ export default function MainLayout() {
                 size="md"
                 thumbIcon={
                   colorScheme === 'dark' ? (
-                    <FaMoon size={12} className="icon-moon" />
+                    <FaMoon size={12} style={{ color: 'var(--mantine-color-dark-6)' }} />
                   ) : (
-                    <FaSun size={12} className="icon-sun" />
+                    <FaSun size={12} style={{ color: 'var(--mantine-color-yellow-4)' }} />
                   )
                 }
                 aria-label="تغییر حالت تم"
@@ -135,7 +141,13 @@ export default function MainLayout() {
         </AppShell.Header>
 
         <AppShell.Navbar p="md">
-          <AppShell.Section className="header-section">
+          <AppShell.Section
+            style={{
+              paddingBottom: rem(16),
+              marginBottom: rem(16),
+              borderBottom: '1px solid var(--mantine-color-gray-2)',
+            }}
+          >
             <Group justify="space-between">
               <Group gap="xs">
                 <Image src={favicon} alt="favicon" width={30} height={30} />
@@ -146,19 +158,31 @@ export default function MainLayout() {
               <Code fw={700}>{version}</Code>
             </Group>
           </AppShell.Section>
+
+          {}
           <AppShell.Section grow component={ScrollArea} dir="ltr">
             <Stack gap={0} dir="rtl">
               <DynamicMenu />
             </Stack>
           </AppShell.Section>
 
-          <AppShell.Section className="footer-section">
+          <AppShell.Section
+            style={{
+              paddingTop: rem(16),
+              borderTop: '1px solid var(--mantine-color-gray-2)',
+            }}
+          >
             <Stack gap="sm">
               <Group gap="sm">
-                <Avatar src={getFullImageUrl(profileImageUrl)} size="sm" radius="xl" color="blue">
+                <Avatar
+                  src={getFullImageUrl(profileImageUrl)}
+                  size="sm"
+                  radius="xl"
+                  color="blue"
+                >
                   {!getFullImageUrl(profileImageUrl) && userInitials}
                 </Avatar>
-                <div className="flex-1-min">
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <Text size="sm" fw={500} truncate>
                     {user?.fullName || 'کاربر'}
                   </Text>
@@ -181,9 +205,9 @@ export default function MainLayout() {
                   size="sm"
                   thumbIcon={
                     colorScheme === 'dark' ? (
-                      <FaMoon size={10} className="icon-moon" />
+                      <FaMoon size={10} style={{ color: 'var(--mantine-color-dark-6)' }} />
                     ) : (
-                      <FaSun size={10} className="icon-sun" />
+                      <FaSun size={10} style={{ color: 'var(--mantine-color-yellow-4)' }} />
                     )
                   }
                   aria-label="تغییر حالت تم"

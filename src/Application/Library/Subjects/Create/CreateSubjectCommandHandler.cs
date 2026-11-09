@@ -19,7 +19,7 @@ internal sealed class CreateSubjectCommandHandler(
 
         if (await subjects.AnyAsync(s => s.Title == command.Title, cancellationToken))
         {
-            return Result.Failure<int>(SubjectErrors.TitleNotUnique);
+            return Result.Failure<int>(Error.Conflict("Subjects.TitleNotUnique", "A subject with this title already exists"));
         }
 
         var subject = new Subject { Title = command.Title };

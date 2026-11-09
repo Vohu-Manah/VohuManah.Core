@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Box, Loader, Center, Text, Alert } from '@mantine/core';
 
@@ -11,7 +11,11 @@ export default function WordViewer({ url }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadWordDocument = useCallback(async () => {
+  useEffect(() => {
+    loadWordDocument();
+  }, [url]);
+
+  const loadWordDocument = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -35,16 +39,11 @@ export default function WordViewer({ url }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [url]);
-
-  useEffect(() => {
-
-    void loadWordDocument();
-  }, [loadWordDocument]);
+  };
 
   if (loading) {
     return (
-      <Center className="h-80vh">
+      <Center style={{ height: '80vh' }}>
         <Loader size="lg" />
       </Center>
     );
@@ -52,7 +51,7 @@ export default function WordViewer({ url }: Props) {
 
   if (error) {
     return (
-      <Center className="h-80vh">
+      <Center style={{ height: '80vh' }}>
         <Alert color="red" title="خطا">
           {error}
           <br />
@@ -66,9 +65,16 @@ export default function WordViewer({ url }: Props) {
 
   return (
     <Box
-      className="doc-viewer"
+      style={{
+        width: '100%',
+        height: '80vh',
+        overflow: 'auto',
+        padding: '20px',
+        direction: 'rtl',
+      }}
     >
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </Box>
   );
 }
+

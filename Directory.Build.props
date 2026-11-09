@@ -8,8 +8,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <NoWarn>$(NoWarn);CA1873;NU1902;NU1903</NoWarn>
-    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+    <NoWarn>$(NoWarn);CA1873;NU1903</NoWarn>
     <RuntimeIdentifiers>win;win-x64;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">

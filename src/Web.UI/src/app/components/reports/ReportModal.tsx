@@ -183,10 +183,24 @@ export function ReportModal({ opened, onClose, reportRequest, title = 'گزار�
       title={title}
       size="xl"
       fullScreen={fullscreen}
-      className={fullscreen ? 'report-modal-fullscreen' : undefined}
-      classNames={{ body: 'report-modal-body', content: 'report-modal-content' }}
+      styles={{
+        body: {
+          height: fullscreen ? '100dvh' : 'calc(100dvh - 110px)',
+          padding: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        },
+        header: fullscreen ? { minHeight: 44 } : undefined,
+        content: {
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        },
+      }}
     >
-      <Stack gap="md" p="md" className="h-100">
+      <Stack gap="md" p="md" style={{ height: '100%', minHeight: 0 }}>
         <Group justify="space-between" wrap="wrap">
           <Stack gap={2}>
             <Text size="sm" c="dimmed">
@@ -213,13 +227,25 @@ export function ReportModal({ opened, onClose, reportRequest, title = 'گزار�
           </Group>
         </Group>
 
-        <Box pos="relative" className="flex-1-flex">
+        <Box pos="relative" style={{ flex: 1, minHeight: 0, display: 'flex' }}>
           {error ? (
             <Alert
               color="red"
               title="خطا در بارگذاری گزارش"
               icon={<Text>⚠️</Text>}
-              className="report-alert"
+              styles={{
+                root: {
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  direction: 'rtl',
+                },
+                message: {
+                  textAlign: 'center',
+                  fontSize: '16px',
+                },
+              }}
             >
               <Text size="lg" fw={500}>
                 {error}
@@ -235,7 +261,13 @@ export function ReportModal({ opened, onClose, reportRequest, title = 'گزار�
                   src={reportDataUrl}
                   onLoad={handleLoad}
                   onError={handleError}
-                  className="iframe-panel"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px',
+                    backgroundColor: '#fff',
+                  }}
                   title={title}
                 />
               )}

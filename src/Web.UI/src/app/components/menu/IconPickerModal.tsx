@@ -63,7 +63,9 @@ export function IconPickerModal({ opened, onClose, onSelect, currentIcon }: Icon
                   size="lg"
                   onClick={() => handleSelect(iconName)}
                   title={iconName}
-                  className={isSelected ? "icon-selected" : "icon-unselected"}
+                  style={{
+                    border: isSelected ? '2px solid var(--mantine-color-blue-6)' : '1px solid transparent',
+                  }}
                 >
                   {IconComponent}
                 </ActionIcon>

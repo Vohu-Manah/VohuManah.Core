@@ -4,7 +4,6 @@ import { login, refresh, revoke } from '@/app/services/auth/authService';
 import { clearTokens, getTokens } from '@/app/services/api/tokenStore';
 import { appMessage } from '@/app/messages/appMessages';
 import type { UserProfile } from '@/app/models/user';
-import { userService } from '@/app/services/library/userService';
 
 type AuthState = {
   user: UserProfile | null;
@@ -16,22 +15,11 @@ type AuthContextValue = {
   user: UserProfile | null;
   isAuthenticated: boolean;
   loading: boolean;
-  can: (permission: string) => boolean;
   login: (payload: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-
-async function loadProfilePermissions(userName: string | undefined, fullName: string | undefined, accessToken: string | null): Promise<UserProfile | null> {
-  if (!accessToken) return null;
-  try {
-    const profile = await userService.getCurrentProfile();
-    return { userName: profile.userName ?? userName, fullName: profile.fullName ?? fullName, permissions: profile.permissions ?? [] };
-  } catch {
-    return { userName: userName ?? '', fullName: fullName ?? '', permissions: [] };
-  }
-}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
@@ -44,16 +32,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const tokens = getTokens();
     if (!tokens) {
-
       setLoading(false);
       return;
     }
 
     refresh()
-      .then(async (res) => {
-        const permissions = await loadProfilePermissions(res.userName, res.fullName, res.accessToken);
+      .then((res) => {
         setState({
-          user: permissions,
+          user: { userName: res.userName, fullName: res.fullName },
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
         });
@@ -69,9 +55,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const handleLogin = async (payload: LoginRequest) => {
     const result = await login(payload);
-    const permissions = await loadProfilePermissions(result.userName, result.fullName, result.accessToken);
     setState({
-      user: permissions,
+      user: { userName: result.userName, fullName: result.fullName },
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
     });
@@ -88,11 +73,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user: state.user,
       isAuthenticated: !!state.accessToken,
       loading,
-      can: (permission: string) => {
-        if (!state.accessToken) return false;
-        const perms = state.user?.permissions;
-        return !!perms && perms.includes(permission);
-      },
       login: handleLogin,
       logout: handleLogout,
     }),

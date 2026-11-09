@@ -79,7 +79,7 @@ export default function ChartViewer({
   };
 
   return (
-    <Card withBorder className="pos-relative">
+    <Card withBorder style={{ position: 'relative' }}>
       <LoadingOverlay visible={loading} />
 
       <Stack gap="sm">

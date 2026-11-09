@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Stack,
   Group,
@@ -38,7 +38,11 @@ export default function BookProfilePage({ bookId }: Props) {
   const [viewerUrl, setViewerUrl] = useState<string>('');
   const [viewerType, setViewerType] = useState<'pdf' | 'word'>('pdf');
 
-  const loadBook = useCallback(async () => {
+  useEffect(() => {
+    loadBook();
+  }, [bookId]);
+
+  const loadBook = async () => {
     try {
       setLoading(true);
       const data = await bookService.getProfile(bookId);
@@ -48,12 +52,7 @@ export default function BookProfilePage({ bookId }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [bookId]);
-
-  useEffect(() => {
-
-    void loadBook();
-  }, [loadBook]);
+  };
 
   const handleDownload = (url: string, fileName: string) => {
     const link = document.createElement('a');
@@ -136,7 +135,7 @@ export default function BookProfilePage({ bookId }: Props) {
       </Group>
 
       <Group align="flex-start" gap="xl">
-        <Box className="flex-col-300">
+        <Box style={{ flex: '0 0 300px' }}>
           <Card withBorder p="md" radius="md">
             {bookCoverUrl ? (
               <Image src={bookCoverUrl} alt={book.name} radius="md" />
@@ -155,7 +154,7 @@ export default function BookProfilePage({ bookId }: Props) {
           </Card>
         </Box>
 
-        <Stack className="flex-1" gap="md">
+        <Stack style={{ flex: 1 }} gap="md">
           <Title order={1}>{book.name}</Title>
 
           <Stack gap="xs">
@@ -185,76 +184,76 @@ export default function BookProfilePage({ bookId }: Props) {
           <Stack gap="xs">
             <Group gap="md">
               <Text>
-                <span className="fw-500">کد کتاب:</span> {book.no}
+                <span style={{ fontWeight: 500 }}>کد کتاب:</span> {book.no}
               </Text>
             </Group>
             {book.isbn && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">شابک:</span> {book.isbn}
+                  <span style={{ fontWeight: 500 }}>شابک:</span> {book.isbn}
                 </Text>
               </Group>
             )}
             {book.publishYear && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">سال انتشار شمسی:</span> {book.publishYear}
+                  <span style={{ fontWeight: 500 }}>سال انتشار شمسی:</span> {book.publishYear}
                 </Text>
               </Group>
             )}
             {book.publishOrder && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">شماره چاپ:</span> {book.publishOrder}
+                  <span style={{ fontWeight: 500 }}>شماره چاپ:</span> {book.publishOrder}
                 </Text>
               </Group>
             )}
             {book.volumeCount > 0 && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">تعداد جلد:</span> {book.volumeCount}
+                  <span style={{ fontWeight: 500 }}>تعداد جلد:</span> {book.volumeCount}
                 </Text>
               </Group>
             )}
             {book.languageName && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">زبان:</span> {book.languageName}
+                  <span style={{ fontWeight: 500 }}>زبان:</span> {book.languageName}
                 </Text>
               </Group>
             )}
             {book.subjectTitle && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">موضوع:</span> {book.subjectTitle}
+                  <span style={{ fontWeight: 500 }}>موضوع:</span> {book.subjectTitle}
                 </Text>
               </Group>
             )}
             {book.publishPlaceName && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">محل چاپ:</span> {book.publishPlaceName}
+                  <span style={{ fontWeight: 500 }}>محل چاپ:</span> {book.publishPlaceName}
                 </Text>
               </Group>
             )}
             {book.bookShelfRow && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">ردیف قفسه:</span> {book.bookShelfRow}
+                  <span style={{ fontWeight: 500 }}>ردیف قفسه:</span> {book.bookShelfRow}
                 </Text>
               </Group>
             )}
             {book.editor && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">ویراستار:</span> {book.editor}
+                  <span style={{ fontWeight: 500 }}>ویراستار:</span> {book.editor}
                 </Text>
               </Group>
             )}
             {book.corrector && (
               <Group gap="md">
                 <Text>
-                  <span className="fw-500">صحاف:</span> {book.corrector}
+                  <span style={{ fontWeight: 500 }}>صحاف:</span> {book.corrector}
                 </Text>
               </Group>
             )}
@@ -279,7 +278,7 @@ export default function BookProfilePage({ bookId }: Props) {
               <Text
                 fw={600}
                 size="lg"
-                className="attachments-title"
+                style={{ direction: 'rtl', color: 'var(--mantine-primary-color-filled)' }}
               >
                 دیگر پیوست‌های کتاب
               </Text>
@@ -355,3 +354,4 @@ export default function BookProfilePage({ bookId }: Props) {
     </Stack>
   );
 }
+

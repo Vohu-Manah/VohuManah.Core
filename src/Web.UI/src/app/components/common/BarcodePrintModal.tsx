@@ -70,6 +70,11 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
     },
   });
 
+  useEffect(() => {
+    if (!opened) return;
+    void loadLookups();
+    void search({}, true);
+  }, [opened]);
 
   const loadLookups = async () => {
     try {
@@ -87,30 +92,6 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
   };
-  const search = async (params: BookSearchRequest, reset = false, targetPageOverride?: number) => {
-    try {
-      setLoading(true);
-      const targetPage = reset ? 1 : (targetPageOverride ?? page);
-      const result = await bookService.search({ ...params, page: targetPage, pageSize: PAGE_SIZE });
-      setResults(result.items);
-      setTotalCount(result.totalCount);
-      setPage(result.page ?? targetPage);
-      if (reset) setSelected([]);
-    } catch (error) {
-      handleApiError(error, 'خطا در جستجو');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!opened) return;
-
-    void loadLookups();
-    void search({}, true);
-
-  }, [opened]);
-
 
   const buildParams = (): BookSearchRequest => {
     const v = form.values;
@@ -133,6 +114,21 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
     return params;
   };
 
+  const search = async (params: BookSearchRequest, reset = false, targetPageOverride?: number) => {
+    try {
+      setLoading(true);
+      const targetPage = reset ? 1 : (targetPageOverride ?? page);
+      const result = await bookService.search({ ...params, page: targetPage, pageSize: PAGE_SIZE });
+      setResults(result.items);
+      setTotalCount(result.totalCount);
+      setPage(result.page ?? targetPage);
+      if (reset) setSelected([]);
+    } catch (error) {
+      handleApiError(error, 'خطا در جستجو');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = () => void search(buildParams(), true);
 
@@ -179,7 +175,7 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
       title="چاپ بارکد کتاب‌ها"
       size="90%"
       fullScreen={isMobile}
-      classNames={{ body: 'barcode-modal-body' }}
+      styles={{ body: { maxHeight: isMobile ? 'calc(100vh - 120px)' : '80vh', overflow: 'auto' } }}
     >
       <Stack gap="md">
         <Title order={5}>فیلتر</Title>

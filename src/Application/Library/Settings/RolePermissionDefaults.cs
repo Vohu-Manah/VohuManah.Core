@@ -10,38 +10,9 @@ public static class RolePermissionDefaults
     public const string Publisher = "Publisher";
     public const string Author = "Author";
 
-    
-    public static readonly ImmutableArray<string> SelfService = ImmutableArray.Create(
-        "Library.Settings.GetUserSettings",
-        "Library.Settings.UpdateUserSettings",
-        "Library.Settings.GetAppInfo",
-        "Library.Users.ChangePassword",
-        "Library.Users.UpdateProfile",
-        "Library.Menu.GetAll");
-
-    public static readonly ImmutableArray<string> DashboardRead = ImmutableArray.Create(
-        "Library.Visits.GetStats");
-
-    
-    private static readonly ImmutableArray<string> ReportsReadOnly = ImmutableArray.Create(
-        "Reports.BookSearchList",
-        "Reports.PublicationSearchList",
-        "Reports.ManuscriptSearchList",
-        "Reports.ManuscriptStatistics",
-        "Reports.BookStatistics",
-        "Reports.PublicationStatistics",
-        "Reports.Export",
-        "Reports.View");
-
-    
-    private static readonly ImmutableArray<string> AttachmentView = ImmutableArray.Create(
-        "Library.Attachments.GetByEntity");
-
     public static readonly ImmutableArray<string> LibrarianEndpoints =
         ImmutableArray.CreateRange(
-            SelfService
-                .Concat(DashboardRead)
-                .Concat(EndpointCatalog.Books)
+            EndpointCatalog.Books
                 .Concat(EndpointCatalog.Manuscripts)
                 .Concat(EndpointCatalog.Publications)
                 .Concat(EndpointCatalog.PublicationTypes)
@@ -49,19 +20,13 @@ public static class RolePermissionDefaults
                 .Concat(EndpointCatalog.Languages)
                 .Concat(EndpointCatalog.Cities)
                 .Concat(EndpointCatalog.Subjects)
-                .Concat(EndpointCatalog.Gaps)
-                .Concat(EndpointCatalog.Attachments)
-                .Concat(EndpointCatalog.Reports));
+                .Concat(EndpointCatalog.Gaps));
 
     public static readonly ImmutableArray<string> PublisherEndpoints =
         ImmutableArray.CreateRange(
-            SelfService
-                .Concat(DashboardRead)
-                .Concat(EndpointCatalog.Publications)
+            EndpointCatalog.Publications
                 .Concat(EndpointCatalog.Publishers)
-                .Concat(EndpointCatalog.PublicationTypes)
-                .Concat(EndpointCatalog.Attachments)
-                .Concat(ReportsReadOnly));
+                .Concat(EndpointCatalog.PublicationTypes));
 
     private static readonly ImmutableArray<string> BooksReadOnly = ImmutableArray.Create(
         "Library.Books.GetAll",
@@ -107,31 +72,15 @@ public static class RolePermissionDefaults
         "Library.Publications.GetStatistics",
         "Library.Publications.Search");
 
-    
-    public static readonly ImmutableArray<string> UserEndpoints =
-        ImmutableArray.CreateRange(
-            SelfService
-                .Concat(DashboardRead)
-                .Concat(BooksReadOnly)
-                .Concat(ManuscriptsReadOnly)
-                .Concat(PublicationsReadOnly)
-                .Concat(ReportsReadOnly)
-                .Concat(AttachmentView));
-
     public static readonly ImmutableArray<string> AuthorEndpoints =
         ImmutableArray.CreateRange(
-            SelfService
-                .Concat(DashboardRead)
-                .Concat(BooksReadOnly)
+            BooksReadOnly
                 .Concat(ManuscriptsReadOnly)
-                .Concat(PublicationsReadOnly)
-                .Concat(ReportsReadOnly)
-                .Concat(AttachmentView));
+                .Concat(PublicationsReadOnly));
 
     public static readonly ImmutableDictionary<string, ImmutableArray<string>> RoleEndpointMapping =
         new Dictionary<string, ImmutableArray<string>>(StringComparer.OrdinalIgnoreCase)
         {
-            [User] = UserEndpoints,
             [Librarian] = LibrarianEndpoints,
             [Publisher] = PublisherEndpoints,
             [Author] = AuthorEndpoints
