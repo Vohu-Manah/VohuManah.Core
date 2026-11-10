@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import {
   Modal,
@@ -71,7 +71,7 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
   });
 
 
-  const loadLookups = async () => {
+  const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
         cityService.getNames(),
@@ -86,7 +86,7 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
     } catch (error) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
-  };
+  }, []);
   const search = async (params: BookSearchRequest, reset = false, targetPageOverride?: number) => {
     try {
       setLoading(true);
@@ -102,14 +102,28 @@ export default function BarcodePrintModal({ opened, onClose }: Props) {
       setLoading(false);
     }
   };
+  const searchFirstPage = useCallback(async () => {
+    try {
+      setLoading(true);
+      const result = await bookService.search({ page: 1, pageSize: PAGE_SIZE });
+      setResults(result.items);
+      setTotalCount(result.totalCount);
+      setPage(result.page ?? 1);
+      setSelected([]);
+    } catch (error) {
+      handleApiError(error, 'خطا در جستجو');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (!opened) return;
 
     void loadLookups();
-    void search({}, true);
+    void searchFirstPage();
 
-  }, [opened]);
+  }, [opened, loadLookups, searchFirstPage]);
 
 
   const buildParams = (): BookSearchRequest => {

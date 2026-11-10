@@ -86,7 +86,7 @@ export default function PublicationsPage() {
       setPublications(result.items);
       setTotalCount(result.totalCount);
     } catch {
-  
+      appMessage.error('خطا در بارگذاری نشریات');
     } finally {
       setLoading(false);
     }
@@ -104,8 +104,8 @@ export default function PublicationsPage() {
       setSubjects(subjectsData);
       setPublicationTypes(typesData);
     } catch {
-  
-      }
+      appMessage.error('خطا در بارگذاری داده‌های کمکی');
+    }
  }, []);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function PublicationsPage() {
         setEditingPublication(null);
         loadData();
       } catch {
-  
+        appMessage.error('خطا در ذخیره نشریه');
       } finally {
         setLoading(false);
       }
@@ -170,7 +170,7 @@ export default function PublicationsPage() {
       });
       setModalOpened(true);
     } catch {
-  
+      appMessage.error('خطا در بارگذاری اطلاعات نشریه');
     } finally {
       setLoading(false);
     }
@@ -184,7 +184,7 @@ export default function PublicationsPage() {
         appMessage.success('نشریه با موفقیت حذف شد');
         loadData();
       } catch {
-  
+        appMessage.error('خطا در حذف نشریه');
       } finally {
         setLoading(false);
       }

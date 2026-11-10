@@ -21,6 +21,9 @@ import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
 import { ReportModal } from '@/app/components/reports/ReportModal';
 import { YearSelect } from '@/app/components/common/YearSelect';
 
+const searchBooks = (params: { page?: number; pageSize?: number }) =>
+  bookService.search(params as never);
+
 export default function SearchBookPage() {
   const {
     items: results,
@@ -29,10 +32,7 @@ export default function SearchBookPage() {
     loading,
     load: loadPaged,
     goToPage,
-  } = usePagedSearch<BookSearchResponse>(
-    (params) => bookService.search(params as never),
-    50,
-  );
+  } = usePagedSearch<BookSearchResponse>(searchBooks, 50);
 
   const [cities, setCities] = useState<CityName[]>([]);
   const [languages, setLanguages] = useState<LanguageName[]>([]);
@@ -78,7 +78,7 @@ export default function SearchBookPage() {
     void loadLookups();
     void loadAllData();
     
-  }, []);
+  }, [loadLookups, loadAllData]);
   const buildFilterParams = (): BookSearchRequest => {
     const params: BookSearchRequest = {};
     if (form.values.name?.trim()) params.name = form.values.name.trim();

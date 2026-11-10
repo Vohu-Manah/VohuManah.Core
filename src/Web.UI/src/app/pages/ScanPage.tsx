@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Stack,
@@ -33,7 +33,7 @@ export default function ScanPage() {
   const handledRef = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const go = (raw: string) => {
+  const go = useCallback((raw: string) => {
     const path = decodeQr(raw);
     if (!path) {
       appMessage.error('بارکد شناسایی نشد');
@@ -42,7 +42,7 @@ export default function ScanPage() {
     if (handledRef.current) return;
     handledRef.current = true;
     navigate(path);
-  };
+  }, [navigate]);
 
   
   
@@ -71,9 +71,7 @@ export default function ScanPage() {
           st.pending = undefined;
           
           if (disposed || token !== tokenRef.current) {
-            try { await st.ins.stop(); } catch {
-    
-  }
+            try { await st.ins.stop(); } catch (error) { console.warn('Scanner stop failed', error); }
           }
         } catch {
           st.pending = undefined;
@@ -84,12 +82,10 @@ export default function ScanPage() {
 
     return () => {
       disposed = true;
-      try { void st.ins.stop().catch(() => {}); } catch {
-    
-  }
+      void st.ins.stop().catch((error) => console.warn('Scanner stop failed', error));
     };
 
-  }, [mode, cameraSupported]);
+  }, [mode, cameraSupported, go]);
 
   
   
@@ -130,8 +126,8 @@ export default function ScanPage() {
       setImageBusy(false);
       try {
         scanner.clear();
-      } catch {
-  
+      } catch (error) {
+        console.warn('Scanner clear failed', error);
       }
       if (fileInputRef.current) fileInputRef.current.value = '';
     }

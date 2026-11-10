@@ -14,8 +14,8 @@ export const visitService = {
   record: async (path: string): Promise<void> => {
     try {
       await apiClient.post('/library/visits', { path });
-    } catch {
-      
+    } catch (error) {
+      console.warn('Failed to record visit', error);
     }
   },
 

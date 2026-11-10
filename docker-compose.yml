@@ -12,8 +12,8 @@ services:
     ports:
       - "${SQL_SERVER_PORT}:1433"
     volumes:
-      - ${SQL_SERVER_VOLUME_NAME}:/var/opt/mssql
-      - ${BACKUP_VOLUME_NAME}:${SQL_BACKUP_FOLDER:-/var/opt/mssql/backups}
+      - ${SQL_SERVER_VOLUME_NAME:-sql-server-data}:/var/opt/mssql
+      - ${BACKUP_VOLUME_NAME:-backup-data}:${SQL_BACKUP_FOLDER:-/var/opt/mssql/backups}
 
   web-api:
     image: ${DOCKER_REGISTRY:-}${WEB_API_IMAGE_NAME}
@@ -35,7 +35,7 @@ services:
       seq:
         condition: service_started
     volumes:
-      - ${BACKUP_VOLUME_NAME}:/app/App_Data/sqlBackups
+      - ${BACKUP_VOLUME_NAME:-backup-data}:/app/App_Data/sqlBackups
 
   web-ui:
     build:

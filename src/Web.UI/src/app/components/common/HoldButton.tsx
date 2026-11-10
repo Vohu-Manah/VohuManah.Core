@@ -175,8 +175,8 @@ const HoldButton: React.FC<HoldButtonProps> = ({
     onModeChange?.('pointer');
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {
-      
+    } catch (error) {
+      console.warn('setPointerCapture failed', error);
     }
   };
 
@@ -186,8 +186,8 @@ const HoldButton: React.FC<HoldButtonProps> = ({
     try {
       if (e.currentTarget.hasPointerCapture(e.pointerId))
         e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      
+    } catch (error) {
+      console.warn('releasePointerCapture failed', error);
     }
     release(options);
   };

@@ -95,7 +95,7 @@ export default function BooksPage() {
       setBooks(result.items);
       setTotalCount(result.totalCount);
     } catch {
-  
+      appMessage.error('خطا در بارگذاری کتاب‌ها');
     } finally {
       setLoading(false);
     }
@@ -114,8 +114,8 @@ export default function BooksPage() {
       setSubjects(subjectsData);
       setPublishers(publishersData);
     } catch {
-  
-      }
+      appMessage.error('خطا در بارگذاری داده‌های کمکی');
+    }
   }, []);
   useEffect(() => {
 
@@ -209,8 +209,8 @@ export default function BooksPage() {
               await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
-  
-      }
+              appMessage.error('خطا در آپلود عکس');
+            }
           }
           appMessage.success('کتاب با موفقیت به‌روزرسانی شد');
         } else {
@@ -221,8 +221,8 @@ export default function BooksPage() {
               await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
-  
-      }
+              appMessage.error('خطا در آپلود عکس');
+            }
           }
           appMessage.success('کتاب با موفقیت ایجاد شد');
         }
@@ -233,7 +233,7 @@ export default function BooksPage() {
         setBookImagePreview('');
         loadData();
       } catch {
-  
+        appMessage.error('خطا در ذخیره کتاب');
       } finally {
         setLoading(false);
       }
@@ -289,7 +289,7 @@ export default function BooksPage() {
       
       setModalOpened(true);
     } catch {
-  
+      appMessage.error('خطا در بارگذاری اطلاعات کتاب');
     } finally {
       setLoading(false);
     }
@@ -303,7 +303,7 @@ export default function BooksPage() {
         appMessage.success('کتاب با موفقیت حذف شد');
         loadData();
       } catch {
-  
+        appMessage.error('خطا در حذف کتاب');
       } finally {
         setLoading(false);
       }

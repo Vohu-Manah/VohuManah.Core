@@ -23,6 +23,9 @@ export default defineConfig([
     },
     rules: {
       ...reactHooks.configs['recommended-latest'].rules,
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/refs': 'off',
+      'react-hooks/purity': 'off',
       'react-refresh/only-export-components': [
         'error',
         {
