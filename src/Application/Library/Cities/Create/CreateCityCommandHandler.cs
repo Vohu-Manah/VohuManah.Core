@@ -19,7 +19,7 @@ internal sealed class CreateCityCommandHandler(
 
         if (await cities.AnyAsync(c => c.Name == command.Name, cancellationToken))
         {
-            return Result.Failure<int>(Error.Conflict("Cities.NameNotUnique", "A city with this name already exists"));
+            return Result.Failure<int>(CityErrors.NameNotUnique);
         }
 
         var city = new City { Name = command.Name };

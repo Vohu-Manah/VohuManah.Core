@@ -9,15 +9,11 @@ export default function PdfViewer({ url }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   return (
-    <Box style={{ width: '100%', height: '80vh' }}>
+    <Box className="pdf-shell">
       <iframe
         ref={iframeRef}
         src={url}
-        style={{
-          width: '100%',
-          height: '100%',
-          border: 'none',
-        }}
+        className="iframe-full"
         title="PDF Viewer"
       />
     </Box>

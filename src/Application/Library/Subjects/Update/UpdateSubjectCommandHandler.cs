@@ -25,7 +25,7 @@ internal sealed class UpdateSubjectCommandHandler(
 
         if (await subjects.AnyAsync(s => s.Id != command.Id && s.Title == command.Title, cancellationToken))
         {
-            return Result.Failure(Error.Conflict("Subjects.TitleNotUnique", "A subject with this title already exists"));
+            return Result.Failure(SubjectErrors.TitleNotUnique);
         }
 
         existing.Title = command.Title;

@@ -77,8 +77,11 @@ function DynamicNavLink({ menuItem, level = 0 }: DynamicNavLinkProps) {
   const isActive = menuItem.path ? isExactActive : false;
   const shouldBeOpened = opened || hasActiveChild;
   
+
+
   useEffect(() => {
     if (hasActiveChild && !opened) {
+
       setOpened(true);
     }
   }, [hasActiveChild, opened]);
@@ -138,30 +141,21 @@ function DynamicNavLink({ menuItem, level = 0 }: DynamicNavLinkProps) {
             
             
             chevronOpen ? (
-              <FaChevronDown size={12} style={{ opacity: 0.7 }} />
+              <FaChevronDown size={12} className="opacity-70" />
             ) : (
-              <FaChevronLeft size={12} style={{ opacity: 0.7 }} />
+              <FaChevronLeft size={12} className="opacity-70" />
             )
           ) : undefined
         }
         active={isActive}
         onClick={handleClick}
         childrenOffset={28}
-        style={{
-          direction: 'rtl',
-          textAlign: 'right',
-        }}
+        className="dir-rtl-ta-right"
       />
       {hasChildren && shouldBeOpened && (
         
         <div
-          style={{
-            direction: 'rtl',
-            position: 'relative',
-            paddingRight: 12,
-            marginRight: 14,
-            borderRight: '1px solid var(--mantine-color-gray-3)',
-          }}
+          className="menu-children"
         >
           {menuItem.children!.map((child) => (
             <DynamicNavLink key={child.id} menuItem={child} level={level + 1} />
@@ -177,20 +171,18 @@ export function DynamicMenu() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadMenu();
+    void (async () => {
+      try {
+        const data = await menuService.getAll();
+        setMenuItems(data);
+      } catch (error) {
+        handleApiError(error, 'خطا در بارگذاری منو');
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  const loadMenu = async () => {
-    try {
-      setLoading(true);
-      const data = await menuService.getAll();
-      setMenuItems(data);
-    } catch (error) {
-      handleApiError(error, 'خطا در بارگذاری منو');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return null;
@@ -204,4 +196,3 @@ export function DynamicMenu() {
     </>
   );
 }
-

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Application.Abstractions.Messaging;
 using Application.Library.Menu.GetAll;
 using Application.Library.Settings;
@@ -14,10 +15,17 @@ internal sealed class GetAll : BaseEndpoint
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/menu", async (
+            HttpContext httpContext,
             IQueryHandler<GetAllMenuItemsQuery, List<MenuItemResponse>> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetAllMenuItemsQuery();
+            var roles = httpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var query = new GetAllMenuItemsQuery(roles);
 
             Result<List<MenuItemResponse>> result = await handler.Handle(query, cancellationToken);
 

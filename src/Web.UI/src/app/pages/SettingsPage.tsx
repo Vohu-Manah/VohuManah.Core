@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Stack, Title, Tabs } from '@mantine/core';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 import ProfileSection from '@/app/components/settings/ProfileSection';
 import UserInfoSection from '@/app/components/settings/UserInfoSection';
 import ChangePasswordSection from '@/app/components/settings/ChangePasswordSection';
@@ -9,7 +11,17 @@ import AboutSection from '@/app/components/settings/AboutSection';
 
 
 export default function SettingsPage() {
+  const { can } = useAuth();
   const [tab, setTab] = useState<string | null>('profile');
+
+  const tabs = [
+    { value: 'profile', label: 'پروفایل', perm: PERM.User.updateProfile, node: <ProfileSection /> },
+    { value: 'user-info', label: 'اطلاعات کاربر', perm: PERM.User.updateProfile, node: <UserInfoSection /> },
+    { value: 'password', label: 'تغییر رمز', perm: PERM.User.changePassword, node: <ChangePasswordSection /> },
+    { value: 'theme', label: 'ظاهر', perm: PERM.Settings.updateUser, node: <ThemeSection /> },
+    { value: 'backup', label: 'بکاپ', perm: PERM.Backup.getInfo, node: <BackupSection /> },
+    { value: 'about', label: 'درباره', perm: PERM.Settings.appInfo, node: <AboutSection /> },
+  ].filter((t) => can(t.perm));
 
   return (
     <Stack p="md">
@@ -17,32 +29,16 @@ export default function SettingsPage() {
 
       <Tabs value={tab} onChange={setTab} keepMounted={false}>
         <Tabs.List>
-          <Tabs.Tab value="profile">پروفایل</Tabs.Tab>
-          <Tabs.Tab value="user-info">اطلاعات کاربر</Tabs.Tab>
-          <Tabs.Tab value="password">تغییر رمز</Tabs.Tab>
-          <Tabs.Tab value="theme">ظاهر</Tabs.Tab>
-          <Tabs.Tab value="backup">بکاپ</Tabs.Tab>
-          <Tabs.Tab value="about">درباره</Tabs.Tab>
+          {tabs.map((t) => (
+            <Tabs.Tab key={t.value} value={t.value}>{t.label}</Tabs.Tab>
+          ))}
         </Tabs.List>
 
-        <Tabs.Panel value="profile" pt="md">
-          <ProfileSection />
-        </Tabs.Panel>
-        <Tabs.Panel value="user-info" pt="md">
-          <UserInfoSection />
-        </Tabs.Panel>
-        <Tabs.Panel value="password" pt="md">
-          <ChangePasswordSection />
-        </Tabs.Panel>
-        <Tabs.Panel value="theme" pt="md">
-          <ThemeSection />
-        </Tabs.Panel>
-        <Tabs.Panel value="backup" pt="md">
-          <BackupSection />
-        </Tabs.Panel>
-        <Tabs.Panel value="about" pt="md">
-          <AboutSection />
-        </Tabs.Panel>
+        {tabs.map((t) => (
+          <Tabs.Panel key={t.value} value={t.value} pt="md">
+            {t.node}
+          </Tabs.Panel>
+        ))}
       </Tabs>
     </Stack>
   );

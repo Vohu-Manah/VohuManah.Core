@@ -19,7 +19,7 @@ internal sealed class CreateLanguageCommandHandler(
 
         if (await languages.AnyAsync(l => l.Name == command.Name, cancellationToken))
         {
-            return Result.Failure<int>(Error.Conflict("Languages.NameNotUnique", "A language with this name already exists"));
+            return Result.Failure<int>(LanguageErrors.NameNotUnique);
         }
 
         var language = new Language

@@ -9,7 +9,20 @@
     <RootNamespace>VohuManah.Infrastructure</RootNamespace>
     <AssemblyName>VohuManah.Infrastructure</AssemblyName>
     <Keywords>VohuManah</Keywords>
+    
+    <AnalysisMode>None</AnalysisMode>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <SonarQubeExclude>true</SonarQubeExclude>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <Using Remove="System" />
+    <Using Remove="System.IO" />
+    <Using Remove="System.Threading" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
@@ -23,6 +36,22 @@
       <ExcludeAssets>contentfiles;content;build</ExcludeAssets>
       <PrivateAssets>contentfiles;content;build</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="ClosedXML" />
+    <PackageReference Include="HarfBuzzSharp" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" />
+    <PackageReference Include="OpenMcdf" />
+    <PackageReference Include="PdfSharpCore" />
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.HarfBuzz" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+    <PackageReference Include="System.CodeDom" />
+    <PackageReference Include="System.Drawing.Common" />
+    <PackageReference Include="System.IO.Packaging" />
+    <PackageReference Include="System.Resources.Extensions" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.ServiceModel.Http" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,16 +81,77 @@
     <EmbeddedResource Include="Reports\Html\Resources\fonts\Shabnam-Thin-FD-WOL.woff2" />
   </ItemGroup>
 
+  
   <ItemGroup>
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Xaml.*.xaml" LogicalName="Reporting.Gauge.WebForms.Xaml.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Map.WebForms\Xaml.*.xaml" LogicalName="Reporting.Map.WebForms.Xaml.%(Filename)%(Extension)" />
 
-    <Content Remove="**\LatoFont\**" />
-    <None Remove="**\LatoFont\**" />
-    <Compile Remove="**\LatoFont\**" />
-    <EmbeddedResource Remove="**\LatoFont\**" />
+
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.RdlObjectModel.Serialization\ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.Serialization.ReportDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2005ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2005ObjectModel.ReportDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2008ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2008ObjectModel.ReportDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2010ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2010ObjectModel.ReportDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportDefinition.xsd" LogicalName="ReportingServices.ReportProcessing.ReportDefinition.xsd" />
+
+    
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.ReportDefinition.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.ReportDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.ReportDefinition2010.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.ReportDefinition2010.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.ReportDefinition2011.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.ReportDefinition2011.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.ReportDefinition2012.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.ReportDefinition2012.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.ReportDefinition2013.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.ReportDefinition2013.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.SharedDataSetDefinition.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.SharedDataSetDefinition.xsd" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.ReportProcessing\ReportPublishing.DefaultFontFamily.xsd" LogicalName="ReportingServices.ReportProcessing.ReportPublishing.DefaultFontFamily.xsd" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Strings.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Strings.resx" ManifestResourceName="Reporting.Chart.WebForms.Strings" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.ChartTypes.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.ChartTypes.resx" ManifestResourceName="Reporting.Chart.WebForms.Commands.ChartTypes" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.Images.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.Images.resx" ManifestResourceName="Reporting.Chart.WebForms.Commands.Images" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.Strings.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms\Commands.Strings.resx" ManifestResourceName="Reporting.Chart.WebForms.Commands.Strings" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Strings.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Strings.resx" ManifestResourceName="Reporting.Gauge.WebForms.Strings" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Common.Strings.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Common.Strings.resx" ManifestResourceName="Reporting.Gauge.WebForms.Common.Strings" />
+    <EmbeddedResource Remove="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Map.WebForms\Strings.resx" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Map.WebForms\Strings.resx" ManifestResourceName="Reporting.Map.WebForms.Strings" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.DataVisualization\Reporting.Chart.WebForms.Design\resources" LogicalName="Reporting.Chart.WebForms.Design.resources" />
+  </ItemGroup>
 
-  <Target Name="RemoveLatoFontFiles" AfterTargets="Build">
+  <ItemGroup>
+    
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Blank.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Blank.gif" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.CanGrowFalse.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.CanGrowFalse.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Common.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Common.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.FitProportional.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.FitProportional.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.FixedHeader.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.FixedHeader.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Html40Viewer.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Html40Viewer.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Html5Renderer.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Html5Renderer.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Html5Renderer.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Html5Renderer.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Html5RenderingExtensionJs.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Html5RenderingExtensionJs.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.Html5Toolbar.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.Html5Toolbar.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ImageConsolidation.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ImageConsolidation.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.jquery.min.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.jquery.min.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.jqueryui.min.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.jqueryui.min.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.jqueryui.min.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.jqueryui.min.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.knockoutjs.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.knockoutjs.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ReportingServices.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ReportingServices.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ReportingServices.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ReportingServices.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ReportingServices40.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ReportingServices40.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ReportingServicesHybrid.css" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ReportingServicesHybrid.css" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ReportingServicesHybrid.js" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ReportingServicesHybrid.js" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.sortAsc.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.sortAsc.gif" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.sortDesc.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.sortDesc.gif" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.ToggleMinus.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.ToggleMinus.gif" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.TogglePlus.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.TogglePlus.gif" />
+    <EmbeddedResource Include="Reports\RdlCore\ReportViewer.Common\ReportingServices.Rendering.HtmlRenderer\RendererResources.unsorted.gif" LogicalName="ReportingServices.Rendering.HtmlRenderer.RendererResources.unsorted.gif" />
+  </ItemGroup>
+
+<Target Name="RemoveLatoFontFiles" AfterTargets="Build">
     <ItemGroup>
       <LatoFontFiles Include="$(OutputPath)LatoFont\**\*" />
     </ItemGroup>

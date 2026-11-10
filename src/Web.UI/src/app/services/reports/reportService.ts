@@ -102,12 +102,14 @@ export async function exportReport(request: ReportExportRequest): Promise<void> 
     datasourceName,
   });
 
-  if (parameters.filterType) {
-    queryParams.append('FilterType', String(parameters.filterType));
+  const filterTypeValue = parameters.filterType ?? parameters.FilterType;
+  if (filterTypeValue != null) {
+    queryParams.append('FilterType', String(filterTypeValue));
   }
 
   Object.entries(parameters).forEach(([key, value]) => {
-    if (key !== 'filterType' && value != null) {
+    const lowerKey = key.toLowerCase();
+    if (lowerKey !== 'filtertype' && value != null) {
       queryParams.append(key, String(value));
     }
   });

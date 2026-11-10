@@ -1,3 +1,4 @@
+using System;
 using Application.Library.Reports.Shared;
 
 namespace Infrastructure.Reports.Html;

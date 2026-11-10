@@ -10,12 +10,15 @@ import type { Role, CreateRoleRequest, UpdateRolePermissionsRequest } from '@/ap
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { handleApiError } from '@/app/helpers/errorHandler';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 type PermissionItem = {
   name: string;
 };
 
 export default function RolesPage() {
+  const { can } = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -35,10 +38,6 @@ export default function RolesPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-    loadEndpoints();
-  }, []);
 
   const loadData = async () => {
     try {
@@ -51,7 +50,6 @@ export default function RolesPage() {
       setLoading(false);
     }
   };
-
   const loadEndpoints = async () => {
     try {
       const data = await roleService.getAllEndpoints();
@@ -60,6 +58,14 @@ export default function RolesPage() {
       handleApiError(error, 'خطا در بارگذاری لیست endpoints');
     }
   };
+
+  useEffect(() => {
+
+    loadData();
+    loadEndpoints();
+  }, []);
+
+
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -137,12 +143,16 @@ export default function RolesPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEditPermissions(row)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete()}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.Role.update) && (
+            <ActionIcon color="blue" onClick={() => handleEditPermissions(row)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.Role.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete()}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -150,10 +160,7 @@ export default function RolesPage() {
 
   const allEndpoints = useMemo(() => Object.values(endpoints).flat(), [endpoints]);
 
-  const permissionItems = useMemo(() => {
-    return allEndpoints.map((ep) => ({ name: ep }));
-  }, [allEndpoints]);
-
+  const permissionItems: PermissionItem[] = allEndpoints.map((ep) => ({ name: ep }));
   const permissionColumns: ProTableColumn<PermissionItem>[] = [
     { key: 'name', title: 'نام مجوز' },
   ];
@@ -168,16 +175,18 @@ export default function RolesPage() {
       <Title order={2}>مدیریت نقش‌ها</Title>
 
       <Group justify="space-between">
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingRole(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن نقش جدید
-        </Button>
+        {can(PERM.Role.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingRole(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن نقش جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>

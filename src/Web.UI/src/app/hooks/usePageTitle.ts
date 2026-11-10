@@ -48,8 +48,8 @@ export function usePageTitle() {
         const data = await menuService.getAll();
         setMenuItems(data);
       } catch {
-        
-      }
+      
+    }
     };
 
     loadMenu();
@@ -65,6 +65,7 @@ export function usePageTitle() {
     const menuItem = findMenuItemByPath(menuItems, currentPath);
     
     if (menuItem) {
+
       setPageName(menuItem.label);
       document.title = `وهومنه - ${menuItem.label}`;
     } else {
@@ -77,4 +78,3 @@ export function usePageTitle() {
     }
   }, [location.pathname, menuItems]);
 }
-

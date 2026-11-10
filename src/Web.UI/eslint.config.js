@@ -11,16 +11,18 @@ export default defineConfig([
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
+      ...tseslint.configs.recommended,
       reactRefresh.configs.vite,
     ],
+    plugins: {
+      'react-hooks': reactHooks,
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
     },
     rules: {
-      
+      ...reactHooks.configs['recommended-latest'].rules,
       'react-refresh/only-export-components': [
         'error',
         {

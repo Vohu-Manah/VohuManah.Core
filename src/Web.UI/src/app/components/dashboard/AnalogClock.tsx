@@ -42,7 +42,7 @@ export default function AnalogClock({ size = 120, label }: AnalogClockProps) {
   const ticks = Array.from({ length: 12 }, (_, i) => i * 30);
 
   return (
-    <Box style={{ textAlign: 'center' }}>
+    <Box className="ta-center">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="ساعت">
         <circle cx={cx} cy={cy} r={r} fill="#f8f9fa" stroke="#adb5bd" strokeWidth={2} />
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -21,6 +21,9 @@ import { ReportModal } from '@/app/components/reports/ReportModal';
 import { YearSelect } from '@/app/components/common/YearSelect';
 import { usePagedSearch } from '@/app/hooks/usePagedSearch';
 
+const searchPublications = (params: { page?: number; pageSize?: number }) =>
+  publicationService.search(params as never);
+
 export default function SearchPublicationPage() {
   const {
     items: results,
@@ -29,10 +32,7 @@ export default function SearchPublicationPage() {
     loading,
     load: loadPaged,
     goToPage,
-  } = usePagedSearch<PublicationSearchResponse>(
-    (params) => publicationService.search(params as never),
-    50,
-  );
+  } = usePagedSearch<PublicationSearchResponse>(searchPublications, 50);
 
   const [cities, setCities] = useState<CityName[]>([]);
   const [languages, setLanguages] = useState<LanguageName[]>([]);
@@ -52,16 +52,11 @@ export default function SearchPublicationPage() {
     },
   });
 
-  useEffect(() => {
-    loadLookups();
-    loadAllData();
-  }, []);
 
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
-  };
-
-  const loadLookups = async () => {
+ }, [loadPaged]);
+  const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, typesData] = await Promise.all([
         cityService.getNames(),
@@ -76,7 +71,15 @@ export default function SearchPublicationPage() {
     } catch (error) {
       handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
     }
-  };
+ }, []);
+
+  useEffect(() => {
+
+    void loadLookups();
+    void loadAllData();
+  }, [loadLookups, loadAllData]);
+
+
 
   const buildParams = (): PublicationSearchRequest => {
     const params: PublicationSearchRequest = {};

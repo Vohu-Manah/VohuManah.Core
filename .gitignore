@@ -408,3 +408,6 @@ FodyWeavers.xsd
 /src/Web.Api/wwwroot/uploads
 /.docs
 /.scripts
+
+# SQL Server backups (runtime artifacts)
+src/Web.Api/App_Data/sqlBackups/*.bak

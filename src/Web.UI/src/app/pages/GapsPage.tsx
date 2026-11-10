@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -11,8 +11,11 @@ import { gapService } from '@/app/services/library/gapService';
 import type { Gap, CreateGapRequest } from '@/app/models/gap';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 export default function GapsPage() {
+  const { can } = useAuth();
   const [gaps, setGaps] = useState<Gap[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -29,13 +32,8 @@ export default function GapsPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await gapService.getAll();
       setGaps(data);
     } catch (error) {
@@ -43,7 +41,12 @@ export default function GapsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -115,12 +118,16 @@ export default function GapsPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.Gap.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.Gap.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -130,16 +137,18 @@ export default function GapsPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت فاصله‌ها</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingGap(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن فاصله جدید
-        </Button>
+        {can(PERM.Gap.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingGap(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن فاصله جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>
@@ -171,5 +180,4 @@ export default function GapsPage() {
     </Stack>
   );
 }
-
 
