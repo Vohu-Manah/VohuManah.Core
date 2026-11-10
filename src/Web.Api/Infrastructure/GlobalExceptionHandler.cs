@@ -65,6 +65,9 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
             "خطای سرور",
             exception.Message,
             exception.Message
+
+
+
         );
     }
 }
