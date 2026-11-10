@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import {
   Modal,
@@ -44,7 +44,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
   const [viewerType, setViewerType] = useState<'pdf' | 'word'>('pdf');
 
 
-  const loadAttachments = async () => {
+  const loadAttachments = useCallback(async () => {
     try {
       setLoading(true);
       const data = await attachmentService.getByEntity('Book', bookId);
@@ -54,7 +54,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
     } finally {
       setLoading(false);
     }
-  };
+  }, [bookId]);
 
   useEffect(() => {
     if (opened) {
@@ -62,7 +62,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
       loadAttachments();
     }
 
-  }, [opened, bookId]);
+  }, [opened, bookId, loadAttachments]);
 
 
   const handleUpload = async () => {

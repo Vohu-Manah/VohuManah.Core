@@ -47,9 +47,9 @@ export function usePageTitle() {
       try {
         const data = await menuService.getAll();
         setMenuItems(data);
-      } catch {
-      
-    }
+      } catch (error) {
+        console.warn('Menu load failed', error);
+      }
     };
 
     loadMenu();

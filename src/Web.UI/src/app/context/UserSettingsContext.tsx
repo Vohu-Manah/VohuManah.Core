@@ -45,7 +45,7 @@ export function UserSettingsProvider({ children }: { children: ReactNode }) {
     }
     
 
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, authLoading, loadUserSettings]);
 
   const value = useMemo<UserSettingsContextValue>(
     () => ({

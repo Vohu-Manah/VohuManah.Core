@@ -47,8 +47,8 @@ export async function buildBarcodePdf(
         errorCorrectionLevel: 'L',
       });
       doc.addImage(dataUrl, 'PNG', x + (cellWidth - qrSize) / 2, y + 4, qrSize, qrSize);
-    } catch {
-      
+    } catch (error) {
+      console.warn('Barcode QR generation failed', error);
     }
 
     
