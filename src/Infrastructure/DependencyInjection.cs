@@ -80,7 +80,7 @@ public static class DependencyInjection
             var environment = sp.GetRequiredService<IWebHostEnvironment>();
             var persianDateTime = sp.GetRequiredService<PersianDateTime>();
             var reportsPath = Path.Combine(environment.WebRootPath, "Reports");
-            return new ReportLocalReportFactory(reportsPath, persianDateTime);
+            return new Infrastructure.Reports.ReportLocalReportFactory(reportsPath, persianDateTime);
         });
 
         services.AddScoped<Infrastructure.Reports.IReportRenderer, Infrastructure.Reports.ReportRenderer>();
