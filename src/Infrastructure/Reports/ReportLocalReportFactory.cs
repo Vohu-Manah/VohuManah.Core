@@ -2,7 +2,6 @@ using System.IO;
 using System.Collections;
 using VohuManah.Infrastructure.Helper.PersianCalendar;
 
-
 namespace Infrastructure.Reports;
 
 internal sealed class ReportLocalReportFactory : IReportLocalReportFactory
