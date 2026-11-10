@@ -1,0 +1,94 @@
+using ReportingServices.DataExtensions;
+using ReportingServices.Diagnostics;
+using ReportingServices.Library;
+using ReportingServices.ReportProcessing;
+using System;
+using System.Security.Permissions;
+
+namespace Reporting
+{
+	[Serializable]
+	internal class LocalExecutionSession
+	{
+		private ControlSnapshot __ReportSnapshot;
+
+		private ControlSnapshot __compiledReport;
+
+		public ControlSnapshot Snapshot
+		{
+			get
+			{
+				return __ReportSnapshot;
+			}
+			set
+			{
+				__ReportSnapshot = value;
+				ExecutionInfo.HasSnapshot = (value != null);
+			}
+		}
+
+		public ControlSnapshot CompiledReport
+		{
+			get
+			{
+				return __compiledReport;
+			}
+			set
+			{
+				__compiledReport = value;
+				ExecutionInfo.IsCompiled = (value != null);
+			}
+		}
+
+		public EventInformation EventInfo
+		{
+			get;
+			set;
+		}
+
+		public LocalExecutionInfo ExecutionInfo
+		{
+			get;
+			private set;
+		}
+
+		public DatasourceCredentialsCollection Credentials
+		{
+			get;
+			private set;
+		}
+
+		internal DataSourceInfoCollection CompiledDataSources
+		{
+			get;
+			set;
+		}
+
+		public LocalExecutionSession()
+		{
+			ExecutionInfo = new LocalExecutionInfo();
+			Credentials = new DatasourceCredentialsCollection();
+		}
+
+		public void ResetExecution()
+		{
+			Snapshot = null;
+			EventInfo = null;
+			CompiledDataSources = null;
+			ExecutionInfo.Reset();
+		}
+
+		public void SaveProcessingResult(OnDemandProcessingResult result)
+		{
+			if (result != null)
+			{
+				result.Save();
+				if (result.EventInfoChanged)
+				{
+					EventInfo = result.NewEventInfo;
+				}
+				ExecutionInfo.SaveProcessingResult(result);
+			}
+		}
+	}
+}

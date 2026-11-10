@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useState, useEffect, useMemo, type ReactNode,
+  createContext, useContext, useState, useEffect, useMemo, useCallback, type ReactNode,
 } from 'react';
 import { settingsService } from '@/app/services/library/settingsService';
 import type { UserSettings } from '@/app/models/settings';
@@ -19,7 +19,7 @@ export function UserSettingsProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
 
-  const loadUserSettings = async () => {
+  const loadUserSettings = useCallback(async () => {
     if (!isAuthenticated) {
       setUserSettings(null);
       setLoading(false);
@@ -36,13 +36,15 @@ export function UserSettingsProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!authLoading) {
+
       loadUserSettings();
     }
     
+
   }, [isAuthenticated, authLoading]);
 
   const value = useMemo<UserSettingsContextValue>(
@@ -51,7 +53,7 @@ export function UserSettingsProvider({ children }: { children: ReactNode }) {
       loading,
       reload: loadUserSettings,
     }),
-    [userSettings, loading],
+    [userSettings, loading, loadUserSettings],
   );
 
   return <UserSettingsContext.Provider value={value}>{children}</UserSettingsContext.Provider>;
@@ -64,4 +66,3 @@ export function useUserSettings() {
   }
   return ctx;
 }
-

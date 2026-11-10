@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -10,8 +10,11 @@ import { languageService } from '@/app/services/library/languageService';
 import type { Language, CreateLanguageRequest } from '@/app/models/language';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 export default function LanguagesPage() {
+  const { can } = useAuth();
   const [languages, setLanguages] = useState<Language[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -28,13 +31,8 @@ export default function LanguagesPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await languageService.getAll();
       setLanguages(data);
     } catch (error) {
@@ -42,7 +40,12 @@ export default function LanguagesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -105,12 +108,16 @@ export default function LanguagesPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.Language.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.Language.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -120,16 +127,18 @@ export default function LanguagesPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت زبان‌ها</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingLanguage(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن زبان جدید
-        </Button>
+        {can(PERM.Language.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingLanguage(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن زبان جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>
@@ -160,5 +169,4 @@ export default function LanguagesPage() {
     </Stack>
   );
 }
-
 

@@ -1,13 +1,12 @@
+import { useEffect, useRef } from 'react';
+
 type ShinyTextProps = {
   text: string;
-  
   color?: string;
-  
   shineColor?: string;
   duration?: number;
   className?: string;
 };
-
 
 export default function ShinyText({
   text,
@@ -16,20 +15,18 @@ export default function ShinyText({
   duration = 3.2,
   className,
 }: ShinyTextProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty('--shiny-color', color);
+    el.style.setProperty('--shiny-shine', shineColor);
+    el.style.setProperty('--shiny-duration', `${duration}s`);
+  }, [color, shineColor, duration]);
+
   return (
-    <span
-      className={className}
-      style={{
-        display: 'inline-block',
-        backgroundImage: `linear-gradient(120deg, ${color} 40%, ${shineColor} 50%, ${color} 60%)`,
-        backgroundSize: '220% 100%',
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        color: 'transparent',
-        animation: `shiny-sweep ${duration}s linear infinite`,
-        fontWeight: 700,
-      }}
-    >
+    <span ref={ref} className={`shiny-text ${className ?? ''}`}>
       {text}
     </span>
   );

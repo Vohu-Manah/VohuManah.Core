@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -16,7 +16,6 @@ import type { LanguageName } from '@/app/models/language';
 import type { SubjectName } from '@/app/models/subject';
 import type { PublisherName } from '@/app/models/publisher';
 import { appMessage } from '@/app/messages/appMessages';
-import { useEffect } from 'react';
 import { usePagedSearch } from '@/app/hooks/usePagedSearch';
 import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
 import { ReportModal } from '@/app/components/reports/ReportModal';
@@ -53,16 +52,11 @@ export default function SearchBookPage() {
     },
   });
 
-  useEffect(() => {
-    loadLookups();
-    loadAllData();
-  }, []);
 
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
-  };
-
-  const loadLookups = async () => {
+ }, [loadPaged]);
+  const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
         cityService.getNames(),
@@ -77,8 +71,14 @@ export default function SearchBookPage() {
     } catch (error) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
-  };
+ }, []);
 
+  useEffect(() => {
+    
+    void loadLookups();
+    void loadAllData();
+    
+  }, []);
   const buildFilterParams = (): BookSearchRequest => {
     const params: BookSearchRequest = {};
     if (form.values.name?.trim()) params.name = form.values.name.trim();

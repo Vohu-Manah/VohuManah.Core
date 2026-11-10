@@ -1,3 +1,5 @@
+using System.Threading;
+using System;
 using Microsoft.Extensions.Logging;
 using System.Collections;
 
@@ -63,7 +65,7 @@ internal sealed class RdlcReportService : IReportService
         catch (Exception ex)
         {
             _logger.LogError(ex, "خطا در ایحاد فایل excel: {ReportFileName}", reportFileName);
-            throw new InvalidOperationException($"خطا در ایحاد فایل excel '{reportFileName}'. جزئیات برای بررسی بیشتر.", ex);
+            throw new InvalidOperationException($"خطا در ایحاد فایل excel '{reportFileName}'. INNER: {ex}", ex);
         }
     }
 

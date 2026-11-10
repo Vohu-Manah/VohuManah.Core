@@ -1,6 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-
-import './HoldButton.css';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 
 export type HoldButtonSize = 'sm' | 'md' | 'lg';
 export type HoldButtonDirection = 'right' | 'up';
@@ -32,7 +30,6 @@ export interface HoldButtonProps {
   onModeChange?: (mode: 'pointer' | 'key') => void;
   onKeyRepeat?: () => void;
   className?: string;
-  style?: CSSProperties;
 }
 
 type Phase = 'idle' | 'holding' | 'done';
@@ -88,7 +85,6 @@ const HoldButton: React.FC<HoldButtonProps> = ({
   onModeChange,
   onKeyRepeat,
   className = '',
-  style = {}
 }) => {
   const [phase, setPhase] = useState<Phase>('idle');
   const [input, setInput] = useState<Input>(null);
@@ -117,6 +113,7 @@ const HoldButton: React.FC<HoldButtonProps> = ({
     cancelAnimationFrame(m.raf);
     m.from = m.p;
     m.to = to;
+
     m.start = performance.now();
     const step = (now: number) => {
       const t = duration > 0 ? Math.min(1, (now - m.start) / duration) : 1;
@@ -170,22 +167,28 @@ const HoldButton: React.FC<HoldButtonProps> = ({
   releaseRef.current = release;
 
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!e.isTrusted || e.button !== 0 || !e.isPrimary || gesture.current.pointerId !== null) return;
+    if (!e.isTrusted || e.button !== 0 || !e.isPrimary || gesture.current.pointerId !== null)
+      return;
     if (!begin('pointer')) return;
     gesture.current.pointerId = e.pointerId;
     onPointerSample?.({ x: e.clientX, y: e.clientY, t: performance.now() });
     onModeChange?.('pointer');
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
+    } catch {
+      
+    }
   };
 
   const endPointer = (e: React.PointerEvent<HTMLButtonElement>, options?: ReleaseOptions) => {
     if (e.pointerId !== gesture.current.pointerId) return;
     gesture.current.pointerId = null;
     try {
-      if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
+      if (e.currentTarget.hasPointerCapture(e.pointerId))
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      
+    }
     release(options);
   };
 
@@ -279,18 +282,31 @@ const HoldButton: React.FC<HoldButtonProps> = ({
     </>
   );
 
-  const cssVars = {
-    '--hb-radius': `${radius}px`,
-    '--hb-bg': backgroundColor,
-    '--hb-fill': fillColor,
-    '--hb-text': textColor,
-    '--hb-fill-text': fillTextColor,
-    '--hb-hold': `${holdTime}ms`,
-    '--hb-cycles': holdTime / 1100,
-    '--hb-release': `${releaseTime}ms`,
-    '--hb-press': pressScale,
-    '--hb-wave': `${wave ? waveAmplitude : 0}px`
-  } as CSSProperties;
+  useEffect(() => {
+    const el = buttonRef.current;
+    if (!el) return;
+    el.style.setProperty('--hb-radius', `${radius}px`);
+    el.style.setProperty('--hb-bg', backgroundColor);
+    el.style.setProperty('--hb-fill', fillColor);
+    el.style.setProperty('--hb-text', textColor);
+    el.style.setProperty('--hb-fill-text', fillTextColor);
+    el.style.setProperty('--hb-hold', `${holdTime}ms`);
+    el.style.setProperty('--hb-cycles', String(holdTime / 1100));
+    el.style.setProperty('--hb-release', `${releaseTime}ms`);
+    el.style.setProperty('--hb-press', String(pressScale));
+    el.style.setProperty('--hb-wave', `${wave ? waveAmplitude : 0}px`);
+  }, [
+    radius,
+    backgroundColor,
+    fillColor,
+    textColor,
+    fillTextColor,
+    holdTime,
+    releaseTime,
+    pressScale,
+    wave,
+    waveAmplitude,
+  ]);
 
   return (
     <button
@@ -303,16 +319,15 @@ const HoldButton: React.FC<HoldButtonProps> = ({
       data-direction={direction}
       data-glow={glow ? 'true' : undefined}
       aria-describedby={hintId}
-      style={{ ...cssVars, ...style }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
-      onPointerUp={e => endPointer(e)}
-      onPointerCancel={e => endPointer(e, { drifted: true })}
-      onLostPointerCapture={e => endPointer(e, { drifted: true })}
+      onPointerUp={(e) => endPointer(e)}
+      onPointerCancel={(e) => endPointer(e, { drifted: true })}
+      onLostPointerCapture={(e) => endPointer(e, { drifted: true })}
       onPointerLeave={handlePointerLeave}
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
-      onContextMenu={e => e.preventDefault()}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <span className="hold-button__pulse" aria-hidden="true" />
       <span className="hold-button__label">{labels}</span>

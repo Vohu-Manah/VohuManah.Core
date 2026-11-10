@@ -9,5 +9,6 @@ public sealed record UserProfileResponse
     public string FullName { get; init; } = string.Empty;
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
+    public List<string> Permissions { get; init; } = [];
 }
 

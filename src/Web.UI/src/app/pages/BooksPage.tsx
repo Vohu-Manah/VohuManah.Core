@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group, ActionIcon, Text } from '@mantine/core';
 import {FaPlus, FaEdit, FaTrash, FaUser, FaPaperclip, FaQrcode, FaCamera } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -25,12 +25,15 @@ import type { PublisherName } from '@/app/models/publisher';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { getFullImageUrl } from '@/app/helpers/imageUrl';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 import QrCodePrint from '@/app/components/common/QrCodePrint';
 import BarcodePrintModal from '@/app/components/common/BarcodePrintModal';
 import BookAttachmentsModal from '@/app/components/common/BookAttachmentsModal';
 
 export default function BooksPage() {
   const navigate = useNavigate();
+  const { can } = useAuth();
   const [books, setBooks] = useState<BookList[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -78,15 +81,51 @@ export default function BooksPage() {
     },
   });
 
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const result = await bookService.getList({
+        page,
+        pageSize: 10,
+        search: searchTerm || undefined,
+        year: filters.year || undefined,
+        fromDate: filters.fromDate ?? undefined,
+        toDate: filters.toDate ?? undefined,
+      });
+      setBooks(result.items);
+      setTotalCount(result.totalCount);
+    } catch {
+  
+    } finally {
+      setLoading(false);
+    }
+  }, [page, searchTerm, filters]);
+
+  const loadLookups = useCallback(async () => {
+    try {
+      const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
+        cityService.getNames(),
+        languageService.getNames(),
+        subjectService.getNames(),
+        publisherService.getNames(),
+      ]);
+      setCities(citiesData);
+      setLanguages(languagesData);
+      setSubjects(subjectsData);
+      setPublishers(publishersData);
+    } catch {
+  
+      }
+  }, []);
   useEffect(() => {
-    loadData();
-    
-  }, [page, filters, searchTerm]);
+
+    void loadData();
+  }, [loadData]);
 
   useEffect(() => {
-    loadLookups();
-     
-  }, []);
+
+    void loadLookups();
+  }, [loadLookups]);
 
   const handleFilterChange = (next: TableFilterValues) => {
     setFilters(next);
@@ -138,42 +177,7 @@ export default function BooksPage() {
     }
   }, [books]);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const result = await bookService.getList({
-        page,
-        pageSize: 10,
-        search: searchTerm || undefined,
-        year: filters.year || undefined,
-        fromDate: filters.fromDate ?? undefined,
-        toDate: filters.toDate ?? undefined,
-      });
-      setBooks(result.items);
-      setTotalCount(result.totalCount);
-    } catch {
-      
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const loadLookups = async () => {
-    try {
-      const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
-        cityService.getNames(),
-        languageService.getNames(),
-        subjectService.getNames(),
-        publisherService.getNames(),
-      ]);
-      setCities(citiesData);
-      setLanguages(languagesData);
-      setSubjects(subjectsData);
-      setPublishers(publishersData);
-    } catch {
-        
-      }
-  };
 
   const handleBookImageChange = (file: File | null) => {
     if (file) {
@@ -205,7 +209,7 @@ export default function BooksPage() {
               await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
-        
+  
       }
           }
           appMessage.success('کتاب با موفقیت به‌روزرسانی شد');
@@ -217,7 +221,7 @@ export default function BooksPage() {
               await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب', true);
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
-        
+  
       }
           }
           appMessage.success('کتاب با موفقیت ایجاد شد');
@@ -229,7 +233,7 @@ export default function BooksPage() {
         setBookImagePreview('');
         loadData();
       } catch {
-        
+  
       } finally {
         setLoading(false);
       }
@@ -285,7 +289,7 @@ export default function BooksPage() {
       
       setModalOpened(true);
     } catch {
-      
+  
     } finally {
       setLoading(false);
     }
@@ -299,7 +303,7 @@ export default function BooksPage() {
         appMessage.success('کتاب با موفقیت حذف شد');
         loadData();
       } catch {
-        
+  
       } finally {
         setLoading(false);
       }
@@ -373,12 +377,16 @@ export default function BooksPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.Book.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.Book.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -404,18 +412,20 @@ export default function BooksPage() {
           >
             اسکن
           </Button>
-          <Button
-            leftSection={<FaPlus />}
-            onClick={() => {
-              form.reset();
-              setEditingBook(null);
-              setBookImageFile(null);
-              setBookImagePreview('');
-              setModalOpened(true);
-            }}
-          >
-            افزودن کتاب جدید
-          </Button>
+          {can(PERM.Book.create) && (
+            <Button
+              leftSection={<FaPlus />}
+              onClick={() => {
+                form.reset();
+                setEditingBook(null);
+                setBookImageFile(null);
+                setBookImagePreview('');
+                setModalOpened(true);
+              }}
+            >
+              افزودن کتاب جدید
+            </Button>
+          )}
         </Group>
       </Group>
 

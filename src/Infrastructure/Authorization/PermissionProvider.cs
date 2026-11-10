@@ -1,3 +1,4 @@
+using System.Threading;
 namespace Infrastructure.Authorization;
 
 internal sealed class PermissionProvider

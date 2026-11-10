@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
 import { Button, Card, Stack, Title, Group, ActionIcon } from '@mantine/core';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -10,8 +10,11 @@ import { subjectService } from '@/app/services/library/subjectService';
 import type { Subject, CreateSubjectRequest } from '@/app/models/subject';
 import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
+import { useAuth } from '@/app/context/AuthContext';
+import { PERM } from '@/app/models/permissions';
 
 export default function SubjectsPage() {
+  const { can } = useAuth();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpened, setModalOpened] = useState(false);
@@ -26,13 +29,8 @@ export default function SubjectsPage() {
     },
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await subjectService.getAll();
       setSubjects(data);
     } catch (error) {
@@ -40,7 +38,12 @@ export default function SubjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+
+    void loadData();
+  }, [loadData]);
 
   const handleSubmit = async () => {
     if (!form.validate().hasErrors) {
@@ -102,12 +105,16 @@ export default function SubjectsPage() {
       title: 'عملیات',
       render: (row) => (
         <Group gap="xs">
-          <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
-            <FaEdit />
-          </ActionIcon>
-          <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
-            <FaTrash />
-          </ActionIcon>
+          {can(PERM.Subject.update) && (
+            <ActionIcon color="blue" onClick={() => handleEdit(row.id)}>
+              <FaEdit />
+            </ActionIcon>
+          )}
+          {can(PERM.Subject.del) && (
+            <ActionIcon color="red" onClick={() => handleDelete(row.id)}>
+              <FaTrash />
+            </ActionIcon>
+          )}
         </Group>
       ),
     },
@@ -117,16 +124,18 @@ export default function SubjectsPage() {
     <Stack p="md">
       <Group justify="space-between">
         <Title order={2}>مدیریت موضوعات</Title>
-        <Button
-          leftSection={<FaPlus />}
-          onClick={() => {
-            form.reset();
-            setEditingSubject(null);
-            setModalOpened(true);
-          }}
-        >
-          افزودن موضوع جدید
-        </Button>
+        {can(PERM.Subject.create) && (
+          <Button
+            leftSection={<FaPlus />}
+            onClick={() => {
+              form.reset();
+              setEditingSubject(null);
+              setModalOpened(true);
+            }}
+          >
+            افزودن موضوع جدید
+          </Button>
+        )}
       </Group>
 
       <Card withBorder>
@@ -156,5 +165,4 @@ export default function SubjectsPage() {
     </Stack>
   );
 }
-
 
