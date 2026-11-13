@@ -47,14 +47,6 @@ internal sealed class ManuscriptSearchListReport : BaseEndpoint
 
                 var manuscripts = searchResult.Value.Items;
 
-                if (manuscripts.Count == 0)
-                {
-                    return CustomResults.Problem(
-                        title: "گزارش خالی",
-                        detail: "گزارش درخواستی خالی می باشد",
-                        statusCode: StatusCodes.Status400BadRequest);
-                }
-
                 var parameters = new Dictionary<string, object>
                 {
                     { "Today", ReportExportHelper.PersianToday() },

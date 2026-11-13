@@ -50,14 +50,6 @@ internal sealed class PublicationSearchListReport : BaseEndpoint
 
                 var publications = searchResult.Value.Items;
 
-                if (publications.Count == 0)
-                {
-                    return CustomResults.Problem(
-                        title: "گزارش خالی",
-                        detail: "گزارش درخواستی خالی می باشد",
-                        statusCode: StatusCodes.Status400BadRequest);
-                }
-
                 var parameters = new Dictionary<string, object>
                 {
                     { "Today", ReportExportHelper.PersianToday() },

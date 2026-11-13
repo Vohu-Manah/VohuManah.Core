@@ -77,7 +77,7 @@ export function ReportModal({ opened, onClose, reportRequest, title = 'گزار�
         const { html } = await fetchPage(targetPage);
         setReportHtml(html);
 
-        void fetchPage(targetPage + 1);
+        void fetchPage(targetPage + 1).catch(() => undefined);
       } catch (err) {
         const errorMessage = getErrorMessage(err, 'خطا در بارگذاری گزارش');
         setError(errorMessage);
