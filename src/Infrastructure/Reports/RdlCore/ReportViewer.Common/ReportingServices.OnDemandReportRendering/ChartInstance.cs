@@ -191,6 +191,7 @@ namespace ReportingServices.OnDemandReportRendering
 				chartMapper.HeightOverride = m_heightOverride;
 				chartMapper.RenderChart();
 				image = chartMapper.GetImage(type);
+				System.Console.Error.WriteLine("[CHART] image null? " + (image == null));
 				actionImageMaps = chartMapper.GetImageMaps();
 			}
 		}

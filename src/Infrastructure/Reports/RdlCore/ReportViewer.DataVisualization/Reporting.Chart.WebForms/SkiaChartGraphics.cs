@@ -8,6 +8,7 @@ using Reporting.Chart.WebForms.Rendering;
 using Reporting.Rendering;
 using Reporting.Chart.WebForms.Rendering.Skia;
 using SkiaSharp;
+using SkiaSharp.HarfBuzz;
 
 namespace Reporting.Chart.WebForms
 {
@@ -95,7 +96,19 @@ namespace Reporting.Chart.WebForms
 		public SizeF MeasureString(string text, IChartFont font)
 		{
 			var nativeFont = Native(font);
-			var width = nativeFont.MeasureText(text);
+			float width;
+			if (NeedsArabicShaping(text))
+			{
+				using var shaper = new SKShaper(nativeFont.Typeface);
+				var shapeBuffer = new HarfBuzzSharp.Buffer();
+				shapeBuffer.AddUtf16(text);
+				shapeBuffer.GuessSegmentProperties();
+				width = shaper.Shape(shapeBuffer, nativeFont).Width;
+			}
+			else
+			{
+				width = nativeFont.MeasureText(text);
+			}
 			nativeFont.GetFontMetrics(out var metrics);
 			return new SizeF(width, metrics.Descent - metrics.Ascent);
 		}
@@ -153,7 +166,22 @@ namespace Reporting.Chart.WebForms
 				effectiveRect = new RectangleF(centerX - layoutRectangle.Height / 2f, centerY - layoutRectangle.Width / 2f, layoutRectangle.Height, layoutRectangle.Width);
 			}
 
-			var width = font.MeasureText(s);
+			float width;
+			SKShaper.Result shaped = null;
+			SKShaper shaper = null;
+			if (NeedsArabicShaping(s))
+			{
+				shaper = new SKShaper(font.Typeface);
+				var shapeBuffer = new HarfBuzzSharp.Buffer();
+				shapeBuffer.AddUtf16(s);
+				shapeBuffer.GuessSegmentProperties();
+				shaped = shaper.Shape(shapeBuffer, font);
+				width = shaped.Width;
+			}
+			else
+			{
+				width = font.MeasureText(s);
+			}
 			font.GetFontMetrics(out var metrics);
 			var textHeight = metrics.Descent - metrics.Ascent;
 
@@ -181,11 +209,54 @@ namespace Reporting.Chart.WebForms
 				canvas.Save();
 				canvas.RotateDegrees(90, centerX, centerY);
 			}
-			canvas.DrawText(s, x, baselineY, SKTextAlign.Left, font, paint);
+			if (shaped != null)
+			{
+				var glyphs = Array.ConvertAll(shaped.Codepoints, g => (ushort)g);
+				var points = shaped.Points;
+				if (points.Length > 0)
+				{
+					var minX = points[0].X;
+					for (var i = 1; i < points.Length; i++)
+					{
+						if (points[i].X < minX) minX = points[i].X;
+					}
+					if (minX < 0)
+					{
+						var shifted = new SKPoint[points.Length];
+						for (var i = 0; i < points.Length; i++)
+						{
+							shifted[i] = new SKPoint(points[i].X - minX, points[i].Y);
+						}
+						points = shifted;
+					}
+				}
+				using var textBlobBuilder = new SKTextBlobBuilder();
+				textBlobBuilder.AddPositionedRun(glyphs, font, points);
+				using var textBlob = textBlobBuilder.Build();
+				canvas.DrawText(textBlob, x, baselineY, paint);
+			}
+			else
+			{
+				canvas.DrawText(s, x, baselineY, SKTextAlign.Left, font, paint);
+			}
 			if (vertical)
 			{
 				canvas.Restore();
 			}
+			shaper?.Dispose();
+		}
+
+		private static bool NeedsArabicShaping(string text)
+		{
+			foreach (var c in text)
+			{
+				if ((c >= '\u0600' && c <= '\u06FF') || (c >= '\u0750' && c <= '\u077F') ||
+					(c >= '\uFB50' && c <= '\uFDFF') || (c >= '\uFE70' && c <= '\uFEFF'))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private static SKPath ToClosedSKPath(PointF[] points)

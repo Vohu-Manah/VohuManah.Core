@@ -1892,10 +1892,20 @@ namespace ReportingServices.Rendering.ImageRenderer
 			return value2;
 		}
 
+		private static float GlyphAdvance1000(ReportingServices.Rendering.RichText.TextRun textRun, PDFFont pdfFont, int glyphIndex)
+		{
+			ReportingServices.Rendering.RichText.SkiaCachedFont skiaFont = textRun.CachedFont?.SkiaFont;
+			if (skiaFont != null)
+			{
+				return (float)textRun.GlyphData.ScaledAdvances[glyphIndex] * 1000f / skiaFont.Font.Size;
+			}
+			return (float)textRun.GlyphData.ScaledAdvances[glyphIndex] * pdfFont.EMGridConversion;
+		}
+
 		private static void WriteGlyph(ReportingServices.Rendering.RichText.TextRun textRun, StringBuilder sb, PDFFont pdfFont, int glyphIndex)
 		{
 			ushort num = (ushort)textRun.GlyphData.GlyphScriptShapeData.Glyphs[glyphIndex];
-			MapGlyphToUnicodeChar(pdfFont.AddUniqueGlyph(num, (float)textRun.GlyphData.ScaledAdvances[glyphIndex] * pdfFont.EMGridConversion), textRun, glyphIndex);
+			MapGlyphToUnicodeChar(pdfFont.AddUniqueGlyph(num, GlyphAdvance1000(textRun, pdfFont, glyphIndex)), textRun, glyphIndex);
 			if (num == ushort.MaxValue)
 			{
 				num = 34;
@@ -2004,7 +2014,7 @@ namespace ReportingServices.Rendering.ImageRenderer
 					for (int k = 0; k < textRun.GlyphData.GlyphScriptShapeData.GlyphCount; k++)
 					{
 						ushort glyph = (ushort)textRun.GlyphData.GlyphScriptShapeData.Glyphs[k];
-						MapGlyphToUnicodeChar(pdfFont.AddUniqueGlyph(glyph, (float)textRun.GlyphData.ScaledAdvances[k] * pdfFont.EMGridConversion), textRun, k);
+						MapGlyphToUnicodeChar(pdfFont.AddUniqueGlyph(glyph, GlyphAdvance1000(textRun, pdfFont, k)), textRun, k);
 					}
 				}
 			}

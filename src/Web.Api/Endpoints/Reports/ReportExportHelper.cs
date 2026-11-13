@@ -24,7 +24,7 @@ internal static class ReportExportHelper
         }
 
         var reportParameters = parameters ?? new Dictionary<string, object>();
-        reportParameters["Today"] = DateTime.Now.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+        reportParameters["Today"] = PersianToday();
 
         byte[] fileBytes;
         string contentType;
@@ -63,6 +63,18 @@ internal static class ReportExportHelper
         }
 
         return Results.File(fileBytes, contentType, fileName);
+    }
+
+    public static string PersianToday()
+    {
+        DateTime now = DateTime.Now;
+        var calendar = new global::System.Globalization.PersianCalendar();
+        return string.Format(
+            System.Globalization.CultureInfo.InvariantCulture,
+            "{0:0000}/{1:00}/{2:00}",
+            calendar.GetYear(now),
+            calendar.GetMonth(now),
+            calendar.GetDayOfMonth(now));
     }
 
     public static IResult HandleExportException(Exception ex, string format)

@@ -14,6 +14,13 @@ namespace Web.Api.Endpoints.Reports;
 [RequireRole(EndpointNames.Reports.Export)]
 internal sealed class ExportReport : BaseEndpoint
 {
+    private static readonly Dictionary<string, string[]> StatFilterTitles = new()
+    {
+        [ReportConstants.BookStatisticReport] = new[] { "ناشر", "محل انتشار", "سال انتشار", "زبان", "موضوع" },
+        [ReportConstants.ManuscriptStatisticReport] = new[] { "فاصله", "محل نگارش", "سال", "زبان", "موضوع" },
+        [ReportConstants.PublicationStatisticReport] = new[] { "نوع", "محل انتشار", "تاریخ انتشار", "زبان", "موضوع" },
+    };
+
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("reports/export/{reportName}", async (
@@ -31,6 +38,7 @@ internal sealed class ExportReport : BaseEndpoint
             try
             {
                 var paramDict = ReportParameterParser.Parse(parameters);
+        filterType ??= 1;
                 IEnumerable dataSource;
 
                 if (reportName == ReportConstants.BookStatisticReport && filterType.HasValue)
@@ -66,6 +74,8 @@ internal sealed class ExportReport : BaseEndpoint
 
                     paramDict["BookCount"] = statistics.BookCount;
                     paramDict["VolumeCount"] = statistics.VolumeCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.BookStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsBookStatistic;
                 }
                 else if (reportName == ReportConstants.ManuscriptStatisticReport && filterType.HasValue)
                 {
@@ -99,6 +109,8 @@ internal sealed class ExportReport : BaseEndpoint
                     };
 
                     paramDict["ManuscriptCount"] = statistics.ManuscriptCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.ManuscriptStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsManuscriptStatistic;
                 }
                 else if (reportName == ReportConstants.PublicationStatisticReport && filterType.HasValue)
                 {
@@ -132,6 +144,8 @@ internal sealed class ExportReport : BaseEndpoint
                     };
 
                     paramDict["PublicationCount"] = statistics.PublicationCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.PublicationStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsPublicationStatistic;
                 }
                 else
                 {

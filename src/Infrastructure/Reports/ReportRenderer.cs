@@ -29,7 +29,7 @@ internal sealed class ReportRenderer : IReportRenderer
             using var report = CreateReport(reportModel);
             byte[] pdf = report.Render(
                 "PDF",
-                deviceInfo: null,
+                deviceInfo: "<DeviceInfo><OutputFormat>PDF</OutputFormat><EmbedFonts>Full</EmbedFonts></DeviceInfo>",
                 pageCountMode: PageCountMode.Actual,
                 mimeType: out _,
                 encoding: out _,
@@ -85,8 +85,13 @@ internal sealed class ReportRenderer : IReportRenderer
             
             const string deviceInfo =
                 "<DeviceInfo>" +
-                "<ExpandContent>false</ExpandContent>" +
-                "<ImageConsolidation>false</ImageConsolidation>" +
+                "<OutputFormat>PDF</OutputFormat>" + 
+                "<PageHeight>29.7cm</PageHeight>" +
+                "<PageWidth>21cm</PageWidth>" +
+                "<MarginTop>1cm</MarginTop>" +
+                "<MarginLeft>1cm</MarginLeft>" +
+                "<MarginRight>1cm</MarginRight>" +
+                "<MarginBottom>1cm</MarginBottom>" +
                 "</DeviceInfo>";
             byte[] htmlBytes = report.Render(
                 "HTML4.0",

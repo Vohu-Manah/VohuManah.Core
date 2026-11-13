@@ -60,7 +60,7 @@ internal sealed class BookSearchListReport : BaseEndpoint
 
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Today", DateTime.Now.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture) },
+                    { "Today", ReportExportHelper.PersianToday() },
                     { "Page", request.Page },
                     { "PageSize", request.PageSize },
                     { "TotalCount", searchResult.Value.TotalCount },
