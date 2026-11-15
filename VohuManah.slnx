@@ -15,7 +15,7 @@
       <Deploy />
     </Project>
   </Folder>
-  <Project Path="docker-compose.dcproj">
+  <Project Path="docker/docker-compose.dcproj">
     <Build />
   </Project>
 </Solution>

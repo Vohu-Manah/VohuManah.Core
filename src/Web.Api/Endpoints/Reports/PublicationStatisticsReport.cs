@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Messaging;
 using Application.Library.Publications.GetStatistics;
 using Infrastructure.Reports;
 using Web.Api.Endpoints.Attributes;
@@ -31,7 +31,7 @@ internal sealed class PublicationStatisticsReport : BaseEndpoint
                 if (result.IsFailure)
                 {
                     return CustomResults.Problem(
-                        title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                        title: "خطا در دریافت داده ها",
                         detail: result.Error.Description);
                 }
 
@@ -58,8 +58,9 @@ internal sealed class PublicationStatisticsReport : BaseEndpoint
 
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Title", $"گزارش آماری براساس {filterTitles.GetValueOrDefault(request.FilterType, "Ù†ÙˆØ¹")}" },
-                    { "PublicationCount", statistics.PublicationCount }
+                    { "Title", $"گزارش آماری براساس {filterTitles.GetValueOrDefault(request.FilterType, "نوع")}" },
+                    { "PublicationCount", statistics.PublicationCount },
+                    { "Today", ReportExportHelper.PersianToday() }
                 };
 
                 var htmlContent = await reportService.GenerateHtmlAsync(

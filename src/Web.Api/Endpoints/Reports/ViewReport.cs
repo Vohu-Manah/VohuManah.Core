@@ -1,4 +1,4 @@
-﻿using Infrastructure.Reports;
+using Infrastructure.Reports;
 using Microsoft.AspNetCore.Mvc;
 using Web.Api.Endpoints.Attributes;
 using Web.Api.Infrastructure;
@@ -35,7 +35,7 @@ internal sealed class ViewReport : BaseEndpoint
             catch (FileNotFoundException ex)
             {
                 return CustomResults.Problem(
-                    title: "Ú¯Ø²Ø§Ø±Ø´ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                    title: "گزارش یافت نشد",
                     detail: ex.Message,
                     statusCode: StatusCodes.Status404NotFound);
             }

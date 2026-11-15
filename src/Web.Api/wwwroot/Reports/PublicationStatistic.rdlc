@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -46,7 +46,7 @@
                   <TextRun>
                     <Value>تعداد نشریه :</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -81,7 +81,7 @@
                   <TextRun>
                     <Value>=Parameters!PublicationCount.Value</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -178,7 +178,7 @@
                 <ChartCategoryAxes>
                   <ChartAxis Name="Primary">
                     <Style>
-                      <FontFamily>Tahoma</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
@@ -384,7 +384,7 @@
                     <TextRun>
                       <Value>=Parameters!Title.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>18pt</FontSize>
                       </Style>
                     </TextRun>
@@ -420,7 +420,7 @@
                     <TextRun>
                       <Value>تاریخ گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -456,7 +456,7 @@
                     <TextRun>
                       <Value>ساعت گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -492,7 +492,7 @@
                     <TextRun>
                       <Value>=Parameters!Today.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -527,7 +527,7 @@
                     <TextRun>
                       <Value>=FormatDateTime(Globals!ExecutionTime,DateFormat.ShortTime)</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>

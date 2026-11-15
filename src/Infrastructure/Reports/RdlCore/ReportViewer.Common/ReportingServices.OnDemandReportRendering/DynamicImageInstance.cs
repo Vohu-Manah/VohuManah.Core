@@ -71,6 +71,7 @@ namespace ReportingServices.OnDemandReportRendering
 			}
 			catch (Exception exception)
 			{
+				Console.Error.WriteLine("[DYNIMG-FAIL] " + GetType().Name + ": " + GetInnerMostException(exception));
 				actionImageMaps = null;
 				return CreateExceptionImage(exception);
 			}

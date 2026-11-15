@@ -195,6 +195,26 @@ namespace ReportingServices.Rendering.ImageRenderer
 			return stream;
 		}
 
+		private static ImageFormat SniffImageFormat(byte[] data)
+		{
+			if (data != null && data.Length >= 4)
+			{
+				if (data[0] == 137 && data[1] == 80 && data[2] == 78 && data[3] == 71)
+				{
+					return ImageFormat.Png;
+				}
+				if (data[0] == 255 && data[1] == 216)
+				{
+					return ImageFormat.Jpeg;
+				}
+				if (data[0] == 71 && data[1] == 73 && data[2] == 70)
+				{
+					return ImageFormat.Gif;
+				}
+			}
+			return ImageFormat.Png;
+		}
+
 		internal static bool GetImage(RPLReport rplReport, ref byte[] imageData, long imageDataOffset, ref GDIImageProps gdiImageProps)
 		{
 			if (GetImage(rplReport, ref imageData, imageDataOffset))
@@ -203,9 +223,16 @@ namespace ReportingServices.Rendering.ImageRenderer
 				{
 					try
 					{
-						using (Image image = Image.FromStream(new MemoryStream(imageData)))
+						using (PortableImage portableImage = PortableImage.FromStream(new MemoryStream(imageData)))
 						{
-							gdiImageProps = new GDIImageProps(image);
+							gdiImageProps = new GDIImageProps
+							{
+								Width = portableImage.Width,
+								Height = portableImage.Height,
+								HorizontalResolution = portableImage.HorizontalResolution,
+								VerticalResolution = portableImage.VerticalResolution,
+								RawFormat = SniffImageFormat(imageData)
+							};
 						}
 					}
 					catch

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -115,7 +115,7 @@
                                 <TextRun>
                                   <Value>اندازه</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -151,7 +151,7 @@
                                 <TextRun>
                                   <Value>تعداد صفحه</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -187,7 +187,7 @@
                                 <TextRun>
                                   <Value>سال نگارش</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -223,7 +223,7 @@
                                 <TextRun>
                                   <Value>محل نگارش</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -259,7 +259,7 @@
                                 <TextRun>
                                   <Value>افتادگی</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -295,7 +295,7 @@
                                 <TextRun>
                                   <Value>نویسنده</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -331,7 +331,7 @@
                                 <TextRun>
                                   <Value>عنوان</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -367,7 +367,7 @@
                                 <TextRun>
                                   <Value>شماره نسخه خطی</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -403,7 +403,7 @@
                                 <TextRun>
                                   <Value>ردیف</Value>
                                   <Style>
-                                    <FontFamily>shabnam</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -444,7 +444,7 @@
                                 <TextRun>
                                   <Value>=Fields!Size.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -478,7 +478,7 @@
                                 <TextRun>
                                   <Value>=Fields!PageCount.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -512,7 +512,7 @@
                                 <TextRun>
                                   <Value>=Fields!Year.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -546,7 +546,7 @@
                                 <TextRun>
                                   <Value>=Fields!WritingPlace.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -580,7 +580,7 @@
                                 <TextRun>
                                   <Value>=Fields!Gap.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -614,7 +614,7 @@
                                 <TextRun>
                                   <Value>=Fields!Author.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -648,7 +648,7 @@
                                 <TextRun>
                                   <Value>=Fields!Name.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -682,7 +682,7 @@
                                 <TextRun>
                                   <Value>=Fields!VersionNo.Value</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -716,7 +716,7 @@
                                 <TextRun>
                                   <Value>=RowNumber("DsManuscripts")</Value>
                                   <Style>
-                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontFamily>Shabnam</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -797,7 +797,7 @@
                     <TextRun>
                       <Value>لیست نسخ خطی</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>18pt</FontSize>
                       </Style>
                     </TextRun>
@@ -833,7 +833,7 @@
                     <TextRun>
                       <Value>تاریخ گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -869,7 +869,7 @@
                     <TextRun>
                       <Value>ساعت گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -905,7 +905,7 @@
                     <TextRun>
                       <Value>=Parameters!Today.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -941,7 +941,7 @@
                     <TextRun>
                       <Value>=FormatDateTime(Globals!ExecutionTime,DateFormat.ShortTime)</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1004,7 +1004,7 @@
                     <TextRun>
                       <Value>صفحه :</Value>
                       <Style>
-                        <FontFamily>Tahoma</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1039,7 +1039,7 @@
                     <TextRun>
                       <Value>از :</Value>
                       <Style>
-                        <FontFamily>Tahoma</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1075,7 +1075,7 @@
                     <TextRun>
                       <Value>=Globals!OverallTotalPages</Value>
                       <Style>
-                        <FontFamily>Tahoma</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1111,7 +1111,7 @@
                     <TextRun>
                       <Value>=Globals!PageNumber</Value>
                       <Style>
-                        <FontFamily>Tahoma</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>

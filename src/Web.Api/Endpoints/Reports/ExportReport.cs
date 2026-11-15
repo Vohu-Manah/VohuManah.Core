@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Messaging;
 using Application.Library.Books.GetStatistics;
 using Application.Library.Manuscripts.GetStatistics;
 using Application.Library.Publications.GetStatistics;
@@ -14,6 +14,13 @@ namespace Web.Api.Endpoints.Reports;
 [RequireRole(EndpointNames.Reports.Export)]
 internal sealed class ExportReport : BaseEndpoint
 {
+    private static readonly Dictionary<string, string[]> StatFilterTitles = new()
+    {
+        [ReportConstants.BookStatisticReport] = new[] { "ناشر", "محل انتشار", "سال انتشار", "زبان", "موضوع" },
+        [ReportConstants.ManuscriptStatisticReport] = new[] { "فاصله", "محل نگارش", "سال", "زبان", "موضوع" },
+        [ReportConstants.PublicationStatisticReport] = new[] { "نوع", "محل انتشار", "تاریخ انتشار", "زبان", "موضوع" },
+    };
+
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("reports/export/{reportName}", async (
@@ -31,6 +38,7 @@ internal sealed class ExportReport : BaseEndpoint
             try
             {
                 var paramDict = ReportParameterParser.Parse(parameters);
+                    filterType ??= 1;
                 IEnumerable dataSource;
 
                 if (reportName == ReportConstants.BookStatisticReport && filterType.HasValue)
@@ -39,7 +47,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ú©ØªØ§Ø¨\u200CÙ‡Ø§ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار کتاب ها یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -49,7 +57,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡ Ù‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -66,6 +74,8 @@ internal sealed class ExportReport : BaseEndpoint
 
                     paramDict["BookCount"] = statistics.BookCount;
                     paramDict["VolumeCount"] = statistics.VolumeCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.BookStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsBookStatistic;
                 }
                 else if (reportName == ReportConstants.ManuscriptStatisticReport && filterType.HasValue)
                 {
@@ -73,7 +83,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ù†Ø³Ø® Ø®Ø·ÛŒ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار نسخ خطی یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -83,7 +93,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -99,6 +109,8 @@ internal sealed class ExportReport : BaseEndpoint
                     };
 
                     paramDict["ManuscriptCount"] = statistics.ManuscriptCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.ManuscriptStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsManuscriptStatistic;
                 }
                 else if (reportName == ReportConstants.PublicationStatisticReport && filterType.HasValue)
                 {
@@ -106,7 +118,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ù†Ø´Ø±ÛŒØ§Øª ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار نشریات یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -116,7 +128,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -132,6 +144,8 @@ internal sealed class ExportReport : BaseEndpoint
                     };
 
                     paramDict["PublicationCount"] = statistics.PublicationCount;
+                    paramDict["Title"] = $"گزارش آماری براساس {StatFilterTitles[ReportConstants.PublicationStatisticReport][filterType.Value - 1]}";
+                    datasourceName = ReportConstants.DsPublicationStatistic;
                 }
                 else
                 {
@@ -169,8 +183,8 @@ internal sealed class ExportReport : BaseEndpoint
 
                     default:
                         return CustomResults.Problem(
-                            title: "ÙØ±Ù…Øª Ù†Ø§Ù…Ø¹ØªØ¨Ø±",
-                            detail: $"ÙØ±Ù…Øª {format} Ù¾Ø´ØªÛŒØ¨Ø§Ù†ÛŒ Ù†Ù…ÛŒ\u200CØ´ÙˆØ¯. ÙØ±Ù…Øª\u200CÙ‡Ø§ÛŒ Ù…Ø¬Ø§Ø²: pdf, excel",
+                            title: "فرمت نامعتبر",
+                            detail: $"فرمت {format} پشتیبانی نمیشود. فرمت های مجاز: pdf, excel",
                             statusCode: StatusCodes.Status400BadRequest);
                 }
 
@@ -186,7 +200,7 @@ internal sealed class ExportReport : BaseEndpoint
             catch (FileNotFoundException ex)
             {
                 return CustomResults.Problem(
-                    title: "Ú¯Ø²Ø§Ø±Ø´ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                    title: "گزارش یافت نشد",
                     detail: ex.Message,
                     statusCode: StatusCodes.Status404NotFound);
             }

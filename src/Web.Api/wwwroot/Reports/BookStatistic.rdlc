@@ -46,7 +46,7 @@
                   <TextRun>
                     <Value>تعداد کل کتابها :</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -81,7 +81,7 @@
                   <TextRun>
                     <Value>=Parameters!BookCount.Value</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -374,7 +374,7 @@
                   <TextRun>
                     <Value>تعداد جلد :</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -410,7 +410,7 @@
                   <TextRun>
                     <Value>=Parameters!VolumeCount.Value</Value>
                     <Style>
-                      <FontFamily>shabnam</FontFamily>
+                      <FontFamily>Shabnam</FontFamily>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -455,7 +455,7 @@
                     <TextRun>
                       <Value>=Parameters!Title.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>18pt</FontSize>
                       </Style>
                     </TextRun>
@@ -491,7 +491,7 @@
                     <TextRun>
                       <Value>تاریخ گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -527,7 +527,7 @@
                     <TextRun>
                       <Value>ساعت گزارش :</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -563,7 +563,7 @@
                     <TextRun>
                       <Value>=Parameters!Today.Value</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
@@ -599,7 +599,7 @@
                     <TextRun>
                       <Value>=FormatDateTime(Globals!ExecutionTime,DateFormat.ShortTime)</Value>
                       <Style>
-                        <FontFamily>shabnam</FontFamily>
+                        <FontFamily>Shabnam</FontFamily>
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
