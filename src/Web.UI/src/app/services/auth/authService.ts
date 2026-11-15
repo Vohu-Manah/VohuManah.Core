@@ -1,5 +1,5 @@
 import { apiClient, rawClient } from '@/app/services/api/client';
-import { setTokens, clearTokens, getTokens } from '@/app/services/api/tokenStore';
+import { setAuthMetadata, clearAuthMetadata } from '@/app/services/api/tokenStore';
 import { toApiError } from '@/app/services/api/errors';
 
 export type LoginRequest = {
@@ -11,16 +11,12 @@ export type LoginRequest = {
 export type LoginResponse = {
   userName: string;
   fullName: string;
-  accessToken: string;
-  refreshToken: string;
 };
 
 export async function login(payload: LoginRequest): Promise<LoginResponse> {
   try {
     const response = await rawClient.post<LoginResponse>('/library/users/login', payload);
-    setTokens({
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
+    setAuthMetadata({
       userName: response.data.userName,
       fullName: response.data.fullName,
     });
@@ -31,46 +27,19 @@ export async function login(payload: LoginRequest): Promise<LoginResponse> {
 }
 
 export async function refresh(): Promise<LoginResponse> {
-  const tokens = getTokens();
-  if (!tokens?.refreshToken) {
-    throw toApiError(new Error('Refresh token not found'));
-  }
-
   try {
-    const response = await rawClient.post<{ accessToken: string; refreshToken: string }>(
-      '/library/users/refresh-token',
-      { refreshToken: tokens.refreshToken },
-    );
-
-    const updated: LoginResponse = {
-      userName: tokens.userName ?? '',
-      fullName: tokens.fullName ?? '',
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-    };
-    setTokens({
-      ...tokens,
-      accessToken: updated.accessToken,
-      refreshToken: updated.refreshToken,
-    });
-    return updated;
+    const response = await rawClient.post<LoginResponse>('/library/users/refresh-token');
+    return response.data;
   } catch (error) {
-    clearTokens();
+    clearAuthMetadata();
     throw toApiError(error);
   }
 }
 
 export async function revoke(): Promise<void> {
-  const tokens = getTokens();
-  if (!tokens?.refreshToken) {
-    clearTokens();
-    return;
-  }
-
   try {
-    await apiClient.post('/library/users/revoke-token', { refreshToken: tokens.refreshToken });
+    await apiClient.post('/library/users/revoke-token');
   } finally {
-    clearTokens();
+    clearAuthMetadata();
   }
 }
-

@@ -1,4 +1,6 @@
-﻿using Web.Api.Infrastructure;
+﻿using Microsoft.AspNetCore.Http;
+using Web.Api.Infrastructure;
+using Web.Api.Middleware;
 
 namespace Web.Api;
 
@@ -11,10 +13,13 @@ public static class DependencyInjection
 
         services.AddControllers();
 
+        services.AddScoped<CsrfMiddleware>();
+
         services.AddCors(options =>
             options.AddPolicy("CorsPolicy", policy =>
                 policy
-                    .AllowAnyOrigin()
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowCredentials()
                     .AllowAnyMethod()
                     .AllowAnyHeader()));
 

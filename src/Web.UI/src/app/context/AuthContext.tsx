@@ -1,15 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { LoginRequest } from '@/app/services/auth/authService';
 import { login, refresh, revoke } from '@/app/services/auth/authService';
-import { clearTokens, getTokens } from '@/app/services/api/tokenStore';
+import { clearAuthMetadata, getAuthMetadata } from '@/app/services/api/tokenStore';
 import { appMessage } from '@/app/messages/appMessages';
 import type { UserProfile } from '@/app/models/user';
 import { userService } from '@/app/services/library/userService';
 
 type AuthState = {
   user: UserProfile | null;
-  accessToken: string | null;
-  refreshToken: string | null;
+  isAuthenticated: boolean;
 };
 
 type AuthContextValue = {
@@ -23,8 +22,7 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-async function loadProfilePermissions(userName: string | undefined, fullName: string | undefined, accessToken: string | null): Promise<UserProfile | null> {
-  if (!accessToken) return null;
+async function loadProfilePermissions(userName: string | undefined, fullName: string | undefined): Promise<UserProfile | null> {
   try {
     const profile = await userService.getCurrentProfile();
     return { userName: profile.userName ?? userName, fullName: profile.fullName ?? fullName, permissions: profile.permissions ?? [] };
@@ -36,30 +34,24 @@ async function loadProfilePermissions(userName: string | undefined, fullName: st
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
     user: null,
-    accessToken: null,
-    refreshToken: null,
+    isAuthenticated: false,
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const tokens = getTokens();
-    if (!tokens) {
-
+    const metadata = getAuthMetadata();
+    if (!metadata) {
       setLoading(false);
       return;
     }
 
     refresh()
       .then(async (res) => {
-        const permissions = await loadProfilePermissions(res.userName, res.fullName, res.accessToken);
-        setState({
-          user: permissions,
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-        });
+        const profile = await loadProfilePermissions(res.userName, res.fullName);
+        setState({ user: profile, isAuthenticated: true });
       })
       .catch(() => {
-        clearTokens();
+        clearAuthMetadata();
         if (typeof window !== 'undefined') {
           window.location.hash = '#/login';
         }
@@ -69,34 +61,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const handleLogin = async (payload: LoginRequest) => {
     const result = await login(payload);
-    const permissions = await loadProfilePermissions(result.userName, result.fullName, result.accessToken);
-    setState({
-      user: permissions,
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
-    });
+    const profile = await loadProfilePermissions(result.userName, result.fullName);
+    setState({ user: profile, isAuthenticated: true });
     appMessage.success('ok');
   };
 
   const handleLogout = async () => {
     await revoke();
-    setState({ user: null, accessToken: null, refreshToken: null });
+    setState({ user: null, isAuthenticated: false });
   };
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user: state.user,
-      isAuthenticated: !!state.accessToken,
+      isAuthenticated: state.isAuthenticated,
       loading,
       can: (permission: string) => {
-        if (!state.accessToken) return false;
+        if (!state.isAuthenticated) return false;
         const perms = state.user?.permissions;
         return !!perms && perms.includes(permission);
       },
       login: handleLogin,
       logout: handleLogout,
     }),
-    [state.user, state.accessToken, loading],
+    [state.user, state.isAuthenticated, loading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

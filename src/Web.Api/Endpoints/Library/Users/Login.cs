@@ -1,5 +1,6 @@
 using Application.Abstractions.Messaging;
 using Application.Library.Users.Login;
+using Infrastructure.Authentication;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -14,12 +15,18 @@ internal sealed class Login : IEndpoint
     {
         app.MapPost("library/users/login", async (
             Request request,
+            HttpContext httpContext,
             ICommandHandler<LoginLibraryUserCommand, LoginLibraryUserResponse> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new LoginLibraryUserCommand(request.UserName, request.Password, request.HumanVerifyToken);
 
             Result<LoginLibraryUserResponse> result = await handler.Handle(command, cancellationToken);
+
+            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value.AccessToken) && !string.IsNullOrEmpty(result.Value.RefreshToken))
+            {
+                AuthCookies.SetAuthCookies(httpContext, result.Value.AccessToken, result.Value.RefreshToken);
+            }
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

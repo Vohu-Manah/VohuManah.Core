@@ -1,6 +1,5 @@
 import { apiClient } from '@/app/services/api/client';
 import { getErrorMessage } from '@/app/helpers/errorHandler';
-import { getTokens } from '@/app/services/api/tokenStore';
 import { appConfig } from '@/app/config/app-config';
 import { appMessage } from '@/app/messages/appMessages';
 
@@ -44,10 +43,6 @@ export function buildReportUrl(request: ReportViewRequest): string {
     ...Object.fromEntries(Object.entries(parameters).map(([key, value]) => [key, String(value)])),
   });
 
-  const tokens = getTokens();
-  if (tokens?.accessToken) {
-    queryParams.append('access_token', tokens.accessToken);
-  }
 
   return `${baseUrl}?${queryParams.toString()}`;
 }
@@ -66,10 +61,6 @@ export function buildSearchListReportUrl(request: SearchListReportRequest): stri
 
   const queryParams = new URLSearchParams();
 
-  const tokens = getTokens();
-  if (tokens?.accessToken) {
-    queryParams.append('access_token', tokens.accessToken);
-  }
 
   return `${baseUrl}?${queryParams.toString()}`;
 }

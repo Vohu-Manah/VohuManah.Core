@@ -1,41 +1,38 @@
-type Tokens = {
-  accessToken: string;
-  refreshToken: string;
+type AuthMetadata = {
   userName?: string;
   fullName?: string;
 };
 
-const STORAGE_KEY = 'vm_auth_tokens';
+const STORAGE_KEY = 'vm_auth_metadata';
 
-let cached: Tokens | null = load();
+let cached: AuthMetadata | null = load();
 
-function load(): Tokens | null {
+function load(): AuthMetadata | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Tokens) : null;
+    return raw ? (JSON.parse(raw) as AuthMetadata) : null;
   } catch {
     return null;
   }
 }
 
-function persist(tokens: Tokens | null) {
-  cached = tokens;
-  if (tokens) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
+function persist(metadata: AuthMetadata | null) {
+  cached = metadata;
+  if (metadata) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(metadata));
   } else {
     localStorage.removeItem(STORAGE_KEY);
   }
 }
 
-export function getTokens(): Tokens | null {
+export function getAuthMetadata(): AuthMetadata | null {
   return cached;
 }
 
-export function setTokens(tokens: Tokens) {
-  persist(tokens);
+export function setAuthMetadata(metadata: AuthMetadata) {
+  persist(metadata);
 }
 
-export function clearTokens() {
+export function clearAuthMetadata() {
   persist(null);
 }
-

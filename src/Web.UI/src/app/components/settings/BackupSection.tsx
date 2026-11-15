@@ -25,7 +25,6 @@ import {
   FaCheck,
   FaTimesCircle,
 } from 'react-icons/fa';
-import { getTokens } from '@/app/services/api/tokenStore';
 import { backupService } from '@/app/services/library/backupService';
 import type { BackupInfo } from '@/app/services/library/backupService';
 import { appMessage } from '@/app/messages/appMessages';
@@ -80,8 +79,16 @@ export default function BackupSection() {
     };
   }, [loadInfo]);
 
-  const nativeDownload = (fileName: string) => {
-    const url = `/library/backup/download?fileName=${encodeURIComponent(fileName)}&access_token=${encodeURIComponent(getTokens()?.accessToken ?? '')}`;
+  const nativeDownload = async (fileName: string) => {
+    const response = await fetch(`/library/backup/download?fileName=${encodeURIComponent(fileName)}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error('دانلود فایل بکاپ ناموفق بود');
+    }
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
@@ -89,8 +96,8 @@ export default function BackupSection() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
-
   const handleCreateBackup = async () => {
     try {
       setLoading(true);
@@ -131,7 +138,7 @@ export default function BackupSection() {
         setPercent(100);
 
         try {
-          nativeDownload(data.fileName || 'library-onetime.bak');
+          await nativeDownload(data.fileName || 'library-onetime.bak');
           setPhase('done');
           setStage('بکاپ با موفقیت دانلود شد');
           appMessage.success('فایل بکاپ دانلود شد و از سرور حذف گردید');
@@ -178,7 +185,7 @@ export default function BackupSection() {
     try {
       setLoading(true);
 
-      nativeDownload(info?.fileName || 'library-onetime.bak');
+      await nativeDownload(info?.fileName || 'library-onetime.bak');
       appMessage.success('دانلود فایل بکاپ آغاز شد');
       await loadInfo();
     } catch (error) {
