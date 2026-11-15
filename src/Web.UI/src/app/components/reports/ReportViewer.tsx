@@ -3,7 +3,6 @@ import { Box, LoadingOverlay, Stack, Text, Alert, ActionIcon } from '@mantine/co
 import { FaExpand, FaCompress } from 'react-icons/fa';
 import { reportService, type ReportExportRequest } from '@/app/services/reports/reportService';
 import { appMessage } from '@/app/messages/appMessages';
-import { getTokens } from '@/app/services/api/tokenStore';
 
 interface ReportViewerProps {
   reportName: string;
@@ -77,24 +76,16 @@ export function ReportViewer({
     });
   }, [reportName, datasourceName, parameters]);
 
-  const checkReportAvailability = useCallback(async (url: string): Promise<boolean> => {
+  const checkReportAvailability = useCallback(async (url: string): Promise<string | null> => {
     try {
-      const tokens = getTokens();
-      const headers: HeadersInit = {
-        Accept: 'text/html',
-      };
-
-      if (tokens?.accessToken) {
-        headers['Authorization'] = `Bearer ${tokens.accessToken}`;
-      }
-
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       try {
         const response = await fetch(url, {
           method: 'GET',
-          headers,
+          credentials: 'include',
+          headers: { Accept: 'text/html' },
           signal: controller.signal,
         });
 
@@ -115,10 +106,12 @@ export function ReportViewer({
 
           setError(errorMessage);
           appMessage.error('خطا در بارگذاری گزارش', errorMessage);
-          return false;
+          return null;
         }
 
-        return true;
+        const html = await response.text();
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        return URL.createObjectURL(blob);
       } finally {
         clearTimeout(timeoutId);
       }
@@ -133,9 +126,10 @@ export function ReportViewer({
 
       setError(errorMessage);
       appMessage.error('خطا در بارگذاری گزارش', errorMessage);
-      return false;
+      return null;
     }
   }, []);
+
 
   useEffect(() => {
     const loadReport = async () => {
@@ -143,13 +137,12 @@ export function ReportViewer({
       setError(null);
 
       const url = buildReportUrl();
-      const isAvailable = await checkReportAvailability(url);
+      const objectUrl = await checkReportAvailability(url);
 
-      if (isAvailable) {
-        setLoading(false);
-      } else {
-        setLoading(false);
+      if (objectUrl && iframeRef.current) {
+        iframeRef.current.src = objectUrl;
       }
+      setLoading(false);
     };
 
     loadReport();

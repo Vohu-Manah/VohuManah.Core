@@ -1,8 +1,8 @@
 import axios, { AxiosHeaders } from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { appConfig } from '@/app/config/app-config';
 import { toApiError } from '@/app/services/api/errors';
-import { getTokens, setTokens, clearTokens } from '@/app/services/api/tokenStore';
+import { clearAuthMetadata } from '@/app/services/api/tokenStore';
 import { handleApiError } from '@/app/helpers/errorHandler';
 
 type ExtendedConfig = AxiosRequestConfig & {
@@ -12,6 +12,9 @@ type ExtendedConfig = AxiosRequestConfig & {
 
 const baseConfig = {
   baseURL: appConfig.apiBaseUrl,
+  withCredentials: true,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,17 +25,7 @@ export const rawClient = axios.create(baseConfig);
 export const apiClient: AxiosInstance = axios.create(baseConfig);
 
 apiClient.interceptors.request.use((config) => {
-  const tokens = getTokens();
-  if (tokens?.accessToken) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${tokens.accessToken}`,
-    } as AxiosRequestHeaders;
-  }
   if (config.data instanceof FormData) {
-    
-    
-    
     const headers = AxiosHeaders.from(config.headers);
     headers.delete('Content-Type');
     config.headers = headers;
@@ -46,29 +39,13 @@ apiClient.interceptors.response.use(
     const axiosError = toApiError(error);
     const originalConfig = (error.config ?? {}) as ExtendedConfig;
 
-    const tokens = getTokens();
-    if (error.response?.status === 401 && tokens?.refreshToken && !originalConfig.skipAuthRefresh) {
+    if (error.response?.status === 401 && !originalConfig.skipAuthRefresh) {
       try {
-        const refreshed = await rawClient.post<{ accessToken: string; refreshToken: string }>(
-          '/library/users/refresh-token',
-          { refreshToken: tokens.refreshToken },
-          { skipAuthRefresh: true } as ExtendedConfig,
-        );
-
-        setTokens({
-          ...tokens,
-          accessToken: refreshed.data.accessToken,
-          refreshToken: refreshed.data.refreshToken,
-        });
-
-        originalConfig.headers = {
-          ...(originalConfig.headers ?? {}),
-          Authorization: `Bearer ${refreshed.data.accessToken}`,
-        };
+        await rawClient.post('/library/users/refresh-token', null, { skipAuthRefresh: true } as ExtendedConfig);
         originalConfig.skipAuthRefresh = true;
         return apiClient.request(originalConfig);
       } catch (refreshError) {
-        clearTokens();
+        clearAuthMetadata();
         const refreshApiError = toApiError(refreshError);
         handleApiError(refreshApiError, 'خطا در احراز هویت');
         if (typeof window !== 'undefined') {
@@ -85,7 +62,6 @@ apiClient.interceptors.response.use(
     return Promise.reject(axiosError);
   },
 );
-
 
 export async function fetchAllPaged<T>(
   fetchPage: (page: number, pageSize: number) => Promise<{ items?: unknown; totalCount?: number }>,

@@ -11,9 +11,16 @@ public static class MiddlewareExtensions
         return app;
     }
 
-    public static IApplicationBuilder UseQueryTokenAuthentication(this IApplicationBuilder app)
+    public static IApplicationBuilder UseCookieTokenAuthentication(this IApplicationBuilder app)
     {
-        app.UseMiddleware<QueryTokenAuthenticationMiddleware>();
+        app.UseMiddleware<CookieTokenAuthenticationMiddleware>();
+
+        return app;
+    }
+
+    public static IApplicationBuilder UseCsrfProtection(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<CsrfMiddleware>();
 
         return app;
     }

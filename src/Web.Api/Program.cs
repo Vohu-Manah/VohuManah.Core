@@ -49,7 +49,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/uploads"
 });
 
-app.UseQueryTokenAuthentication();
+app.UseCookieTokenAuthentication();
 
 
 
@@ -71,6 +71,10 @@ app.Use(async (context, next) =>
     }
     await next();
 });
+
+app.UseCookieTokenAuthentication();
+
+app.UseCsrfProtection();
 
 app.UseAuthentication();
 
