@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Messaging;
 using Application.Library.Manuscripts.GetStatistics;
 using Infrastructure.Reports;
 using Web.Api.Endpoints.Attributes;
@@ -31,7 +31,7 @@ internal sealed class ManuscriptStatisticsReport : BaseEndpoint
                 if (result.IsFailure)
                 {
                     return CustomResults.Problem(
-                        title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                        title: "خطا در دریافت داده ها",
                         detail: result.Error.Description);
                 }
 
@@ -49,7 +49,7 @@ internal sealed class ManuscriptStatisticsReport : BaseEndpoint
 
                 var filterTitles = new Dictionary<int, string>
                 {
-                    { 1, "ÙØ§ØµÙ„Ù‡" },
+                    { 1, "فاصله" },
                     { 2, "محل نگارش" },
                     { 3, "سال" },
                     { 4, "زبان" },
@@ -58,8 +58,9 @@ internal sealed class ManuscriptStatisticsReport : BaseEndpoint
 
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Title", $"گزارش آماری براساس {filterTitles.GetValueOrDefault(request.FilterType, "ÙØ§ØµÙ„Ù‡")}" },
-                    { "ManuscriptCount", statistics.ManuscriptCount }
+                    { "Title", $"گزارش آماری براساس {filterTitles.GetValueOrDefault(request.FilterType, "فاصله")}" },
+                    { "ManuscriptCount", statistics.ManuscriptCount },
+                    { "Today", ReportExportHelper.PersianToday() }
                 };
 
                 var htmlContent = await reportService.GenerateHtmlAsync(

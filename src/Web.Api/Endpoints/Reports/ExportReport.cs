@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Messaging;
 using Application.Library.Books.GetStatistics;
 using Application.Library.Manuscripts.GetStatistics;
 using Application.Library.Publications.GetStatistics;
@@ -38,7 +38,7 @@ internal sealed class ExportReport : BaseEndpoint
             try
             {
                 var paramDict = ReportParameterParser.Parse(parameters);
-        filterType ??= 1;
+                    filterType ??= 1;
                 IEnumerable dataSource;
 
                 if (reportName == ReportConstants.BookStatisticReport && filterType.HasValue)
@@ -47,7 +47,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ú©ØªØ§Ø¨\u200CÙ‡Ø§ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار کتاب ها یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -57,7 +57,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡ Ù‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -83,7 +83,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ù†Ø³Ø® Ø®Ø·ÛŒ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار نسخ خطی یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -93,7 +93,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -118,7 +118,7 @@ internal sealed class ExportReport : BaseEndpoint
                     {
                         return CustomResults.Problem(
                             title: "خطا در تولید گزارش",
-                            detail: "Handler Ø¨Ø±Ø§ÛŒ Ø¢Ù…Ø§Ø± Ù†Ø´Ø±ÛŒØ§Øª ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                            detail: "Handler برای آمار نشریات یافت نشد",
                             statusCode: StatusCodes.Status500InternalServerError);
                     }
 
@@ -128,7 +128,7 @@ internal sealed class ExportReport : BaseEndpoint
                     if (result.IsFailure)
                     {
                         return CustomResults.Problem(
-                            title: "Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ø¯Ø§Ø¯Ù‡\u200CÙ‡Ø§",
+                            title: "خطا در دریافت داده ها",
                             detail: result.Error.Description);
                     }
 
@@ -183,8 +183,8 @@ internal sealed class ExportReport : BaseEndpoint
 
                     default:
                         return CustomResults.Problem(
-                            title: "ÙØ±Ù…Øª Ù†Ø§Ù…Ø¹ØªØ¨Ø±",
-                            detail: $"ÙØ±Ù…Øª {format} Ù¾Ø´ØªÛŒØ¨Ø§Ù†ÛŒ Ù†Ù…ÛŒ\u200CØ´ÙˆØ¯. ÙØ±Ù…Øª\u200CÙ‡Ø§ÛŒ Ù…Ø¬Ø§Ø²: pdf, excel",
+                            title: "فرمت نامعتبر",
+                            detail: $"فرمت {format} پشتیبانی نمیشود. فرمت های مجاز: pdf, excel",
                             statusCode: StatusCodes.Status400BadRequest);
                 }
 
@@ -200,7 +200,7 @@ internal sealed class ExportReport : BaseEndpoint
             catch (FileNotFoundException ex)
             {
                 return CustomResults.Problem(
-                    title: "Ú¯Ø²Ø§Ø±Ø´ ÛŒØ§ÙØª Ù†Ø´Ø¯",
+                    title: "گزارش یافت نشد",
                     detail: ex.Message,
                     statusCode: StatusCodes.Status404NotFound);
             }

@@ -69,12 +69,13 @@ internal static class ReportExportHelper
     {
         DateTime now = DateTime.Now;
         var calendar = new global::System.Globalization.PersianCalendar();
-        return string.Format(
+        string result = string.Format(
             System.Globalization.CultureInfo.InvariantCulture,
             "{0:0000}/{1:00}/{2:00}",
             calendar.GetYear(now),
             calendar.GetMonth(now),
             calendar.GetDayOfMonth(now));
+        return result;
     }
 
     public static IResult HandleExportException(Exception ex, string format)
