@@ -1,6 +1,5 @@
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Shared;
 using VohuManah.Domain.Gaps;
 using VohuManah.Domain.Languages;
 using VohuManah.Domain.Manuscripts;
@@ -11,9 +10,9 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.Search;
 
 internal sealed class SearchManuscriptsQueryHandler(
-    IApplicationDbContext dbContext) : IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>>
 {
-    public async Task<Result<PagedResult<ManuscriptSearchResponse>>> Handle(SearchManuscriptsQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedList<ManuscriptSearchResponse>>> Handle(SearchManuscriptsQuery query, CancellationToken cancellationToken)
     {
         var manuscripts = dbContext.Manuscripts;
 
@@ -101,7 +100,7 @@ internal sealed class SearchManuscriptsQueryHandler(
             .Take(query.MaxResults)
             .ToListAsync(cancellationToken);
 
-        return Result.Success(new PagedResult<ManuscriptSearchResponse>
+        return Result.Success(new PagedList<ManuscriptSearchResponse>
         {
             Items = results,
             TotalCount = totalCount,

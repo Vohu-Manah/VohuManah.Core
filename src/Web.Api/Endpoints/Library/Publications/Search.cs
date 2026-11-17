@@ -1,5 +1,4 @@
-﻿using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Publications.Search;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
@@ -36,7 +35,7 @@ internal sealed class Search : BaseEndpoint
     {
         app.MapPost("library/publications/search", async (
             Request request,
-            IQueryHandler<SearchPublicationsQuery, PagedResult<PublicationSearchResponse>> handler,
+            IQueryHandler<SearchPublicationsQuery, PagedList<PublicationSearchResponse>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchPublicationsQuery(
@@ -56,7 +55,7 @@ internal sealed class Search : BaseEndpoint
                 request.FromPeriod,
                 request.ToPeriod, request.MaxResults, request.Page, request.PageSize);
 
-            Result<PagedResult<PublicationSearchResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedList<PublicationSearchResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

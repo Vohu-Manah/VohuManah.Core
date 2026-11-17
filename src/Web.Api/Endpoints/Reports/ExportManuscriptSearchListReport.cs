@@ -1,5 +1,4 @@
-﻿using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Manuscripts.Search;
 using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
 using VohuManah.Web.Api.Infrastructure;
 using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.SharedKernel;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 
@@ -18,7 +18,7 @@ internal sealed class ExportManuscriptSearchListReport : BaseEndpoint
         app.MapPost("reports/export/manuscript-search-list", async (
             ManuscriptSearchListReportRequest request,
             [FromQuery] string format,
-            IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>> searchHandler,
+            IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>> searchHandler,
             IReportService reportService,
             CancellationToken cancellationToken) =>
         {
@@ -66,4 +66,3 @@ internal sealed class ExportManuscriptSearchListReport : BaseEndpoint
         .WithTags("Reports");
     }
 }
-

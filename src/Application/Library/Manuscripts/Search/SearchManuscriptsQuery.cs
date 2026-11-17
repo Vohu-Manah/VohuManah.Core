@@ -1,5 +1,5 @@
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Shared;
+using VohuManah.SharedKernel;
 
 namespace VohuManah.Application.Library.Manuscripts.Search;
 
@@ -18,5 +18,4 @@ public sealed record SearchManuscriptsQuery(
     string? Size,
     int MaxResults = 50000,
     int Page = 1,
-    int PageSize = 50) : IQuery<PagedResult<ManuscriptSearchResponse>>;
-
+    int PageSize = 50) : IQuery<PagedList<ManuscriptSearchResponse>>;
