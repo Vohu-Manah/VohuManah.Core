@@ -39,10 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<InternalsVisibleTo Include="ArchitectureTests" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Reports\Html\Resources\ReportStyles.css" />
     <EmbeddedResource Include="Reports\Html\Resources\ReportScripts.js" />
     <EmbeddedResource Include="Reports\Html\Resources\fontawesome.all.min.css" />

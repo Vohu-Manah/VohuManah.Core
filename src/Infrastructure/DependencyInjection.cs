@@ -150,7 +150,7 @@ public static class DependencyInjection
 
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-        services.AddScoped<VohuManah.Application.Abstractions.Authorization.IRolePermissionService, Authorization.RoleEndpointService>();
+        services.AddScoped<VohuManah.Application.Abstractions.Authorization.IRolePermissionService, Authorization.RolePermissionService>();
 
         return services;
     }

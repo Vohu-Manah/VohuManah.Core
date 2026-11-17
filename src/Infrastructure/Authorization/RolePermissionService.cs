@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Infrastructure.Authorization;
 
-internal sealed class RoleEndpointService(IApplicationDbContext dbContext) : IRolePermissionService
+internal sealed class RolePermissionService(IApplicationDbContext dbContext) : IRolePermissionService
 {
     public async Task<bool> HasPermissionAsync(string roleName, string endpointName, CancellationToken cancellationToken = default)
     {
