@@ -2,6 +2,7 @@ using System.Threading;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Collections;
+using VohuManah.Application.Abstractions.Reports;
 
 namespace VohuManah.Infrastructure.Reports;
 

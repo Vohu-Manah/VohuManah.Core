@@ -7,6 +7,7 @@ using VohuManah.Infrastructure.Authorization;
 using VohuManah.Infrastructure.Caching;
 using VohuManah.Infrastructure.Database;
 using VohuManah.Infrastructure.FileStorage;
+using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Infrastructure.Reports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

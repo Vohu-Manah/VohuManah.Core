@@ -1,4 +1,4 @@
-using VohuManah.Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using System.Collections;
 using VohuManah.Web.Api.Infrastructure;
 

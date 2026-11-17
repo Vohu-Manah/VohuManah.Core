@@ -2,7 +2,7 @@ using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Books.GetStatistics;
 using VohuManah.Application.Library.Manuscripts.GetStatistics;
 using VohuManah.Application.Library.Publications.GetStatistics;
-using VohuManah.Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using VohuManah.Web.Api.Endpoints.Attributes;

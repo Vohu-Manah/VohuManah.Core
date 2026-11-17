@@ -1,7 +1,7 @@
 ﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Shared;
 using VohuManah.Application.Library.Publications.Search;
-using VohuManah.Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
 using VohuManah.Web.Api.Infrastructure;

@@ -1,4 +1,4 @@
-using VohuManah.Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;

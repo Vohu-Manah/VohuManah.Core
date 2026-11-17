@@ -2,7 +2,7 @@
 using VohuManah.Application.Library.Shared;
 using VohuManah.Application.Library.Books.Search;
 using VohuManah.Application.Library.Settings;
-using VohuManah.Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
 using VohuManah.Web.Api.Infrastructure;
