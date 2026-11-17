@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Menu.GetAll;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Menu.GetAll;
+using VohuManah.Domain.Menu;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Menu.Update;
+namespace VohuManah.Application.Library.Menu.Update;
 
 internal sealed class UpdateMenuItemCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateMenuItemCommand, MenuItemResponse>
 {
     public async Task<Result<MenuItemResponse>> Handle(UpdateMenuItemCommand command, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         MenuItem? menuItem = await menuItems
             .FirstOrDefaultAsync(m => m.Id == command.Id, cancellationToken)
@@ -68,7 +68,7 @@ internal sealed class UpdateMenuItemCommandHandler(
         menuItem.DisplayOrder = command.DisplayOrder;
         menuItem.IsActive = command.IsActive;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         cacheManager.Remove(GetAllMenuItemsQueryHandler.MenuItemsAllKey);
 

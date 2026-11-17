@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Manuscripts.GetById;
+namespace VohuManah.Application.Library.Manuscripts.GetById;
 
 public sealed record GetManuscriptByIdQuery(int Id) : IQuery<ManuscriptResponse>;
 

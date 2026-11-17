@@ -1,15 +1,15 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Manuscripts.GetAllEntities;
-using Domain.Library;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Manuscripts.GetAllEntities;
+using VohuManah.Domain.Manuscripts;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Manuscripts;
+namespace VohuManah.Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole(EndpointNames.Manuscripts.GetAllEntities)]
+[RequireRole(PermissionNames.Manuscripts.GetAllEntities)]
 internal sealed class GetAllEntities : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

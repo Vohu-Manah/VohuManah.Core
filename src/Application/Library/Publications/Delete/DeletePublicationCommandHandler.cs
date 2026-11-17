@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.Delete;
+namespace VohuManah.Application.Library.Publications.Delete;
 
 internal sealed class DeletePublicationCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<DeletePublicationCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<DeletePublicationCommand>
 {
     public async Task<Result> Handle(DeletePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         Publication? publication = await publications
             .SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
@@ -22,7 +22,7 @@ internal sealed class DeletePublicationCommandHandler(
         }
 
         publications.Remove(publication);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

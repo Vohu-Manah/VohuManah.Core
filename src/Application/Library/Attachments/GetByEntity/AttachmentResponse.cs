@@ -1,4 +1,4 @@
-namespace Application.Library.Attachments.GetByEntity;
+namespace VohuManah.Application.Library.Attachments.GetByEntity;
 
 public sealed record AttachmentResponse
 {

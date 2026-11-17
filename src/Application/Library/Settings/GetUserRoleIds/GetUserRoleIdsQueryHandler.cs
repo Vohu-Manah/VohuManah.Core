@@ -1,25 +1,25 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetUserRoleIds;
+namespace VohuManah.Application.Library.Settings.GetUserRoleIds;
 
 internal sealed class GetUserRoleIdsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetUserRoleIdsQuery, List<int>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetUserRoleIdsQuery, List<int>>
 {
     public async Task<Result<List<int>>> Handle(GetUserRoleIdsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<UserRole> userRoles = dbContext.UserRoles;
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
-        Domain.Library.User? user = await users
+        VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure<List<int>>(Domain.Library.UserErrors.NotFound(query.UserId));
+            return Result.Failure<List<int>>(VohuManah.Domain.Users.UserErrors.NotFound(query.UserId));
         }
 
         List<int> roleIds = await userRoles

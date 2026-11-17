@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Gaps;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Gaps.Create;
+namespace VohuManah.Application.Library.Gaps.Create;
 
 internal sealed class CreateGapCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreateGapCommand, int>
 {
     private const string GapPatternKey = "sdp.gap.";
 
     public async Task<Result<int>> Handle(CreateGapCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         if (await gaps.AnyAsync(g => g.Title == command.Title, cancellationToken))
         {
@@ -30,7 +30,7 @@ internal sealed class CreateGapCommandHandler(
         };
 
         gaps.Add(gap);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(GapPatternKey);
 

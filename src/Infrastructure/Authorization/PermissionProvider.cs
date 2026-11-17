@@ -1,5 +1,5 @@
 using System.Threading;
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
 internal sealed class PermissionProvider
 {

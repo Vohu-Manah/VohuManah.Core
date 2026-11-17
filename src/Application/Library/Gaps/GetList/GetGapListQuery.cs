@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Gaps.GetList;
+namespace VohuManah.Application.Library.Gaps.GetList;
 
 public sealed record GetGapListQuery : IQuery<List<GapListResponse>>;
 

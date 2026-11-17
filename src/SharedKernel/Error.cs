@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace SharedKernel;
+namespace VohuManah.SharedKernel;
 
 [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Error is appropriate name for this domain concept")]
 public record Error

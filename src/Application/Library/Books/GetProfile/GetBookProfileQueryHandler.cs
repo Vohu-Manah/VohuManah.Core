@@ -1,21 +1,22 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Application.Library.Attachments.GetByEntity;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Attachments.GetByEntity;
+using VohuManah.Domain.Attachments;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetProfile;
+namespace VohuManah.Application.Library.Books.GetProfile;
 
 internal sealed class GetBookProfileQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : IQueryHandler<GetBookProfileQuery, BookProfileResponse>
 {
     public async Task<Result<BookProfileResponse>> Handle(GetBookProfileQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Book> books = dbContext.Books;
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Book? book = await books
             .Include(b => b.Publisher)

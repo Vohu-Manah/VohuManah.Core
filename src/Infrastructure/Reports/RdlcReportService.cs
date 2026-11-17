@@ -2,8 +2,9 @@ using System.Threading;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Collections;
+using VohuManah.Application.Abstractions.Reports;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class RdlcReportService : IReportService
 {

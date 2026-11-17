@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.GetById;
+namespace VohuManah.Application.Library.Manuscripts.GetById;
 
 internal sealed class GetManuscriptByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptByIdQuery, ManuscriptResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptByIdQuery, ManuscriptResponse>
 {
     public async Task<Result<ManuscriptResponse>> Handle(GetManuscriptByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         Manuscript? manuscript = await manuscripts
             .Include(m => m.Language)

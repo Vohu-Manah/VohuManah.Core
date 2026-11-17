@@ -1,7 +1,7 @@
 using System;
-using Application.Library.Reports.Shared;
+using VohuManah.Application.Library.Reports.Shared;
 
-namespace Infrastructure.Reports.Html;
+namespace VohuManah.Infrastructure.Reports.Html;
 
 internal sealed class ReportTableGenerator : IReportTableGenerator
 {

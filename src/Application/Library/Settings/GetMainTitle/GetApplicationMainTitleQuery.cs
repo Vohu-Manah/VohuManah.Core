@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Settings.GetMainTitle;
+namespace VohuManah.Application.Library.Settings.GetMainTitle;
 
 public sealed record GetApplicationMainTitleQuery() : IQuery<string>;
 

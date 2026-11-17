@@ -1,8 +1,8 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
-using Infrastructure.Authentication;
+using VohuManah.Web.Api.Security;
 
-namespace Web.Api.Middleware;
+namespace VohuManah.Web.Api.Middleware;
 
 public sealed class CsrfMiddleware : IMiddleware
 {

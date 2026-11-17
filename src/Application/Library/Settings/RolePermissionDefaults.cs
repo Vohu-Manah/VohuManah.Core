@@ -1,6 +1,7 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Application.Library.Settings;
+namespace VohuManah.Application.Library.Settings;
 
 public static class RolePermissionDefaults
 {
@@ -41,26 +42,26 @@ public static class RolePermissionDefaults
         ImmutableArray.CreateRange(
             SelfService
                 .Concat(DashboardRead)
-                .Concat(EndpointCatalog.Books)
-                .Concat(EndpointCatalog.Manuscripts)
-                .Concat(EndpointCatalog.Publications)
-                .Concat(EndpointCatalog.PublicationTypes)
-                .Concat(EndpointCatalog.Publishers)
-                .Concat(EndpointCatalog.Languages)
-                .Concat(EndpointCatalog.Cities)
-                .Concat(EndpointCatalog.Subjects)
-                .Concat(EndpointCatalog.Gaps)
-                .Concat(EndpointCatalog.Attachments)
-                .Concat(EndpointCatalog.Reports));
+                .Concat(PermissionCatalog.Books)
+                .Concat(PermissionCatalog.Manuscripts)
+                .Concat(PermissionCatalog.Publications)
+                .Concat(PermissionCatalog.PublicationTypes)
+                .Concat(PermissionCatalog.Publishers)
+                .Concat(PermissionCatalog.Languages)
+                .Concat(PermissionCatalog.Cities)
+                .Concat(PermissionCatalog.Subjects)
+                .Concat(PermissionCatalog.Gaps)
+                .Concat(PermissionCatalog.Attachments)
+                .Concat(PermissionCatalog.Reports));
 
     public static readonly ImmutableArray<string> PublisherEndpoints =
         ImmutableArray.CreateRange(
             SelfService
                 .Concat(DashboardRead)
-                .Concat(EndpointCatalog.Publications)
-                .Concat(EndpointCatalog.Publishers)
-                .Concat(EndpointCatalog.PublicationTypes)
-                .Concat(EndpointCatalog.Attachments)
+                .Concat(PermissionCatalog.Publications)
+                .Concat(PermissionCatalog.Publishers)
+                .Concat(PermissionCatalog.PublicationTypes)
+                .Concat(PermissionCatalog.Attachments)
                 .Concat(ReportsReadOnly));
 
     private static readonly ImmutableArray<string> BooksReadOnly = ImmutableArray.Create(

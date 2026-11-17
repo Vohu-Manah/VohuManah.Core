@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Users.Update;
+namespace VohuManah.Application.Library.Users.Update;
 
 public sealed record UpdateLibraryUserCommand(
     [Display(Name = "شناسه")] long Id,

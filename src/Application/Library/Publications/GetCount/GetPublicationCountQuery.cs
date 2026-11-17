@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Publications.GetCount;
+namespace VohuManah.Application.Library.Publications.GetCount;
 
 public sealed record GetPublicationCountQuery : IQuery<int>;
 

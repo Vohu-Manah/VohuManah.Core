@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Attachments.Upload;
+namespace VohuManah.Application.Library.Attachments.Upload;
 
 public sealed record UploadAttachmentCommand(
     [Display(Name = "نوع موجودیت")] string EntityType,

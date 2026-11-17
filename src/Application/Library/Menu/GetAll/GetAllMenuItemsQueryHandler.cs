@@ -1,15 +1,15 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Abstractions.Authorization;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.Domain.Menu;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Menu.GetAll;
+namespace VohuManah.Application.Library.Menu.GetAll;
 
 internal sealed class GetAllMenuItemsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager,
     IRolePermissionService rolePermissionService) : IQueryHandler<GetAllMenuItemsQuery, List<MenuItemResponse>>
 {
@@ -44,7 +44,7 @@ internal sealed class GetAllMenuItemsQueryHandler(
 
     public async Task<Result<List<MenuItemResponse>>> Handle(GetAllMenuItemsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         List<MenuItem> allItems = await menuItems
             .Include(m => m.Children)

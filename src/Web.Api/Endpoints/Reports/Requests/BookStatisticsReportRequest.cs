@@ -1,4 +1,4 @@
-namespace Web.Api.Endpoints.Reports.Requests;
+namespace VohuManah.Web.Api.Endpoints.Reports.Requests;
 
 internal sealed record BookStatisticsReportRequest
 {

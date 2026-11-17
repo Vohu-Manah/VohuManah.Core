@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Subjects;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Subjects.GetAll;
+namespace VohuManah.Application.Library.Subjects.GetAll;
 
 internal sealed class GetAllSubjectsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllSubjectsQuery, List<SubjectResponse>>
 {
     private const string SubjectAllKey = "sdp.subject.all";
 
     public Task<Result<List<SubjectResponse>>> Handle(GetAllSubjectsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+        DbSet<Subject> subjects = dbContext.Subjects;
 
         List<Subject> allSubjects = cacheManager.Retrieve(SubjectAllKey, () => subjects.ToList());
 

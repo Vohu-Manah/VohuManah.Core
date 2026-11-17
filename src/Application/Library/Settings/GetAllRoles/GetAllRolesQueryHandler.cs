@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetAllRoles;
+namespace VohuManah.Application.Library.Settings.GetAllRoles;
 
 internal sealed class GetAllRolesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllRolesQuery, List<RoleResponse>>
 {
     internal const string RolesAllKey = "sdp.roles.all";
 
     public Task<Result<List<RoleResponse>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<Role> roles = dbContext.Roles;
 
         List<Role> allRoles = cacheManager.Retrieve(RolesAllKey, () => roles.ToList());
 

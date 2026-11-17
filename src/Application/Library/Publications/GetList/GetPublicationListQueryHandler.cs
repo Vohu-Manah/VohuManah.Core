@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.GetList;
+namespace VohuManah.Application.Library.Publications.GetList;
 
 internal sealed class GetPublicationListQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationListQuery, PagedList<PublicationListResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationListQuery, PagedList<PublicationListResponse>>
 {
     public async Task<Result<PagedList<PublicationListResponse>>> Handle(GetPublicationListQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Publication> publications = unitOfWork.GetDbSet<Publication>()
+        IQueryable<Publication> publications = dbContext.Publications
             .Include(p => p.City)
             .Include(p => p.PublicationType)
             .Include(p => p.Subject)

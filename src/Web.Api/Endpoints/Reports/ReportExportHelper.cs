@@ -1,8 +1,8 @@
-using Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Reports;
 using System.Collections;
-using Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
 internal static class ReportExportHelper
 {

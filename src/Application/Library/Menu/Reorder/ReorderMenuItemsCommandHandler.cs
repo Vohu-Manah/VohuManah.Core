@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Menu.GetAll;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Menu.GetAll;
+using VohuManah.Domain.Menu;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Menu.Reorder;
+namespace VohuManah.Application.Library.Menu.Reorder;
 
 internal sealed class ReorderMenuItemsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<ReorderMenuItemsCommand>
 {
     public async Task<Result> Handle(ReorderMenuItemsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         
         List<int> itemIds = command.Items.Select(i => i.Id).ToList();
@@ -39,7 +39,7 @@ internal sealed class ReorderMenuItemsCommandHandler(
             }
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         cacheManager.Remove(GetAllMenuItemsQueryHandler.MenuItemsAllKey);
 

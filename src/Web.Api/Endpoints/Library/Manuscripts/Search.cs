@@ -1,15 +1,14 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Manuscripts.Search;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Manuscripts.Search;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Manuscripts;
+namespace VohuManah.Web.Api.Endpoints.Library.Manuscripts;
 
-[RequireRole(EndpointNames.Manuscripts.Search)]
+[RequireRole(PermissionNames.Manuscripts.Search)]
 internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(
@@ -33,7 +32,7 @@ internal sealed class Search : BaseEndpoint
     {
         app.MapPost("library/manuscripts/search", async (
             Request request,
-            IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>> handler,
+            IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchManuscriptsQuery(
@@ -50,7 +49,7 @@ internal sealed class Search : BaseEndpoint
                 request.GapId,
                 request.Size, request.MaxResults, request.Page, request.PageSize);
 
-            Result<PagedResult<ManuscriptSearchResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedList<ManuscriptSearchResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

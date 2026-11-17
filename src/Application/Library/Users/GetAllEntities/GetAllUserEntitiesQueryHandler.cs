@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.GetAllEntities;
+namespace VohuManah.Application.Library.Users.GetAllEntities;
 
 internal sealed class GetAllUserEntitiesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllUserEntitiesQuery, List<User>>
 {
     private const string UserAllKey = "sdp.user.all";
 
     public Task<Result<List<User>>> Handle(GetAllUserEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<User> users = unitOfWork.GetDbSet<User>();
+        DbSet<User> users = dbContext.LibraryUsers;
 
         List<User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 

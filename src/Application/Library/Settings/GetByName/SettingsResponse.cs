@@ -1,4 +1,4 @@
-namespace Application.Library.Settings.GetByName;
+namespace VohuManah.Application.Library.Settings.GetByName;
 
 public sealed record SettingsResponse
 {

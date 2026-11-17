@@ -1,15 +1,14 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Publications.Search;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Publications.Search;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Publications;
+namespace VohuManah.Web.Api.Endpoints.Library.Publications;
 
-[RequireRole(EndpointNames.Publications.Search)]
+[RequireRole(PermissionNames.Publications.Search)]
 internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(
@@ -36,7 +35,7 @@ internal sealed class Search : BaseEndpoint
     {
         app.MapPost("library/publications/search", async (
             Request request,
-            IQueryHandler<SearchPublicationsQuery, PagedResult<PublicationSearchResponse>> handler,
+            IQueryHandler<SearchPublicationsQuery, PagedList<PublicationSearchResponse>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new SearchPublicationsQuery(
@@ -56,7 +55,7 @@ internal sealed class Search : BaseEndpoint
                 request.FromPeriod,
                 request.ToPeriod, request.MaxResults, request.Page, request.PageSize);
 
-            Result<PagedResult<PublicationSearchResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<PagedList<PublicationSearchResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

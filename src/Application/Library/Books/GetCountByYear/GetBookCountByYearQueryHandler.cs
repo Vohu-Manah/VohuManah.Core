@@ -1,18 +1,18 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetCountByYear;
+namespace VohuManah.Application.Library.Books.GetCountByYear;
 
 internal sealed class GetBookCountByYearQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookCountByYearQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookCountByYearQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountByYearQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.GetDbSet<Book>();
+        var books = dbContext.Books;
 
         var list = await books
             .GroupBy(b => b.PublishYear)

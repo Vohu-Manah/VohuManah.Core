@@ -1,5 +1,5 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Users.Tokens;
+namespace VohuManah.Application.Library.Users.Tokens;
 
 public sealed record RefreshAccessTokenCommand(string RefreshToken) : ICommand<RefreshAccessTokenResponse>;

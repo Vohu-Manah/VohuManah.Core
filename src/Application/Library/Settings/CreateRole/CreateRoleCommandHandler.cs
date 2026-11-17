@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Settings.GetAllRoles;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Settings.GetAllRoles;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.CreateRole;
+namespace VohuManah.Application.Library.Settings.CreateRole;
 
 internal sealed class CreateRoleCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreateRoleCommand, RoleResponse>
 {
 
     public async Task<Result<RoleResponse>> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<Role> roles = dbContext.Roles;
 
         string normalizedName = command.Name.Trim();
 
@@ -34,22 +34,22 @@ internal sealed class CreateRoleCommandHandler(
         };
 
         roles.Add(role);
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (RolePermissionDefaults.TryGetDefaults(role.Name, out var defaultEndpoints) && defaultEndpoints.Length > 0)
         {
-            DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+            DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
 
             foreach (string endpoint in defaultEndpoints)
             {
-                rolePermissions.Add(new RoleEndpoint
+                rolePermissions.Add(new RolePermission
                 {
                     RoleId = role.Id,
                     EndpointName = endpoint
                 });
             }
 
-            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         cacheManager.Remove(GetAllRolesQueryHandler.RolesAllKey);

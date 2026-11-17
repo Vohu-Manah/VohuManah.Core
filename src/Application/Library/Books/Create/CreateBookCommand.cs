@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Books.Create;
+namespace VohuManah.Application.Library.Books.Create;
 
 public sealed record CreateBookCommand(
     [Display(Name = "نام کتاب")] string Name,

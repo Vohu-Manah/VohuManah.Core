@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publishers;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publishers.GetList;
+namespace VohuManah.Application.Library.Publishers.GetList;
 
 internal sealed class GetPublisherListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetPublisherListQuery, List<PublisherListResponse>>
 {
     private const string PublisherAllKey = "sdp.publisher.all";
 
     public Task<Result<List<PublisherListResponse>>> Handle(GetPublisherListQuery query, CancellationToken cancellationToken)
     {
-        var publishers = unitOfWork.GetDbSet<Publisher>();
+        var publishers = dbContext.Publishers;
 
         var allPublishers = cacheManager.Retrieve(PublisherAllKey, () => publishers.OrderBy(p => p.Name).ToList());
 

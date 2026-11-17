@@ -1,13 +1,13 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Cities.Update;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Cities.Update;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Cities;
+namespace VohuManah.Web.Api.Endpoints.Library.Cities;
 
-[RequireRole(EndpointNames.Cities.Update)]
+[RequireRole(PermissionNames.Cities.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(string Name);

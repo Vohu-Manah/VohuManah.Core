@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Cities.GetList;
+namespace VohuManah.Application.Library.Cities.GetList;
 
 public sealed record GetCityListQuery : IQuery<List<CityListResponse>>;
 

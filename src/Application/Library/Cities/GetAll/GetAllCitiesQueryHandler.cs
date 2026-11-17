@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Cities;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Cities.GetAll;
+namespace VohuManah.Application.Library.Cities.GetAll;
 
 internal sealed class GetAllCitiesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllCitiesQuery, List<CityResponse>>
 {
     private const string CityAllKey = "sdp.city.all";
 
     public Task<Result<List<CityResponse>>> Handle(GetAllCitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         List<City> allCities = cacheManager.Retrieve(CityAllKey, () =>
             cities.OrderBy(c => c.Name).ToList());

@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Visits.Record;
+namespace VohuManah.Application.Library.Visits.Record;
 
 public sealed record RecordVisitCommand(
     [Display(Name = "مسیر")] string Path) : ICommand;

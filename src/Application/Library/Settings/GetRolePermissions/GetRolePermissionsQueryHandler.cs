@@ -1,18 +1,18 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetRolePermissions;
+namespace VohuManah.Application.Library.Settings.GetRolePermissions;
 
 internal sealed class GetRolePermissionsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetRolePermissionsQuery, List<string>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetRolePermissionsQuery, List<string>>
 {
     public async Task<Result<List<string>>> Handle(GetRolePermissionsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
+        DbSet<Role> roles = dbContext.Roles;
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == query.RoleId, cancellationToken);
 

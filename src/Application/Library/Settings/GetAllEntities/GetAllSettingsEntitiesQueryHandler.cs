@@ -1,22 +1,22 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetAllEntities;
+namespace VohuManah.Application.Library.Settings.GetAllEntities;
 
 internal sealed class GetAllSettingsEntitiesQueryHandler(
-    IUnitOfWork unitOfWork,
-    ICacheManager cacheManager) : IQueryHandler<GetAllSettingsEntitiesQuery, List<Domain.Library.Settings>>
+    IApplicationDbContext dbContext,
+    ICacheManager cacheManager) : IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.AppSettings.Settings>>
 {
     private const string SettingsAllKey = "sdp.settings.all";
 
-    public Task<Result<List<Domain.Library.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
+    public Task<Result<List<VohuManah.Domain.AppSettings.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
-        List<Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
         return Task.FromResult(Result.Success(allSettings));
     }

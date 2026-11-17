@@ -1,18 +1,18 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.PublicationTypes;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.PublicationTypes.GetNames;
+namespace VohuManah.Application.Library.PublicationTypes.GetNames;
 
 internal sealed class GetPublicationTypeNamesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationTypeNamesQuery, List<SelectItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationTypeNamesQuery, List<SelectItemResponse>>
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetPublicationTypeNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> types = unitOfWork.GetDbSet<PublicationType>();
+        DbSet<PublicationType> types = dbContext.PublicationTypes;
 
         List<SelectItemResponse> items = types
             .OrderBy(t => t.Title)

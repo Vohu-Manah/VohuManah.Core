@@ -1,22 +1,22 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Manuscripts.Search;
-using Infrastructure.Reports;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Endpoints.Reports.Requests;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Manuscripts.Search;
+using VohuManah.Application.Abstractions.Reports;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints.Reports.Requests;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.SharedKernel;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.ManuscriptSearchList)]
+[RequireRole(PermissionNames.Reports.ManuscriptSearchList)]
 internal sealed class ManuscriptSearchListReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("reports/manuscript-search-list", async (
             ManuscriptSearchListReportRequest request,
-            IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>> searchHandler,
+            IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>> searchHandler,
             IReportService reportService,
             CancellationToken cancellationToken) =>
         {

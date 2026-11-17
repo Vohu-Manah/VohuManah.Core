@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Settings.CreateRole;
+namespace VohuManah.Application.Library.Settings.CreateRole;
 
 internal sealed class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
 {

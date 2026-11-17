@@ -1,0 +1,29 @@
+using System.Threading;
+using System.Collections;
+
+namespace VohuManah.Application.Abstractions.Reports;
+
+public interface IReportService
+{
+    Task<byte[]> GeneratePdfAsync(
+        string reportFileName,
+        string reportDatasourceName,
+        IEnumerable dataSource,
+        Dictionary<string, object> parameters,
+        CancellationToken cancellationToken = default);
+
+    Task<byte[]> GenerateExcelAsync(
+        string reportFileName,
+        string reportDatasourceName,
+        IEnumerable dataSource,
+        Dictionary<string, object> parameters,
+        CancellationToken cancellationToken = default);
+
+    Task<string> GenerateHtmlAsync(
+        string reportFileName,
+        string reportDatasourceName,
+        IEnumerable dataSource,
+        Dictionary<string, object> parameters,
+        CancellationToken cancellationToken = default);
+}
+

@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.Search;
+namespace VohuManah.Application.Library.Books.Search;
 
 public sealed record SearchBooksQuery(
     string? Name,
@@ -21,4 +21,4 @@ public sealed record SearchBooksQuery(
     string? ToPublishYear,
     int MaxResults = 5000,
     int Page = 1,
-    int PageSize = 50) : IQuery<PagedResult<BookSearchResponse>>;
+    int PageSize = 50) : IQuery<PagedList<BookSearchResponse>>;

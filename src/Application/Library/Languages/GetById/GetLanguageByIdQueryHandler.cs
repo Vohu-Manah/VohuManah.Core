@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Languages;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Languages.GetById;
+namespace VohuManah.Application.Library.Languages.GetById;
 
 internal sealed class GetLanguageByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetLanguageByIdQuery, LanguageResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetLanguageByIdQuery, LanguageResponse>
 {
     public async Task<Result<LanguageResponse>> Handle(GetLanguageByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         Language? language = await languages
             .SingleOrDefaultAsync(l => l.Id == query.Id, cancellationToken);

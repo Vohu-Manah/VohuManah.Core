@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.GetCurrentProfile;
+namespace VohuManah.Application.Library.Users.GetCurrentProfile;
 
 internal sealed class GetCurrentUserProfileQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetCurrentUserProfileQuery, UserProfileResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetCurrentUserProfileQuery, UserProfileResponse>
 {
     public async Task<Result<UserProfileResponse>> Handle(GetCurrentUserProfileQuery query, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
         var user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
 
@@ -20,12 +20,12 @@ internal sealed class GetCurrentUserProfileQueryHandler(
             return Result.Failure<UserProfileResponse>(UserErrors.NotFound(query.UserId));
         }
 
-        var roleIds = await unitOfWork.GetDbSet<UserRole>()
+        var roleIds = await dbContext.UserRoles
             .Where(ur => ur.UserId == query.UserId)
             .Select(ur => ur.RoleId)
             .ToListAsync(cancellationToken);
 
-        var permissions = await unitOfWork.GetDbSet<RoleEndpoint>()
+        var permissions = await dbContext.RolePermissions
             .Where(rp => roleIds.Contains(rp.RoleId))
             .Select(rp => rp.EndpointName)
             .Distinct()

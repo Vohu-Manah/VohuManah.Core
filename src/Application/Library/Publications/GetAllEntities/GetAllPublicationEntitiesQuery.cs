@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 
-namespace Application.Library.Publications.GetAllEntities;
+namespace VohuManah.Application.Library.Publications.GetAllEntities;
 
 public sealed record GetAllPublicationEntitiesQuery : IQuery<List<Publication>>;
 

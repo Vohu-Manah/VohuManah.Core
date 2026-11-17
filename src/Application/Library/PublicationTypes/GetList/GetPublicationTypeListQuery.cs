@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.PublicationTypes.GetList;
+namespace VohuManah.Application.Library.PublicationTypes.GetList;
 
 public sealed record GetPublicationTypeListQuery : IQuery<List<PublicationTypeListResponse>>;
 

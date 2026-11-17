@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Languages;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Languages.GetList;
+namespace VohuManah.Application.Library.Languages.GetList;
 
 internal sealed class GetLanguageListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetLanguageListQuery, List<LanguageListResponse>>
 {
     private const string LanguageAllKey = "sdp.language.all";
 
     public Task<Result<List<LanguageListResponse>>> Handle(GetLanguageListQuery query, CancellationToken cancellationToken)
     {
-        var languages = unitOfWork.GetDbSet<Language>();
+        var languages = dbContext.Languages;
 
         var allLanguages = cacheManager.Retrieve(LanguageAllKey, () => languages.ToList());
 

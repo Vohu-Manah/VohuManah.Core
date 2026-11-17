@@ -1,4 +1,4 @@
-namespace Application.Library.Users.GetCurrentProfile;
+namespace VohuManah.Application.Library.Users.GetCurrentProfile;
 
 public sealed record UserProfileResponse
 {

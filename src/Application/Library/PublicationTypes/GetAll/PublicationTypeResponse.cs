@@ -1,4 +1,4 @@
-namespace Application.Library.PublicationTypes.GetAll;
+namespace VohuManah.Application.Library.PublicationTypes.GetAll;
 
 public sealed record PublicationTypeResponse
 {

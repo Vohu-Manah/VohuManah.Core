@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Attachments.Upload;
+namespace VohuManah.Application.Library.Attachments.Upload;
 
 internal sealed class UploadAttachmentCommandValidator : AbstractValidator<UploadAttachmentCommand>
 {

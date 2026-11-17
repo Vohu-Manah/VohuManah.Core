@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 
-namespace Application.Library.Users.GetAllEntities;
+namespace VohuManah.Application.Library.Users.GetAllEntities;
 
 public sealed record GetAllUserEntitiesQuery : IQuery<List<User>>;
 

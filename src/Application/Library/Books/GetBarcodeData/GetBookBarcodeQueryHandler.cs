@@ -1,13 +1,13 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetBarcodeData;
+namespace VohuManah.Application.Library.Books.GetBarcodeData;
 
 internal sealed class GetBookBarcodeQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookBarcodeQuery, List<BookBarcodeResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookBarcodeQuery, List<BookBarcodeResponse>>
 {
     public async Task<Result<List<BookBarcodeResponse>>> Handle(
         GetBookBarcodeQuery query,
@@ -19,7 +19,7 @@ internal sealed class GetBookBarcodeQueryHandler(
         long afterId = Math.Max(0, query.AfterId);
         int take = Math.Clamp(query.Take, 1, 5000);
 
-        IQueryable<Book> books = unitOfWork.GetDbSet<Book>()
+        IQueryable<Book> books = dbContext.Books
             .AsNoTracking()
             .Where(b => b.Id > afterId);
 

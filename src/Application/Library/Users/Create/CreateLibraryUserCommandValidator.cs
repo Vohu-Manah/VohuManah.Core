@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Users.Create;
+namespace VohuManah.Application.Library.Users.Create;
 
 internal sealed class CreateLibraryUserCommandValidator : AbstractValidator<CreateLibraryUserCommand>
 {

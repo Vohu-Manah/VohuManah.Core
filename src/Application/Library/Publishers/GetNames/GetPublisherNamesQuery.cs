@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Publishers.GetNames;
+namespace VohuManah.Application.Library.Publishers.GetNames;
 
 public sealed record GetPublisherNamesQuery(bool AddAllItemInFirstRow = false) : IQuery<List<SelectItemResponse>>;
 

@@ -1,9 +1,9 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Abstractions.Behaviors;
+namespace VohuManah.Application.Abstractions.Behaviors;
 
 internal static class LoggingDecorator
 {

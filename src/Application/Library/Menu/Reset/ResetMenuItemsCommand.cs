@@ -1,5 +1,5 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Menu.Reset;
+namespace VohuManah.Application.Library.Menu.Reset;
 
 public sealed record ResetMenuItemsCommand : ICommand;

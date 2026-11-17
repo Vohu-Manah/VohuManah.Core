@@ -1,18 +1,18 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.GetStatistics;
+namespace VohuManah.Application.Library.Manuscripts.GetStatistics;
 
 internal sealed class GetManuscriptStatisticsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptStatisticsQuery, ManuscriptStatisticsResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptStatisticsQuery, ManuscriptStatisticsResponse>
 {
     public async Task<Result<ManuscriptStatisticsResponse>> Handle(GetManuscriptStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         int manuscriptCount = await manuscripts.CountAsync(cancellationToken);
 

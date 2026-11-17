@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 internal static class ClaimsPrincipalExtensions
 {

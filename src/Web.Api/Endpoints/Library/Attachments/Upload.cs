@@ -1,14 +1,14 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Attachments.Upload;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Attachments.Upload;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Attachments;
+namespace VohuManah.Web.Api.Endpoints.Library.Attachments;
 
-[RequireRole(EndpointNames.Attachments.Upload)]
+[RequireRole(PermissionNames.Attachments.Upload)]
 internal sealed class Upload : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

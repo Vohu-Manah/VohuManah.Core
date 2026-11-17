@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Publications.Delete;
+namespace VohuManah.Application.Library.Publications.Delete;
 
 internal sealed class DeletePublicationCommandValidator : AbstractValidator<DeletePublicationCommand>
 {

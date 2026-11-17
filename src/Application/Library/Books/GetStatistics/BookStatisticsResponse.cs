@@ -1,6 +1,6 @@
-using Application.Library.Shared;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Books.GetStatistics;
+namespace VohuManah.Application.Library.Books.GetStatistics;
 
 public sealed record BookStatisticsResponse
 {

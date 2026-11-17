@@ -1,5 +1,5 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Books.GetAll;
+namespace VohuManah.Application.Library.Books.GetAll;
 
 public sealed record GetAllBooksQuery() : IQuery<List<BookResponse>>;

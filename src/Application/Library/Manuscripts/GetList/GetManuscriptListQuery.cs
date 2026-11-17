@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.GetList;
+namespace VohuManah.Application.Library.Manuscripts.GetList;
 
 public sealed record GetManuscriptListQuery : IQuery<PagedList<ManuscriptListResponse>>
 {

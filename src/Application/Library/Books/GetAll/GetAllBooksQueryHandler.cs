@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetAll;
+namespace VohuManah.Application.Library.Books.GetAll;
 
 internal sealed class GetAllBooksQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetAllBooksQuery, List<BookResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetAllBooksQuery, List<BookResponse>>
 {
     public async Task<Result<List<BookResponse>>> Handle(GetAllBooksQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         List<BookResponse> allBooks = await books
             .Include(b => b.Publisher)

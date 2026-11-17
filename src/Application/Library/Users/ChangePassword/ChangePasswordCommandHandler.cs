@@ -1,19 +1,19 @@
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.ChangePassword;
+namespace VohuManah.Application.Library.Users.ChangePassword;
 
 internal sealed class ChangePasswordCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IPasswordHasher passwordHasher) : ICommandHandler<ChangePasswordCommand>
 {
     public async Task<Result> Handle(ChangePasswordCommand command, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
 
         var user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -31,7 +31,7 @@ internal sealed class ChangePasswordCommandHandler(
         string newPasswordHash = passwordHasher.Hash(command.NewPassword);
         user.Password = newPasswordHash;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

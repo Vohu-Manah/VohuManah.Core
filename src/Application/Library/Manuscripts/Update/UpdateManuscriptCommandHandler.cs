@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Update;
+namespace VohuManah.Application.Library.Manuscripts.Update;
 
 internal sealed class UpdateManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateManuscriptCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateManuscriptCommand>
 {
     public async Task<Result> Handle(UpdateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         Manuscript? existing = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
@@ -33,7 +33,7 @@ internal sealed class UpdateManuscriptCommandHandler(
         existing.WritingPlaceId = command.WritingPlaceId;
         existing.Year = command.Year;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

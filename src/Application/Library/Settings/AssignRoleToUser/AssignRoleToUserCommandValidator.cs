@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Settings.AssignRoleToUser;
+namespace VohuManah.Application.Library.Settings.AssignRoleToUser;
 
 internal sealed class AssignRoleToUserCommandValidator : AbstractValidator<AssignRoleToUserCommand>
 {

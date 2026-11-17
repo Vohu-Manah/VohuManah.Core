@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
 internal sealed class PermissionRequirement : IAuthorizationRequirement
 {

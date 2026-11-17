@@ -1,22 +1,22 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Books.Search;
-using Application.Library.Settings;
-using Infrastructure.Reports;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Endpoints.Reports.Requests;
-using Web.Api.Infrastructure;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Books.Search;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.Application.Abstractions.Reports;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints.Reports.Requests;
+using VohuManah.Web.Api.Http;
+using VohuManah.SharedKernel;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.BookSearchList)]
+[RequireRole(PermissionNames.Reports.BookSearchList)]
 internal sealed class BookSearchListReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("reports/book-search-list", async (
             BookSearchListReportRequest request,
-            IQueryHandler<SearchBooksQuery, PagedResult<BookSearchResponse>> searchHandler,
+            IQueryHandler<SearchBooksQuery, PagedList<BookSearchResponse>> searchHandler,
             IReportService reportService,
             CancellationToken cancellationToken) =>
         {

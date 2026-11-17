@@ -1,4 +1,4 @@
-namespace Application.Library.Cities.GetById;
+namespace VohuManah.Application.Library.Cities.GetById;
 
 public sealed record CityResponse
 {

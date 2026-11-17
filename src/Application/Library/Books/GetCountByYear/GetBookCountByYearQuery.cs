@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Books.GetCountByYear;
+namespace VohuManah.Application.Library.Books.GetCountByYear;
 
 public sealed record GetBookCountByYearQuery : IQuery<List<ListItemResponse>>;
 

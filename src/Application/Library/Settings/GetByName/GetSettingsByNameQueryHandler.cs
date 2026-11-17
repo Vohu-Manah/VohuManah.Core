@@ -1,25 +1,25 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.AppSettings;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetByName;
+namespace VohuManah.Application.Library.Settings.GetByName;
 
 internal sealed class GetSettingsByNameQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetSettingsByNameQuery, SettingsResponse>
 {
     private const string SettingsAllKey = "sdp.settings.all";
 
     public Task<Result<SettingsResponse>> Handle(GetSettingsByNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
-        List<Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
-        Domain.Library.Settings? setting = allSettings.SingleOrDefault(s => s.Name.Trim() == query.Name.Trim());
+        VohuManah.Domain.AppSettings.Settings? setting = allSettings.SingleOrDefault(s => s.Name.Trim() == query.Name.Trim());
 
         if (setting == null)
         {

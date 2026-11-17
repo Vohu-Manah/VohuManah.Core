@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Search;
+namespace VohuManah.Application.Library.Manuscripts.Search;
 
 public sealed record SearchManuscriptsQuery(
     string? Name,
@@ -18,5 +18,4 @@ public sealed record SearchManuscriptsQuery(
     string? Size,
     int MaxResults = 50000,
     int Page = 1,
-    int PageSize = 50) : IQuery<PagedResult<ManuscriptSearchResponse>>;
-
+    int PageSize = 50) : IQuery<PagedList<ManuscriptSearchResponse>>;

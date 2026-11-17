@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Attachments;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Attachments.Update;
+namespace VohuManah.Application.Library.Attachments.Update;
 
 internal sealed class UpdateAttachmentCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateAttachmentCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateAttachmentCommand>
 {
     public async Task<Result> Handle(UpdateAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Attachment? attachment = await attachments
             .SingleOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
@@ -46,7 +46,7 @@ internal sealed class UpdateAttachmentCommandHandler(
             attachment.IsMain = command.IsMain.Value;
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

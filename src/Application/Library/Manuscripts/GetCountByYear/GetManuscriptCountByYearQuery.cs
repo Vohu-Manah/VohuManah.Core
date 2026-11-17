@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Manuscripts.GetCountByYear;
+namespace VohuManah.Application.Library.Manuscripts.GetCountByYear;
 
 public sealed record GetManuscriptCountByYearQuery : IQuery<List<ListItemResponse>>;
 

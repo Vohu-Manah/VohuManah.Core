@@ -1,15 +1,15 @@
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.Update;
+namespace VohuManah.Application.Library.Users.Update;
 
 internal sealed class UpdateLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager,
     IPasswordHasher passwordHasher) : ICommandHandler<UpdateLibraryUserCommand>
 {
@@ -17,9 +17,9 @@ internal sealed class UpdateLibraryUserCommandHandler(
 
     public async Task<Result> Handle(UpdateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
-        Domain.Library.User? existing = await users
+        VohuManah.Domain.Users.User? existing = await users
             .SingleOrDefaultAsync(u => u.Id == command.Id, cancellationToken);
 
         if (existing == null)
@@ -32,7 +32,7 @@ internal sealed class UpdateLibraryUserCommandHandler(
         existing.Name = command.Name;
         existing.LastName = command.LastName;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(UserPatternKey);
 

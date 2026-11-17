@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Menu.GetAll;
+namespace VohuManah.Application.Library.Menu.GetAll;
 
 public sealed record GetAllMenuItemsQuery(IReadOnlyList<string> RoleNames) : IQuery<List<MenuItemResponse>>;
 

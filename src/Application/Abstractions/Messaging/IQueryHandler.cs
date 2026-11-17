@@ -1,6 +1,6 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Abstractions.Messaging;
+namespace VohuManah.Application.Abstractions.Messaging;
 
 public interface IQueryHandler<in TQuery, TResponse>
     where TQuery : IQuery<TResponse>

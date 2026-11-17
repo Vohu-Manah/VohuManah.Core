@@ -1,17 +1,17 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Books.GetStatistics;
-using Application.Library.Manuscripts.GetStatistics;
-using Application.Library.Publications.GetStatistics;
-using Infrastructure.Reports;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Books.GetStatistics;
+using VohuManah.Application.Library.Manuscripts.GetStatistics;
+using VohuManah.Application.Library.Publications.GetStatistics;
+using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.Export)]
+[RequireRole(PermissionNames.Reports.Export)]
 internal sealed class ExportReport : BaseEndpoint
 {
     private static readonly Dictionary<string, string[]> StatFilterTitles = new()

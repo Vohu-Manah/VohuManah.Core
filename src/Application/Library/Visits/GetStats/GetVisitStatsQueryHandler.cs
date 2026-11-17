@@ -1,13 +1,13 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Visits;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Visits.GetStats;
+namespace VohuManah.Application.Library.Visits.GetStats;
 
 internal sealed class GetVisitStatsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IDateTimeProvider dateTimeProvider) : IQueryHandler<GetVisitStatsQuery, VisitStatsResponse>
 {
     private const int MaxDays = 90;
@@ -17,7 +17,7 @@ internal sealed class GetVisitStatsQueryHandler(
         int days = query.Days <= 0 ? 30 : Math.Min(query.Days, MaxDays);
         DateTime from = dateTimeProvider.UtcNow.Date.AddDays(-(days - 1));
 
-        List<DateTime> stamps = await unitOfWork.GetDbSet<VisitLog>()
+        List<DateTime> stamps = await dbContext.VisitLogs
             .Where(v => v.VisitedAt >= from)
             .Select(v => v.VisitedAt)
             .ToListAsync(cancellationToken)

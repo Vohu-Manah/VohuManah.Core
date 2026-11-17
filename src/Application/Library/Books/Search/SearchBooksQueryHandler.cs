@@ -1,18 +1,19 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Subjects;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.Search;
+namespace VohuManah.Application.Library.Books.Search;
 
 internal sealed class SearchBooksQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<SearchBooksQuery, PagedResult<BookSearchResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<SearchBooksQuery, PagedList<BookSearchResponse>>
 {
-    public async Task<Result<PagedResult<BookSearchResponse>>> Handle(SearchBooksQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedList<BookSearchResponse>>> Handle(SearchBooksQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         IQueryable<Book> queryable = books.AsQueryable();
 
@@ -148,7 +149,7 @@ internal sealed class SearchBooksQueryHandler(
             })
             .ToList();
 
-        return Result.Success(new PagedResult<BookSearchResponse>
+        return Result.Success(new PagedList<BookSearchResponse>
         {
             Items = items,
             TotalCount = totalCount,

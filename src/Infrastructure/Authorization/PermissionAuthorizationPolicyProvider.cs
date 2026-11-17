@@ -2,7 +2,7 @@
 using System.Threading;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
 internal sealed class PermissionAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
 {

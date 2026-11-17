@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Subjects.Create;
+namespace VohuManah.Application.Library.Subjects.Create;
 
 internal sealed class CreateSubjectCommandValidator : AbstractValidator<CreateSubjectCommand>
 {

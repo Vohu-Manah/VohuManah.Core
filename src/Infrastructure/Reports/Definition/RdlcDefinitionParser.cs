@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Infrastructure.Reports.Definition;
+namespace VohuManah.Infrastructure.Reports.Definition;
 
 internal sealed class RdlcDefinitionParser
 {

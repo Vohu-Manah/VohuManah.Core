@@ -1,13 +1,13 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using FluentValidation;
 using FluentValidation.Results;
-using SharedKernel;
+using VohuManah.SharedKernel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
-namespace Application.Abstractions.Behaviors;
+namespace VohuManah.Application.Abstractions.Behaviors;
 
 internal static class ValidationDecorator
 {

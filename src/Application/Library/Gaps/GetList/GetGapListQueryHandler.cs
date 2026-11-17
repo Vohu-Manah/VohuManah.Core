@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Gaps;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Gaps.GetList;
+namespace VohuManah.Application.Library.Gaps.GetList;
 
 internal sealed class GetGapListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetGapListQuery, List<GapListResponse>>
 {
     private const string GapAllKey = "sdp.gap.all";
 
     public Task<Result<List<GapListResponse>>> Handle(GetGapListQuery query, CancellationToken cancellationToken)
     {
-        var gaps = unitOfWork.GetDbSet<Gap>();
+        var gaps = dbContext.Gaps;
 
         var allGaps = cacheManager.Retrieve(GapAllKey, () => gaps.OrderByDescending(g => g.Id).ToList());
 

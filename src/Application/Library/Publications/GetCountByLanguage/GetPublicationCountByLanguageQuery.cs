@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Publications.GetCountByLanguage;
+namespace VohuManah.Application.Library.Publications.GetCountByLanguage;
 
 public sealed record GetPublicationCountByLanguageQuery : IQuery<List<ListItemResponse>>;
 

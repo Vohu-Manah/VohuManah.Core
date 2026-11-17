@@ -1,8 +1,8 @@
 using System;
-using Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Authentication;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 internal sealed class UserContext : IUserContext
 {

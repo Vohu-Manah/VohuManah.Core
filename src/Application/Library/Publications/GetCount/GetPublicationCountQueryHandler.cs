@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.GetCount;
+namespace VohuManah.Application.Library.Publications.GetCount;
 
 internal sealed class GetPublicationCountQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountQuery, int>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationCountQuery, int>
 {
     public async Task<Result<int>> Handle(GetPublicationCountQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         int count = await publications.CountAsync(cancellationToken);
 

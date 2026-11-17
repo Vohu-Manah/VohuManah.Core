@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetById;
+namespace VohuManah.Application.Library.Books.GetById;
 
 internal sealed class GetBookByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookByIdQuery, BookResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
     public async Task<Result<BookResponse>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         Book? book = await books
             .Include(b => b.Publisher)

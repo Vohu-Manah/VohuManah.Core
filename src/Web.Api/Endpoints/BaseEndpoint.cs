@@ -1,6 +1,6 @@
-using Web.Api.Extensions;
+using VohuManah.Web.Api.Extensions;
 
-namespace Web.Api.Endpoints;
+namespace VohuManah.Web.Api.Endpoints;
 
 public abstract class BaseEndpoint : IEndpoint
 {

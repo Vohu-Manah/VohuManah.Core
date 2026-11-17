@@ -1,4 +1,4 @@
-namespace Application.Library.Subjects.GetAll;
+namespace VohuManah.Application.Library.Subjects.GetAll;
 
 public sealed record SubjectResponse
 {

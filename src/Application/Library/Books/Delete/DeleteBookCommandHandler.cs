@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.Delete;
+namespace VohuManah.Application.Library.Books.Delete;
 
 internal sealed class DeleteBookCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<DeleteBookCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<DeleteBookCommand>
 {
     public async Task<Result> Handle(DeleteBookCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         Book? book = await books
             .Include(b => b.Publisher)
@@ -26,7 +26,7 @@ internal sealed class DeleteBookCommandHandler(
         }
 
         books.Remove(book);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

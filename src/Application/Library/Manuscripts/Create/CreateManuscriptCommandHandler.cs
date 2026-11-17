@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Create;
+namespace VohuManah.Application.Library.Manuscripts.Create;
 
 internal sealed class CreateManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<CreateManuscriptCommand, int>
+    IApplicationDbContext dbContext) : ICommandHandler<CreateManuscriptCommand, int>
 {
     public async Task<Result<int>> Handle(CreateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
 
         var manuscript = new Manuscript
@@ -29,7 +29,7 @@ internal sealed class CreateManuscriptCommandHandler(
         };
 
         manuscripts.Add(manuscript);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return manuscript.Id;
     }

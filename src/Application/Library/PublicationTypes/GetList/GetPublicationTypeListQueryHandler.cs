@@ -1,20 +1,20 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.PublicationTypes;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.PublicationTypes.GetList;
+namespace VohuManah.Application.Library.PublicationTypes.GetList;
 
 internal sealed class GetPublicationTypeListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetPublicationTypeListQuery, List<PublicationTypeListResponse>>
 {
     private const string PublicationTypeAllKey = "sdp.publicationtype.all";
 
     public Task<Result<List<PublicationTypeListResponse>>> Handle(GetPublicationTypeListQuery query, CancellationToken cancellationToken)
     {
-        var publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+        var publicationTypes = dbContext.PublicationTypes;
 
         var allPublicationTypes = cacheManager.Retrieve(PublicationTypeAllKey, () => publicationTypes.ToList());
 

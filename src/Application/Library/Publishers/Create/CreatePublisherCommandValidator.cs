@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Publishers.Create;
+namespace VohuManah.Application.Library.Publishers.Create;
 
 internal sealed class CreatePublisherCommandValidator : AbstractValidator<CreatePublisherCommand>
 {

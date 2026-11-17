@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Settings.Update;
+namespace VohuManah.Application.Library.Settings.Update;
 
 public sealed record UpdateSettingsCommand(
     [Display(Name = "نام تنظیمات")] string Name,

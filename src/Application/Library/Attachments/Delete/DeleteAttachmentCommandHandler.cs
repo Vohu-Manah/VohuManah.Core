@@ -1,19 +1,19 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Attachments;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Attachments.Delete;
+namespace VohuManah.Application.Library.Attachments.Delete;
 
 internal sealed class DeleteAttachmentCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : ICommandHandler<DeleteAttachmentCommand>
 {
     public async Task<Result> Handle(DeleteAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Attachment? attachment = await attachments
             .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
@@ -28,7 +28,7 @@ internal sealed class DeleteAttachmentCommandHandler(
             await fileStorageService.DeleteFileAsync(attachment.FilePath, cancellationToken);
 
             attachments.Remove(attachment);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

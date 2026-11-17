@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Users.GetFullName;
+namespace VohuManah.Application.Library.Users.GetFullName;
 
 public sealed record GetUserFullNameQuery(string UserName) : IQuery<string?>;
 

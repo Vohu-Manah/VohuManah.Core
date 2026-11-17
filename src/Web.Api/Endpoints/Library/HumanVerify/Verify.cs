@@ -1,9 +1,9 @@
-using Application.Abstractions.HumanVerification;
-using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
+using VohuManah.Application.Abstractions.HumanVerification;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
 
-namespace Web.Api.Endpoints.Library.HumanVerify;
+namespace VohuManah.Web.Api.Endpoints.Library.HumanVerify;
 
 internal sealed class Verify : IEndpoint
 {

@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Database;
+﻿namespace VohuManah.Infrastructure.Database;
 
 internal static class Schemas
 {

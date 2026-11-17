@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Settings.UpdateUserSettings;
+namespace VohuManah.Application.Library.Settings.UpdateUserSettings;
 
 internal sealed class UpdateUserSettingsCommandValidator : AbstractValidator<UpdateUserSettingsCommand>
 {

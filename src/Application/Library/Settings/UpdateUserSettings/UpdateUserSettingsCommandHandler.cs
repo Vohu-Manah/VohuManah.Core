@@ -1,20 +1,21 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Attachments;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.UpdateUserSettings;
+namespace VohuManah.Application.Library.Settings.UpdateUserSettings;
 
 internal sealed class UpdateUserSettingsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : ICommandHandler<UpdateUserSettingsCommand>
 {
     public async Task<Result> Handle(UpdateUserSettingsCommand command, CancellationToken cancellationToken)
     {
-        var userSettings = unitOfWork.GetDbSet<UserSettings>();
-        var attachments = unitOfWork.GetDbSet<Attachment>();
+        var userSettings = dbContext.UserSettings;
+        var attachments = dbContext.Attachments;
 
         var settings = await userSettings
             .Include(us => us.ProfileImageAttachment)
@@ -61,7 +62,7 @@ internal sealed class UpdateUserSettingsCommandHandler(
             settings.ThemeMode = command.ThemeMode;
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

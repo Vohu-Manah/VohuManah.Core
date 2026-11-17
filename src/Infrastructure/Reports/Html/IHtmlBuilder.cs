@@ -1,4 +1,4 @@
-namespace Infrastructure.Reports.Html;
+namespace VohuManah.Infrastructure.Reports.Html;
 
 internal interface IHtmlBuilder
 {

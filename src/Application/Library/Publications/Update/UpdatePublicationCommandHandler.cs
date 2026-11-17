@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.Update;
+namespace VohuManah.Application.Library.Publications.Update;
 
 internal sealed class UpdatePublicationCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdatePublicationCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdatePublicationCommand>
 {
     public async Task<Result> Handle(UpdatePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         Publication? existing = await publications
             .SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
@@ -40,7 +40,7 @@ internal sealed class UpdatePublicationCommandHandler(
         existing.TypeId = command.TypeId;
         existing.Period = command.Period;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

@@ -1,15 +1,15 @@
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.Create;
+namespace VohuManah.Application.Library.Users.Create;
 
 internal sealed class CreateLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager,
     IPasswordHasher passwordHasher) : ICommandHandler<CreateLibraryUserCommand, string>
 {
@@ -17,7 +17,7 @@ internal sealed class CreateLibraryUserCommandHandler(
 
     public async Task<Result<string>> Handle(CreateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<User> users = unitOfWork.GetDbSet<User>();
+        DbSet<User> users = dbContext.LibraryUsers;
 
         if (await users.AnyAsync(u => u.UserName == command.UserName, cancellationToken))
         {
@@ -35,7 +35,7 @@ internal sealed class CreateLibraryUserCommandHandler(
         };
 
         users.Add(user);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(UserPatternKey);
 

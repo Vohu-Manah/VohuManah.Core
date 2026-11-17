@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Publications.GetCountBySubject;
+namespace VohuManah.Application.Library.Publications.GetCountBySubject;
 
 public sealed record GetPublicationCountBySubjectQuery : IQuery<List<ListItemResponse>>;
 

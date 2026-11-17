@@ -1,4 +1,4 @@
-namespace Application.Abstractions.Authorization;
+namespace VohuManah.Application.Abstractions.Authorization;
 
 public interface IRolePermissionService
 {

@@ -1,4 +1,4 @@
-﻿namespace SharedKernel;
+﻿namespace VohuManah.SharedKernel;
 
 public interface IDateTimeProvider
 {

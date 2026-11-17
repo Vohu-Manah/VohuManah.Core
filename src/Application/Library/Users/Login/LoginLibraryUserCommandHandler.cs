@@ -1,16 +1,16 @@
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
-using Application.Abstractions.HumanVerification;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.HumanVerification;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.Login;
+namespace VohuManah.Application.Library.Users.Login;
 
 internal sealed class LoginLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ILibraryTokenProvider tokenProvider,
     IPasswordHasher passwordHasher,
     IConfiguration configuration,
@@ -24,10 +24,10 @@ internal sealed class LoginLibraryUserCommandHandler(
             return Result.Failure<LoginLibraryUserResponse>(HumanVerifyErrors.InvalidOrExpired);
         }
 
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         string loginInput = command.UserName.Trim();
-        Domain.Library.User? user = await users
+        VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.UserName == loginInput || (u.Email != null && u.Email == loginInput), cancellationToken);
 
         if (user == null || !passwordHasher.Verify(command.Password.Trim(), user.Password))
@@ -45,8 +45,8 @@ internal sealed class LoginLibraryUserCommandHandler(
             Token = Guid.NewGuid().ToString("N"),
             ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
-        unitOfWork.GetDbSet<RefreshToken>().Add(refresh);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        dbContext.RefreshTokens.Add(refresh);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         LoginLibraryUserResponse response = new LoginLibraryUserResponse
         {

@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Gaps;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Gaps.GetById;
+namespace VohuManah.Application.Library.Gaps.GetById;
 
 internal sealed class GetGapByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetGapByIdQuery, GapResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetGapByIdQuery, GapResponse>
 {
     public async Task<Result<GapResponse>> Handle(GetGapByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         Gap? gap = await gaps
             .SingleOrDefaultAsync(g => g.Id == query.Id, cancellationToken);

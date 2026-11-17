@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Users.Login;
+namespace VohuManah.Application.Library.Users.Login;
 
 public sealed record LoginLibraryUserCommand(
     [Display(Name = "نام کاربری")] string UserName,

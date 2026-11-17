@@ -1,4 +1,4 @@
-namespace Application.Library.Gaps.GetAll;
+namespace VohuManah.Application.Library.Gaps.GetAll;
 
 public sealed record GapResponse
 {

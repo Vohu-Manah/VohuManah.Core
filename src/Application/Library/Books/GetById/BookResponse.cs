@@ -1,4 +1,4 @@
-namespace Application.Library.Books.GetById;
+namespace VohuManah.Application.Library.Books.GetById;
 
 public sealed record BookResponse
 {

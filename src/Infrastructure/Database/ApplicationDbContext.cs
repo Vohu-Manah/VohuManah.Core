@@ -1,10 +1,23 @@
 using System;
-using Application.Abstractions.Data;
-using Domain.Library;
-using Infrastructure.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Attachments;
+using VohuManah.Domain.Books;
+using VohuManah.Domain.Cities;
+using VohuManah.Domain.Gaps;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Manuscripts;
+using VohuManah.Domain.Menu;
+using VohuManah.Domain.PublicationTypes;
+using VohuManah.Domain.Publications;
+using VohuManah.Domain.Publishers;
+using VohuManah.Domain.Subjects;
+using VohuManah.Domain.Users;
+using VohuManah.Domain.Visits;
+using VohuManah.Infrastructure.Database.Seeds;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Database;
+namespace VohuManah.Infrastructure.Database;
 
 public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -16,7 +29,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
         Database.SetCommandTimeout(TimeSpan.FromMinutes(5));
     }
 
-    public DbSet<Domain.Library.User> LibraryUsers { get; set; }
+    public DbSet<VohuManah.Domain.Users.User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Language> Languages { get; set; }
@@ -29,7 +42,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Settings> Settings { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<RoleEndpoint> RoleEndpoints { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<UserSettings> UserSettings { get; set; }
@@ -43,10 +56,5 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
         LibrarySeedData.SeedData(modelBuilder);
 
         base.OnModelCreating(modelBuilder);
-    }
-
-    public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class
-    {
-        return Set<TEntity>();
     }
 }

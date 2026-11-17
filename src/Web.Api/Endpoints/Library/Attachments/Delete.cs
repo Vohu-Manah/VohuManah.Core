@@ -1,13 +1,13 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Attachments.Delete;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Attachments.Delete;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Attachments;
+namespace VohuManah.Web.Api.Endpoints.Library.Attachments;
 
-[RequireRole(EndpointNames.Attachments.Delete)]
+[RequireRole(PermissionNames.Attachments.Delete)]
 internal sealed class Delete : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

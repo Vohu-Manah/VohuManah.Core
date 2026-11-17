@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Users.UpdateProfile;
+namespace VohuManah.Application.Library.Users.UpdateProfile;
 
 internal sealed class UpdateUserProfileCommandValidator : AbstractValidator<UpdateUserProfileCommand>
 {

@@ -1,12 +1,12 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Visits;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Visits.Record;
+namespace VohuManah.Application.Library.Visits.Record;
 
 internal sealed class RecordVisitCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IDateTimeProvider dateTimeProvider) : ICommandHandler<RecordVisitCommand>
 {
     public async Task<Result> Handle(RecordVisitCommand command, CancellationToken cancellationToken)
@@ -22,8 +22,8 @@ internal sealed class RecordVisitCommandHandler(
             VisitedAt = dateTimeProvider.UtcNow
         };
 
-        await unitOfWork.GetDbSet<VisitLog>().AddAsync(visitLog, cancellationToken).ConfigureAwait(false);
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.VisitLogs.AddAsync(visitLog, cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         return Result.Success();
     }

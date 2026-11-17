@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.UpdateProfile;
+namespace VohuManah.Application.Library.Users.UpdateProfile;
 
 internal sealed class UpdateUserProfileCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateUserProfileCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateUserProfileCommand>
 {
     public async Task<Result> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
 
         var user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -32,7 +32,7 @@ internal sealed class UpdateUserProfileCommandHandler(
         user.Email = command.Email;
         user.PhoneNumber = command.PhoneNumber;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

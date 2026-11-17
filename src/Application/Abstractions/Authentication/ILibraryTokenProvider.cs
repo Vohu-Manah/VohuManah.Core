@@ -1,6 +1,6 @@
-using Domain.Library;
+using VohuManah.Domain.Users;
 
-namespace Application.Abstractions.Authentication;
+namespace VohuManah.Application.Abstractions.Authentication;
 
 public interface ILibraryTokenProvider
 {

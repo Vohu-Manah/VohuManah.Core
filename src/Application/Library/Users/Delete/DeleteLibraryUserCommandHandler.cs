@@ -1,30 +1,30 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.Delete;
+namespace VohuManah.Application.Library.Users.Delete;
 
 internal sealed class DeleteLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeleteLibraryUserCommand>
 {
     private const string UserPatternKey = "sdp.user.";
 
     public async Task<Result> Handle(DeleteLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
-        List<Domain.Library.User> allUsers = await users.ToListAsync(cancellationToken);
+        List<VohuManah.Domain.Users.User> allUsers = await users.ToListAsync(cancellationToken);
         if (allUsers.Count == 1)
         {
             return Result.Failure(UserErrors.CannotDeleteLastUser);
         }
 
         
-        Domain.Library.User? existing = await users
+        VohuManah.Domain.Users.User? existing = await users
             .SingleOrDefaultAsync(u => u.Id == command.Id, cancellationToken);
 
         if (existing == null)
@@ -33,7 +33,7 @@ internal sealed class DeleteLibraryUserCommandHandler(
         }
 
         users.Remove(existing);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(UserPatternKey);
 

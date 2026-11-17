@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Delete;
+namespace VohuManah.Application.Library.Manuscripts.Delete;
 
 internal sealed class DeleteManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<DeleteManuscriptCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<DeleteManuscriptCommand>
 {
     public async Task<Result> Handle(DeleteManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         Manuscript? manuscript = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
@@ -22,7 +22,7 @@ internal sealed class DeleteManuscriptCommandHandler(
         }
 
         manuscripts.Remove(manuscript);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

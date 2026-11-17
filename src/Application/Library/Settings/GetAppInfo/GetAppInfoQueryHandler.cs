@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.AppSettings;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetAppInfo;
+namespace VohuManah.Application.Library.Settings.GetAppInfo;
 
 internal sealed class GetAppInfoQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetAppInfoQuery, AppInfoResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetAppInfoQuery, AppInfoResponse>
 {
     public async Task<Result<AppInfoResponse>> Handle(GetAppInfoQuery query, CancellationToken cancellationToken)
     {
-        var appInfos = unitOfWork.GetDbSet<AppInfo>();
+        var appInfos = dbContext.AppInfos;
 
         var appInfo = await appInfos.FirstOrDefaultAsync(cancellationToken);
 

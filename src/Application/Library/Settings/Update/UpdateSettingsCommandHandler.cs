@@ -1,23 +1,23 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.AppSettings;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.Update;
+namespace VohuManah.Application.Library.Settings.Update;
 
 internal sealed class UpdateSettingsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateSettingsCommand>
 {
     private const string SettingsPatternKey = "sdp.settings.";
 
     public async Task<Result> Handle(UpdateSettingsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
-        Domain.Library.Settings? existing = await settings
+        VohuManah.Domain.AppSettings.Settings? existing = await settings
             .SingleOrDefaultAsync(s => s.Name.Trim() == command.Name.Trim(), cancellationToken);
 
         if (existing == null)
@@ -27,7 +27,7 @@ internal sealed class UpdateSettingsCommandHandler(
 
         existing.Value = command.Value;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(SettingsPatternKey);
 

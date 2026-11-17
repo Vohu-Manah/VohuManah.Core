@@ -1,9 +1,9 @@
-using Application.Abstractions.Behaviors;
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Behaviors;
+using VohuManah.Application.Abstractions.Messaging;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application;
+namespace VohuManah.Application;
 
 public static class DependencyInjection
 {

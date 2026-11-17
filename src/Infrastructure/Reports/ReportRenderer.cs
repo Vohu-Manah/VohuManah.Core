@@ -1,4 +1,4 @@
-using Infrastructure.Reports.Html;
+using VohuManah.Infrastructure.Reports.Html;
 using Microsoft.Extensions.Logging;
 using Reporting.NETCore;
 using System;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class ReportRenderer : IReportRenderer
 {
@@ -54,7 +54,7 @@ internal sealed class ReportRenderer : IReportRenderer
             using var report = CreateReport(reportModel);
             byte[] excel = report.Render(
                 "EXCELOPENXML",
-                deviceInfo: null,
+                deviceInfo: null!,
                 pageCountMode: PageCountMode.Actual,
                 mimeType: out _,
                 encoding: out _,
@@ -148,7 +148,7 @@ internal sealed class ReportRenderer : IReportRenderer
 
         foreach (var warning in warnings)
         {
-            
+            Console.WriteLine($"Report warning: {warning}");
         }
     }
 }

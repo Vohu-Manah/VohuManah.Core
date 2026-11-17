@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace Infrastructure.Reports.Html;
+namespace VohuManah.Infrastructure.Reports.Html;
 
 internal sealed class ReportResourceLoader : IReportResourceLoader
 {

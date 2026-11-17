@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 
-namespace Application.Library.Books.GetAllEntities;
+namespace VohuManah.Application.Library.Books.GetAllEntities;
 
 public sealed record GetAllBookEntitiesQuery : IQuery<List<Book>>;
 

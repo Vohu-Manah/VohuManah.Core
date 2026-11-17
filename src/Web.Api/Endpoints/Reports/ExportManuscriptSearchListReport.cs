@@ -1,16 +1,16 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Manuscripts.Search;
-using Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Manuscripts.Search;
+using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Endpoints.Reports.Requests;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints.Reports.Requests;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.SharedKernel;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.Export)]
+[RequireRole(PermissionNames.Reports.Export)]
 internal sealed class ExportManuscriptSearchListReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
@@ -18,7 +18,7 @@ internal sealed class ExportManuscriptSearchListReport : BaseEndpoint
         app.MapPost("reports/export/manuscript-search-list", async (
             ManuscriptSearchListReportRequest request,
             [FromQuery] string format,
-            IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>> searchHandler,
+            IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>> searchHandler,
             IReportService reportService,
             CancellationToken cancellationToken) =>
         {
@@ -66,4 +66,3 @@ internal sealed class ExportManuscriptSearchListReport : BaseEndpoint
         .WithTags("Reports");
     }
 }
-

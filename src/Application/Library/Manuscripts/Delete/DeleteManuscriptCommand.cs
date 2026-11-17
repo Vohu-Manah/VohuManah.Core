@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Manuscripts.Delete;
+namespace VohuManah.Application.Library.Manuscripts.Delete;
 
 public sealed record DeleteManuscriptCommand([Display(Name = "شناسه")] int Id) : ICommand;
 

@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Manuscripts.Create;
+namespace VohuManah.Application.Library.Manuscripts.Create;
 
 internal sealed class CreateManuscriptCommandValidator : AbstractValidator<CreateManuscriptCommand>
 {

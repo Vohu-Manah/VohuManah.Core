@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Manuscripts;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.GetList;
+namespace VohuManah.Application.Library.Manuscripts.GetList;
 
 internal sealed class GetManuscriptListQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptListQuery, PagedList<ManuscriptListResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptListQuery, PagedList<ManuscriptListResponse>>
 {
     public async Task<Result<PagedList<ManuscriptListResponse>>> Handle(GetManuscriptListQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>()
+        IQueryable<Manuscript> manuscripts = dbContext.Manuscripts
             .Include(m => m.City)
             .Include(m => m.Gap)
             .Include(m => m.Subject)

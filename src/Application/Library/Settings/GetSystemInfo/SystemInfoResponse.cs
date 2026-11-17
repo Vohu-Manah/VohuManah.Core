@@ -1,4 +1,4 @@
-namespace Application.Library.Settings.GetSystemInfo;
+namespace VohuManah.Application.Library.Settings.GetSystemInfo;
 
 public sealed record SystemInfoResponse
 {

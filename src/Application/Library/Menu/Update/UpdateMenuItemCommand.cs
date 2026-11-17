@@ -1,8 +1,8 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Menu.GetAll;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Menu.GetAll;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Menu.Update;
+namespace VohuManah.Application.Library.Menu.Update;
 
 public sealed record UpdateMenuItemCommand(
     [Display(Name = "شناسه")] int Id,

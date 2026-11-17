@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Languages;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Languages.Delete;
+namespace VohuManah.Application.Library.Languages.Delete;
 
 internal sealed class DeleteLanguageCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeleteLanguageCommand>
 {
     private const string LanguagePatternKey = "sdp.language.";
 
     public async Task<Result> Handle(DeleteLanguageCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         Language? existing = await languages.SingleOrDefaultAsync(l => l.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -24,7 +24,7 @@ internal sealed class DeleteLanguageCommandHandler(
         }
 
         languages.Remove(existing);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(LanguagePatternKey);
 

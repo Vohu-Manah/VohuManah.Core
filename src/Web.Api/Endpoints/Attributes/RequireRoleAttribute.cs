@@ -1,4 +1,4 @@
-namespace Web.Api.Endpoints.Attributes;
+namespace VohuManah.Web.Api.Endpoints.Attributes;
 
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]

@@ -1,18 +1,18 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+﻿using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.UpdateRolePermissions;
+namespace VohuManah.Application.Library.Settings.UpdateRolePermissions;
 
 internal sealed class UpdateRolePermissionsCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateRolePermissionsCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateRolePermissionsCommand>
 {
     public async Task<Result> Handle(UpdateRolePermissionsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
-        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+        DbSet<Role> roles = dbContext.Roles;
+        DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == command.RoleId, cancellationToken);
 
@@ -21,19 +21,19 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             return Result.Failure(Error.NotFound("Role.NotFound", "نقش یافت نشد"));
         }
 
-        var normalizedEndpoints = (command.EndpointNames ?? Array.Empty<string>())
+        var normalizedEndpoints = (command.PermissionNames ?? Array.Empty<string>())
             .Where(endpoint => !string.IsNullOrWhiteSpace(endpoint))
             .Select(endpoint => endpoint.Trim())
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        List<RoleEndpoint> existingPermissions = await rolePermissions
+        List<RolePermission> existingPermissions = await rolePermissions
             .Where(rp => rp.RoleId == command.RoleId)
             .ToListAsync(cancellationToken);
 
         var endpointSet = new HashSet<string>(normalizedEndpoints, StringComparer.OrdinalIgnoreCase);
 
-        List<RoleEndpoint> toRemove = existingPermissions
+        List<RolePermission> toRemove = existingPermissions
             .Where(rp => !endpointSet.Contains(rp.EndpointName))
             .ToList();
 
@@ -53,14 +53,14 @@ internal sealed class UpdateRolePermissionsCommandHandler(
                 continue;
             }
 
-            rolePermissions.Add(new RoleEndpoint
+            rolePermissions.Add(new RolePermission
             {
                 RoleId = command.RoleId,
                 EndpointName = endpoint
             });
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

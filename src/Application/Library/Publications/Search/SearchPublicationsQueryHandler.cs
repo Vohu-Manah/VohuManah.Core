@@ -1,18 +1,19 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Publications;
+using VohuManah.Domain.Subjects;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.Search;
+namespace VohuManah.Application.Library.Publications.Search;
 
 internal sealed class SearchPublicationsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<SearchPublicationsQuery, PagedResult<PublicationSearchResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<SearchPublicationsQuery, PagedList<PublicationSearchResponse>>
 {
-    public async Task<Result<PagedResult<PublicationSearchResponse>>> Handle(SearchPublicationsQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedList<PublicationSearchResponse>>> Handle(SearchPublicationsQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         var queryable = publications.AsQueryable();
 
@@ -113,7 +114,7 @@ internal sealed class SearchPublicationsQueryHandler(
             .Take(query.MaxResults)
             .ToListAsync(cancellationToken);
 
-        return Result.Success(new PagedResult<PublicationSearchResponse>
+        return Result.Success(new PagedList<PublicationSearchResponse>
         {
             Items = results,
             TotalCount = totalCount,

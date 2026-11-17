@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class ReportModel
 {

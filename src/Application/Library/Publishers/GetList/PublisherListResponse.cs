@@ -1,4 +1,4 @@
-namespace Application.Library.Publishers.GetList;
+namespace VohuManah.Application.Library.Publishers.GetList;
 
 public sealed record PublisherListResponse
 {

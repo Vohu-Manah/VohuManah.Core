@@ -1,15 +1,15 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Settings.UpdateUserSettings;
-using SharedKernel;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Settings.UpdateUserSettings;
+using VohuManah.SharedKernel;
 using System.Security.Claims;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Http;
+using VohuManah.Application.Abstractions.Authorization;
 
-namespace Web.Api.Endpoints.Library.Settings;
+namespace VohuManah.Web.Api.Endpoints.Library.Settings;
 
-[RequireRole(EndpointNames.Settings.UpdateUserSettings)]
+[RequireRole(PermissionNames.Settings.UpdateUserSettings)]
 internal sealed class UpdateUserSettingsEndpoint : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

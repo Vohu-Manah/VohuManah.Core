@@ -1,4 +1,4 @@
-namespace Application.Library.Settings.GetUserRoles;
+namespace VohuManah.Application.Library.Settings.GetUserRoles;
 
 public sealed record UserRoleResponse
 {

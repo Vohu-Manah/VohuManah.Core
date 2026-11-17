@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Cities.GetNames;
+namespace VohuManah.Application.Library.Cities.GetNames;
 
 public sealed record GetCityNamesQuery(bool AddAllItemInFirstRow = false) : IQuery<List<SelectItemResponse>>;
 

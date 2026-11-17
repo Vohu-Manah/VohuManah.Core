@@ -1,21 +1,21 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publishers;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publishers.Create;
+namespace VohuManah.Application.Library.Publishers.Create;
 
 internal sealed class CreatePublisherCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreatePublisherCommand, int>
 {
     private const string PublisherPatternKey = "sdp.publisher.";
 
     public async Task<Result<int>> Handle(CreatePublisherCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+        DbSet<Publisher> publishers = dbContext.Publishers;
 
         if (await publishers.AnyAsync(p => p.Name == command.Name, cancellationToken))
         {
@@ -34,7 +34,7 @@ internal sealed class CreatePublisherCommandHandler(
         };
 
         publishers.Add(publisher);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(PublisherPatternKey);
 

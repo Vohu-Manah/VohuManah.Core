@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetVolumeCount;
+namespace VohuManah.Application.Library.Books.GetVolumeCount;
 
 internal sealed class GetBookVolumeCountQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookVolumeCountQuery, int>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookVolumeCountQuery, int>
 {
     public async Task<Result<int>> Handle(GetBookVolumeCountQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.GetDbSet<Book>();
+        var books = dbContext.Books;
 
         int volumeCount = await books.SumAsync(b => (int?)b.VolumeCount, cancellationToken) ?? 0;
 

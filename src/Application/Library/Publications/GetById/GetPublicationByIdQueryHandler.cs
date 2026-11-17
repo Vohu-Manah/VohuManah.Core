@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Publications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.GetById;
+namespace VohuManah.Application.Library.Publications.GetById;
 
 internal sealed class GetPublicationByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationByIdQuery, PublicationResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationByIdQuery, PublicationResponse>
 {
     public async Task<Result<PublicationResponse>> Handle(GetPublicationByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         Publication? publication = await publications
             .Include(p => p.PublicationType)

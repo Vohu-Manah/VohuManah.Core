@@ -1,4 +1,4 @@
-namespace Application.Library.Books.GetBarcodeData;
+namespace VohuManah.Application.Library.Books.GetBarcodeData;
 
 
 public sealed record BookBarcodeResponse

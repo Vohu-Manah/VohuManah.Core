@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Gaps.Update;
+namespace VohuManah.Application.Library.Gaps.Update;
 
 public sealed record UpdateGapCommand(
     [Display(Name = "شناسه")] int Id,

@@ -1,17 +1,17 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Cities;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Cities.GetById;
+namespace VohuManah.Application.Library.Cities.GetById;
 
 internal sealed class GetCityByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetCityByIdQuery, CityResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetCityByIdQuery, CityResponse>
 {
     public async Task<Result<CityResponse>> Handle(GetCityByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         City? city = await cities
             .SingleOrDefaultAsync(c => c.Id == query.Id, cancellationToken);

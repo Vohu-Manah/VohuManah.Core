@@ -1,18 +1,20 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Gaps;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Manuscripts;
+using VohuManah.Domain.Subjects;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Search;
+namespace VohuManah.Application.Library.Manuscripts.Search;
 
 internal sealed class SearchManuscriptsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<SearchManuscriptsQuery, PagedList<ManuscriptSearchResponse>>
 {
-    public async Task<Result<PagedResult<ManuscriptSearchResponse>>> Handle(SearchManuscriptsQuery query, CancellationToken cancellationToken)
+    public async Task<Result<PagedList<ManuscriptSearchResponse>>> Handle(SearchManuscriptsQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        var manuscripts = dbContext.Manuscripts;
 
         var queryable = manuscripts.AsQueryable();
 
@@ -98,7 +100,7 @@ internal sealed class SearchManuscriptsQueryHandler(
             .Take(query.MaxResults)
             .ToListAsync(cancellationToken);
 
-        return Result.Success(new PagedResult<ManuscriptSearchResponse>
+        return Result.Success(new PagedList<ManuscriptSearchResponse>
         {
             Items = results,
             TotalCount = totalCount,

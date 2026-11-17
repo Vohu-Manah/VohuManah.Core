@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Settings;
-using Application.Library.Users.ChangePassword;
-using SharedKernel;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.Application.Library.Users.ChangePassword;
+using VohuManah.SharedKernel;
 using System.Security.Claims;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Http;
 
-namespace Web.Api.Endpoints.Library.Users;
+namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
-[RequireRole(EndpointNames.Users.ChangePassword)]
+[RequireRole(PermissionNames.Users.ChangePassword)]
 internal sealed class ChangePassword : BaseEndpoint
 {
     public sealed record Request(string CurrentPassword, string NewPassword);

@@ -1,8 +1,8 @@
 using System.Threading;
 using System;
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,20 +11,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 internal sealed class LibraryTokenProvider(
     IConfiguration configuration,
-    IUnitOfWork unitOfWork) : ILibraryTokenProvider
+    IApplicationDbContext dbContext) : ILibraryTokenProvider
 {
     public async Task<string> CreateAsync(User user, CancellationToken ct)
     {
-        var userRoles = await unitOfWork.GetDbSet<UserRole>()
+        var userRoles = await dbContext.UserRoles
             .Where(ur => ur.UserId == user.Id)
             .Select(ur => ur.RoleId)
             .ToListAsync(ct);
 
-        var roles = await unitOfWork.GetDbSet<Role>()
+        var roles = await dbContext.Roles
             .Where(r => userRoles.Contains(r.Id))
             .Select(r => r.Name)
             .ToListAsync(ct);

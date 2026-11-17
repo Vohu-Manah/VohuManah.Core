@@ -1,6 +1,6 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Abstractions.Messaging;
+namespace VohuManah.Application.Abstractions.Messaging;
 
 public interface ICommandHandler<in TCommand>
     where TCommand : ICommand

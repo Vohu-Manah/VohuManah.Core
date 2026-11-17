@@ -1,19 +1,19 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Attachments;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Attachments.Upload;
+namespace VohuManah.Application.Library.Attachments.Upload;
 
 internal sealed class UploadAttachmentCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : ICommandHandler<UploadAttachmentCommand, long>
 {
     public async Task<Result<long>> Handle(UploadAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         try
         {
@@ -54,7 +54,7 @@ internal sealed class UploadAttachmentCommandHandler(
             };
 
             attachments.Add(attachment);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return attachment.Id;
         }

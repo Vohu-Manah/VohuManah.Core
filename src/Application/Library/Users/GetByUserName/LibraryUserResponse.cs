@@ -1,4 +1,4 @@
-namespace Application.Library.Users.GetByUserName;
+namespace VohuManah.Application.Library.Users.GetByUserName;
 
 public sealed record LibraryUserResponse
 {

@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace Infrastructure.Reports.Html;
+namespace VohuManah.Infrastructure.Reports.Html;
 
 internal sealed class HtmlBuilder : IHtmlBuilder
 {

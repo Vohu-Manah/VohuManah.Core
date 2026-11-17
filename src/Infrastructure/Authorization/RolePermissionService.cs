@@ -1,16 +1,16 @@
 using System.Threading;
-using Application.Abstractions.Authorization;
-using Application.Abstractions.Data;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
-internal sealed class RoleEndpointService(IUnitOfWork unitOfWork) : IRolePermissionService
+internal sealed class RolePermissionService(IApplicationDbContext dbContext) : IRolePermissionService
 {
     public async Task<bool> HasPermissionAsync(string roleName, string endpointName, CancellationToken cancellationToken = default)
     {
-        var hasPermission = await unitOfWork.GetDbSet<RoleEndpoint>()
+        var hasPermission = await dbContext.RolePermissions
             .Include(rp => rp.Role)
             .AnyAsync(
                 rp => rp.Role!.Name == roleName && rp.EndpointName == endpointName,
@@ -21,7 +21,7 @@ internal sealed class RoleEndpointService(IUnitOfWork unitOfWork) : IRolePermiss
 
     public async Task<List<string>> GetEndpointsForRoleAsync(string roleName, CancellationToken cancellationToken = default)
     {
-        var endpoints = await unitOfWork.GetDbSet<RoleEndpoint>()
+        var endpoints = await dbContext.RolePermissions
             .Include(rp => rp.Role)
             .Where(rp => rp.Role!.Name == roleName)
             .Select(rp => rp.EndpointName)
@@ -32,7 +32,7 @@ internal sealed class RoleEndpointService(IUnitOfWork unitOfWork) : IRolePermiss
 
     public async Task<List<string>> GetRolesForEndpointAsync(string endpointName, CancellationToken cancellationToken = default)
     {
-        var roles = await unitOfWork.GetDbSet<RoleEndpoint>()
+        var roles = await dbContext.RolePermissions
             .Include(rp => rp.Role)
             .Where(rp => rp.EndpointName == endpointName)
             .Select(rp => rp.Role!.Name)

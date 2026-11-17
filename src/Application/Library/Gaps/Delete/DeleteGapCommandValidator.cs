@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Gaps.Delete;
+namespace VohuManah.Application.Library.Gaps.Delete;
 
 internal sealed class DeleteGapCommandValidator : AbstractValidator<DeleteGapCommand>
 {

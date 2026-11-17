@@ -1,4 +1,4 @@
-﻿namespace Web.Api.Endpoints;
+﻿namespace VohuManah.Web.Api.Endpoints;
 
 public interface IEndpoint
 {

@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Settings.UpdateUserSettings;
+namespace VohuManah.Application.Library.Settings.UpdateUserSettings;
 
 public sealed record UpdateUserSettingsCommand(
     long UserId,
