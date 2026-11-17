@@ -46,10 +46,41 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ReportViewer.NETCore\Reporting\CommonStrings.resx" ManifestResourceName="Reporting.CommonStrings" />
+    <EmbeddedResource Include="ReportViewer.Common\Reporting\ProcessingStrings.resx" ManifestResourceName="Reporting.ProcessingStrings" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Diagnostics.Utilities\ErrorStrings.resx" ManifestResourceName="ReportingServices.Diagnostics.Utilities.ErrorStrings" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.HtmlRendering\RenderRes.resx" ManifestResourceName="ReportingServices.HtmlRendering.RenderRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.OnDemandReportRendering\RenderErrors.resx" ManifestResourceName="ReportingServices.OnDemandReportRendering.RenderErrors" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel\SR.resx" ManifestResourceName="ReportingServices.RdlObjectModel.SR" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel\SRErrors.resx" ManifestResourceName="ReportingServices.RdlObjectModel.SRErrors" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.DataRenderer\StringResources.resx" ManifestResourceName="ReportingServices.Rendering.DataRenderer.StringResources" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ExcelRenderer\ExcelRenderRes.resx" ManifestResourceName="ReportingServices.Rendering.ExcelRenderer.ExcelRenderRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.HPBProcessing\HPBRes.resx" ManifestResourceName="ReportingServices.Rendering.HPBProcessing.HPBRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.de.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.de" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.es.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.es" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.fr.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.fr" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.it.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.it" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.ja.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.ja" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.ko.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.ko" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.pt.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.pt" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.zh-Hans.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.zh-Hans" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.ImageRenderer\ImageRendererRes.zh-Hant.resx" ManifestResourceName="ReportingServices.Rendering.ImageRenderer.ImageRendererRes.zh-Hant" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.RPLProcessing\RPLRes.resx" ManifestResourceName="ReportingServices.Rendering.RPLProcessing.RPLRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.RPLRendering\RenderRes.resx" ManifestResourceName="ReportingServices.Rendering.RPLRendering.RenderRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.RichText\RichTextRes.resx" ManifestResourceName="ReportingServices.Rendering.RichText.RichTextRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.SPBProcessing\SPBRes.resx" ManifestResourceName="ReportingServices.Rendering.SPBProcessing.SPBRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.WordRenderer\WordRenderRes.resx" ManifestResourceName="ReportingServices.Rendering.WordRenderer.WordRenderRes" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.ReportProcessing\RDLUpgradeStrings.resx" ManifestResourceName="ReportingServices.ReportProcessing.RDLUpgradeStrings" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.ReportProcessing\RDLValidatingReaderStrings.resx" ManifestResourceName="ReportingServices.ReportProcessing.RDLValidatingReaderStrings" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.ReportProcessing\RPRes.resx" ManifestResourceName="ReportingServices.ReportProcessing.RPRes" />
+    <EmbeddedResource Include="ReportViewer.Common\SqlServer.ReportingServices\SoapExceptionStrings.resx" ManifestResourceName="SqlServer.ReportingServices.SoapExceptionStrings" />
     <EmbeddedResource Include="ReportViewer.DataVisualization\Reporting.Gauge.WebForms\Xaml.*.xaml" LogicalName="Reporting.Gauge.WebForms.Xaml.%(Filename)%(Extension)" />
     <EmbeddedResource Include="ReportViewer.DataVisualization\Reporting.Map.WebForms\Xaml.*.xaml" LogicalName="Reporting.Map.WebForms.Xaml.%(Filename)%(Extension)" />
 
     <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel.Serialization\ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.Serialization.ReportDefinition.xsd" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.RichText\Fonts\Shabnam-FD-WOL.ttf" LogicalName="VohuManah.Infrastructure.Reports.Html.Resources.fonts.Shabnam-FD-WOL.ttf" />
+    <EmbeddedResource Include="ReportViewer.Common\ReportingServices.Rendering.RichText\Fonts\Shabnam-Bold-FD-WOL.ttf" LogicalName="VohuManah.Infrastructure.Reports.Html.Resources.fonts.Shabnam-Bold-FD-WOL.ttf" />
     <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2005ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2005ObjectModel.ReportDefinition.xsd" />
     <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2008ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2008ObjectModel.ReportDefinition.xsd" />
     <EmbeddedResource Include="ReportViewer.Common\ReportingServices.RdlObjectModel.RdlUpgrade\Rdl2010ObjectModel.ReportDefinition.xsd" LogicalName="ReportingServices.RdlObjectModel.RdlUpgrade.Rdl2010ObjectModel.ReportDefinition.xsd" />
