@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using VohuManah.Web.Api.Authorization;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 using VohuManah.Web.Api.Middleware;
 
 namespace VohuManah.Web.Api;

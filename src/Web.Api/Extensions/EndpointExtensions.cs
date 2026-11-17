@@ -107,7 +107,7 @@ public static class EndpointExtensions
 
             if (requestParameter != null)
             {
-                var validationError = VohuManah.Web.Api.Infrastructure.ModelBindingValidator.ValidateRequestTypes(requestParameter);
+                var validationError = VohuManah.Web.Api.Http.ModelBindingValidator.ValidateRequestTypes(requestParameter);
                 if (validationError != null)
                 {
                     return Results.Problem(

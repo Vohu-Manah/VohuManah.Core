@@ -3,7 +3,7 @@ using VohuManah.Application.Library.Manuscripts.GetList;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Manuscripts;
 

@@ -2,7 +2,7 @@
 using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 

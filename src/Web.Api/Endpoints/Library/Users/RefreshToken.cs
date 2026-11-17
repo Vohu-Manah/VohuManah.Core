@@ -3,7 +3,7 @@ using VohuManah.Application.Library.Users.Tokens;
 using VohuManah.Web.Api.Security;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Extensions;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Users;
 

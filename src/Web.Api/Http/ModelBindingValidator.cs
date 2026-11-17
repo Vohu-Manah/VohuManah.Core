@@ -2,7 +2,7 @@ using VohuManah.SharedKernel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace VohuManah.Web.Api.Infrastructure;
+namespace VohuManah.Web.Api.Http;
 
 public static class ModelBindingValidator
 {

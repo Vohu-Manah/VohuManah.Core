@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VohuManah.Application.Abstractions.Data;
 
-namespace VohuManah.Web.Api.Infrastructure;
+namespace VohuManah.Web.Api.Http;
 
 internal sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,

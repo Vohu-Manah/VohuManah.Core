@@ -3,7 +3,7 @@ using VohuManah.Application.Library.Publications.Search;
 using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.SharedKernel;
 

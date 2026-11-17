@@ -2,7 +2,7 @@
 using VohuManah.Application.Library.Users.Tokens;
 using VohuManah.Web.Api.Security;
 using VohuManah.Web.Api.Endpoints.Attributes;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Users;

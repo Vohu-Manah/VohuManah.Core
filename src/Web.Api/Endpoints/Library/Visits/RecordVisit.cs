@@ -2,7 +2,7 @@ using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Visits.Record;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Extensions;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Visits;
 

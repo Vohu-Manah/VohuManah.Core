@@ -6,7 +6,7 @@ using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using VohuManah.Web.Api.Endpoints.Attributes;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;

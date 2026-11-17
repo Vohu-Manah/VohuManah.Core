@@ -3,7 +3,7 @@ using VohuManah.Application.Library.Books.Update;
 using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Books;
 

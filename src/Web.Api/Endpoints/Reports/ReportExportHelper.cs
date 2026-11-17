@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Reports;
 using System.Collections;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 

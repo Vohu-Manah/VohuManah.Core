@@ -4,7 +4,7 @@ using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
-using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Http;
 using VohuManah.SharedKernel;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
