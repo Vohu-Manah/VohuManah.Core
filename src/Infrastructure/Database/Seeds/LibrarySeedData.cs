@@ -1,7 +1,15 @@
 using System;
 using System.Collections.Immutable;
 using VohuManah.Application.Library.Settings;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Cities;
+using VohuManah.Domain.Gaps;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Menu;
+using VohuManah.Domain.PublicationTypes;
+using VohuManah.Domain.Publishers;
+using VohuManah.Domain.Subjects;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Infrastructure.Database.Seeds;
@@ -29,8 +37,8 @@ internal static class LibrarySeedData
 
     private static void SeedUsers(ModelBuilder mb)
     {
-        mb.Entity<VohuManah.Domain.Library.User>().HasData(
-            new VohuManah.Domain.Library.User
+        mb.Entity<VohuManah.Domain.Users.User>().HasData(
+            new VohuManah.Domain.Users.User
             {
                 Id = 1,
                 UserName = "admin",

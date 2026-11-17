@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Gaps;
 using VohuManah.SharedKernel;
 
 namespace VohuManah.Application.Library.Gaps.GetList;

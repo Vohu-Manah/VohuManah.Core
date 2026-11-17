@@ -2,7 +2,7 @@ using VohuManah.Application.Abstractions.Authentication;
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -17,9 +17,9 @@ internal sealed class UpdateLibraryUserCommandHandler(
 
     public async Task<Result> Handle(UpdateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
-        VohuManah.Domain.Library.User? existing = await users
+        VohuManah.Domain.Users.User? existing = await users
             .SingleOrDefaultAsync(u => u.Id == command.Id, cancellationToken);
 
         if (existing == null)

@@ -1,6 +1,6 @@
 ﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Manuscripts.GetAllEntities;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Manuscripts;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;

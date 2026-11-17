@@ -14,9 +14,9 @@ internal sealed class GetAllSettingsQueryHandler(
 
     public Task<Result<List<SettingsResponse>>> Handle(GetAllSettingsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
 
-        List<VohuManah.Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
         List<SettingsResponse> response = allSettings.Select(s => new SettingsResponse
         {

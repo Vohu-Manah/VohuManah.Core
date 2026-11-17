@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace VohuManah.Infrastructure.Database.Configurations;
 
-internal sealed class UserConfiguration : IEntityTypeConfiguration<VohuManah.Domain.Library.User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<VohuManah.Domain.Users.User>
 {
-    public void Configure(EntityTypeBuilder<VohuManah.Domain.Library.User> builder)
+    public void Configure(EntityTypeBuilder<VohuManah.Domain.Users.User> builder)
     {
         builder.HasKey(u => u.Id);
 

@@ -14,8 +14,8 @@ internal sealed class GetBackgroundImagePathQueryHandler(
 
     public Task<Result<string>> Handle(GetBackgroundImagePathQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
-        List<VohuManah.Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
+        List<VohuManah.Domain.AppSettings.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string folder = all.Where(s => s.Name == "BackgroundImageFolder").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
         string name = all.Where(s => s.Name == "CurrentBackgroundImageName").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
         string path = string.IsNullOrWhiteSpace(folder) || string.IsNullOrWhiteSpace(name) ? string.Empty : System.IO.Path.Combine(folder, name);

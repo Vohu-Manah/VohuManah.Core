@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -12,14 +12,14 @@ internal sealed class RemoveRoleFromUserCommandHandler(
     public async Task<Result> Handle(RemoveRoleFromUserCommand command, CancellationToken cancellationToken)
     {
         DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
-        VohuManah.Domain.Library.User? user = await users
+        VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure(VohuManah.Domain.Library.UserErrors.NotFound(command.UserId));
+            return Result.Failure(VohuManah.Domain.Users.UserErrors.NotFound(command.UserId));
         }
 
         UserRole? userRole = await userRoles

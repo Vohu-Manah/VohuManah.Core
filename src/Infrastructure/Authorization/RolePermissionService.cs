@@ -1,7 +1,7 @@
 using System.Threading;
 using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Abstractions.Data;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Infrastructure.Authorization;

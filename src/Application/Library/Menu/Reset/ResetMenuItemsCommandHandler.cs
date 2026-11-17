@@ -3,7 +3,7 @@ using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Menu.GetAll;
 using VohuManah.Application.Library.Menu.Shared;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Menu;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 

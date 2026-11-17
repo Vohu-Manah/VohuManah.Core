@@ -1,5 +1,5 @@
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Publications;
 
 namespace VohuManah.Application.Library.Publications.GetAllEntities;
 

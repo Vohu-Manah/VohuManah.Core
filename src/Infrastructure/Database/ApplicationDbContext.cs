@@ -1,6 +1,19 @@
 using System;
 using VohuManah.Application.Abstractions.Data;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Attachments;
+using VohuManah.Domain.Books;
+using VohuManah.Domain.Cities;
+using VohuManah.Domain.Gaps;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Manuscripts;
+using VohuManah.Domain.Menu;
+using VohuManah.Domain.PublicationTypes;
+using VohuManah.Domain.Publications;
+using VohuManah.Domain.Publishers;
+using VohuManah.Domain.Subjects;
+using VohuManah.Domain.Users;
+using VohuManah.Domain.Visits;
 using VohuManah.Infrastructure.Database.Seeds;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +29,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
         Database.SetCommandTimeout(TimeSpan.FromMinutes(5));
     }
 
-    public DbSet<VohuManah.Domain.Library.User> LibraryUsers { get; set; }
+    public DbSet<VohuManah.Domain.Users.User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Language> Languages { get; set; }

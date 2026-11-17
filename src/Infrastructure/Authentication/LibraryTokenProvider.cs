@@ -2,7 +2,7 @@ using System.Threading;
 using System;
 using VohuManah.Application.Abstractions.Authentication;
 using VohuManah.Application.Abstractions.Data;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

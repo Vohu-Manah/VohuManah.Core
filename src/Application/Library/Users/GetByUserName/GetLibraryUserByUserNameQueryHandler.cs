@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -15,11 +15,11 @@ internal sealed class GetLibraryUserByUserNameQueryHandler(
 
     public Task<Result<LibraryUserResponse>> Handle(GetLibraryUserByUserNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
-        List<VohuManah.Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+        List<VohuManah.Domain.Users.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 
-        VohuManah.Domain.Library.User? user = allUsers.SingleOrDefault(u => u.UserName == query.UserName);
+        VohuManah.Domain.Users.User? user = allUsers.SingleOrDefault(u => u.UserName == query.UserName);
 
         if (user == null)
         {

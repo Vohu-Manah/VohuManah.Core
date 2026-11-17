@@ -1,7 +1,8 @@
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.FileStorage;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Attachments;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 

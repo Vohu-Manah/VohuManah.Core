@@ -1,4 +1,4 @@
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Cities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

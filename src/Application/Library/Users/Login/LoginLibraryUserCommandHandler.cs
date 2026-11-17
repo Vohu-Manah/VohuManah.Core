@@ -2,7 +2,7 @@ using VohuManah.Application.Abstractions.Authentication;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.HumanVerification;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using VohuManah.SharedKernel;
@@ -24,10 +24,10 @@ internal sealed class LoginLibraryUserCommandHandler(
             return Result.Failure<LoginLibraryUserResponse>(HumanVerifyErrors.InvalidOrExpired);
         }
 
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
         string loginInput = command.UserName.Trim();
-        VohuManah.Domain.Library.User? user = await users
+        VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.UserName == loginInput || (u.Email != null && u.Email == loginInput), cancellationToken);
 
         if (user == null || !passwordHasher.Verify(command.Password.Trim(), user.Password))

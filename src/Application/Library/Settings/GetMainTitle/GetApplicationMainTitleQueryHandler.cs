@@ -14,9 +14,9 @@ internal sealed class GetApplicationMainTitleQueryHandler(
 
     public Task<Result<string>> Handle(GetApplicationMainTitleQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
 
-        List<VohuManah.Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string title = all.Where(s => s.Name == "ApplicationMainTitle").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
 
         return Task.FromResult(Result.Success(title));

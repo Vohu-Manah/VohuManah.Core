@@ -25,7 +25,7 @@ namespace VohuManah.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("VohuManah.Domain.Library.AppInfo", b =>
+            modelBuilder.Entity("VohuManah.Domain.AppSettings.AppInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,7 +90,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Attachment", b =>
+            modelBuilder.Entity("VohuManah.Domain.Attachments.Attachment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("Attachment", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Book", b =>
+            modelBuilder.Entity("VohuManah.Domain.Books.Book", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,7 +248,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("Book", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.City", b =>
+            modelBuilder.Entity("VohuManah.Domain.Cities.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -283,7 +283,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Gap", b =>
+            modelBuilder.Entity("VohuManah.Domain.Gaps.Gap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -325,7 +325,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Language", b =>
+            modelBuilder.Entity("VohuManah.Domain.Languages.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,7 +368,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Manuscript", b =>
+            modelBuilder.Entity("VohuManah.Domain.Manuscripts.Manuscript", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -437,7 +437,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("Manuscript", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.MenuItem", b =>
+            modelBuilder.Entity("VohuManah.Domain.Menu.MenuItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -833,7 +833,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Publication", b =>
+            modelBuilder.Entity("VohuManah.Domain.Publications.Publication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -919,7 +919,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("Publication", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.PublicationType", b =>
+            modelBuilder.Entity("VohuManah.Domain.PublicationTypes.PublicationType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -954,7 +954,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Publisher", b =>
+            modelBuilder.Entity("VohuManah.Domain.Publishers.Publisher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1013,7 +1013,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.RefreshToken", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1040,7 +1040,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("RefreshTokens", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Role", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1085,7 +1085,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.RolePermission", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.RolePermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3391,7 +3391,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Settings", b =>
+            modelBuilder.Entity("VohuManah.Domain.AppSettings.Settings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3434,7 +3434,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Subject", b =>
+            modelBuilder.Entity("VohuManah.Domain.Subjects.Subject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3474,7 +3474,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.User", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -3532,7 +3532,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.UserRole", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3596,7 +3596,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.UserSettings", b =>
+            modelBuilder.Entity("VohuManah.Domain.AppSettings.UserSettings", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -3635,7 +3635,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("UserSettings", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.VisitLog", b =>
+            modelBuilder.Entity("VohuManah.Domain.Visits.VisitLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -3658,27 +3658,27 @@ namespace VohuManah.Infrastructure.Migrations
                     b.ToTable("VisitLog", "dbo");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Book", b =>
+            modelBuilder.Entity("VohuManah.Domain.Books.Book", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.Language", "Language")
+                    b.HasOne("VohuManah.Domain.Languages.Language", "Language")
                         .WithMany("Books")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.City", "City")
+                    b.HasOne("VohuManah.Domain.Cities.City", "City")
                         .WithMany("Books")
                         .HasForeignKey("PublishPlaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.Publisher", "Publisher")
+                    b.HasOne("VohuManah.Domain.Publishers.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.Subject", "Subject")
+                    b.HasOne("VohuManah.Domain.Subjects.Subject", "Subject")
                         .WithMany("Books")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3693,27 +3693,27 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Manuscript", b =>
+            modelBuilder.Entity("VohuManah.Domain.Manuscripts.Manuscript", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.Gap", "Gap")
+                    b.HasOne("VohuManah.Domain.Gaps.Gap", "Gap")
                         .WithMany("Manuscripts")
                         .HasForeignKey("GapId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.Language", "Language")
+                    b.HasOne("VohuManah.Domain.Languages.Language", "Language")
                         .WithMany("Manuscripts")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.Subject", "Subject")
+                    b.HasOne("VohuManah.Domain.Subjects.Subject", "Subject")
                         .WithMany("Manuscripts")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.City", "City")
+                    b.HasOne("VohuManah.Domain.Cities.City", "City")
                         .WithMany("Manuscripts")
                         .HasForeignKey("WritingPlaceId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3728,9 +3728,9 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.MenuItem", b =>
+            modelBuilder.Entity("VohuManah.Domain.Menu.MenuItem", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.MenuItem", "Parent")
+                    b.HasOne("VohuManah.Domain.Menu.MenuItem", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -3738,27 +3738,27 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Publication", b =>
+            modelBuilder.Entity("VohuManah.Domain.Publications.Publication", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.Language", "Language")
+                    b.HasOne("VohuManah.Domain.Languages.Language", "Language")
                         .WithMany("Publications")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.City", "City")
+                    b.HasOne("VohuManah.Domain.Cities.City", "City")
                         .WithMany("Publications")
                         .HasForeignKey("PublishPlaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.Subject", "Subject")
+                    b.HasOne("VohuManah.Domain.Subjects.Subject", "Subject")
                         .WithMany("Publications")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VohuManah.Domain.Library.PublicationType", "PublicationType")
+                    b.HasOne("VohuManah.Domain.PublicationTypes.PublicationType", "PublicationType")
                         .WithMany("Publications")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3773,9 +3773,9 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.RolePermission", b =>
+            modelBuilder.Entity("VohuManah.Domain.Users.RolePermission", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.Role", "Role")
+                    b.HasOne("VohuManah.Domain.Users.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3784,14 +3784,14 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.UserSettings", b =>
+            modelBuilder.Entity("VohuManah.Domain.AppSettings.UserSettings", b =>
                 {
-                    b.HasOne("VohuManah.Domain.Library.Attachment", "ProfileImageAttachment")
+                    b.HasOne("VohuManah.Domain.Attachments.Attachment", "ProfileImageAttachment")
                         .WithMany()
                         .HasForeignKey("ProfileImageAttachmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("VohuManah.Domain.Library.User", "User")
+                    b.HasOne("VohuManah.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3802,7 +3802,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.City", b =>
+            modelBuilder.Entity("VohuManah.Domain.Cities.City", b =>
                 {
                     b.Navigation("Books");
 
@@ -3811,12 +3811,12 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Publications");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Gap", b =>
+            modelBuilder.Entity("VohuManah.Domain.Gaps.Gap", b =>
                 {
                     b.Navigation("Manuscripts");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Language", b =>
+            modelBuilder.Entity("VohuManah.Domain.Languages.Language", b =>
                 {
                     b.Navigation("Books");
 
@@ -3825,22 +3825,22 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Publications");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.MenuItem", b =>
+            modelBuilder.Entity("VohuManah.Domain.Menu.MenuItem", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.PublicationType", b =>
+            modelBuilder.Entity("VohuManah.Domain.PublicationTypes.PublicationType", b =>
                 {
                     b.Navigation("Publications");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Publisher", b =>
+            modelBuilder.Entity("VohuManah.Domain.Publishers.Publisher", b =>
                 {
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.Subject", b =>
+            modelBuilder.Entity("VohuManah.Domain.Subjects.Subject", b =>
                 {
                     b.Navigation("Books");
 

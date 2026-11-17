@@ -14,12 +14,12 @@ internal sealed class GetAllEntities : BaseEndpoint
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("library/settings/entities", async (
-            IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.Library.Settings>> handler,
+            IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.AppSettings.Settings>> handler,
             CancellationToken cancellationToken) =>
         {
             var query = new GetAllSettingsEntitiesQuery();
 
-            Result<List<VohuManah.Domain.Library.Settings>> result = await handler.Handle(query, cancellationToken);
+            Result<List<VohuManah.Domain.AppSettings.Settings>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })

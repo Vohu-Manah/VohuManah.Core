@@ -1,4 +1,4 @@
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Books;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

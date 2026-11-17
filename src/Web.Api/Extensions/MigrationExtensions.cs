@@ -27,7 +27,7 @@ public static class MigrationExtensions
 
             try
             {
-                var adminExists = dbContext.GetDbSet<VohuManah.Domain.Library.User>()
+                var adminExists = dbContext.GetDbSet<VohuManah.Domain.Users.User>()
                     .Any(u => u.UserName == "admin");
 
                 if (adminExists)

@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Subjects;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 

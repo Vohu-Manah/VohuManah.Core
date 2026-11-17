@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -15,9 +15,9 @@ internal sealed class UpdateSettingsCommandHandler(
 
     public async Task<Result> Handle(UpdateSettingsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
 
-        VohuManah.Domain.Library.Settings? existing = await settings
+        VohuManah.Domain.AppSettings.Settings? existing = await settings
             .SingleOrDefaultAsync(s => s.Name.Trim() == command.Name.Trim(), cancellationToken);
 
         if (existing == null)

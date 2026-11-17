@@ -8,15 +8,15 @@ namespace VohuManah.Application.Library.Settings.GetAllEntities;
 
 internal sealed class GetAllSettingsEntitiesQueryHandler(
     IUnitOfWork unitOfWork,
-    ICacheManager cacheManager) : IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.Library.Settings>>
+    ICacheManager cacheManager) : IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.AppSettings.Settings>>
 {
     private const string SettingsAllKey = "sdp.settings.all";
 
-    public Task<Result<List<VohuManah.Domain.Library.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
+    public Task<Result<List<VohuManah.Domain.AppSettings.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
 
-        List<VohuManah.Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
         return Task.FromResult(Result.Success(allSettings));
     }

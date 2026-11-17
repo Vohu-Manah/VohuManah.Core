@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -15,11 +15,11 @@ internal sealed class GetSettingsByNameQueryHandler(
 
     public Task<Result<SettingsResponse>> Handle(GetSettingsByNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
 
-        List<VohuManah.Domain.Library.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 
-        VohuManah.Domain.Library.Settings? setting = allSettings.SingleOrDefault(s => s.Name.Trim() == query.Name.Trim());
+        VohuManah.Domain.AppSettings.Settings? setting = allSettings.SingleOrDefault(s => s.Name.Trim() == query.Name.Trim());
 
         if (setting == null)
         {

@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 
@@ -12,14 +12,14 @@ internal sealed class GetUserRoleIdsQueryHandler(
     public async Task<Result<List<int>>> Handle(GetUserRoleIdsQuery query, CancellationToken cancellationToken)
     {
         DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
-        VohuManah.Domain.Library.User? user = await users
+        VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure<List<int>>(VohuManah.Domain.Library.UserErrors.NotFound(query.UserId));
+            return Result.Failure<List<int>>(VohuManah.Domain.Users.UserErrors.NotFound(query.UserId));
         }
 
         List<int> roleIds = await userRoles

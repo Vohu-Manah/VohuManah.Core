@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Authentication;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using VohuManah.SharedKernel;
 

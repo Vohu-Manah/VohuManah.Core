@@ -1,7 +1,7 @@
 using VohuManah.Application.Abstractions.Caching;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Subjects;
 using VohuManah.SharedKernel;
 
 namespace VohuManah.Application.Library.Subjects.GetList;

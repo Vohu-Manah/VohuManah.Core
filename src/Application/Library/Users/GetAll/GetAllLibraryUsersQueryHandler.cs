@@ -14,9 +14,9 @@ internal sealed class GetAllLibraryUsersQueryHandler(
 
     public Task<Result<List<LibraryUserResponse>>> Handle(GetAllLibraryUsersQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
+        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
 
-        List<VohuManah.Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+        List<VohuManah.Domain.Users.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 
         List<LibraryUserResponse> response = allUsers.Select(u => new LibraryUserResponse
         {

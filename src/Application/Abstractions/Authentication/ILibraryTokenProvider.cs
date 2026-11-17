@@ -1,4 +1,4 @@
-using VohuManah.Domain.Library;
+using VohuManah.Domain.Users;
 
 namespace VohuManah.Application.Abstractions.Authentication;
 

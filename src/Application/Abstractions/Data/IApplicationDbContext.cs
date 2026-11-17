@@ -1,11 +1,24 @@
-using VohuManah.Domain.Library;
+using VohuManah.Domain.AppSettings;
+using VohuManah.Domain.Attachments;
+using VohuManah.Domain.Books;
+using VohuManah.Domain.Cities;
+using VohuManah.Domain.Gaps;
+using VohuManah.Domain.Languages;
+using VohuManah.Domain.Manuscripts;
+using VohuManah.Domain.Menu;
+using VohuManah.Domain.PublicationTypes;
+using VohuManah.Domain.Publications;
+using VohuManah.Domain.Publishers;
+using VohuManah.Domain.Subjects;
+using VohuManah.Domain.Users;
+using VohuManah.Domain.Visits;
 using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Application.Abstractions.Data;
 
 public interface IApplicationDbContext : IUnitOfWork
 {
-    DbSet<VohuManah.Domain.Library.User> LibraryUsers { get; }
+    DbSet<VohuManah.Domain.Users.User> LibraryUsers { get; }
     DbSet<Book> Books { get; }
     DbSet<City> Cities { get; }
     DbSet<Language> Languages { get; }
