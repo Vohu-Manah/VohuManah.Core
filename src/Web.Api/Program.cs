@@ -1,6 +1,7 @@
 using VohuManah.Application;
 using HealthChecks.UI.Client;
 using VohuManah.Infrastructure;
+using VohuManah.Infrastructure.Database;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
@@ -94,7 +95,7 @@ app.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.ApplyMigrations();
+app.Services.ApplyMigrations(app.Environment.IsDevelopment());
 
 app.MapControllers();
 

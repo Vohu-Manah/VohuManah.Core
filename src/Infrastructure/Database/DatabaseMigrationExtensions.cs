@@ -1,13 +1,16 @@
-using VohuManah.Infrastructure.Database;
+using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using VohuManah.Infrastructure.Database;
 
-namespace VohuManah.Web.Api.Extensions;
+namespace VohuManah.Infrastructure.Database;
 
-public static class MigrationExtensions
+public static class DatabaseMigrationExtensions
 {
-    public static void ApplyMigrations(this IApplicationBuilder app)
+    public static void ApplyMigrations(this IServiceProvider services, bool isDevelopment)
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
+        using IServiceScope scope = services.CreateScope();
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
 
@@ -17,8 +20,6 @@ public static class MigrationExtensions
         {
             logger.LogInformation("در حال اعمال مایگریشن های دیتابیس...");
 
-            
-            
             dbContext.Database.SetCommandTimeout(TimeSpan.FromMinutes(10));
 
             dbContext.Database.Migrate();
@@ -48,7 +49,7 @@ public static class MigrationExtensions
         {
             logger.LogError(ex, "اعمال مایگریشن های دیتابیس با شکست مواجه شد.");
 
-            if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+            if (isDevelopment)
             {
                 logger.LogError("خطا در اعمال مایگریشن در محیط Development. برنامه متوقف می شود.");
                 throw;
