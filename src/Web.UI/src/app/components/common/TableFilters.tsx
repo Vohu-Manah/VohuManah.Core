@@ -20,6 +20,7 @@ export function TableFilters({ value, onChange, yearSource }: TableFiltersProps)
       <YearSelect
         w={130}
         source={yearSource}
+        label=""
         value={value.year || null}
         onChange={(year) => onChange({ ...value, year: year ?? '' })}
       />
