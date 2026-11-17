@@ -1,6 +1,6 @@
-﻿using Web.Api.Middleware;
+﻿using VohuManah.Web.Api.Middleware;
 
-namespace Web.Api.Extensions;
+namespace VohuManah.Web.Api.Extensions;
 
 public static class MiddlewareExtensions
 {

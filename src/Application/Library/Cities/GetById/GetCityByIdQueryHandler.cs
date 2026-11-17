@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Cities.GetById;
+namespace VohuManah.Application.Library.Cities.GetById;
 
 internal sealed class GetCityByIdQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetCityByIdQuery, CityResponse>

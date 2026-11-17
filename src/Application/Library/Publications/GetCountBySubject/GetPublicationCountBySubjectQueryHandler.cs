@@ -1,11 +1,11 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.GetCountBySubject;
+namespace VohuManah.Application.Library.Publications.GetCountBySubject;
 
 internal sealed class GetPublicationCountBySubjectQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountBySubjectQuery, List<ListItemResponse>>

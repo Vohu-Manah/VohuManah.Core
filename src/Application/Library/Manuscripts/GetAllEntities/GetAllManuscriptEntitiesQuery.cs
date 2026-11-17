@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 
-namespace Application.Library.Manuscripts.GetAllEntities;
+namespace VohuManah.Application.Library.Manuscripts.GetAllEntities;
 
 public sealed record GetAllManuscriptEntitiesQuery : IQuery<List<Manuscript>>;
 

@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.Update;
+namespace VohuManah.Application.Library.Books.Update;
 
 internal sealed class UpdateBookCommandHandler(
     IUnitOfWork unitOfWork) : ICommandHandler<UpdateBookCommand>

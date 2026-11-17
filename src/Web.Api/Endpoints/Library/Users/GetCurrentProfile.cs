@@ -1,12 +1,12 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Users.GetCurrentProfile;
-using SharedKernel;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Users.GetCurrentProfile;
+using VohuManah.SharedKernel;
 using System.Security.Claims;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Application.Library.Settings;
 
-namespace Web.Api.Endpoints.Library.Users;
+namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
 [RequireRole(EndpointNames.Settings.GetUserSettings)]
 internal sealed class GetCurrentProfile : BaseEndpoint

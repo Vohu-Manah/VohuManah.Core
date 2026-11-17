@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Users.ChangePassword;
+namespace VohuManah.Application.Library.Users.ChangePassword;
 
 public sealed record ChangePasswordCommand(
     long UserId,

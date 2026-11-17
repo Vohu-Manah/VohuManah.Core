@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Backup.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.DbBackup.Shared;
 
-namespace Application.Library.Backup.GetInfo;
+namespace VohuManah.Application.Library.DbBackup.GetInfo;
 
 public sealed record GetBackupInfoQuery : IQuery<BackupInfoResponse>;

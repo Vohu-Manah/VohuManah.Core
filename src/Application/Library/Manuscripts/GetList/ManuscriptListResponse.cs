@@ -1,4 +1,4 @@
-namespace Application.Library.Manuscripts.GetList;
+namespace VohuManah.Application.Library.Manuscripts.GetList;
 
 public sealed record ManuscriptListResponse
 {

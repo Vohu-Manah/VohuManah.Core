@@ -1,11 +1,11 @@
-using Infrastructure.Authorization;
+using VohuManah.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
-using Web.Api.Endpoints;
-using Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints;
+using VohuManah.Web.Api.Endpoints.Attributes;
 
-namespace Web.Api.Extensions;
+namespace VohuManah.Web.Api.Extensions;
 
 public static class EndpointExtensions
 {
@@ -107,7 +107,7 @@ public static class EndpointExtensions
 
             if (requestParameter != null)
             {
-                var validationError = Infrastructure.ModelBindingValidator.ValidateRequestTypes(requestParameter);
+                var validationError = VohuManah.Web.Api.Infrastructure.ModelBindingValidator.ValidateRequestTypes(requestParameter);
                 if (validationError != null)
                 {
                     return Results.Problem(

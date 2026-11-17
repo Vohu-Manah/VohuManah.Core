@@ -1,6 +1,6 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Abstractions.HumanVerification;
+namespace VohuManah.Application.Abstractions.HumanVerification;
 
 public sealed record HumanVerifyChallenge(
     string ChallengeId,

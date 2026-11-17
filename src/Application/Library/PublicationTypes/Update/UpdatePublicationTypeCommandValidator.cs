@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.PublicationTypes.Update;
+namespace VohuManah.Application.Library.PublicationTypes.Update;
 
 internal sealed class UpdatePublicationTypeCommandValidator : AbstractValidator<UpdatePublicationTypeCommand>
 {

@@ -1,11 +1,11 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Gaps.Update;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Gaps.Update;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Application.Library.Settings;
 
-namespace Web.Api.Endpoints.Library.Gaps;
+namespace VohuManah.Web.Api.Endpoints.Library.Gaps;
 
 [RequireRole(EndpointNames.Gaps.Update)]
 internal sealed class Update : BaseEndpoint

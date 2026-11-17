@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Books.Create;
+namespace VohuManah.Application.Library.Books.Create;
 
 internal sealed class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
 {

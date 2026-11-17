@@ -1,6 +1,6 @@
 using VohuManah.Infrastructure.Helper.PersianCalendar;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class ReportParameterBuilder
 {

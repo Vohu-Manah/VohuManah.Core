@@ -1,4 +1,4 @@
-namespace Application.Library.Shared;
+namespace VohuManah.Application.Library.Shared;
 
 public sealed record ListItemResponse
 {

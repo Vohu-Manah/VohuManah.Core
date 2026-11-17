@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Books.GetVolumeCount;
+namespace VohuManah.Application.Library.Books.GetVolumeCount;
 
 public sealed record GetBookVolumeCountQuery : IQuery<int>;
 

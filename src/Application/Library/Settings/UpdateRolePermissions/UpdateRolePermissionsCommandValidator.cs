@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Settings.UpdateRolePermissions;
+namespace VohuManah.Application.Library.Settings.UpdateRolePermissions;
 
 internal sealed class UpdateRolePermissionsCommandValidator : AbstractValidator<UpdateRolePermissionsCommand>
 {

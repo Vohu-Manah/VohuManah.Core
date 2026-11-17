@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Publications.GetStatistics;
+namespace VohuManah.Application.Library.Publications.GetStatistics;
 
 public sealed record GetPublicationStatisticsQuery() : IQuery<PublicationStatisticsResponse>
 {

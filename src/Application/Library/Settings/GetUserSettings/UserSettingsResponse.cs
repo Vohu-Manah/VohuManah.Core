@@ -1,4 +1,4 @@
-namespace Application.Library.Settings.GetUserSettings;
+namespace VohuManah.Application.Library.Settings.GetUserSettings;
 
 public sealed record UserSettingsResponse
 {

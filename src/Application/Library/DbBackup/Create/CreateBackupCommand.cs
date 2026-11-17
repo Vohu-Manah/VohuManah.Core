@@ -1,5 +1,5 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Backup.Create;
+namespace VohuManah.Application.Library.DbBackup.Create;
 
 public sealed record CreateBackupCommand : ICommand;

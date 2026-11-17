@@ -1,10 +1,10 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Visits.Record;
-using SharedKernel;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Visits.Record;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Library.Visits;
+namespace VohuManah.Web.Api.Endpoints.Library.Visits;
 
 
 

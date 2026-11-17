@@ -1,4 +1,4 @@
-namespace Application.Library.Languages.GetAll;
+namespace VohuManah.Application.Library.Languages.GetAll;
 
 public sealed record LanguageResponse
 {

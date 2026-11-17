@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Languages.Create;
+namespace VohuManah.Application.Library.Languages.Create;
 
 internal sealed class CreateLanguageCommandValidator : AbstractValidator<CreateLanguageCommand>
 {

@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Users.UpdateProfile;
+namespace VohuManah.Application.Library.Users.UpdateProfile;
 
 public sealed record UpdateUserProfileCommand(
     long UserId,

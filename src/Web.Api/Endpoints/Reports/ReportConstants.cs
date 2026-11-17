@@ -1,4 +1,4 @@
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
 internal static class ReportConstants
 {

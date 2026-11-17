@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Attachments.Update;
+namespace VohuManah.Application.Library.Attachments.Update;
 
 public sealed record UpdateAttachmentCommand(
     long Id,

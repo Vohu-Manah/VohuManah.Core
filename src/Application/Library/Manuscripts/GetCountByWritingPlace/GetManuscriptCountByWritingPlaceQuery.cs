@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Manuscripts.GetCountByWritingPlace;
+namespace VohuManah.Application.Library.Manuscripts.GetCountByWritingPlace;
 
 public sealed record GetManuscriptCountByWritingPlaceQuery : IQuery<List<ListItemResponse>>;
 

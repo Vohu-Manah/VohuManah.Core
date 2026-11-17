@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Gaps.GetNames;
+namespace VohuManah.Application.Library.Gaps.GetNames;
 
 public sealed record GetGapNamesQuery(bool AddAllItemInFirstRow = false) : IQuery<List<SelectItemResponse>>;
 

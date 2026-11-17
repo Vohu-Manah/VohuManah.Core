@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Application.Abstractions.FileStorage;
+namespace VohuManah.Application.Abstractions.FileStorage;
 
 public interface IFileStorageService
 {

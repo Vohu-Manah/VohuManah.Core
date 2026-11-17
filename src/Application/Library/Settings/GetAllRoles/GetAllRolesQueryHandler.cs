@@ -1,11 +1,11 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetAllRoles;
+namespace VohuManah.Application.Library.Settings.GetAllRoles;
 
 internal sealed class GetAllRolesQueryHandler(
     IUnitOfWork unitOfWork,

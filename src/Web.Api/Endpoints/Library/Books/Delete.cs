@@ -1,11 +1,11 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Books.Delete;
-using Application.Library.Settings;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Books.Delete;
+using VohuManah.Application.Library.Settings;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Library.Books;
+namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
 [RequireRole(EndpointNames.Books.Delete)]
 internal sealed class Delete : BaseEndpoint

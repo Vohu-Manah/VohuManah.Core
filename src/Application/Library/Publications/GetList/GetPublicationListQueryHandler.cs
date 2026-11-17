@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Publications.GetList;
+namespace VohuManah.Application.Library.Publications.GetList;
 
 internal sealed class GetPublicationListQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationListQuery, PagedList<PublicationListResponse>>

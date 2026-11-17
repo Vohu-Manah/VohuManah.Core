@@ -1,5 +1,5 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Backup.Download;
+namespace VohuManah.Application.Library.DbBackup.Download;
 
 public sealed record DownloadBackupQuery(string FileName) : IQuery<BackupDownloadFile>;

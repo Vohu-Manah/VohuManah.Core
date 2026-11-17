@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.AssignRoleToUser;
+namespace VohuManah.Application.Library.Settings.AssignRoleToUser;
 
 internal sealed class AssignRoleToUserCommandHandler(
     IUnitOfWork unitOfWork) : ICommandHandler<AssignRoleToUserCommand>
@@ -13,14 +13,14 @@ internal sealed class AssignRoleToUserCommandHandler(
     {
         DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
         DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
 
-        Domain.Library.User? user = await users
+        VohuManah.Domain.Library.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure(Domain.Library.UserErrors.NotFound(command.UserId));
+            return Result.Failure(VohuManah.Domain.Library.UserErrors.NotFound(command.UserId));
         }
         bool roleExists = await roles.AnyAsync(r => r.Id == command.RoleId, cancellationToken);
         if (!roleExists)

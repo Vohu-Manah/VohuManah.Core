@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Collections;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 public interface IReportService
 {

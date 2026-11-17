@@ -1,8 +1,8 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Web.Api.Infrastructure;
+namespace VohuManah.Web.Api.Infrastructure;
 
 public static class ModelBindingValidator
 {

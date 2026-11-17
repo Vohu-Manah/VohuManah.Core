@@ -1,4 +1,4 @@
-using Infrastructure.Reports.Html;
+using VohuManah.Infrastructure.Reports.Html;
 using Microsoft.Extensions.Logging;
 using Reporting.NETCore;
 using System;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class ReportRenderer : IReportRenderer
 {

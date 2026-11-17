@@ -1,7 +1,7 @@
-using Infrastructure.Database;
+using VohuManah.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Web.Api.Extensions;
+namespace VohuManah.Web.Api.Extensions;
 
 public static class MigrationExtensions
 {
@@ -27,7 +27,7 @@ public static class MigrationExtensions
 
             try
             {
-                var adminExists = dbContext.GetDbSet<Domain.Library.User>()
+                var adminExists = dbContext.GetDbSet<VohuManah.Domain.Library.User>()
                     .Any(u => u.UserName == "admin");
 
                 if (adminExists)

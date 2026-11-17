@@ -1,4 +1,4 @@
-namespace Application.Library.Publications.Search;
+namespace VohuManah.Application.Library.Publications.Search;
 
 public sealed record PublicationSearchResponse
 {

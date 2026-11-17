@@ -1,6 +1,6 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Web.Api.Infrastructure;
+namespace VohuManah.Web.Api.Infrastructure;
 
 public static class CustomResults
 {

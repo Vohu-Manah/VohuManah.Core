@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Manuscripts.Delete;
+namespace VohuManah.Application.Library.Manuscripts.Delete;
 
 internal sealed class DeleteManuscriptCommandValidator : AbstractValidator<DeleteManuscriptCommand>
 {

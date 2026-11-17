@@ -1,11 +1,11 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Languages.GetNames;
+namespace VohuManah.Application.Library.Languages.GetNames;
 
 internal sealed class GetLanguageNamesQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetLanguageNamesQuery, List<SelectItemResponse>>

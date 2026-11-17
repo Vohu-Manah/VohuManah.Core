@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Subjects.GetNames;
+namespace VohuManah.Application.Library.Subjects.GetNames;
 
 public sealed record GetSubjectNamesQuery(bool AddAllItemInFirstRow = false) : IQuery<List<SelectItemResponse>>;
 

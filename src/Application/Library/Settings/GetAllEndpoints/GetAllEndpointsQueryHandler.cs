@@ -1,8 +1,8 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Settings;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Settings;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetAllEndpoints;
+namespace VohuManah.Application.Library.Settings.GetAllEndpoints;
 
 internal sealed class GetAllEndpointsQueryHandler : IQueryHandler<GetAllEndpointsQuery, Dictionary<string, List<string>>>
 {

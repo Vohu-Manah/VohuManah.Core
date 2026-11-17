@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Subjects.GetList;
+namespace VohuManah.Application.Library.Subjects.GetList;
 
 public sealed record GetSubjectListQuery : IQuery<List<SubjectListResponse>>;
 

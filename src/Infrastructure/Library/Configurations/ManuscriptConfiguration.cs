@@ -1,8 +1,8 @@
-using Domain.Library;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Library;
+namespace VohuManah.Infrastructure.Library.Configurations;
 
 internal sealed class ManuscriptConfiguration : IEntityTypeConfiguration<Manuscript>
 {

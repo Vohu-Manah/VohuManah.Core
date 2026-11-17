@@ -1,6 +1,6 @@
-﻿using SharedKernel;
+﻿using VohuManah.SharedKernel;
 
-namespace Web.Api.Extensions;
+namespace VohuManah.Web.Api.Extensions;
 
 public static class ResultExtensions
 {

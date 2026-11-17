@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
-using Infrastructure.Authentication;
+using VohuManah.Infrastructure.Authentication;
 
-namespace Web.Api.Middleware;
+namespace VohuManah.Web.Api.Middleware;
 
 public sealed class CookieTokenAuthenticationMiddleware
 {

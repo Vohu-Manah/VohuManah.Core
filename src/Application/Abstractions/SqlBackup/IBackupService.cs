@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Application.Abstractions.Backup;
+namespace VohuManah.Application.Abstractions.SqlBackup;
 
 public interface IBackupService
 {

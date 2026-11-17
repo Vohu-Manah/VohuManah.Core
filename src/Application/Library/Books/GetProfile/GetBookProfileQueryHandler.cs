@@ -1,12 +1,12 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Application.Library.Attachments.GetByEntity;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Attachments.GetByEntity;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetProfile;
+namespace VohuManah.Application.Library.Books.GetProfile;
 
 internal sealed class GetBookProfileQueryHandler(
     IUnitOfWork unitOfWork,

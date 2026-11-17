@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Settings.AssignRoleToUser;
+namespace VohuManah.Application.Library.Settings.AssignRoleToUser;
 
 public sealed record AssignRoleToUserCommand(
     [Display(Name = "شناسه کاربر")] long UserId,

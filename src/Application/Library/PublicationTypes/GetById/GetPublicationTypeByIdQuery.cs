@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.PublicationTypes.GetById;
+namespace VohuManah.Application.Library.PublicationTypes.GetById;
 
 public sealed record GetPublicationTypeByIdQuery(int Id) : IQuery<PublicationTypeResponse>;
 

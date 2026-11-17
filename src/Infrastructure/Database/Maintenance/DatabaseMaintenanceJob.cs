@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
 
-namespace Infrastructure.Database.Maintenance;
+namespace VohuManah.Infrastructure.Database.Maintenance;
 
 
 

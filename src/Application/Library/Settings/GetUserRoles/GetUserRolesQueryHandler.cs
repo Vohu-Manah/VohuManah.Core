@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetUserRoles;
+namespace VohuManah.Application.Library.Settings.GetUserRoles;
 
 internal sealed class GetUserRolesQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetUserRolesQuery, List<UserRoleResponse>>
@@ -13,14 +13,14 @@ internal sealed class GetUserRolesQueryHandler(
     {
         DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
         DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
 
-        Domain.Library.User? user = await users
+        VohuManah.Domain.Library.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure<List<UserRoleResponse>>(Domain.Library.UserErrors.NotFound(query.UserId));
+            return Result.Failure<List<UserRoleResponse>>(VohuManah.Domain.Library.UserErrors.NotFound(query.UserId));
         }
 
         var endpointPermissions = await userRoles

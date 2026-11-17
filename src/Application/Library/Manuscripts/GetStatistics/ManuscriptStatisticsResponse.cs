@@ -1,6 +1,6 @@
-using Application.Library.Shared;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Manuscripts.GetStatistics;
+namespace VohuManah.Application.Library.Manuscripts.GetStatistics;
 
 public sealed record ManuscriptStatisticsResponse
 {

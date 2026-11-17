@@ -1,4 +1,4 @@
-namespace Domain.Library;
+namespace VohuManah.Domain.Library;
 
 
 public sealed class RoleEndpoint

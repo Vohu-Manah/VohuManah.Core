@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Cities.Create;
+namespace VohuManah.Application.Library.Cities.Create;
 
 internal sealed class CreateCityCommandValidator : AbstractValidator<CreateCityCommand>
 {

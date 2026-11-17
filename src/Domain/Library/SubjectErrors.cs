@@ -1,6 +1,6 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Domain.Library;
+namespace VohuManah.Domain.Library;
 
 public static class SubjectErrors
 {

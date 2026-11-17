@@ -1,10 +1,10 @@
 using System.Threading;
 using System;
-using Application.Abstractions.Caching;
-using Application.Abstractions.HumanVerification;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.HumanVerification;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using SharedKernel;
+using VohuManah.SharedKernel;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;

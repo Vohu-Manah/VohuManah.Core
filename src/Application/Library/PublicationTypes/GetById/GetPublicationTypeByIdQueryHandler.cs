@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.PublicationTypes.GetById;
+namespace VohuManah.Application.Library.PublicationTypes.GetById;
 
 internal sealed class GetPublicationTypeByIdQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationTypeByIdQuery, PublicationTypeResponse>

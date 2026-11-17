@@ -1,13 +1,13 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Menu.GetAll;
-using Application.Library.Menu.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Menu.GetAll;
+using VohuManah.Application.Library.Menu.Shared;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Menu.Reset;
+namespace VohuManah.Application.Library.Menu.Reset;
 
 internal sealed class ResetMenuItemsCommandHandler(
     IUnitOfWork unitOfWork,

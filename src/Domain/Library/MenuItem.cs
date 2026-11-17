@@ -1,7 +1,7 @@
-using SharedKernel;
+using VohuManah.SharedKernel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Domain.Library;
+namespace VohuManah.Domain.Library;
 
 public sealed class MenuItem : Entity
 {

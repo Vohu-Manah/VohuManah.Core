@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Publications.Create;
+namespace VohuManah.Application.Library.Publications.Create;
 
 public sealed record CreatePublicationCommand(
     [Display(Name = "نام نشریه")] string Name,

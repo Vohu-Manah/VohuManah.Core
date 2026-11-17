@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Manuscripts.Update;
+namespace VohuManah.Application.Library.Manuscripts.Update;
 
 internal sealed class UpdateManuscriptCommandValidator : AbstractValidator<UpdateManuscriptCommand>
 {

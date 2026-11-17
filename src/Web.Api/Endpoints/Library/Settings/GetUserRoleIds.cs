@@ -1,12 +1,12 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Settings.GetUserRoleIds;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Settings.GetUserRoleIds;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Application.Library.Settings;
 
-namespace Web.Api.Endpoints.Library.Settings;
+namespace VohuManah.Web.Api.Endpoints.Library.Settings;
 
 [RequireRole(EndpointNames.Settings.GetUserRoles)]
 internal sealed class GetUserRoleIds : BaseEndpoint

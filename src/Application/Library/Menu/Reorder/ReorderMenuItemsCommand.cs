@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Menu.Reorder;
+namespace VohuManah.Application.Library.Menu.Reorder;
 
 public sealed record MenuItemOrder(
     [Display(Name = "شناسه")] int Id,

@@ -1,9 +1,9 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Visits.Record;
+namespace VohuManah.Application.Library.Visits.Record;
 
 internal sealed class RecordVisitCommandHandler(
     IUnitOfWork unitOfWork,

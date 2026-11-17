@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 
-namespace Infrastructure.Reports.Definition;
+namespace VohuManah.Infrastructure.Reports.Definition;
 
 
 

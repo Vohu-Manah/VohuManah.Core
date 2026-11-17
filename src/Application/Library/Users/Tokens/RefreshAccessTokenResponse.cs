@@ -1,4 +1,4 @@
-namespace Application.Library.Users.Tokens;
+namespace VohuManah.Application.Library.Users.Tokens;
 
 public sealed record RefreshAccessTokenResponse(string AccessToken, string RefreshToken);
 

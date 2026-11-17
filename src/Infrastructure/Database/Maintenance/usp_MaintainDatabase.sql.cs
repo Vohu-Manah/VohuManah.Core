@@ -1,4 +1,4 @@
-namespace Infrastructure.Database.Maintenance;
+namespace VohuManah.Infrastructure.Database.Maintenance;
 
 
 

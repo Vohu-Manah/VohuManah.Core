@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace Application.Library.Settings;
+namespace VohuManah.Application.Library.Settings;
 
 public static class RolePermissionDefaults
 {

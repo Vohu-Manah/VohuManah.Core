@@ -1,11 +1,11 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.GetByUserName;
+namespace VohuManah.Application.Library.Users.GetByUserName;
 
 internal sealed class GetLibraryUserByUserNameQueryHandler(
     IUnitOfWork unitOfWork,
@@ -15,11 +15,11 @@ internal sealed class GetLibraryUserByUserNameQueryHandler(
 
     public Task<Result<LibraryUserResponse>> Handle(GetLibraryUserByUserNameQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
 
-        List<Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+        List<VohuManah.Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 
-        Domain.Library.User? user = allUsers.SingleOrDefault(u => u.UserName == query.UserName);
+        VohuManah.Domain.Library.User? user = allUsers.SingleOrDefault(u => u.UserName == query.UserName);
 
         if (user == null)
         {

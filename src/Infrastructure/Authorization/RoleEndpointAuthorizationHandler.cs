@@ -1,10 +1,10 @@
 using System.Threading;
-using Application.Abstractions.Authorization;
+using VohuManah.Application.Abstractions.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
 internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serviceScopeFactory)
     : AuthorizationHandler<RoleEndpointRequirement>

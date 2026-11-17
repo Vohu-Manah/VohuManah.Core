@@ -1,12 +1,12 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Manuscripts.GetStatistics;
-using Infrastructure.Reports;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Endpoints.Reports.Requests;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Manuscripts.GetStatistics;
+using VohuManah.Infrastructure.Reports;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints.Reports.Requests;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Application.Library.Settings;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
 [RequireRole(EndpointNames.Reports.ManuscriptStatistics)]
 internal sealed class ManuscriptStatisticsReport : BaseEndpoint

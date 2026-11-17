@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Languages.Create;
+namespace VohuManah.Application.Library.Languages.Create;
 
 public sealed record CreateLanguageCommand(
     [Display(Name = "نام زبان")] string Name,

@@ -1,10 +1,10 @@
 using System;
-using Application.Abstractions.Data;
-using Domain.Library;
-using Infrastructure.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.Library;
+using VohuManah.Infrastructure.Library.Seeds;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Database;
+namespace VohuManah.Infrastructure.Database;
 
 public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -16,7 +16,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
         Database.SetCommandTimeout(TimeSpan.FromMinutes(5));
     }
 
-    public DbSet<Domain.Library.User> LibraryUsers { get; set; }
+    public DbSet<VohuManah.Domain.Library.User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Language> Languages { get; set; }

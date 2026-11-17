@@ -1,11 +1,11 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.Search;
+namespace VohuManah.Application.Library.Books.Search;
 
 internal sealed class SearchBooksQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<SearchBooksQuery, PagedResult<BookSearchResponse>>

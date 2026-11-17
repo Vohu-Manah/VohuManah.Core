@@ -1,4 +1,4 @@
-namespace Application.Library.Backup.Shared;
+namespace VohuManah.Application.Library.DbBackup.Shared;
 
 public sealed record BackupInfoResponse(
     bool Exists,

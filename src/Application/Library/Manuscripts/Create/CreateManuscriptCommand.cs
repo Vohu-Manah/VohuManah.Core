@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Manuscripts.Create;
+namespace VohuManah.Application.Library.Manuscripts.Create;
 
 public sealed record CreateManuscriptCommand(
     [Display(Name = "نام نسخه خطی")] string Name,

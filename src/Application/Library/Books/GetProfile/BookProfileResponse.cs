@@ -1,6 +1,6 @@
-using Application.Library.Attachments.GetByEntity;
+using VohuManah.Application.Library.Attachments.GetByEntity;
 
-namespace Application.Library.Books.GetProfile;
+namespace VohuManah.Application.Library.Books.GetProfile;
 
 public sealed record BookProfileResponse
 {

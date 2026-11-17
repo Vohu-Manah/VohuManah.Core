@@ -1,11 +1,11 @@
-using Domain.Library;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Abstractions.Data;
+namespace VohuManah.Application.Abstractions.Data;
 
 public interface IApplicationDbContext : IUnitOfWork
 {
-    DbSet<Domain.Library.User> LibraryUsers { get; }
+    DbSet<VohuManah.Domain.Library.User> LibraryUsers { get; }
     DbSet<Book> Books { get; }
     DbSet<City> Cities { get; }
     DbSet<Language> Languages { get; }

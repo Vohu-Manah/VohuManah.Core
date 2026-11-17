@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
 internal sealed class FontResource : BaseEndpoint
 {

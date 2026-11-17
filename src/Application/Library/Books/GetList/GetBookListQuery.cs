@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetList;
+namespace VohuManah.Application.Library.Books.GetList;
 
 public sealed record GetBookListQuery : IQuery<PagedList<BookListResponse>>
 {

@@ -1,14 +1,14 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Books.Search;
-using SharedKernel;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Extensions;
-using Web.Api.Infrastructure;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Application.Library.Books.Search;
+using VohuManah.SharedKernel;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Extensions;
+using VohuManah.Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Library.Books;
+namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
-using Application.Library.Settings;
+using VohuManah.Application.Library.Settings;
 
 [RequireRole(EndpointNames.Books.Search)]
 internal sealed class Search : BaseEndpoint

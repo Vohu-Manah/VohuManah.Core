@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Publishers.Update;
+namespace VohuManah.Application.Library.Publishers.Update;
 
 public sealed record UpdatePublisherCommand(
     [Display(Name = "شناسه")] int Id,

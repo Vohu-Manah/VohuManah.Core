@@ -1,4 +1,4 @@
-namespace Application.Library.Menu.GetAll;
+namespace VohuManah.Application.Library.Menu.GetAll;
 
 public sealed record MenuItemResponse
 {

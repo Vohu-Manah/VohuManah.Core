@@ -1,4 +1,4 @@
-namespace Application.Abstractions.Caching;
+namespace VohuManah.Application.Abstractions.Caching;
 
 public interface ICacheManager
 {

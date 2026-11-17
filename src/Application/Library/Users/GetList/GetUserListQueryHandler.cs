@@ -1,10 +1,10 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.GetList;
+namespace VohuManah.Application.Library.Users.GetList;
 
 internal sealed class GetUserListQueryHandler(
     IUnitOfWork unitOfWork,

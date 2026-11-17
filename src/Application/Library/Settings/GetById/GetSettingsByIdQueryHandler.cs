@@ -1,19 +1,19 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetById;
+namespace VohuManah.Application.Library.Settings.GetById;
 
 internal sealed class GetSettingsByIdQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetSettingsByIdQuery, SettingsResponse>
 {
     public async Task<Result<SettingsResponse>> Handle(GetSettingsByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
 
-        Domain.Library.Settings? setting = await settings
+        VohuManah.Domain.Library.Settings? setting = await settings
             .SingleOrDefaultAsync(s => s.Id == query.Id, cancellationToken);
 
         if (setting == null)

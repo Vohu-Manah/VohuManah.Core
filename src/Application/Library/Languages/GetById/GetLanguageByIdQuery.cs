@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Languages.GetById;
+namespace VohuManah.Application.Library.Languages.GetById;
 
 public sealed record GetLanguageByIdQuery(int Id) : IQuery<LanguageResponse>;
 

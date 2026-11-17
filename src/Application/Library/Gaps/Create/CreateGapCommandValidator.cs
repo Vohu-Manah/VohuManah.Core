@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Gaps.Create;
+namespace VohuManah.Application.Library.Gaps.Create;
 
 internal sealed class CreateGapCommandValidator : AbstractValidator<CreateGapCommand>
 {

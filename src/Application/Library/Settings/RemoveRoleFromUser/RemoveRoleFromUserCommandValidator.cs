@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Settings.RemoveRoleFromUser;
+namespace VohuManah.Application.Library.Settings.RemoveRoleFromUser;
 
 internal sealed class RemoveRoleFromUserCommandValidator : AbstractValidator<RemoveRoleFromUserCommand>
 {

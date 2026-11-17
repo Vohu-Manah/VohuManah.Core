@@ -1,11 +1,11 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.FileStorage;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.FileStorage;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Attachments.Delete;
+namespace VohuManah.Application.Library.Attachments.Delete;
 
 internal sealed class DeleteAttachmentCommandHandler(
     IUnitOfWork unitOfWork,

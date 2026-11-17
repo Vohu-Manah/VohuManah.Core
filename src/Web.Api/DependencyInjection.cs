@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Web.Api.Infrastructure;
-using Web.Api.Middleware;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Web.Api.Middleware;
 
-namespace Web.Api;
+namespace VohuManah.Web.Api;
 
 public static class DependencyInjection
 {

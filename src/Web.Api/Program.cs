@@ -1,12 +1,12 @@
-using Application;
+using VohuManah.Application;
 using HealthChecks.UI.Client;
-using Infrastructure;
+using VohuManah.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using System.Reflection;
-using Web.Api;
-using Web.Api.Extensions;
+using VohuManah.Web.Api;
+using VohuManah.Web.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>

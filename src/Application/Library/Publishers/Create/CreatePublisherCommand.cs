@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Publishers.Create;
+namespace VohuManah.Application.Library.Publishers.Create;
 
 public sealed record CreatePublisherCommand(
     [Display(Name = "نام ناشر")] string Name,

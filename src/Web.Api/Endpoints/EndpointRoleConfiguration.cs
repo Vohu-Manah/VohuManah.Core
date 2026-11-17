@@ -1,7 +1,7 @@
-using Application.Library.Settings;
+using VohuManah.Application.Library.Settings;
 using System.Collections.Immutable;
 
-namespace Web.Api.Endpoints;
+namespace VohuManah.Web.Api.Endpoints;
 
 public static class EndpointRoleConfiguration
 {

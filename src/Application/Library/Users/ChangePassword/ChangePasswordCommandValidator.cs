@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Users.ChangePassword;
+namespace VohuManah.Application.Library.Users.ChangePassword;
 
 internal sealed class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCommand>
 {

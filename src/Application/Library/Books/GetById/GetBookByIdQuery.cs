@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Books.GetById;
+namespace VohuManah.Application.Library.Books.GetById;
 
 public sealed record GetBookByIdQuery(long Id) : IQuery<BookResponse>;
 

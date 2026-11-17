@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Books.GetCountByPublishPlace;
+namespace VohuManah.Application.Library.Books.GetCountByPublishPlace;
 
 public sealed record GetBookCountByPublishPlaceQuery : IQuery<List<ListItemResponse>>;
 

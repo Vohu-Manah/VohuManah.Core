@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Attachments.GetByEntity;
+namespace VohuManah.Application.Library.Attachments.GetByEntity;
 
 public sealed record GetAttachmentsByEntityQuery(
     string EntityType,

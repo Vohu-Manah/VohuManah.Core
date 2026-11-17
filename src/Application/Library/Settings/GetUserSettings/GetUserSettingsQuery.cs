@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Settings.GetUserSettings;
+namespace VohuManah.Application.Library.Settings.GetUserSettings;
 
 public sealed record GetUserSettingsQuery(long UserId) : IQuery<UserSettingsResponse>;
 

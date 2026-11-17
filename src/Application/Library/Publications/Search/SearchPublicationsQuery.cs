@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
 
-namespace Application.Library.Publications.Search;
+namespace VohuManah.Application.Library.Publications.Search;
 
 public sealed record SearchPublicationsQuery(
     string? Name,

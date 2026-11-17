@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Gaps.Create;
+namespace VohuManah.Application.Library.Gaps.Create;
 
 public sealed record CreateGapCommand(
     [Display(Name = "عنوان فاصله")] string Title,

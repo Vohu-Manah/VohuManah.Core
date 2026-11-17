@@ -1,8 +1,8 @@
-using Application.Abstractions.Messaging;
-using SharedKernel;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.SharedKernel;
 using System.Runtime.InteropServices;
 
-namespace Application.Library.Settings.GetSystemInfo;
+namespace VohuManah.Application.Library.Settings.GetSystemInfo;
 
 internal sealed class GetSystemInfoQueryHandler : IQueryHandler<GetSystemInfoQuery, SystemInfoResponse>
 {

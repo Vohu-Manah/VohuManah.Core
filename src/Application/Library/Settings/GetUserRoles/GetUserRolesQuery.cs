@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Settings.GetUserRoles;
+namespace VohuManah.Application.Library.Settings.GetUserRoles;
 
 public sealed record GetUserRolesQuery(long UserId) : IQuery<List<UserRoleResponse>>;
 

@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Users.Login;
+namespace VohuManah.Application.Library.Users.Login;
 
 internal sealed class LoginLibraryUserCommandValidator : AbstractValidator<LoginLibraryUserCommand>
 {

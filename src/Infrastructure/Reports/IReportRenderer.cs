@@ -1,4 +1,4 @@
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal interface IReportRenderer
 {

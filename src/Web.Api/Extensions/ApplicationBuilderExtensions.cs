@@ -1,4 +1,4 @@
-namespace Web.Api.Extensions;
+namespace VohuManah.Web.Api.Extensions;
 
 public static class ApplicationBuilderExtensions
 {

@@ -1,4 +1,4 @@
-namespace Infrastructure.Reports.Definition;
+namespace VohuManah.Infrastructure.Reports.Definition;
 
 
 

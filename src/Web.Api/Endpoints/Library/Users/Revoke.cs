@@ -1,11 +1,11 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Users.Tokens;
-using Infrastructure.Authentication;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Infrastructure;
-using Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Users.Tokens;
+using VohuManah.Infrastructure.Authentication;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Infrastructure;
+using VohuManah.Application.Library.Settings;
 
-namespace Web.Api.Endpoints.Library.Users;
+namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
 [RequireRole(EndpointNames.Users.Revoke)]
 internal sealed class Revoke : BaseEndpoint

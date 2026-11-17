@@ -1,13 +1,13 @@
-﻿using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Application.Library.Books.Search;
-using Application.Library.Settings;
-using Infrastructure.Reports;
-using Web.Api.Endpoints.Attributes;
-using Web.Api.Endpoints.Reports.Requests;
-using Web.Api.Infrastructure;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Application.Library.Books.Search;
+using VohuManah.Application.Library.Settings;
+using VohuManah.Infrastructure.Reports;
+using VohuManah.Web.Api.Endpoints.Attributes;
+using VohuManah.Web.Api.Endpoints.Reports.Requests;
+using VohuManah.Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Reports;
+namespace VohuManah.Web.Api.Endpoints.Reports;
 
 [RequireRole(EndpointNames.Reports.BookSearchList)]
 internal sealed class BookSearchListReport : BaseEndpoint

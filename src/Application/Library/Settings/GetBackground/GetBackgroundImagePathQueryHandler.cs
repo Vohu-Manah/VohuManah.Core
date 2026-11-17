@@ -1,10 +1,10 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetBackground;
+namespace VohuManah.Application.Library.Settings.GetBackground;
 
 internal sealed class GetBackgroundImagePathQueryHandler(
     IUnitOfWork unitOfWork,
@@ -14,8 +14,8 @@ internal sealed class GetBackgroundImagePathQueryHandler(
 
     public Task<Result<string>> Handle(GetBackgroundImagePathQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
-        List<Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
+        List<VohuManah.Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string folder = all.Where(s => s.Name == "BackgroundImageFolder").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
         string name = all.Where(s => s.Name == "CurrentBackgroundImageName").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
         string path = string.IsNullOrWhiteSpace(folder) || string.IsNullOrWhiteSpace(name) ? string.Empty : System.IO.Path.Combine(folder, name);

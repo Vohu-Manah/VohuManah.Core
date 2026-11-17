@@ -2,9 +2,9 @@ using System;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 
-namespace Infrastructure.Caching;
+namespace VohuManah.Infrastructure.Caching;
 
-public sealed class MemoryCacheManager : Application.Abstractions.Caching.ICacheManager
+public sealed class MemoryCacheManager : VohuManah.Application.Abstractions.Caching.ICacheManager
 {
     private readonly ObjectCache _cache = MemoryCache.Default;
 

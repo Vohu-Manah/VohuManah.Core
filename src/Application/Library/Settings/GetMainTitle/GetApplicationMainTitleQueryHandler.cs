@@ -1,10 +1,10 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.GetMainTitle;
+namespace VohuManah.Application.Library.Settings.GetMainTitle;
 
 internal sealed class GetApplicationMainTitleQueryHandler(
     IUnitOfWork unitOfWork,
@@ -14,9 +14,9 @@ internal sealed class GetApplicationMainTitleQueryHandler(
 
     public Task<Result<string>> Handle(GetApplicationMainTitleQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.Settings> settings = unitOfWork.GetDbSet<Domain.Library.Settings>();
+        DbSet<VohuManah.Domain.Library.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.Library.Settings>();
 
-        List<Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
+        List<VohuManah.Domain.Library.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string title = all.Where(s => s.Name == "ApplicationMainTitle").Select(s => s.Value).SingleOrDefault() ?? string.Empty;
 
         return Task.FromResult(Result.Success(title));

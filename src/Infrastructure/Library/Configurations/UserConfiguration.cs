@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Library;
+namespace VohuManah.Infrastructure.Library.Configurations;
 
-internal sealed class UserConfiguration : IEntityTypeConfiguration<Domain.Library.User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<VohuManah.Domain.Library.User>
 {
-    public void Configure(EntityTypeBuilder<Domain.Library.User> builder)
+    public void Configure(EntityTypeBuilder<VohuManah.Domain.Library.User> builder)
     {
         builder.HasKey(u => u.Id);
 

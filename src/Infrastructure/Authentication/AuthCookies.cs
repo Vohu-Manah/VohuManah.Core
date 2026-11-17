@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 public static class AuthCookies
 {

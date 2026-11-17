@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Immutable;
-using Application.Library.Settings;
-using Domain.Library;
+using VohuManah.Application.Library.Settings;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Library;
+namespace VohuManah.Infrastructure.Library.Seeds;
 
 internal static class LibrarySeedData
 {
@@ -29,8 +29,8 @@ internal static class LibrarySeedData
 
     private static void SeedUsers(ModelBuilder mb)
     {
-        mb.Entity<Domain.Library.User>().HasData(
-            new Domain.Library.User
+        mb.Entity<VohuManah.Domain.Library.User>().HasData(
+            new VohuManah.Domain.Library.User
             {
                 Id = 1,
                 UserName = "admin",

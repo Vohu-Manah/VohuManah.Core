@@ -1,8 +1,8 @@
 using System;
-using Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Authentication;
 using System.Security.Cryptography;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 internal sealed class PasswordHasher : IPasswordHasher
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
 
-namespace Infrastructure.Reports.Html;
+namespace VohuManah.Infrastructure.Reports.Html;
 
 internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
 {

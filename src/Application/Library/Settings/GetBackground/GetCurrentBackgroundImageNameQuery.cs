@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Settings.GetBackground;
+namespace VohuManah.Application.Library.Settings.GetBackground;
 
 public sealed record GetCurrentBackgroundImageNameQuery() : IQuery<string>;
 

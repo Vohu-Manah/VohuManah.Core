@@ -1,3 +1,3 @@
-namespace Application.Abstractions.HumanVerification;
+namespace VohuManah.Application.Abstractions.HumanVerification;
 
 public sealed record PointerSample(double X, double Y, double T);

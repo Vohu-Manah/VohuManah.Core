@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Users.GetAll;
+namespace VohuManah.Application.Library.Users.GetAll;
 
 public sealed record GetAllLibraryUsersQuery() : IQuery<List<LibraryUserResponse>>;
 

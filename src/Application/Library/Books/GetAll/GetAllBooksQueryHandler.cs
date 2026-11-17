@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Books.GetAll;
+namespace VohuManah.Application.Library.Books.GetAll;
 
 internal sealed class GetAllBooksQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetAllBooksQuery, List<BookResponse>>

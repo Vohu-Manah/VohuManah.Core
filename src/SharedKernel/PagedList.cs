@@ -1,4 +1,4 @@
-namespace SharedKernel;
+namespace VohuManah.SharedKernel;
 
 public sealed record PagedList<T>
 {

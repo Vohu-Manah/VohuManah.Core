@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Publishers.GetList;
+namespace VohuManah.Application.Library.Publishers.GetList;
 
 public sealed record GetPublisherListQuery : IQuery<List<PublisherListResponse>>;
 

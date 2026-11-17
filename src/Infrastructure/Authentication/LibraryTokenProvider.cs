@@ -1,8 +1,8 @@
 using System.Threading;
 using System;
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Authentication;
+namespace VohuManah.Infrastructure.Authentication;
 
 internal sealed class LibraryTokenProvider(
     IConfiguration configuration,

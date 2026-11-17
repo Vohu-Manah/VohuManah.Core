@@ -1,7 +1,7 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Library.Settings.UpdateRolePermissions;
+namespace VohuManah.Application.Library.Settings.UpdateRolePermissions;
 
 public sealed record UpdateRolePermissionsCommand(
     [Display(Name = "شناسه نقش")] int RoleId,

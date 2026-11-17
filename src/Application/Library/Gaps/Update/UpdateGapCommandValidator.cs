@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Gaps.Update;
+namespace VohuManah.Application.Library.Gaps.Update;
 
 internal sealed class UpdateGapCommandValidator : AbstractValidator<UpdateGapCommand>
 {

@@ -1,4 +1,4 @@
-namespace Application.Library.Settings;
+namespace VohuManah.Application.Library.Settings;
 
 #pragma warning disable CA1034
 public static class EndpointNames

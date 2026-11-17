@@ -1,6 +1,6 @@
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Messaging;
 
-namespace Application.Library.Cities.GetAll;
+namespace VohuManah.Application.Library.Cities.GetAll;
 
 public sealed record GetAllCitiesQuery(bool AddAllItemInFirstRow = false) : IQuery<List<CityResponse>>;
 

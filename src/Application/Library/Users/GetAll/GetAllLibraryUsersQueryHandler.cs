@@ -1,10 +1,10 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Users.GetAll;
+namespace VohuManah.Application.Library.Users.GetAll;
 
 internal sealed class GetAllLibraryUsersQueryHandler(
     IUnitOfWork unitOfWork,
@@ -14,9 +14,9 @@ internal sealed class GetAllLibraryUsersQueryHandler(
 
     public Task<Result<List<LibraryUserResponse>>> Handle(GetAllLibraryUsersQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Domain.Library.User> users = unitOfWork.GetDbSet<Domain.Library.User>();
+        DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
 
-        List<Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
+        List<VohuManah.Domain.Library.User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 
         List<LibraryUserResponse> response = allUsers.Select(u => new LibraryUserResponse
         {

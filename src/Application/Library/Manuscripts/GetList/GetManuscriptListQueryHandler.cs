@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.GetList;
+namespace VohuManah.Application.Library.Manuscripts.GetList;
 
 internal sealed class GetManuscriptListQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptListQuery, PagedList<ManuscriptListResponse>>

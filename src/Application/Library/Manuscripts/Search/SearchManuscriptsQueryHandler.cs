@@ -1,11 +1,11 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Shared;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Shared;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Search;
+namespace VohuManah.Application.Library.Manuscripts.Search;
 
 internal sealed class SearchManuscriptsQueryHandler(
     IUnitOfWork unitOfWork) : IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>>

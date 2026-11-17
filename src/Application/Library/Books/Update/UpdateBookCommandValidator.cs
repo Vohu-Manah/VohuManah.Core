@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Library.Books.Update;
+namespace VohuManah.Application.Library.Books.Update;
 
 internal sealed class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
 {

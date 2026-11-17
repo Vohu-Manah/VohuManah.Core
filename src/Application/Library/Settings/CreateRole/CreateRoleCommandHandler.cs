@@ -1,12 +1,12 @@
-using Application.Abstractions.Caching;
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Application.Library.Settings.GetAllRoles;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Caching;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Library.Settings.GetAllRoles;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Settings.CreateRole;
+namespace VohuManah.Application.Library.Settings.CreateRole;
 
 internal sealed class CreateRoleCommandHandler(
     IUnitOfWork unitOfWork,

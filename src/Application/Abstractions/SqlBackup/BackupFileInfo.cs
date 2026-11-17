@@ -1,4 +1,4 @@
-namespace Application.Abstractions.Backup;
+namespace VohuManah.Application.Abstractions.SqlBackup;
 
 public sealed record BackupFileInfo(
     bool Exists,

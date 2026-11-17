@@ -1,10 +1,10 @@
-using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel;
+using VohuManah.SharedKernel;
 
-namespace Application.Library.Manuscripts.Update;
+namespace VohuManah.Application.Library.Manuscripts.Update;
 
 internal sealed class UpdateManuscriptCommandHandler(
     IUnitOfWork unitOfWork) : ICommandHandler<UpdateManuscriptCommand>

@@ -1,10 +1,10 @@
 using System.Threading;
-using Application.Abstractions.Authorization;
-using Application.Abstractions.Data;
-using Domain.Library;
+using VohuManah.Application.Abstractions.Authorization;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Authorization;
+namespace VohuManah.Infrastructure.Authorization;
 
 internal sealed class RoleEndpointService(IUnitOfWork unitOfWork) : IRolePermissionService
 {

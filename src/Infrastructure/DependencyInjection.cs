@@ -1,13 +1,13 @@
 using System.IO;
 using System;
-using Application.Abstractions.Authentication;
-using Application.Abstractions.Data;
-using Infrastructure.Authentication;
-using Infrastructure.Authorization;
-using Infrastructure.Caching;
-using Infrastructure.Database;
-using Infrastructure.FileStorage;
-using Infrastructure.Reports;
+using VohuManah.Application.Abstractions.Authentication;
+using VohuManah.Application.Abstractions.Data;
+using VohuManah.Infrastructure.Authentication;
+using VohuManah.Infrastructure.Authorization;
+using VohuManah.Infrastructure.Caching;
+using VohuManah.Infrastructure.Database;
+using VohuManah.Infrastructure.FileStorage;
+using VohuManah.Infrastructure.Reports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using SharedKernel;
+using VohuManah.SharedKernel;
 using System.Security.Claims;
 using System.Text;
 using VohuManah.Infrastructure.Database.SqlBackup;
@@ -24,7 +24,7 @@ using VohuManah.Infrastructure.Helper.Time;
 using VohuManah.Infrastructure.Helper.HumanVerification;
 using VohuManah.Infrastructure.Helper.PersianCalendar;
 
-namespace Infrastructure;
+namespace VohuManah.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -42,14 +42,14 @@ public static class DependencyInjection
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        services.AddSingleton<Application.Abstractions.Caching.ICacheManager, MemoryCacheManager>();
+        services.AddSingleton<VohuManah.Application.Abstractions.Caching.ICacheManager, MemoryCacheManager>();
 
         services.AddSingleton<IPersianCalendar, PersianCalendarService>();
         services.AddScoped<PersianDateTime>();
-        services.AddScoped<Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
+        services.AddScoped<VohuManah.Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
 
-        services.AddScoped<Application.Abstractions.Backup.IBackupService, SqlBackupService>();
-        services.AddSingleton<Application.Abstractions.HumanVerification.IHumanVerificationService, HumanVerificationService>();
+        services.AddScoped<VohuManah.Application.Abstractions.SqlBackup.IBackupService, SqlBackupService>();
+        services.AddSingleton<VohuManah.Application.Abstractions.HumanVerification.IHumanVerificationService, HumanVerificationService>();
         services.AddHostedService<DailyBackupJob>();
         services.AddHostedService<BackupCleanupJob>();
         services.AddHostedService<Database.Maintenance.DatabaseMaintenanceJob>();
@@ -59,31 +59,31 @@ public static class DependencyInjection
 
     private static IServiceCollection AddReportServices(this IServiceCollection services)
     {
-        services.AddSingleton<Infrastructure.Reports.Html.IReportResourceLoader, Infrastructure.Reports.Html.ReportResourceLoader>();
-        services.AddTransient<Infrastructure.Reports.Html.IHtmlBuilder, Infrastructure.Reports.Html.HtmlBuilder>();
-        services.AddScoped<Infrastructure.Reports.Html.IReportHtmlWrapper>(sp =>
+        services.AddSingleton<VohuManah.Infrastructure.Reports.Html.IReportResourceLoader, VohuManah.Infrastructure.Reports.Html.ReportResourceLoader>();
+        services.AddTransient<VohuManah.Infrastructure.Reports.Html.IHtmlBuilder, VohuManah.Infrastructure.Reports.Html.HtmlBuilder>();
+        services.AddScoped<VohuManah.Infrastructure.Reports.Html.IReportHtmlWrapper>(sp =>
         {
-            var resourceLoader = sp.GetRequiredService<Infrastructure.Reports.Html.IReportResourceLoader>();
-            var htmlBuilderFactory = new Func<Infrastructure.Reports.Html.IHtmlBuilder>(() =>
-                sp.GetRequiredService<Infrastructure.Reports.Html.IHtmlBuilder>());
-            return new Infrastructure.Reports.Html.ReportHtmlWrapper(resourceLoader, htmlBuilderFactory);
+            var resourceLoader = sp.GetRequiredService<VohuManah.Infrastructure.Reports.Html.IReportResourceLoader>();
+            var htmlBuilderFactory = new Func<VohuManah.Infrastructure.Reports.Html.IHtmlBuilder>(() =>
+                sp.GetRequiredService<VohuManah.Infrastructure.Reports.Html.IHtmlBuilder>());
+            return new VohuManah.Infrastructure.Reports.Html.ReportHtmlWrapper(resourceLoader, htmlBuilderFactory);
         });
-        services.AddScoped<Infrastructure.Reports.Html.IReportTableGenerator>(sp =>
+        services.AddScoped<VohuManah.Infrastructure.Reports.Html.IReportTableGenerator>(sp =>
         {
-            var htmlBuilderFactory = new Func<Infrastructure.Reports.Html.IHtmlBuilder>(() =>
-                sp.GetRequiredService<Infrastructure.Reports.Html.IHtmlBuilder>());
-            return new Infrastructure.Reports.Html.ReportTableGenerator(htmlBuilderFactory);
+            var htmlBuilderFactory = new Func<VohuManah.Infrastructure.Reports.Html.IHtmlBuilder>(() =>
+                sp.GetRequiredService<VohuManah.Infrastructure.Reports.Html.IHtmlBuilder>());
+            return new VohuManah.Infrastructure.Reports.Html.ReportTableGenerator(htmlBuilderFactory);
         });
 
-        services.AddScoped<Infrastructure.Reports.IReportLocalReportFactory>(sp =>
+        services.AddScoped<VohuManah.Infrastructure.Reports.IReportLocalReportFactory>(sp =>
         {
             var environment = sp.GetRequiredService<IWebHostEnvironment>();
             var persianDateTime = sp.GetRequiredService<PersianDateTime>();
             var reportsPath = Path.Combine(environment.WebRootPath, "Reports");
-            return new Infrastructure.Reports.ReportLocalReportFactory(reportsPath, persianDateTime);
+            return new VohuManah.Infrastructure.Reports.ReportLocalReportFactory(reportsPath, persianDateTime);
         });
 
-        services.AddScoped<Infrastructure.Reports.IReportRenderer, Infrastructure.Reports.ReportRenderer>();
+        services.AddScoped<VohuManah.Infrastructure.Reports.IReportRenderer, VohuManah.Infrastructure.Reports.ReportRenderer>();
         services.AddScoped<IReportService, RdlcReportService>();
 
         return services;
@@ -135,7 +135,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddScoped<Application.Abstractions.Authentication.ILibraryTokenProvider, Infrastructure.Authentication.LibraryTokenProvider>();
+        services.AddScoped<VohuManah.Application.Abstractions.Authentication.ILibraryTokenProvider, VohuManah.Infrastructure.Authentication.LibraryTokenProvider>();
 
         return services;
     }
@@ -151,7 +151,7 @@ public static class DependencyInjection
 
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-        services.AddScoped<Application.Abstractions.Authorization.IRolePermissionService, Authorization.RoleEndpointService>();
+        services.AddScoped<VohuManah.Application.Abstractions.Authorization.IRolePermissionService, Authorization.RoleEndpointService>();
 
         return services;
     }

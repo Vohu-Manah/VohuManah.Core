@@ -3,7 +3,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.Collections;
 
-namespace Infrastructure.Reports;
+namespace VohuManah.Infrastructure.Reports;
 
 internal sealed class RdlcReportService : IReportService
 {
