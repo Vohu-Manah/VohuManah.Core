@@ -1,14 +1,14 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Books.GetStatistics;
 using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.BookStatistics)]
+[RequireRole(PermissionNames.Reports.BookStatistics)]
 internal sealed class BookStatisticsReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

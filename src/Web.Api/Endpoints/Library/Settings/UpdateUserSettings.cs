@@ -5,11 +5,11 @@ using System.Security.Claims;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Settings;
 
-[RequireRole(EndpointNames.Settings.UpdateUserSettings)]
+[RequireRole(PermissionNames.Settings.UpdateUserSettings)]
 internal sealed class UpdateUserSettingsEndpoint : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

@@ -1,4 +1,4 @@
-using VohuManah.Application.Abstractions.Data;
+﻿using VohuManah.Application.Abstractions.Data;
 using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,7 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             return Result.Failure(Error.NotFound("Role.NotFound", "نقش یافت نشد"));
         }
 
-        var normalizedEndpoints = (command.EndpointNames ?? Array.Empty<string>())
+        var normalizedEndpoints = (command.PermissionNames ?? Array.Empty<string>())
             .Where(endpoint => !string.IsNullOrWhiteSpace(endpoint))
             .Select(endpoint => endpoint.Trim())
             .Distinct(StringComparer.OrdinalIgnoreCase)

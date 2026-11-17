@@ -1,4 +1,4 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Manuscripts.GetList;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
@@ -7,9 +7,9 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Manuscripts;
 
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
-[RequireRole(EndpointNames.Manuscripts.GetList)]
+[RequireRole(PermissionNames.Manuscripts.GetList)]
 internal sealed class GetList : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

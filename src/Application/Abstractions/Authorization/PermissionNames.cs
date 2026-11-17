@@ -1,7 +1,7 @@
-namespace VohuManah.Application.Library.Settings;
+﻿namespace VohuManah.Application.Abstractions.Authorization;
 
 #pragma warning disable CA1034
-public static class EndpointNames
+public static class PermissionNames
 {
     public static class Books
     {

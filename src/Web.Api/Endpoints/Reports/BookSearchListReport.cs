@@ -1,7 +1,7 @@
 ﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Shared;
 using VohuManah.Application.Library.Books.Search;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
@@ -9,7 +9,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.BookSearchList)]
+[RequireRole(PermissionNames.Reports.BookSearchList)]
 internal sealed class BookSearchListReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

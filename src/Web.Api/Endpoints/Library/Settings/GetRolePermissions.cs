@@ -1,5 +1,5 @@
-using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Library.Settings.GetRolePermissions;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
@@ -8,7 +8,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Settings;
 
-[RequireRole(EndpointNames.Settings.GetRolePermissions)]
+[RequireRole(PermissionNames.Settings.GetRolePermissions)]
 internal sealed class GetRolePermissions : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

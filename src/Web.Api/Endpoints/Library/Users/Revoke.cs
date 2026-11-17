@@ -3,11 +3,11 @@ using VohuManah.Application.Library.Users.Tokens;
 using VohuManah.Web.Api.Security;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
-[RequireRole(EndpointNames.Users.Revoke)]
+[RequireRole(PermissionNames.Users.Revoke)]
 internal sealed class Revoke : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

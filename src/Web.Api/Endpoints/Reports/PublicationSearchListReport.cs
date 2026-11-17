@@ -5,11 +5,11 @@ using VohuManah.Application.Abstractions.Reports;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Endpoints.Reports.Requests;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.PublicationSearchList)]
+[RequireRole(PermissionNames.Reports.PublicationSearchList)]
 internal sealed class PublicationSearchListReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

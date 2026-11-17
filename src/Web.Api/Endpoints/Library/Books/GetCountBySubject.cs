@@ -5,11 +5,11 @@ using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
-[RequireRole(EndpointNames.Books.GetCountBySubject)]
+[RequireRole(PermissionNames.Books.GetCountBySubject)]
 internal sealed class GetCountBySubject : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

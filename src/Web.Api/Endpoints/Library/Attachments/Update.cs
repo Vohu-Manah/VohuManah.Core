@@ -1,6 +1,6 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Attachments.Update;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
@@ -8,7 +8,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Attachments;
 
-[RequireRole(EndpointNames.Attachments.Update)]
+[RequireRole(PermissionNames.Attachments.Update)]
 internal sealed class Update : BaseEndpoint
 {
     public sealed record Request(string? Description, bool? IsMain);

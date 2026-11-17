@@ -1,6 +1,6 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Books.GetAllEntities;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Domain.Books;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
@@ -9,7 +9,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
-[RequireRole(EndpointNames.Books.GetAllEntities)]
+[RequireRole(PermissionNames.Books.GetAllEntities)]
 internal sealed class GetAllEntities : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

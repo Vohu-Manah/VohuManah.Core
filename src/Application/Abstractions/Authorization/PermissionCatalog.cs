@@ -1,8 +1,8 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
-namespace VohuManah.Application.Library.Settings;
+namespace VohuManah.Application.Abstractions.Authorization;
 
-public static class EndpointCatalog
+public static class PermissionCatalog
 {
     public static readonly ImmutableArray<string> Books = ImmutableArray.Create(
         "Library.Books.Create",

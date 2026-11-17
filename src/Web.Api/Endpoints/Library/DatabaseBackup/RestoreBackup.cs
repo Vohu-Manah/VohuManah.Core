@@ -1,6 +1,6 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.DatabaseBackup.Restore;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
@@ -8,7 +8,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 
-[RequireRole(EndpointNames.Backup.Restore)]
+[RequireRole(PermissionNames.Backup.Restore)]
 internal sealed class RestoreBackup : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

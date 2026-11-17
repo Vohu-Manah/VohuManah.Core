@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Immutable;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Library.Settings;
 using VohuManah.Domain.AppSettings;
 using VohuManah.Domain.Cities;
@@ -205,7 +206,7 @@ internal static class LibrarySeedData
         var rows = new List<RolePermission>();
         int nextId = 1;
 
-        foreach (var ep in EndpointCatalog.All.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+        foreach (var ep in PermissionCatalog.All.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
         {
             rows.Add(new RolePermission { Id = nextId++, RoleId = 1, EndpointName = ep });
         }

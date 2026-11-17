@@ -1,3 +1,4 @@
+﻿using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Library.Settings;
 using System.Collections.Immutable;
 

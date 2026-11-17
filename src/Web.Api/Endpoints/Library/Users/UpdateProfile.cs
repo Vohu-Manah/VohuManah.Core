@@ -1,5 +1,5 @@
-using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.Messaging;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Library.Users.UpdateProfile;
 using VohuManah.SharedKernel;
 using System.Security.Claims;
@@ -8,7 +8,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
-[RequireRole(EndpointNames.Settings.UpdateUserSettings)]
+[RequireRole(PermissionNames.Settings.UpdateUserSettings)]
 internal sealed class UpdateProfile : BaseEndpoint
 {
     public sealed record Request(string Name, string LastName, string? Email, string? PhoneNumber);

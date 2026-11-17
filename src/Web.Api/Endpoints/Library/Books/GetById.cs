@@ -1,6 +1,6 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Books.GetById;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
@@ -8,7 +8,7 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
-[RequireRole(EndpointNames.Books.GetById)]
+[RequireRole(PermissionNames.Books.GetById)]
 internal sealed class GetById : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

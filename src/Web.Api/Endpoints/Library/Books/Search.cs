@@ -1,4 +1,4 @@
-using VohuManah.Application.Abstractions.Messaging;
+﻿using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Shared;
 using VohuManah.Application.Library.Books.Search;
 using VohuManah.SharedKernel;
@@ -8,9 +8,9 @@ using VohuManah.Web.Api.Infrastructure;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Books;
 
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
-[RequireRole(EndpointNames.Books.Search)]
+[RequireRole(PermissionNames.Books.Search)]
 internal sealed class Search : BaseEndpoint
 {
     public sealed record Request(

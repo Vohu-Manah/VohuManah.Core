@@ -3,11 +3,11 @@ using VohuManah.Application.Library.Settings.AssignRoleToUser;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Settings;
 
-[RequireRole(EndpointNames.Settings.AssignRoleToUser)]
+[RequireRole(PermissionNames.Settings.AssignRoleToUser)]
 internal sealed class AssignRoleToUser : BaseEndpoint
 {
     public sealed record Request(int RoleId);

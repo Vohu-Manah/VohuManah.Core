@@ -1,5 +1,5 @@
-using VohuManah.Application.Abstractions.DatabaseBackup;
-using VohuManah.Application.Library.Settings;
+﻿using VohuManah.Application.Abstractions.DatabaseBackup;
+using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
@@ -10,7 +10,7 @@ namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 
 
 
-[RequireRole(EndpointNames.Backup.Cancel)]
+[RequireRole(PermissionNames.Backup.Cancel)]
 internal sealed class CancelBackup : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

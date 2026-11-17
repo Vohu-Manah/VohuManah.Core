@@ -3,11 +3,11 @@ using VohuManah.Application.Library.Languages.Delete;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Languages;
 
-[RequireRole(EndpointNames.Languages.Delete)]
+[RequireRole(PermissionNames.Languages.Delete)]
 internal sealed class Delete : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

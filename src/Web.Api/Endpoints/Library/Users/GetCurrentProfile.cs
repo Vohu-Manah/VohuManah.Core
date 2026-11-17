@@ -4,11 +4,11 @@ using VohuManah.SharedKernel;
 using System.Security.Claims;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Library.Users;
 
-[RequireRole(EndpointNames.Settings.GetUserSettings)]
+[RequireRole(PermissionNames.Settings.GetUserSettings)]
 internal sealed class GetCurrentProfile : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)

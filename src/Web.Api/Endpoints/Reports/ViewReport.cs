@@ -1,12 +1,12 @@
-using VohuManah.Application.Abstractions.Reports;
+﻿using VohuManah.Application.Abstractions.Reports;
 using Microsoft.AspNetCore.Mvc;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Infrastructure;
-using VohuManah.Application.Library.Settings;
+using VohuManah.Application.Abstractions.Authorization;
 
 namespace VohuManah.Web.Api.Endpoints.Reports;
 
-[RequireRole(EndpointNames.Reports.View)]
+[RequireRole(PermissionNames.Reports.View)]
 internal sealed class ViewReport : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
