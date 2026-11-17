@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.Application.Library.Users.Tokens;
-using VohuManah.Infrastructure.Authentication;
+using VohuManah.Web.Api.Security;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;

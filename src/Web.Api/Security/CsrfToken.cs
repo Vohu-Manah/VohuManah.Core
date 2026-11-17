@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
 
-namespace VohuManah.Infrastructure.Authentication;
+namespace VohuManah.Web.Api.Security;
 
 public static class CsrfToken
 {

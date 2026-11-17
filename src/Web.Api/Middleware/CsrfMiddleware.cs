@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
-using VohuManah.Infrastructure.Authentication;
+using VohuManah.Web.Api.Security;
 
 namespace VohuManah.Web.Api.Middleware;
 
