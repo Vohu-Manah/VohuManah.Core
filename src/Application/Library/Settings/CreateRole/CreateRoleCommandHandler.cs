@@ -38,11 +38,11 @@ internal sealed class CreateRoleCommandHandler(
 
         if (RolePermissionDefaults.TryGetDefaults(role.Name, out var defaultEndpoints) && defaultEndpoints.Length > 0)
         {
-            DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+            DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
 
             foreach (string endpoint in defaultEndpoints)
             {
-                rolePermissions.Add(new RoleEndpoint
+                rolePermissions.Add(new RolePermission
                 {
                     RoleId = role.Id,
                     EndpointName = endpoint

@@ -24,7 +24,7 @@ internal static class LibrarySeedData
         SeedUserRoles(modelBuilder);
         SeedAppInfo(modelBuilder);
         SeedMenuItems(modelBuilder);
-        SeedRoleEndpoints(modelBuilder);
+        SeedRolePermissions(modelBuilder);
     }
 
     private static void SeedUsers(ModelBuilder mb)
@@ -192,31 +192,31 @@ internal static class LibrarySeedData
             new MenuItem { Id = 36, Label = "نقش دهی به کاربران", Path = "/admin/user-roles", ParentId = 34, DisplayOrder = 1, IsActive = true, IsSystem = false });
     }
 
-    private static void SeedRoleEndpoints(ModelBuilder mb)
+    private static void SeedRolePermissions(ModelBuilder mb)
     {
-        var rows = new List<RoleEndpoint>();
+        var rows = new List<RolePermission>();
         int nextId = 1;
 
         foreach (var ep in EndpointCatalog.All.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
         {
-            rows.Add(new RoleEndpoint { Id = nextId++, RoleId = 1, EndpointName = ep });
+            rows.Add(new RolePermission { Id = nextId++, RoleId = 1, EndpointName = ep });
         }
 
 
-        AddRoleEndpoints(rows, ref nextId, 2, RolePermissionDefaults.UserEndpoints);
-        AddRoleEndpoints(rows, ref nextId, 3, RolePermissionDefaults.LibrarianEndpoints);
-        AddRoleEndpoints(rows, ref nextId, 4, RolePermissionDefaults.PublisherEndpoints);
-        AddRoleEndpoints(rows, ref nextId, 5, RolePermissionDefaults.AuthorEndpoints);
+        AddRolePermissions(rows, ref nextId, 2, RolePermissionDefaults.UserEndpoints);
+        AddRolePermissions(rows, ref nextId, 3, RolePermissionDefaults.LibrarianEndpoints);
+        AddRolePermissions(rows, ref nextId, 4, RolePermissionDefaults.PublisherEndpoints);
+        AddRolePermissions(rows, ref nextId, 5, RolePermissionDefaults.AuthorEndpoints);
 
-        mb.Entity<RoleEndpoint>().HasData(rows);
+        mb.Entity<RolePermission>().HasData(rows);
     }
 
-    private static void AddRoleEndpoints(
-        List<RoleEndpoint> rows, ref int nextId, int roleId, ImmutableArray<string> endpoints)
+    private static void AddRolePermissions(
+        List<RolePermission> rows, ref int nextId, int roleId, ImmutableArray<string> endpoints)
     {
         foreach (var ep in endpoints)
         {
-            rows.Add(new RoleEndpoint { Id = nextId++, RoleId = roleId, EndpointName = ep });
+            rows.Add(new RolePermission { Id = nextId++, RoleId = roleId, EndpointName = ep });
         }
     }
 }

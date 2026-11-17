@@ -12,7 +12,7 @@ internal sealed class GetUserRolesQueryHandler(
     public async Task<Result<List<UserRoleResponse>>> Handle(GetUserRolesQuery query, CancellationToken cancellationToken)
     {
         DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+        DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
         DbSet<VohuManah.Domain.Library.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Library.User>();
 
         VohuManah.Domain.Library.User? user = await users

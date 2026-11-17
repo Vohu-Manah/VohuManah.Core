@@ -1,29 +1,27 @@
 using System.Threading;
 using VohuManah.Application.Abstractions.DatabaseBackup;
-using VohuManah.Application.Library.DatabaseBackup.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace VohuManah.Infrastructure.Database.SqlBackup;
+namespace VohuManah.Infrastructure.Database.DatabaseBackup;
 
 
 
 
 
 
-internal sealed class DailyBackupJob(
+internal sealed class BackupCleanupJob(
     IServiceScopeFactory scopeFactory,
-    ILogger<DailyBackupJob> logger) : BackgroundService
+    ILogger<BackupCleanupJob> logger) : BackgroundService
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromHours(24);
+    private static readonly TimeSpan CheckInterval = TimeSpan.FromMinutes(15);
+    private static readonly TimeSpan MaxAge = TimeSpan.FromHours(1);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        
-        
-        await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken).ConfigureAwait(false);
+        await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken).ConfigureAwait(false);
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -32,9 +30,7 @@ internal sealed class DailyBackupJob(
                 using IServiceScope scope = scopeFactory.CreateScope();
                 IBackupService backupService = scope.ServiceProvider.GetRequiredService<IBackupService>();
 
-                await backupService.RunBackupAsync(BackupFileNames.Daily, stoppingToken).ConfigureAwait(false);
-
-                logger.LogInformation("بکاپ روزانهٔ دیتابیس انجام شد.");
+                await backupService.CleanupExpiredOneTimeBackupAsync(MaxAge, stoppingToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
@@ -42,12 +38,12 @@ internal sealed class DailyBackupJob(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "اجرای جاب بکاپ روزانه با خطا مواجه شد.");
+                logger.LogError(ex, "اجرای جاب پاکسازی بکاپ با خطا مواجه شد.");
             }
 
             try
             {
-                await Task.Delay(Interval, stoppingToken).ConfigureAwait(false);
+                await Task.Delay(CheckInterval, stoppingToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

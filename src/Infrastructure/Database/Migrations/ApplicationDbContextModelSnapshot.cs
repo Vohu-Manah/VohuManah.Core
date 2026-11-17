@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using VohuManah.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -1082,7 +1082,7 @@ namespace VohuManah.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.RoleEndpoint", b =>
+            modelBuilder.Entity("VohuManah.Domain.Library.RolePermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3926,7 +3926,7 @@ namespace VohuManah.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("VohuManah.Domain.Library.RoleEndpoint", b =>
+            modelBuilder.Entity("VohuManah.Domain.Library.RolePermission", b =>
                 {
                     b.HasOne("VohuManah.Domain.Library.Role", "Role")
                         .WithMany()

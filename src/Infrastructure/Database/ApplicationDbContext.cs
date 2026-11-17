@@ -29,7 +29,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Settings> Settings { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<RoleEndpoint> RoleEndpoints { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<UserSettings> UserSettings { get; set; }

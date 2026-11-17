@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace VohuManah.Domain.Library;
 
-
-public sealed class RoleEndpoint
+[SuppressMessage("", "CA1711")]
+public sealed class RolePermission
 {
     public int Id { get; set; }
 

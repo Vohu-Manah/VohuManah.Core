@@ -11,11 +11,11 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace VohuManah.Infrastructure.Database.SqlBackup;
+namespace VohuManah.Infrastructure.Database.DatabaseBackup;
 
-internal sealed class SqlBackupService(
+internal sealed class DatabaseBackupService(
     ApplicationDbContext dbContext,
-    ILogger<SqlBackupService> logger) : IBackupService
+    ILogger<DatabaseBackupService> logger) : IBackupService
 {
     private const string SpName = "dbo.usp_BackupDatabase";
 
@@ -28,16 +28,16 @@ internal sealed class SqlBackupService(
     
     
     
-    private static readonly string? SqlBackupFolder = Environment.GetEnvironmentVariable("SQL_BACKUP_FOLDER");
+    private static readonly string? DatabaseBackupFolder = Environment.GetEnvironmentVariable("SQL_BACKUP_FOLDER");
 
     private static string ToSqlPath(string webApiPath)
     {
-        if (string.IsNullOrEmpty(SqlBackupFolder) ||
+        if (string.IsNullOrEmpty(DatabaseBackupFolder) ||
             !webApiPath.StartsWith(BackupFolder + Path.DirectorySeparatorChar, StringComparison.Ordinal))
         {
             return webApiPath;
         }
-        return Path.Combine(SqlBackupFolder, webApiPath[(BackupFolder.Length + 1)..]);
+        return Path.Combine(DatabaseBackupFolder, webApiPath[(BackupFolder.Length + 1)..]);
     }
 
     private static readonly Lock ProgressLock = new();

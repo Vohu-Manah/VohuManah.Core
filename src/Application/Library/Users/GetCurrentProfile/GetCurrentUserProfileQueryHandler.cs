@@ -25,7 +25,7 @@ internal sealed class GetCurrentUserProfileQueryHandler(
             .Select(ur => ur.RoleId)
             .ToListAsync(cancellationToken);
 
-        var permissions = await unitOfWork.GetDbSet<RoleEndpoint>()
+        var permissions = await unitOfWork.GetDbSet<RolePermission>()
             .Where(rp => roleIds.Contains(rp.RoleId))
             .Select(rp => rp.EndpointName)
             .Distinct()

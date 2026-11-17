@@ -19,10 +19,9 @@ using Microsoft.IdentityModel.Tokens;
 using VohuManah.SharedKernel;
 using System.Security.Claims;
 using System.Text;
-using VohuManah.Infrastructure.Database.SqlBackup;
+using VohuManah.Infrastructure.Database.DatabaseBackup;
 using VohuManah.Infrastructure.Time;
 using VohuManah.Infrastructure.HumanVerification;
-using VohuManah.Infrastructure.Time;
 
 namespace VohuManah.Infrastructure;
 
@@ -48,7 +47,7 @@ public static class DependencyInjection
         services.AddScoped<PersianDateTime>();
         services.AddScoped<VohuManah.Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
 
-        services.AddScoped<VohuManah.Application.Abstractions.DatabaseBackup.IBackupService, SqlBackupService>();
+        services.AddScoped<VohuManah.Application.Abstractions.DatabaseBackup.IBackupService, DatabaseBackupService>();
         services.AddSingleton<VohuManah.Application.Abstractions.HumanVerification.IHumanVerificationService, HumanVerificationService>();
         services.AddHostedService<DailyBackupJob>();
         services.AddHostedService<BackupCleanupJob>();

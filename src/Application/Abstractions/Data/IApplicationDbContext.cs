@@ -18,7 +18,7 @@ public interface IApplicationDbContext : IUnitOfWork
     DbSet<Settings> Settings { get; }
     DbSet<Role> Roles { get; }
     DbSet<UserRole> UserRoles { get; }
-    DbSet<RoleEndpoint> RoleEndpoints { get; }
+    DbSet<RolePermission> RolePermissions { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
     DbSet<Attachment> Attachments { get; }
     DbSet<UserSettings> UserSettings { get; }

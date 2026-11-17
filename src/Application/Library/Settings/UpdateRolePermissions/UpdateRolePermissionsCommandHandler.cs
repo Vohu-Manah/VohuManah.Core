@@ -12,7 +12,7 @@ internal sealed class UpdateRolePermissionsCommandHandler(
     public async Task<Result> Handle(UpdateRolePermissionsCommand command, CancellationToken cancellationToken)
     {
         DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
-        DbSet<RoleEndpoint> rolePermissions = unitOfWork.GetDbSet<RoleEndpoint>();
+        DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == command.RoleId, cancellationToken);
 
@@ -27,13 +27,13 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        List<RoleEndpoint> existingPermissions = await rolePermissions
+        List<RolePermission> existingPermissions = await rolePermissions
             .Where(rp => rp.RoleId == command.RoleId)
             .ToListAsync(cancellationToken);
 
         var endpointSet = new HashSet<string>(normalizedEndpoints, StringComparer.OrdinalIgnoreCase);
 
-        List<RoleEndpoint> toRemove = existingPermissions
+        List<RolePermission> toRemove = existingPermissions
             .Where(rp => !endpointSet.Contains(rp.EndpointName))
             .ToList();
 
@@ -53,7 +53,7 @@ internal sealed class UpdateRolePermissionsCommandHandler(
                 continue;
             }
 
-            rolePermissions.Add(new RoleEndpoint
+            rolePermissions.Add(new RolePermission
             {
                 RoleId = command.RoleId,
                 EndpointName = endpoint
