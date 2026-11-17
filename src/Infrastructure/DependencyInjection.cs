@@ -41,6 +41,7 @@ public static class DependencyInjection
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<IDatabaseExceptionClassifier, SqlServerExceptionClassifier>();
 
         services.AddSingleton<VohuManah.Application.Abstractions.Caching.ICacheManager, MemoryCacheManager>();
 

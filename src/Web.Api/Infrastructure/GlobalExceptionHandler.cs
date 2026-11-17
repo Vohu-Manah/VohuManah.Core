@@ -1,11 +1,12 @@
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+using VohuManah.Application.Abstractions.Data;
 
 namespace VohuManah.Web.Api.Infrastructure;
 
-internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+internal sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger,
+    IDatabaseExceptionClassifier databaseExceptionClassifier)
     : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
@@ -33,54 +34,25 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
         return true;
     }
 
-    private static (int StatusCode, string Title, string Detail, string ErrorMessage) GetErrorDetails(Exception exception)
+    private (int StatusCode, string Title, string Detail, string ErrorMessage) GetErrorDetails(Exception exception)
     {
-        if (exception is DbUpdateException dbUpdateException)
+        return databaseExceptionClassifier.Classify(exception) switch
         {
-            var sqlException = dbUpdateException.InnerException as SqlException;
-
-            if (sqlException != null)
-            {
-                if (sqlException.Number == 547)
-                {
-                    return (
-                        StatusCodes.Status409Conflict,
-                        "خطای وابستگی",
-                        "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست.",
-                        "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست."
-                    );
-                }
-
-                if (sqlException.Number is 2601 or 2627)
-                {
-                    return (
-                        StatusCodes.Status409Conflict,
-                        "خطای یکتا بودن",
-                        "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است.",
-                        "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است."
-                    );
-                }
-            }
-            }
-
-        if (exception.InnerException is SqlException sqlEx && sqlEx.Number == 547)
-        {
-            return (
+            DatabaseFailureKind.FkReferenced => (
                 StatusCodes.Status409Conflict,
                 "خطای وابستگی",
                 "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست.",
-                "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست."
-            );
-        }
-
-        return (
-            StatusCodes.Status500InternalServerError,
-            "خطای سرور",
-            exception.Message,
-            exception.Message
-
-
-
-        );
+                "این مورد در بخش های دیگر برنامه استفاده شده است و قابل حذف نیست."),
+            DatabaseFailureKind.DuplicateKey => (
+                StatusCodes.Status409Conflict,
+                "خطای یکتا بودن",
+                "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است.",
+                "یکی از مقادیر ارسال شده از قبل در سیستم ثبت شده است."),
+            _ => (
+                StatusCodes.Status500InternalServerError,
+                "خطای سرور",
+                exception.Message,
+                exception.Message)
+        };
     }
 }
