@@ -9,7 +9,7 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.Update;
 
 internal sealed class UpdateLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager,
     IPasswordHasher passwordHasher) : ICommandHandler<UpdateLibraryUserCommand>
 {
@@ -17,7 +17,7 @@ internal sealed class UpdateLibraryUserCommandHandler(
 
     public async Task<Result> Handle(UpdateLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         VohuManah.Domain.Users.User? existing = await users
             .SingleOrDefaultAsync(u => u.Id == command.Id, cancellationToken);
@@ -32,7 +32,7 @@ internal sealed class UpdateLibraryUserCommandHandler(
         existing.Name = command.Name;
         existing.LastName = command.LastName;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(UserPatternKey);
 

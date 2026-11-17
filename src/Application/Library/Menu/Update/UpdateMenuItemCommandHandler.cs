@@ -9,12 +9,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Menu.Update;
 
 internal sealed class UpdateMenuItemCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateMenuItemCommand, MenuItemResponse>
 {
     public async Task<Result<MenuItemResponse>> Handle(UpdateMenuItemCommand command, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         MenuItem? menuItem = await menuItems
             .FirstOrDefaultAsync(m => m.Id == command.Id, cancellationToken)
@@ -68,7 +68,7 @@ internal sealed class UpdateMenuItemCommandHandler(
         menuItem.DisplayOrder = command.DisplayOrder;
         menuItem.IsActive = command.IsActive;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         cacheManager.Remove(GetAllMenuItemsQueryHandler.MenuItemsAllKey);
 

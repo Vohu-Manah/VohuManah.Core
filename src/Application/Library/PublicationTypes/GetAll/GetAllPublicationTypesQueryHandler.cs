@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.PublicationTypes.GetAll;
 
 internal sealed class GetAllPublicationTypesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllPublicationTypesQuery, List<PublicationTypeResponse>>
 {
     private const string PublicationTypeAllKey = "sdp.publicationtype.all";
 
     public Task<Result<List<PublicationTypeResponse>>> Handle(GetAllPublicationTypesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+        DbSet<PublicationType> publicationTypes = dbContext.PublicationTypes;
 
         List<PublicationType> allPublicationTypes = cacheManager.Retrieve(PublicationTypeAllKey, () => publicationTypes.ToList());
 

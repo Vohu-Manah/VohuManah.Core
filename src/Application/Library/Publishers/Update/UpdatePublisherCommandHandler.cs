@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publishers.Update;
 
 internal sealed class UpdatePublisherCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdatePublisherCommand>
 {
     private const string PublisherPatternKey = "sdp.publisher.";
 
     public async Task<Result> Handle(UpdatePublisherCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+        DbSet<Publisher> publishers = dbContext.Publishers;
 
         Publisher? existing = await publishers.SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -36,7 +36,7 @@ internal sealed class UpdatePublisherCommandHandler(
         existing.Telephone = command.Telephone;
         existing.Website = command.Website;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(PublisherPatternKey);
 

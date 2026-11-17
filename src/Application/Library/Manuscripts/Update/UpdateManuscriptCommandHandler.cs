@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.Update;
 
 internal sealed class UpdateManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateManuscriptCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateManuscriptCommand>
 {
     public async Task<Result> Handle(UpdateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         Manuscript? existing = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
@@ -33,7 +33,7 @@ internal sealed class UpdateManuscriptCommandHandler(
         existing.WritingPlaceId = command.WritingPlaceId;
         existing.Year = command.Year;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

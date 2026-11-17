@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Languages.Create;
 
 internal sealed class CreateLanguageCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreateLanguageCommand, int>
 {
     private const string LanguagePatternKey = "sdp.language.";
 
     public async Task<Result<int>> Handle(CreateLanguageCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         if (await languages.AnyAsync(l => l.Name == command.Name, cancellationToken))
         {
@@ -28,7 +28,7 @@ internal sealed class CreateLanguageCommandHandler(
             Abbreviation = command.Abbreviation
         };
         languages.Add(language);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(LanguagePatternKey);
 

@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Languages.GetAll;
 
 internal sealed class GetAllLanguagesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllLanguagesQuery, List<LanguageResponse>>
 {
     private const string LanguageAllKey = "sdp.language.all";
 
     public Task<Result<List<LanguageResponse>>> Handle(GetAllLanguagesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         List<Language> allLanguages = cacheManager.Retrieve(LanguageAllKey, () => languages.ToList());
 

@@ -8,12 +8,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetUserSettings;
 
 internal sealed class GetUserSettingsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : IQueryHandler<GetUserSettingsQuery, UserSettingsResponse>
 {
     public async Task<Result<UserSettingsResponse>> Handle(GetUserSettingsQuery query, CancellationToken cancellationToken)
     {
-        var userSettings = unitOfWork.GetDbSet<UserSettings>();
+        var userSettings = dbContext.UserSettings;
 
         var settings = await userSettings
             .Include(us => us.ProfileImageAttachment)
@@ -26,7 +26,7 @@ internal sealed class GetUserSettingsQueryHandler(
                 UserId = query.UserId,
             };
             userSettings.Add(newSettings);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success(new UserSettingsResponse
             {

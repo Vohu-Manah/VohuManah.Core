@@ -7,12 +7,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetRolePermissions;
 
 internal sealed class GetRolePermissionsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetRolePermissionsQuery, List<string>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetRolePermissionsQuery, List<string>>
 {
     public async Task<Result<List<string>>> Handle(GetRolePermissionsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
+        DbSet<Role> roles = dbContext.Roles;
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == query.RoleId, cancellationToken);
 

@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.Create;
 
 internal sealed class CreateBookCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<CreateBookCommand, long>
+    IApplicationDbContext dbContext) : ICommandHandler<CreateBookCommand, long>
 {
     public async Task<Result<long>> Handle(CreateBookCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
 
         var book = new Book
@@ -36,7 +36,7 @@ internal sealed class CreateBookCommandHandler(
         };
 
         books.Add(book);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return book.Id;
     }

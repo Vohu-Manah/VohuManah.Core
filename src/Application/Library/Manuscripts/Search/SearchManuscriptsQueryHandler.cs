@@ -11,11 +11,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.Search;
 
 internal sealed class SearchManuscriptsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<SearchManuscriptsQuery, PagedResult<ManuscriptSearchResponse>>
 {
     public async Task<Result<PagedResult<ManuscriptSearchResponse>>> Handle(SearchManuscriptsQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        var manuscripts = dbContext.Manuscripts;
 
         var queryable = manuscripts.AsQueryable();
 

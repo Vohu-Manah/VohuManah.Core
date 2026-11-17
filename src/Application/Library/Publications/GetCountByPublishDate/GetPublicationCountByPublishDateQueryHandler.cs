@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetCountByPublishDate;
 
 internal sealed class GetPublicationCountByPublishDateQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountByPublishDateQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationCountByPublishDateQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetPublicationCountByPublishDateQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         var list = await publications
             .GroupBy(p => p.PublishDate)

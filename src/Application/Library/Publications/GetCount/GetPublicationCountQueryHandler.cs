@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetCount;
 
 internal sealed class GetPublicationCountQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountQuery, int>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationCountQuery, int>
 {
     public async Task<Result<int>> Handle(GetPublicationCountQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         int count = await publications.CountAsync(cancellationToken);
 

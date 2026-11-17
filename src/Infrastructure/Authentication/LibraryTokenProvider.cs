@@ -15,16 +15,16 @@ namespace VohuManah.Infrastructure.Authentication;
 
 internal sealed class LibraryTokenProvider(
     IConfiguration configuration,
-    IUnitOfWork unitOfWork) : ILibraryTokenProvider
+    IApplicationDbContext dbContext) : ILibraryTokenProvider
 {
     public async Task<string> CreateAsync(User user, CancellationToken ct)
     {
-        var userRoles = await unitOfWork.GetDbSet<UserRole>()
+        var userRoles = await dbContext.UserRoles
             .Where(ur => ur.UserId == user.Id)
             .Select(ur => ur.RoleId)
             .ToListAsync(ct);
 
-        var roles = await unitOfWork.GetDbSet<Role>()
+        var roles = await dbContext.Roles
             .Where(r => userRoles.Contains(r.Id))
             .Select(r => r.Name)
             .ToListAsync(ct);

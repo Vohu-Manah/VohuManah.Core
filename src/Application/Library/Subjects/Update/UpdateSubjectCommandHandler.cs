@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Subjects.Update;
 
 internal sealed class UpdateSubjectCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateSubjectCommand>
 {
     private const string SubjectPatternKey = "sdp.subject.";
 
     public async Task<Result> Handle(UpdateSubjectCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+        DbSet<Subject> subjects = dbContext.Subjects;
 
         Subject? existing = await subjects.SingleOrDefaultAsync(s => s.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -29,7 +29,7 @@ internal sealed class UpdateSubjectCommandHandler(
         }
 
         existing.Title = command.Title;
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(SubjectPatternKey);
 

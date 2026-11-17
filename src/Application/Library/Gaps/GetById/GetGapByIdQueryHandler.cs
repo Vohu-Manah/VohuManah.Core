@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Gaps.GetById;
 
 internal sealed class GetGapByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetGapByIdQuery, GapResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetGapByIdQuery, GapResponse>
 {
     public async Task<Result<GapResponse>> Handle(GetGapByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         Gap? gap = await gaps
             .SingleOrDefaultAsync(g => g.Id == query.Id, cancellationToken);

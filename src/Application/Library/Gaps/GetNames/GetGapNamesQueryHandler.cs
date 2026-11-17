@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Gaps.GetNames;
 
 internal sealed class GetGapNamesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetGapNamesQuery, List<SelectItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetGapNamesQuery, List<SelectItemResponse>>
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetGapNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         List<SelectItemResponse> items = gaps
             .OrderBy(g => g.Title)

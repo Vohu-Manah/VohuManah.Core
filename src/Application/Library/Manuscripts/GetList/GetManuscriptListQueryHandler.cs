@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.GetList;
 
 internal sealed class GetManuscriptListQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptListQuery, PagedList<ManuscriptListResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptListQuery, PagedList<ManuscriptListResponse>>
 {
     public async Task<Result<PagedList<ManuscriptListResponse>>> Handle(GetManuscriptListQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>()
+        IQueryable<Manuscript> manuscripts = dbContext.Manuscripts
             .Include(m => m.City)
             .Include(m => m.Gap)
             .Include(m => m.Subject)

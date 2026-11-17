@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetCountByPublishPlace;
 
 internal sealed class GetPublicationCountByPublishPlaceQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountByPublishPlaceQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationCountByPublishPlaceQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetPublicationCountByPublishPlaceQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         var list = await publications
             .Include(p => p.City)

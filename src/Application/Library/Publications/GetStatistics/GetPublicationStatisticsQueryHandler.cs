@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetStatistics;
 
 internal sealed class GetPublicationStatisticsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationStatisticsQuery, PublicationStatisticsResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationStatisticsQuery, PublicationStatisticsResponse>
 {
     public async Task<Result<PublicationStatisticsResponse>> Handle(GetPublicationStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         int publicationCount = await publications.CountAsync(cancellationToken);
 

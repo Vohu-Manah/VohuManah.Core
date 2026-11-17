@@ -57,9 +57,4 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
         base.OnModelCreating(modelBuilder);
     }
-
-    public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class
-    {
-        return Set<TEntity>();
-    }
 }

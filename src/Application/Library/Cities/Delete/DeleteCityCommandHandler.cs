@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Cities.Delete;
 
 internal sealed class DeleteCityCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeleteCityCommand>
 {
     private const string CityPatternKey = "sdp.city.";
 
     public async Task<Result> Handle(DeleteCityCommand command, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         City? existing = await cities.SingleOrDefaultAsync(c => c.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -24,7 +24,7 @@ internal sealed class DeleteCityCommandHandler(
         }
 
         cities.Remove(existing);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(CityPatternKey);
 

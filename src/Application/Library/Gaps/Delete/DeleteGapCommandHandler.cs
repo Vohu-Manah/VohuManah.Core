@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Gaps.Delete;
 
 internal sealed class DeleteGapCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeleteGapCommand>
 {
     private const string GapPatternKey = "sdp.gap.";
 
     public async Task<Result> Handle(DeleteGapCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         Gap? gap = await gaps
             .SingleOrDefaultAsync(g => g.Id == command.Id, cancellationToken);
@@ -26,7 +26,7 @@ internal sealed class DeleteGapCommandHandler(
         }
 
         gaps.Remove(gap);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(GapPatternKey);
 

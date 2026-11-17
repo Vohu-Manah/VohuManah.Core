@@ -9,13 +9,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.CreateRole;
 
 internal sealed class CreateRoleCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreateRoleCommand, RoleResponse>
 {
 
     public async Task<Result<RoleResponse>> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<Role> roles = dbContext.Roles;
 
         string normalizedName = command.Name.Trim();
 
@@ -34,11 +34,11 @@ internal sealed class CreateRoleCommandHandler(
         };
 
         roles.Add(role);
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (RolePermissionDefaults.TryGetDefaults(role.Name, out var defaultEndpoints) && defaultEndpoints.Length > 0)
         {
-            DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
+            DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
 
             foreach (string endpoint in defaultEndpoints)
             {
@@ -49,7 +49,7 @@ internal sealed class CreateRoleCommandHandler(
                 });
             }
 
-            await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         cacheManager.Remove(GetAllRolesQueryHandler.RolesAllKey);

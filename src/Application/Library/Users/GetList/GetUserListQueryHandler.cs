@@ -7,14 +7,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.GetList;
 
 internal sealed class GetUserListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetUserListQuery, List<UserListResponse>>
 {
     private const string UserAllKey = "sdp.user.all";
 
     public Task<Result<List<UserListResponse>>> Handle(GetUserListQuery query, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
 
         var allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 

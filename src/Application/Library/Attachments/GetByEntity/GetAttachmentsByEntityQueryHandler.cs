@@ -8,12 +8,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Attachments.GetByEntity;
 
 internal sealed class GetAttachmentsByEntityQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : IQueryHandler<GetAttachmentsByEntityQuery, List<AttachmentResponse>>
 {
     public async Task<Result<List<AttachmentResponse>>> Handle(GetAttachmentsByEntityQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         List<Attachment> results = await attachments
             .Where(a => a.EntityType == query.EntityType && a.EntityId == query.EntityId)

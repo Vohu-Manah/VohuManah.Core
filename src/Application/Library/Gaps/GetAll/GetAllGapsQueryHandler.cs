@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Gaps.GetAll;
 
 internal sealed class GetAllGapsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllGapsQuery, List<GapResponse>>
 {
     private const string GapAllKey = "sdp.gap.all";
 
     public Task<Result<List<GapResponse>>> Handle(GetAllGapsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Gap> gaps = unitOfWork.GetDbSet<Gap>();
+        DbSet<Gap> gaps = dbContext.Gaps;
 
         List<Gap> allGaps = cacheManager.Retrieve(GapAllKey, () => gaps.OrderByDescending(g => g.Id).ToList());
 

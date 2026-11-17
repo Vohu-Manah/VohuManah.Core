@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetCountByType;
 
 internal sealed class GetPublicationCountByTypeQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationCountByTypeQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationCountByTypeQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetPublicationCountByTypeQuery query, CancellationToken cancellationToken)
     {
-        var publications = unitOfWork.GetDbSet<Publication>();
+        var publications = dbContext.Publications;
 
         var list = await publications
             .Include(p => p.PublicationType)

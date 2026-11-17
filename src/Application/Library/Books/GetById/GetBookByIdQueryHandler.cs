@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetById;
 
 internal sealed class GetBookByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookByIdQuery, BookResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
     public async Task<Result<BookResponse>> Handle(GetBookByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         Book? book = await books
             .Include(b => b.Publisher)

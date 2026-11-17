@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetAllRoles;
 
 internal sealed class GetAllRolesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllRolesQuery, List<RoleResponse>>
 {
     internal const string RolesAllKey = "sdp.roles.all";
 
     public Task<Result<List<RoleResponse>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
+        DbSet<Role> roles = dbContext.Roles;
 
         List<Role> allRoles = cacheManager.Retrieve(RolesAllKey, () => roles.ToList());
 

@@ -7,13 +7,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.AssignRoleToUser;
 
 internal sealed class AssignRoleToUserCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<AssignRoleToUserCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<AssignRoleToUserCommand>
 {
     public async Task<Result> Handle(AssignRoleToUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<UserRole> userRoles = dbContext.UserRoles;
+        DbSet<Role> roles = dbContext.Roles;
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -46,7 +46,7 @@ internal sealed class AssignRoleToUserCommandHandler(
         };
 
         userRoles.Add(userRole);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

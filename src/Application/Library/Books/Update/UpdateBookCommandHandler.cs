@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.Update;
 
 internal sealed class UpdateBookCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateBookCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateBookCommand>
 {
     public async Task<Result> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         Book? existing = await books
             .Include(b => b.Publisher)
@@ -51,7 +51,7 @@ internal sealed class UpdateBookCommandHandler(
             existing.BookShelfRow = command.BookShelfRow;
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

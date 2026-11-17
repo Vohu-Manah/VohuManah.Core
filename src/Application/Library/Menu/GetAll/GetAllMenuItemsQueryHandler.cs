@@ -9,7 +9,7 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Menu.GetAll;
 
 internal sealed class GetAllMenuItemsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager,
     IRolePermissionService rolePermissionService) : IQueryHandler<GetAllMenuItemsQuery, List<MenuItemResponse>>
 {
@@ -44,7 +44,7 @@ internal sealed class GetAllMenuItemsQueryHandler(
 
     public async Task<Result<List<MenuItemResponse>>> Handle(GetAllMenuItemsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         List<MenuItem> allItems = await menuItems
             .Include(m => m.Children)

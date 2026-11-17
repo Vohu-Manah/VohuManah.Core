@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Cities.Update;
 
 internal sealed class UpdateCityCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateCityCommand>
 {
     private const string CityPatternKey = "sdp.city.";
 
     public async Task<Result> Handle(UpdateCityCommand command, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         City? existing = await cities.SingleOrDefaultAsync(c => c.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -29,7 +29,7 @@ internal sealed class UpdateCityCommandHandler(
         }
 
         existing.Name = command.Name;
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(CityPatternKey);
 

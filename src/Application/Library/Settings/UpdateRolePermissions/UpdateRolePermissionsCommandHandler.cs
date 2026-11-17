@@ -7,12 +7,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.UpdateRolePermissions;
 
 internal sealed class UpdateRolePermissionsCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateRolePermissionsCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateRolePermissionsCommand>
 {
     public async Task<Result> Handle(UpdateRolePermissionsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Role> roles = unitOfWork.GetDbSet<Role>();
-        DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
+        DbSet<Role> roles = dbContext.Roles;
+        DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
 
         Role? role = await roles.FirstOrDefaultAsync(r => r.Id == command.RoleId, cancellationToken);
 
@@ -60,7 +60,7 @@ internal sealed class UpdateRolePermissionsCommandHandler(
             });
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

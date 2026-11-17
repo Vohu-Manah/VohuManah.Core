@@ -12,11 +12,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetStatistics;
 
 internal sealed class GetBookStatisticsQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookStatisticsQuery, BookStatisticsResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookStatisticsQuery, BookStatisticsResponse>
 {
     public async Task<Result<BookStatisticsResponse>> Handle(GetBookStatisticsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
+        DbSet<Book> books = dbContext.Books;
 
         
         
@@ -45,13 +45,13 @@ internal sealed class GetBookStatisticsQueryHandler(
         long volumeCount = grouped.Sum(g => g.VolumeSum);
 
         
-        var subjectNames = await unitOfWork.GetDbSet<Subject>()
+        var subjectNames = await dbContext.Subjects
             .ToDictionaryAsync(s => s.Id, s => s.Title, cancellationToken);
-        var languageNames = await unitOfWork.GetDbSet<Language>()
+        var languageNames = await dbContext.Languages
             .ToDictionaryAsync(l => l.Id, l => l.Name, cancellationToken);
-        var publisherNames = await unitOfWork.GetDbSet<Publisher>()
+        var publisherNames = await dbContext.Publishers
             .ToDictionaryAsync(p => p.Id, p => p.Name, cancellationToken);
-        var cityNames = await unitOfWork.GetDbSet<City>()
+        var cityNames = await dbContext.Cities
             .ToDictionaryAsync(c => c.Id, c => c.Name, cancellationToken);
 
         return Result.Success(new BookStatisticsResponse

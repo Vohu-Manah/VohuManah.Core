@@ -7,12 +7,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.RemoveRoleFromUser;
 
 internal sealed class RemoveRoleFromUserCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<RemoveRoleFromUserCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<RemoveRoleFromUserCommand>
 {
     public async Task<Result> Handle(RemoveRoleFromUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<UserRole> userRoles = dbContext.UserRoles;
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -33,7 +33,7 @@ internal sealed class RemoveRoleFromUserCommandHandler(
         }
 
         userRoles.Remove(userRole);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

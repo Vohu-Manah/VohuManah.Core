@@ -7,14 +7,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.GetFullName;
 
 internal sealed class GetUserFullNameQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetUserFullNameQuery, string?>
 {
     private const string UserAllKey = "sdp.user.all";
 
     public Task<Result<string?>> Handle(GetUserFullNameQuery query, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
 
         var allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 

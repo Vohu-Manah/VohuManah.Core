@@ -7,14 +7,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Cities.GetList;
 
 internal sealed class GetCityListQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetCityListQuery, List<CityListResponse>>
 {
     private const string CityAllKey = "sdp.city.all";
 
     public Task<Result<List<CityListResponse>>> Handle(GetCityListQuery query, CancellationToken cancellationToken)
     {
-        var cities = unitOfWork.GetDbSet<City>();
+        var cities = dbContext.Cities;
 
         var allCities = cacheManager.Retrieve(CityAllKey, () => cities.OrderBy(c => c.Name).ToList());
 

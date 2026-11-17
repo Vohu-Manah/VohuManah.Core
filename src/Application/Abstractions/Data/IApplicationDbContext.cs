@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Application.Abstractions.Data;
 
-public interface IApplicationDbContext : IUnitOfWork
+public interface IApplicationDbContext
 {
     DbSet<VohuManah.Domain.Users.User> LibraryUsers { get; }
     DbSet<Book> Books { get; }
@@ -38,11 +38,6 @@ public interface IApplicationDbContext : IUnitOfWork
     DbSet<AppInfo> AppInfos { get; }
     DbSet<MenuItem> MenuItems { get; }
     DbSet<VisitLog> VisitLogs { get; }
-}
-
-public interface IUnitOfWork
-{
-    DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class;
     int SaveChanges();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

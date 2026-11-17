@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.Create;
 
 internal sealed class CreateManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<CreateManuscriptCommand, int>
+    IApplicationDbContext dbContext) : ICommandHandler<CreateManuscriptCommand, int>
 {
     public async Task<Result<int>> Handle(CreateManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
 
         var manuscript = new Manuscript
@@ -29,7 +29,7 @@ internal sealed class CreateManuscriptCommandHandler(
         };
 
         manuscripts.Add(manuscript);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return manuscript.Id;
     }

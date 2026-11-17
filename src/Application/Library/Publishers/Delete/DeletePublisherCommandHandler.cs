@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publishers.Delete;
 
 internal sealed class DeletePublisherCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeletePublisherCommand>
 {
     private const string PublisherPatternKey = "sdp.publisher.";
 
     public async Task<Result> Handle(DeletePublisherCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publisher> publishers = unitOfWork.GetDbSet<Publisher>();
+        DbSet<Publisher> publishers = dbContext.Publishers;
 
         Publisher? existing = await publishers.SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -24,7 +24,7 @@ internal sealed class DeletePublisherCommandHandler(
         }
 
         publishers.Remove(existing);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(PublisherPatternKey);
 

@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetList;
 
 internal sealed class GetBookListQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookListQuery, PagedList<BookListResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookListQuery, PagedList<BookListResponse>>
 {
     public async Task<Result<PagedList<BookListResponse>>> Handle(GetBookListQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Book> books = unitOfWork.GetDbSet<Book>()
+        IQueryable<Book> books = dbContext.Books
             .Include(b => b.Publisher)
             .Include(b => b.Subject)
             .AsNoTracking();

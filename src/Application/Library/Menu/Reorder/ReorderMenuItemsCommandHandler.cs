@@ -9,12 +9,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Menu.Reorder;
 
 internal sealed class ReorderMenuItemsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<ReorderMenuItemsCommand>
 {
     public async Task<Result> Handle(ReorderMenuItemsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         
         List<int> itemIds = command.Items.Select(i => i.Id).ToList();
@@ -39,7 +39,7 @@ internal sealed class ReorderMenuItemsCommandHandler(
             }
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         cacheManager.Remove(GetAllMenuItemsQueryHandler.MenuItemsAllKey);
 

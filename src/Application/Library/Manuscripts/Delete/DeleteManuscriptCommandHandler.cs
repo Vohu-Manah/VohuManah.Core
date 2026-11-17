@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.Delete;
 
 internal sealed class DeleteManuscriptCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<DeleteManuscriptCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<DeleteManuscriptCommand>
 {
     public async Task<Result> Handle(DeleteManuscriptCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Manuscript> manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        DbSet<Manuscript> manuscripts = dbContext.Manuscripts;
 
         Manuscript? manuscript = await manuscripts
             .SingleOrDefaultAsync(m => m.Id == command.Id, cancellationToken);
@@ -22,7 +22,7 @@ internal sealed class DeleteManuscriptCommandHandler(
         }
 
         manuscripts.Remove(manuscript);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.PublicationTypes.Update;
 
 internal sealed class UpdatePublicationTypeCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdatePublicationTypeCommand>
 {
     private const string PublicationTypePatternKey = "sdp.publicationType.";
 
     public async Task<Result> Handle(UpdatePublicationTypeCommand command, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+        DbSet<PublicationType> publicationTypes = dbContext.PublicationTypes;
 
         PublicationType? existing = await publicationTypes
             .SingleOrDefaultAsync(pt => pt.Id == command.Id, cancellationToken);
@@ -32,7 +32,7 @@ internal sealed class UpdatePublicationTypeCommandHandler(
 
         existing.Title = command.Title;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(PublicationTypePatternKey);
 

@@ -7,14 +7,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetAllEntities;
 
 internal sealed class GetAllSettingsEntitiesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllSettingsEntitiesQuery, List<VohuManah.Domain.AppSettings.Settings>>
 {
     private const string SettingsAllKey = "sdp.settings.all";
 
     public Task<Result<List<VohuManah.Domain.AppSettings.Settings>>> Handle(GetAllSettingsEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
         List<VohuManah.Domain.AppSettings.Settings> allSettings = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
 

@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetCountByPublisher;
 
 internal sealed class GetBookCountByPublisherQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookCountByPublisherQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookCountByPublisherQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountByPublisherQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.GetDbSet<Book>();
+        var books = dbContext.Books;
 
         var list = await books
             .Include(b => b.Publisher)

@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Subjects.GetAll;
 
 internal sealed class GetAllSubjectsQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllSubjectsQuery, List<SubjectResponse>>
 {
     private const string SubjectAllKey = "sdp.subject.all";
 
     public Task<Result<List<SubjectResponse>>> Handle(GetAllSubjectsQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+        DbSet<Subject> subjects = dbContext.Subjects;
 
         List<Subject> allSubjects = cacheManager.Retrieve(SubjectAllKey, () => subjects.ToList());
 

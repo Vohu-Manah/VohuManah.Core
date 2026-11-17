@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Languages.GetById;
 
 internal sealed class GetLanguageByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetLanguageByIdQuery, LanguageResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetLanguageByIdQuery, LanguageResponse>
 {
     public async Task<Result<LanguageResponse>> Handle(GetLanguageByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         Language? language = await languages
             .SingleOrDefaultAsync(l => l.Id == query.Id, cancellationToken);

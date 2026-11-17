@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetCountByLanguage;
 
 internal sealed class GetBookCountByLanguageQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetBookCountByLanguageQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetBookCountByLanguageQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetBookCountByLanguageQuery query, CancellationToken cancellationToken)
     {
-        var books = unitOfWork.GetDbSet<Book>();
+        var books = dbContext.Books;
 
         var list = await books
             .Include(b => b.Language)

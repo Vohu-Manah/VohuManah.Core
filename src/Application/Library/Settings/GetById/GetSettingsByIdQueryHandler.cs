@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetById;
 
 internal sealed class GetSettingsByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetSettingsByIdQuery, SettingsResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetSettingsByIdQuery, SettingsResponse>
 {
     public async Task<Result<SettingsResponse>> Handle(GetSettingsByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
         VohuManah.Domain.AppSettings.Settings? setting = await settings
             .SingleOrDefaultAsync(s => s.Id == query.Id, cancellationToken);

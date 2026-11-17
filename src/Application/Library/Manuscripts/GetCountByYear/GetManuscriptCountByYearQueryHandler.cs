@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.GetCountByYear;
 
 internal sealed class GetManuscriptCountByYearQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptCountByYearQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptCountByYearQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetManuscriptCountByYearQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        var manuscripts = dbContext.Manuscripts;
 
         var list = await manuscripts
             .GroupBy(m => m.Year)

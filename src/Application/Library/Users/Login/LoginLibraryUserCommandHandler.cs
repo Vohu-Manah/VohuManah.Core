@@ -10,7 +10,7 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.Login;
 
 internal sealed class LoginLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ILibraryTokenProvider tokenProvider,
     IPasswordHasher passwordHasher,
     IConfiguration configuration,
@@ -24,7 +24,7 @@ internal sealed class LoginLibraryUserCommandHandler(
             return Result.Failure<LoginLibraryUserResponse>(HumanVerifyErrors.InvalidOrExpired);
         }
 
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         string loginInput = command.UserName.Trim();
         VohuManah.Domain.Users.User? user = await users
@@ -45,8 +45,8 @@ internal sealed class LoginLibraryUserCommandHandler(
             Token = Guid.NewGuid().ToString("N"),
             ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
-        unitOfWork.GetDbSet<RefreshToken>().Add(refresh);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        dbContext.RefreshTokens.Add(refresh);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         LoginLibraryUserResponse response = new LoginLibraryUserResponse
         {

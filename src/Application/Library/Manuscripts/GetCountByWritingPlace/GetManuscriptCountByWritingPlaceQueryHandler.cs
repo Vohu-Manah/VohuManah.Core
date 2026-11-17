@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.GetCountByWritingPlace;
 
 internal sealed class GetManuscriptCountByWritingPlaceQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptCountByWritingPlaceQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptCountByWritingPlaceQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetManuscriptCountByWritingPlaceQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        var manuscripts = dbContext.Manuscripts;
 
         var list = await manuscripts
             .Include(m => m.City)

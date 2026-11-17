@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Subjects.GetById;
 
 internal sealed class GetSubjectByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetSubjectByIdQuery, SubjectResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetSubjectByIdQuery, SubjectResponse>
 {
     public async Task<Result<SubjectResponse>> Handle(GetSubjectByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Subject> subjects = unitOfWork.GetDbSet<Subject>();
+        DbSet<Subject> subjects = dbContext.Subjects;
 
         Subject? subject = await subjects
             .SingleOrDefaultAsync(s => s.Id == query.Id, cancellationToken);

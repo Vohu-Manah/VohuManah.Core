@@ -10,13 +10,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Books.GetProfile;
 
 internal sealed class GetBookProfileQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : IQueryHandler<GetBookProfileQuery, BookProfileResponse>
 {
     public async Task<Result<BookProfileResponse>> Handle(GetBookProfileQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Book> books = unitOfWork.GetDbSet<Book>();
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Book> books = dbContext.Books;
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Book? book = await books
             .Include(b => b.Publisher)

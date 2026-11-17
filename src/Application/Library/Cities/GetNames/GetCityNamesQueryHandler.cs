@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Cities.GetNames;
 
 internal sealed class GetCityNamesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetCityNamesQuery, List<SelectItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetCityNamesQuery, List<SelectItemResponse>>
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetCityNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         List<SelectItemResponse> items = cities
             .OrderBy(c => c.Name)

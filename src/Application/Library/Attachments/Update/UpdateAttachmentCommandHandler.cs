@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Attachments.Update;
 
 internal sealed class UpdateAttachmentCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateAttachmentCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateAttachmentCommand>
 {
     public async Task<Result> Handle(UpdateAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Attachment? attachment = await attachments
             .SingleOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
@@ -46,7 +46,7 @@ internal sealed class UpdateAttachmentCommandHandler(
             attachment.IsMain = command.IsMain.Value;
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

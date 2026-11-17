@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.Update;
 
 internal sealed class UpdateSettingsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateSettingsCommand>
 {
     private const string SettingsPatternKey = "sdp.settings.";
 
     public async Task<Result> Handle(UpdateSettingsCommand command, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
         VohuManah.Domain.AppSettings.Settings? existing = await settings
             .SingleOrDefaultAsync(s => s.Name.Trim() == command.Name.Trim(), cancellationToken);
@@ -27,7 +27,7 @@ internal sealed class UpdateSettingsCommandHandler(
 
         existing.Value = command.Value;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(SettingsPatternKey);
 

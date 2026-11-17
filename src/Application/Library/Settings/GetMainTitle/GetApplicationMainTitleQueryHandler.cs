@@ -7,14 +7,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetMainTitle;
 
 internal sealed class GetApplicationMainTitleQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetApplicationMainTitleQuery, string>
 {
     private const string SettingsAllKey = "sdp.settings.all";
 
     public Task<Result<string>> Handle(GetApplicationMainTitleQuery query, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.AppSettings.Settings> settings = unitOfWork.GetDbSet<VohuManah.Domain.AppSettings.Settings>();
+        DbSet<VohuManah.Domain.AppSettings.Settings> settings = dbContext.Settings;
 
         List<VohuManah.Domain.AppSettings.Settings> all = cacheManager.Retrieve(SettingsAllKey, () => settings.ToList());
         string title = all.Where(s => s.Name == "ApplicationMainTitle").Select(s => s.Value).SingleOrDefault() ?? string.Empty;

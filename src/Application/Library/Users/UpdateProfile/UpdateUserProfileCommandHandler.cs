@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.UpdateProfile;
 
 internal sealed class UpdateUserProfileCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateUserProfileCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdateUserProfileCommand>
 {
     public async Task<Result> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
     {
-        var users = unitOfWork.GetDbSet<User>();
+        var users = dbContext.LibraryUsers;
 
         var user = await users
             .FirstOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
@@ -32,7 +32,7 @@ internal sealed class UpdateUserProfileCommandHandler(
         user.Email = command.Email;
         user.PhoneNumber = command.PhoneNumber;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

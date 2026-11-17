@@ -9,13 +9,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.UpdateUserSettings;
 
 internal sealed class UpdateUserSettingsCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : ICommandHandler<UpdateUserSettingsCommand>
 {
     public async Task<Result> Handle(UpdateUserSettingsCommand command, CancellationToken cancellationToken)
     {
-        var userSettings = unitOfWork.GetDbSet<UserSettings>();
-        var attachments = unitOfWork.GetDbSet<Attachment>();
+        var userSettings = dbContext.UserSettings;
+        var attachments = dbContext.Attachments;
 
         var settings = await userSettings
             .Include(us => us.ProfileImageAttachment)
@@ -62,7 +62,7 @@ internal sealed class UpdateUserSettingsCommandHandler(
             settings.ThemeMode = command.ThemeMode;
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

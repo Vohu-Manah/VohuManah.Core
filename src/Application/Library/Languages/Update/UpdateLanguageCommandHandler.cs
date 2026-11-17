@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Languages.Update;
 
 internal sealed class UpdateLanguageCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<UpdateLanguageCommand>
 {
     private const string LanguagePatternKey = "sdp.language.";
 
     public async Task<Result> Handle(UpdateLanguageCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Language> languages = unitOfWork.GetDbSet<Language>();
+        DbSet<Language> languages = dbContext.Languages;
 
         Language? existing = await languages.SingleOrDefaultAsync(l => l.Id == command.Id, cancellationToken);
         if (existing == null)
@@ -30,7 +30,7 @@ internal sealed class UpdateLanguageCommandHandler(
 
         existing.Name = command.Name;
         existing.Abbreviation = command.Abbreviation;
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(LanguagePatternKey);
 

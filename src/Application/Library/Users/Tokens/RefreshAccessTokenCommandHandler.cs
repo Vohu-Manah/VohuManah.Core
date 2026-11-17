@@ -9,13 +9,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.Tokens;
 
 internal sealed class RefreshAccessTokenCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ILibraryTokenProvider tokenProvider,
     IConfiguration configuration) : ICommandHandler<RefreshAccessTokenCommand, RefreshAccessTokenResponse>
 {
     public async Task<Result<RefreshAccessTokenResponse>> Handle(RefreshAccessTokenCommand command, CancellationToken cancellationToken)
     {
-        RefreshToken? refresh = await unitOfWork.GetDbSet<RefreshToken>()
+        RefreshToken? refresh = await dbContext.RefreshTokens
             .SingleOrDefaultAsync(r => r.Token == command.RefreshToken, cancellationToken);
 
         if (refresh == null || !refresh.IsActive)
@@ -23,7 +23,7 @@ internal sealed class RefreshAccessTokenCommandHandler(
             return Result.Failure<RefreshAccessTokenResponse>(Error.Conflict("Auth.InvalidRefresh", "توکن رفرش نامعتبر یا منقضی شده است"));
         }
 
-        User? user = await unitOfWork.GetDbSet<User>()
+        User? user = await dbContext.LibraryUsers
             .SingleOrDefaultAsync(u => u.UserName == refresh.UserName, cancellationToken);
 
         if (user == null)
@@ -44,8 +44,8 @@ internal sealed class RefreshAccessTokenCommandHandler(
             ExpiresAtUtc = DateTime.UtcNow.AddDays(refreshDays)
         };
 
-        unitOfWork.GetDbSet<RefreshToken>().Add(newRefresh);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        dbContext.RefreshTokens.Add(newRefresh);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         var response = new RefreshAccessTokenResponse(accessToken, newRefresh.Token);
         return Result.Success(response);

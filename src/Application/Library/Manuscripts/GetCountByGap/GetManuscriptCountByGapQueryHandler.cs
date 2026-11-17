@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Manuscripts.GetCountByGap;
 
 internal sealed class GetManuscriptCountByGapQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetManuscriptCountByGapQuery, List<ListItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetManuscriptCountByGapQuery, List<ListItemResponse>>
 {
     public async Task<Result<List<ListItemResponse>>> Handle(GetManuscriptCountByGapQuery query, CancellationToken cancellationToken)
     {
-        var manuscripts = unitOfWork.GetDbSet<Manuscript>();
+        var manuscripts = dbContext.Manuscripts;
 
         var list = await manuscripts
             .Include(m => m.Gap)

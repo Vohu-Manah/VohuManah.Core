@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.GetAllEntities;
 
 internal sealed class GetAllUserEntitiesQueryHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : IQueryHandler<GetAllUserEntitiesQuery, List<User>>
 {
     private const string UserAllKey = "sdp.user.all";
 
     public Task<Result<List<User>>> Handle(GetAllUserEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<User> users = unitOfWork.GetDbSet<User>();
+        DbSet<User> users = dbContext.LibraryUsers;
 
         List<User> allUsers = cacheManager.Retrieve(UserAllKey, () => users.ToList());
 

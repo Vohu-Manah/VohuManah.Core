@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetAllEntities;
 
 internal sealed class GetAllPublicationEntitiesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetAllPublicationEntitiesQuery, List<Publication>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetAllPublicationEntitiesQuery, List<Publication>>
 {
     public async Task<Result<List<Publication>>> Handle(GetAllPublicationEntitiesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         List<Publication> allPublications = await publications.ToListAsync(cancellationToken);
 

@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetAppInfo;
 
 internal sealed class GetAppInfoQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetAppInfoQuery, AppInfoResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetAppInfoQuery, AppInfoResponse>
 {
     public async Task<Result<AppInfoResponse>> Handle(GetAppInfoQuery query, CancellationToken cancellationToken)
     {
-        var appInfos = unitOfWork.GetDbSet<AppInfo>();
+        var appInfos = dbContext.AppInfos;
 
         var appInfo = await appInfos.FirstOrDefaultAsync(cancellationToken);
 

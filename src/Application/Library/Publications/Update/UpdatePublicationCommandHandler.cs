@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.Update;
 
 internal sealed class UpdatePublicationCommandHandler(
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdatePublicationCommand>
+    IApplicationDbContext dbContext) : ICommandHandler<UpdatePublicationCommand>
 {
     public async Task<Result> Handle(UpdatePublicationCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         Publication? existing = await publications
             .SingleOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
@@ -40,7 +40,7 @@ internal sealed class UpdatePublicationCommandHandler(
         existing.TypeId = command.TypeId;
         existing.Period = command.Period;
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

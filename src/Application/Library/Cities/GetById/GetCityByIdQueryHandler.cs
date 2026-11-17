@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Cities.GetById;
 
 internal sealed class GetCityByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetCityByIdQuery, CityResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetCityByIdQuery, CityResponse>
 {
     public async Task<Result<CityResponse>> Handle(GetCityByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<City> cities = unitOfWork.GetDbSet<City>();
+        DbSet<City> cities = dbContext.Cities;
 
         City? city = await cities
             .SingleOrDefaultAsync(c => c.Id == query.Id, cancellationToken);

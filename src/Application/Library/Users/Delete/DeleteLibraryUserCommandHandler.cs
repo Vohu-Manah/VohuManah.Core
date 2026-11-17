@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Users.Delete;
 
 internal sealed class DeleteLibraryUserCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeleteLibraryUserCommand>
 {
     private const string UserPatternKey = "sdp.user.";
 
     public async Task<Result> Handle(DeleteLibraryUserCommand command, CancellationToken cancellationToken)
     {
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         List<VohuManah.Domain.Users.User> allUsers = await users.ToListAsync(cancellationToken);
         if (allUsers.Count == 1)
@@ -33,7 +33,7 @@ internal sealed class DeleteLibraryUserCommandHandler(
         }
 
         users.Remove(existing);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(UserPatternKey);
 

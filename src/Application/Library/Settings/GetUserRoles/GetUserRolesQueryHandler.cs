@@ -7,13 +7,13 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Settings.GetUserRoles;
 
 internal sealed class GetUserRolesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetUserRolesQuery, List<UserRoleResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetUserRolesQuery, List<UserRoleResponse>>
 {
     public async Task<Result<List<UserRoleResponse>>> Handle(GetUserRolesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<UserRole> userRoles = unitOfWork.GetDbSet<UserRole>();
-        DbSet<RolePermission> rolePermissions = unitOfWork.GetDbSet<RolePermission>();
-        DbSet<VohuManah.Domain.Users.User> users = unitOfWork.GetDbSet<VohuManah.Domain.Users.User>();
+        DbSet<UserRole> userRoles = dbContext.UserRoles;
+        DbSet<RolePermission> rolePermissions = dbContext.RolePermissions;
+        DbSet<VohuManah.Domain.Users.User> users = dbContext.LibraryUsers;
 
         VohuManah.Domain.Users.User? user = await users
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);

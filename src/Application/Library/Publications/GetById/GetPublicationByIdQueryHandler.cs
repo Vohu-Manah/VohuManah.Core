@@ -7,11 +7,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Publications.GetById;
 
 internal sealed class GetPublicationByIdQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationByIdQuery, PublicationResponse>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationByIdQuery, PublicationResponse>
 {
     public async Task<Result<PublicationResponse>> Handle(GetPublicationByIdQuery query, CancellationToken cancellationToken)
     {
-        DbSet<Publication> publications = unitOfWork.GetDbSet<Publication>();
+        DbSet<Publication> publications = dbContext.Publications;
 
         Publication? publication = await publications
             .Include(p => p.PublicationType)

@@ -8,14 +8,14 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.PublicationTypes.Delete;
 
 internal sealed class DeletePublicationTypeCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<DeletePublicationTypeCommand>
 {
     private const string PublicationTypePatternKey = "sdp.publicationType.";
 
     public async Task<Result> Handle(DeletePublicationTypeCommand command, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> publicationTypes = unitOfWork.GetDbSet<PublicationType>();
+        DbSet<PublicationType> publicationTypes = dbContext.PublicationTypes;
 
         PublicationType? publicationType = await publicationTypes
             .SingleOrDefaultAsync(pt => pt.Id == command.Id, cancellationToken);
@@ -26,7 +26,7 @@ internal sealed class DeletePublicationTypeCommandHandler(
         }
 
         publicationTypes.Remove(publicationType);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         cacheManager.RemoveByPattern(PublicationTypePatternKey);
 

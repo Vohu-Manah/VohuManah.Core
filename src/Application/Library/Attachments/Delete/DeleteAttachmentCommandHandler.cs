@@ -8,12 +8,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Attachments.Delete;
 
 internal sealed class DeleteAttachmentCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     IFileStorageService fileStorageService) : ICommandHandler<DeleteAttachmentCommand>
 {
     public async Task<Result> Handle(DeleteAttachmentCommand command, CancellationToken cancellationToken)
     {
-        DbSet<Attachment> attachments = unitOfWork.GetDbSet<Attachment>();
+        DbSet<Attachment> attachments = dbContext.Attachments;
 
         Attachment? attachment = await attachments
             .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
@@ -28,7 +28,7 @@ internal sealed class DeleteAttachmentCommandHandler(
             await fileStorageService.DeleteFileAsync(attachment.FilePath, cancellationToken);
 
             attachments.Remove(attachment);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

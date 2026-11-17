@@ -9,12 +9,12 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.Menu.Create;
 
 internal sealed class CreateMenuItemCommandHandler(
-    IUnitOfWork unitOfWork,
+    IApplicationDbContext dbContext,
     ICacheManager cacheManager) : ICommandHandler<CreateMenuItemCommand, MenuItemResponse>
 {
     public async Task<Result<MenuItemResponse>> Handle(CreateMenuItemCommand command, CancellationToken cancellationToken)
     {
-        DbSet<MenuItem> menuItems = unitOfWork.GetDbSet<MenuItem>();
+        DbSet<MenuItem> menuItems = dbContext.MenuItems;
 
         
         if (command.ParentId.HasValue)
@@ -42,7 +42,7 @@ internal sealed class CreateMenuItemCommandHandler(
         };
 
         menuItems.Add(menuItem);
-        await unitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         cacheManager.Remove(GetAllMenuItemsQueryHandler.MenuItemsAllKey);
 

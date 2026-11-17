@@ -8,11 +8,11 @@ using VohuManah.SharedKernel;
 namespace VohuManah.Application.Library.PublicationTypes.GetNames;
 
 internal sealed class GetPublicationTypeNamesQueryHandler(
-    IUnitOfWork unitOfWork) : IQueryHandler<GetPublicationTypeNamesQuery, List<SelectItemResponse>>
+    IApplicationDbContext dbContext) : IQueryHandler<GetPublicationTypeNamesQuery, List<SelectItemResponse>>
 {
     public Task<Result<List<SelectItemResponse>>> Handle(GetPublicationTypeNamesQuery query, CancellationToken cancellationToken)
     {
-        DbSet<PublicationType> types = unitOfWork.GetDbSet<PublicationType>();
+        DbSet<PublicationType> types = dbContext.PublicationTypes;
 
         List<SelectItemResponse> items = types
             .OrderBy(t => t.Title)
