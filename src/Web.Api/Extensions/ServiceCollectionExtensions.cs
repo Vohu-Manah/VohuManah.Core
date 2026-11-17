@@ -2,6 +2,16 @@ namespace VohuManah.Web.Api.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
+    internal static WebApplicationBuilder ConfigureKestrel(this WebApplicationBuilder builder)
+    {
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.Limits.MaxRequestBodySize = 100L * 1024 * 1024 * 1024;
+        });
+
+        return builder;
+    }
+
     internal static IServiceCollection AddSwaggerGenWithAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(o =>

@@ -3,19 +3,14 @@ using HealthChecks.UI.Client;
 using VohuManah.Infrastructure;
 using VohuManah.Infrastructure.Database;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.FileProviders;
 using Serilog;
 using System.Reflection;
 using VohuManah.Web.Api;
 using VohuManah.Web.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options =>
-{
-    
-    
-    options.Limits.MaxRequestBodySize = 100L * 1024 * 1024 * 1024;
-});
+
+builder.ConfigureKestrel();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -38,40 +33,11 @@ app.UseExceptionHandler();
 
 app.UseCors("CorsPolicy");
 
-var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads");
-if (!Directory.Exists(uploadsPath))
-{
-    Directory.CreateDirectory(uploadsPath);
-}
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/uploads"
-});
+app.UseUploads();
 
 app.UseCookieTokenAuthentication();
 
-
-
-
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/reports"))
-        context.Response.Headers.CacheControl = "no-store";
-
-    
-    
-    if (!context.Request.Path.StartsWithSegments("/library/backup/restore"))
-    {
-        var bodySizeFeature = context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpMaxRequestBodySizeFeature>();
-        if (bodySizeFeature is not null)
-        {
-            bodySizeFeature.MaxRequestBodySize = 30L * 1024 * 1024;
-        }
-    }
-    await next();
-});
+app.UseRequestLimits();
 
 app.UseCookieTokenAuthentication();
 
