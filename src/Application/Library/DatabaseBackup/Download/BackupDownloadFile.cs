@@ -1,4 +1,4 @@
-namespace VohuManah.Application.Library.DbBackup.Download;
+namespace VohuManah.Application.Library.DatabaseBackup.Download;
 
 public sealed record BackupDownloadFile
 {

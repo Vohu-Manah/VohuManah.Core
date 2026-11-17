@@ -1,25 +1,23 @@
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.DbBackup.Restore;
+using VohuManah.Application.Library.DatabaseBackup.Create;
 using VohuManah.Application.Library.Settings;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
 
-namespace VohuManah.Web.Api.Endpoints.Library.DbBackup;
+namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 
-[RequireRole(EndpointNames.Backup.Restore)]
-internal sealed class RestoreDailyBackup : BaseEndpoint
+[RequireRole(EndpointNames.Backup.Create)]
+internal sealed class CreateBackup : BaseEndpoint
 {
     public override void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("library/backup/restore-daily", async (
-            ICommandHandler<RestoreBackupCommand> handler,
+        app.MapPost("library/backup", async (
+            ICommandHandler<CreateBackupCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new RestoreBackupCommand(BackupRestoreSource.DailyFile, null, null);
-
-            Result result = await handler.Handle(command, cancellationToken);
+            Result result = await handler.Handle(new CreateBackupCommand(), cancellationToken);
 
             return result.Match(Results.NoContent, CustomResults.Problem);
         })

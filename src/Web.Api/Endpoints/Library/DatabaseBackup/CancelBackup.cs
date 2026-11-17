@@ -1,10 +1,10 @@
-using VohuManah.Application.Abstractions.SqlBackup;
+using VohuManah.Application.Abstractions.DatabaseBackup;
 using VohuManah.Application.Library.Settings;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
 
-namespace VohuManah.Web.Api.Endpoints.Library.DbBackup;
+namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 
 
 

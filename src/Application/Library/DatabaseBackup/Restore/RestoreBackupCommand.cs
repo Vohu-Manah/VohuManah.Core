@@ -1,6 +1,6 @@
 using VohuManah.Application.Abstractions.Messaging;
 
-namespace VohuManah.Application.Library.DbBackup.Restore;
+namespace VohuManah.Application.Library.DatabaseBackup.Restore;
 
 public sealed record RestoreBackupCommand(
     BackupRestoreSource Source,

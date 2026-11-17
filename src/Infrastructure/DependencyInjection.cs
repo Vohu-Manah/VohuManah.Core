@@ -48,7 +48,7 @@ public static class DependencyInjection
         services.AddScoped<PersianDateTime>();
         services.AddScoped<VohuManah.Application.Abstractions.FileStorage.IFileStorageService, LocalFileStorageService>();
 
-        services.AddScoped<VohuManah.Application.Abstractions.SqlBackup.IBackupService, SqlBackupService>();
+        services.AddScoped<VohuManah.Application.Abstractions.DatabaseBackup.IBackupService, SqlBackupService>();
         services.AddSingleton<VohuManah.Application.Abstractions.HumanVerification.IHumanVerificationService, HumanVerificationService>();
         services.AddHostedService<DailyBackupJob>();
         services.AddHostedService<BackupCleanupJob>();

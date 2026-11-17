@@ -1,5 +1,5 @@
 using System.Threading;
-using VohuManah.Application.Abstractions.SqlBackup;
+using VohuManah.Application.Abstractions.DatabaseBackup;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

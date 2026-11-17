@@ -1,9 +1,9 @@
-using VohuManah.Application.Abstractions.SqlBackup;
+using VohuManah.Application.Abstractions.DatabaseBackup;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.DbBackup.Shared;
+using VohuManah.Application.Library.DatabaseBackup.Shared;
 using VohuManah.SharedKernel;
 
-namespace VohuManah.Application.Library.DbBackup.Create;
+namespace VohuManah.Application.Library.DatabaseBackup.Create;
 
 internal sealed class CreateBackupCommandHandler(
     IBackupService backupService) : ICommandHandler<CreateBackupCommand>

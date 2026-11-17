@@ -1,4 +1,4 @@
-namespace VohuManah.Application.Library.DbBackup.Restore;
+namespace VohuManah.Application.Library.DatabaseBackup.Restore;
 
 public enum BackupRestoreSource
 {

@@ -1,12 +1,12 @@
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.DbBackup.Restore;
+using VohuManah.Application.Library.DatabaseBackup.Restore;
 using VohuManah.Application.Library.Settings;
 using VohuManah.SharedKernel;
 using VohuManah.Web.Api.Endpoints.Attributes;
 using VohuManah.Web.Api.Extensions;
 using VohuManah.Web.Api.Infrastructure;
 
-namespace VohuManah.Web.Api.Endpoints.Library.DbBackup;
+namespace VohuManah.Web.Api.Endpoints.Library.DatabaseBackup;
 
 [RequireRole(EndpointNames.Backup.Restore)]
 internal sealed class RestoreBackup : BaseEndpoint

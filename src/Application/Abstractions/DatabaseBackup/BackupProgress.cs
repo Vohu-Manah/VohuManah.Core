@@ -1,4 +1,4 @@
-namespace VohuManah.Application.Abstractions.SqlBackup;
+namespace VohuManah.Application.Abstractions.DatabaseBackup;
 
 
 

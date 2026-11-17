@@ -1,4 +1,4 @@
-namespace VohuManah.Application.Library.DbBackup.Shared;
+namespace VohuManah.Application.Library.DatabaseBackup.Shared;
 
 
 

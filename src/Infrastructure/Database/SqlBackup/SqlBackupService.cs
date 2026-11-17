@@ -1,7 +1,7 @@
 using System.Threading;
 using System;
-using VohuManah.Application.Abstractions.SqlBackup;
-using VohuManah.Application.Library.DbBackup.Shared;
+using VohuManah.Application.Abstractions.DatabaseBackup;
+using VohuManah.Application.Library.DatabaseBackup.Shared;
 using VohuManah.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;

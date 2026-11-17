@@ -1,8 +1,8 @@
-using VohuManah.Application.Abstractions.SqlBackup;
+using VohuManah.Application.Abstractions.DatabaseBackup;
 using VohuManah.Application.Abstractions.Messaging;
 using VohuManah.SharedKernel;
 
-namespace VohuManah.Application.Library.DbBackup.Download;
+namespace VohuManah.Application.Library.DatabaseBackup.Download;
 
 internal sealed class DownloadBackupQueryHandler(
     IBackupService backupService) : IQueryHandler<DownloadBackupQuery, BackupDownloadFile>
@@ -21,7 +21,7 @@ internal sealed class DownloadBackupQueryHandler(
 
         
         
-        bool isOneTime = query.FileName == VohuManah.Application.Library.DbBackup.Shared.BackupFileNames.OneTime;
+        bool isOneTime = query.FileName == VohuManah.Application.Library.DatabaseBackup.Shared.BackupFileNames.OneTime;
         Stream stream = await backupService
             .OpenReadAsync(query.FileName, deleteAfterRead: isOneTime, cancellationToken)
             .ConfigureAwait(false);

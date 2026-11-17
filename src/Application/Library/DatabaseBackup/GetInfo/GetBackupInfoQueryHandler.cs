@@ -1,9 +1,9 @@
-using VohuManah.Application.Abstractions.SqlBackup;
+using VohuManah.Application.Abstractions.DatabaseBackup;
 using VohuManah.Application.Abstractions.Messaging;
-using VohuManah.Application.Library.DbBackup.Shared;
+using VohuManah.Application.Library.DatabaseBackup.Shared;
 using VohuManah.SharedKernel;
 
-namespace VohuManah.Application.Library.DbBackup.GetInfo;
+namespace VohuManah.Application.Library.DatabaseBackup.GetInfo;
 
 internal sealed class GetBackupInfoQueryHandler(
     IBackupService backupService) : IQueryHandler<GetBackupInfoQuery, BackupInfoResponse>
