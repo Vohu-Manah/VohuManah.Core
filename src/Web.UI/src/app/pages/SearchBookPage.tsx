@@ -149,7 +149,7 @@ export default function SearchBookPage() {
               {...form.getInputProps('subjectId', { type: 'input' })}
             />
             <YearSelect
-              label="سال چاپ"
+              label=""
               source="book"
               value={form.values.publishYear || null}
               onChange={(year) => form.setFieldValue('publishYear', year ?? '')}

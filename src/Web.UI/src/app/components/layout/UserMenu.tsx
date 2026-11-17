@@ -15,7 +15,7 @@ export default function UserMenu() {
   const [opened, setOpened] = useState(false);
 
   return (
-    <Menu shadow="md" position="bottom-end" opened={opened} onChange={setOpened}>
+    <Menu shadow="md" position="bottom-start" opened={opened} onChange={setOpened} width={230}>
       <Menu.Target>
         <UnstyledButton>
           <Group gap="xs" className="dir-rtl">
@@ -30,10 +30,7 @@ export default function UserMenu() {
                 {user?.userName ?? ''}
               </Text>
             </div>
-            <FaChevronDown
-              size={12}
-              className={`chevron ${opened ? "chevron-open" : ""}`}
-            />
+            <FaChevronDown size={12} className={`chevron ${opened ? 'chevron-open' : ''}`} />
           </Group>
         </UnstyledButton>
       </Menu.Target>

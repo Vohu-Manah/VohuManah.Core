@@ -157,7 +157,7 @@ export default function SearchPublicationPage() {
               }
             />
             <YearSelect
-              label="سال"
+              label=""
               source="publication"
               value={form.values.year || null}
               onChange={(year) => form.setFieldValue('year', year ?? '')}

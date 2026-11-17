@@ -112,7 +112,6 @@ export default function ChartViewer({
           />
         ) : (
           <BarChart
-            cursorFill="gray.2"
             h={height}
             data={data}
             dataKey="label"

@@ -59,8 +59,8 @@ export default function MainLayout() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (opened) close();
-  }, [pathname, opened, close]);
+    close();
+  }, [pathname, close]);
 
   useEffect(() => {
     if (pathname && pathname !== '/') {
@@ -136,14 +136,14 @@ export default function MainLayout() {
 
         <AppShell.Navbar p="md">
           <AppShell.Section className="header-section">
-            <Group justify="space-between">
-              <Group gap="xs">
-                <Image src={favicon} alt="favicon" width={30} height={30} />
-                <Text fw={700} size="lg">
+            <Group justify="space-between" wrap="nowrap">
+              <Group gap="xs" wrap="nowrap">
+                <Image src={favicon} alt="favicon" w={32} h={32} className="flex-shrink-0" />
+                <Text fw={700} size="lg" truncate>
                   وُهُومَنَهْ
                 </Text>
               </Group>
-              <Code fw={700}>{version}</Code>
+              <Code fw={700} className="flex-shrink-0">{version}</Code>
             </Group>
           </AppShell.Section>
           <AppShell.Section grow component={ScrollArea} dir="ltr">

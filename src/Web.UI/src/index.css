@@ -627,8 +627,6 @@ main .mantine-Stack-root {
   padding-inline-end: 10px;
 }
 
- 
-
 .fw-500 {
   font-weight: 500;
 }
@@ -650,6 +648,11 @@ main .mantine-Stack-root {
   flex: 1;
   min-height: 0;
   display: flex;
+  flex-direction: column;
+}
+.flex-1-flex .iframe-panel {
+  flex: 1;
+  min-height: 0;
 }
 .flex-col-300 {
   flex: 0 0 300px;
@@ -725,7 +728,6 @@ main .mantine-Stack-root {
   margin-bottom: 4px;
 }
 
- 
 .w-100-dir-rtl {
   width: 100%;
   direction: rtl;
@@ -745,15 +747,15 @@ main .mantine-Stack-root {
   max-width: 0;
 }
 .td-cell-right {
-  text-align: right;
+  text-align: center;
   padding: 8px 7px;
   overflow: hidden;
 }
 .truncate-block {
   display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .dir-rtl-ta-right {
   direction: rtl;
@@ -845,6 +847,15 @@ main .mantine-Stack-root {
   justify-content: center;
   padding: 40px;
   direction: rtl;
+  align-items: center;
+}
+@media (max-width: 767px) {
+  .login-form-col {
+    padding: 24px 16px;
+    align-items: center;
+    width: 100%;
+    flex: 1 1 0%;
+  }
 }
 .chevron {
   opacity: 0.7;
@@ -905,7 +916,6 @@ main .mantine-Stack-root {
   }
 }
 
- 
 .hidden-verify-input {
   position: fixed;
   left: 0;
@@ -935,10 +945,16 @@ main .mantine-Stack-root {
   color: var(--mantine-color-yellow-4);
 }
 .report-fullscreen-btn {
-  position: absolute;
+  position: static;
+}
+.report-fullscreen-btn.report-fullscreen-active {
+  position: fixed;
   top: 12px;
   left: 12px;
-  z-index: 1;
+  z-index: 2100;
+}
+.report-filter-hidden {
+  display: none;
 }
 .pdf-shell {
   width: 100%;
@@ -999,7 +1015,6 @@ main .mantine-Stack-root {
   margin-left: 180px;
 }
 
- 
 .smart-textinput {
   direction: rtl;
 }
@@ -1060,11 +1075,18 @@ main .mantine-Stack-root {
   inset: 0;
   z-index: 2000;
   background-color: #fff;
-  padding: 8px;
-  height: 100vh;
+  padding: 56px 8px 8px;
+  display: flex;
+  flex-direction: column;
 }
 
- 
+.report-fullscreen .iframe-panel {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
 .smart-textinput__wrapper {
   direction: rtl;
   position: relative;
@@ -1095,7 +1117,6 @@ main .mantine-Stack-root {
   direction: rtl;
 }
 
- 
 .report-alert {
   display: flex;
   flex-direction: column;
@@ -1108,7 +1129,6 @@ main .mantine-Stack-root {
   width: 100%;
 }
 
- 
 .password-input-ltr input {
   direction: ltr;
   text-align: left;
@@ -1118,13 +1138,11 @@ main .mantine-Stack-root {
   text-align: left;
 }
 
- 
 .barcode-modal-body {
   max-height: 70vh;
   overflow: auto;
 }
 
- 
 .report-modal-body {
   padding: 0;
   display: flex;
@@ -1132,6 +1150,7 @@ main .mantine-Stack-root {
   overflow: hidden;
   flex: 1;
   min-height: 0;
+  height: 100%;
 }
 .report-modal-content {
   height: 100%;
@@ -1152,19 +1171,6 @@ main .mantine-Stack-root {
   min-height: 0;
 }
 
- 
-.report-fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background-color: #fff;
-  height: 100dvh;
-}
-.report-fullscreen .iframe-panel {
-  height: 100%;
-}
-
- 
 .login-hero-title {
   color: #fff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
@@ -1292,19 +1298,19 @@ a.star-border {
 .hold-button--sm {
   height: 36px;
   padding: 0 16px;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .hold-button--md {
   height: 44px;
   padding: 0 22px;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .hold-button--lg {
   height: 52px;
   padding: 0 28px;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Box, LoadingOverlay, Stack, Text, Alert, ActionIcon } from '@mantine/core';
-import { FaExpand, FaCompress } from 'react-icons/fa';
+import { createPortal } from 'react-dom';
+import { Box, LoadingOverlay, Stack, Text, Alert } from '@mantine/core';
 import { reportService, type ReportExportRequest } from '@/app/services/reports/reportService';
 import { appMessage } from '@/app/messages/appMessages';
 
@@ -10,6 +10,8 @@ interface ReportViewerProps {
   parameters?: Record<string, string>;
   height?: string;
   showToolbar?: boolean;
+  fullscreen?: boolean;
+  onToggleFullscreen: () => void;
 }
 
 export function ReportViewer({
@@ -17,22 +19,22 @@ export function ReportViewer({
   datasourceName,
   parameters = {},
   height = '800px',
+  fullscreen = false,
+  onToggleFullscreen,
 }: ReportViewerProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [fullscreen, setFullscreen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
 
   
   useEffect(() => {
     if (!fullscreen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setFullscreen(false);
+      if (e.key === 'Escape') onToggleFullscreen();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [fullscreen]);
+  }, [fullscreen, onToggleFullscreen]);
 
   const handleExport = useCallback(
     async (format: 'pdf' | 'excel') => {
@@ -47,11 +49,6 @@ export function ReportViewer({
     },
     [reportName, datasourceName, parameters],
   );
-
-  useEffect(() => {
-    const el = boxRef.current;
-    if (el && !fullscreen) el.style.height = height;
-  }, [height, fullscreen]);
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
@@ -160,48 +157,43 @@ export function ReportViewer({
     appMessage.error('خطا در بارگذاری گزارش', errorMessage);
   };
 
+  const viewer = (
+    <Box
+      pos={fullscreen ? undefined : 'relative'}
+      h={fullscreen ? undefined : height}
+      className={fullscreen ? 'report-fullscreen' : undefined}
+    >
+      {error ? (
+        <Alert
+          color="red"
+          title="خطا در بارگذاری گزارش"
+          icon={<Text>⚠️</Text>}
+          className="report-alert"
+        >
+          <Text size="lg" fw={500}>
+            {error}
+          </Text>
+        </Alert>
+      ) : (
+        <>
+          <LoadingOverlay visible={loading} overlayProps={{ radius: 'sm', blur: 2 }} />
+          <Box
+            component="iframe"
+            ref={iframeRef}
+            src={buildReportUrl()}
+            onLoad={handleLoad}
+            onError={handleError}
+            className="iframe-panel"
+            title={`گزارش ${reportName}`}
+          />
+        </>
+      )}
+    </Box>
+  );
+
   return (
     <Stack gap="md">
-      <Box
-        ref={boxRef}
-        pos="relative"
-        className={fullscreen ? 'report-fullscreen' : undefined}
-      >
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          title={fullscreen ? 'خروج از تمام‌صفحه' : 'نمایش تمام‌صفحه'}
-          onClick={() => setFullscreen((v) => !v)}
-          className="report-fullscreen-btn"
-        >
-          {fullscreen ? <FaCompress size={16} /> : <FaExpand size={16} />}
-        </ActionIcon>
-        {error ? (
-          <Alert
-            color="red"
-            title="خطا در بارگذاری گزارش"
-            icon={<Text>⚠️</Text>}
-            className="report-alert"
-          >
-            <Text size="lg" fw={500}>
-              {error}
-            </Text>
-          </Alert>
-        ) : (
-          <>
-            <LoadingOverlay visible={loading} overlayProps={{ radius: 'sm', blur: 2 }} />
-            <Box
-              component="iframe"
-              ref={iframeRef}
-              src={buildReportUrl()}
-              onLoad={handleLoad}
-              onError={handleError}
-              className="iframe-panel"
-              title={`گزارش ${reportName}`}
-            />
-          </>
-        )}
-      </Box>
+      {fullscreen ? createPortal(viewer, document.body) : viewer}
     </Stack>
   );
 }

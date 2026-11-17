@@ -160,7 +160,7 @@ export default function SearchManuscriptPage() {
               }
             />
             <YearSelect
-              label="سال"
+              label=""
               source="manuscript"
               value={form.values.year || null}
               onChange={(year) => form.setFieldValue('year', year ?? '')}
