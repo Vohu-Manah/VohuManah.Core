@@ -8,7 +8,6 @@
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\docker\docker-compose.dcproj</DockerComposeProjectPath>
     <Keywords>VohuManah</Keywords>
-    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
