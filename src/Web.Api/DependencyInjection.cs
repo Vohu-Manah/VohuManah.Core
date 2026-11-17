@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using VohuManah.Web.Api.Authorization;
 using VohuManah.Web.Api.Infrastructure;
 using VohuManah.Web.Api.Middleware;
 
@@ -25,6 +27,8 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+
+        services.AddTransient<IAuthorizationHandler, RoleEndpointAuthorizationHandler>();
 
         return services;
     }

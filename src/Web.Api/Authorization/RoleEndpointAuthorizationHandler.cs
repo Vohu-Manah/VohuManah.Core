@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
-namespace VohuManah.Infrastructure.Authorization;
+namespace VohuManah.Web.Api.Authorization;
 
 internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serviceScopeFactory)
     : AuthorizationHandler<RoleEndpointRequirement>
@@ -45,15 +45,5 @@ internal sealed class RoleEndpointAuthorizationHandler(IServiceScopeFactory serv
             }
         }
     }
-}
-
-public sealed class RoleEndpointRequirement : IAuthorizationRequirement
-{
-    public RoleEndpointRequirement(string endpointName)
-    {
-        EndpointName = endpointName;
-    }
-
-    public string EndpointName { get; }
 }
 

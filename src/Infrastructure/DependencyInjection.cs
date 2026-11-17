@@ -147,7 +147,6 @@ public static class DependencyInjection
         services.AddScoped<PermissionProvider>();
 
         services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
-        services.AddTransient<IAuthorizationHandler, Authorization.RoleEndpointAuthorizationHandler>();
 
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 

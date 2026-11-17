@@ -1,7 +1,7 @@
-using VohuManah.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
+using VohuManah.Web.Api.Authorization;
 using VohuManah.Web.Api.Endpoints;
 using VohuManah.Web.Api.Endpoints.Attributes;
 
