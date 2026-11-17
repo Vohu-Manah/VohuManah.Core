@@ -54,7 +54,7 @@ internal sealed class ReportRenderer : IReportRenderer
             using var report = CreateReport(reportModel);
             byte[] excel = report.Render(
                 "EXCELOPENXML",
-                deviceInfo: null,
+                deviceInfo: null!,
                 pageCountMode: PageCountMode.Actual,
                 mimeType: out _,
                 encoding: out _,
@@ -148,7 +148,7 @@ internal sealed class ReportRenderer : IReportRenderer
 
         foreach (var warning in warnings)
         {
-            
+            Console.WriteLine($"Report warning: {warning}");
         }
     }
 }
