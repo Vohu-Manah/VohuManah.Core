@@ -1,7 +1,7 @@
 using VohuManah.SharedKernel;
 using System;
 
-namespace VohuManah.Infrastructure.Helper.Time;
+namespace VohuManah.Infrastructure.Time;
 
 internal sealed class DateTimeProvider : IDateTimeProvider
 {

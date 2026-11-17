@@ -1,6 +1,6 @@
 using System;
 
-namespace VohuManah.Infrastructure.Helper.PersianCalendar;
+namespace VohuManah.Infrastructure.Time;
 
 internal sealed class PersianCalendarService : IPersianCalendar
 {

@@ -9,7 +9,7 @@ using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace VohuManah.Infrastructure.Helper.HumanVerification;
+namespace VohuManah.Infrastructure.HumanVerification;
 
 internal sealed record ChallengeState(long IssuedAtUnixSeconds);
 

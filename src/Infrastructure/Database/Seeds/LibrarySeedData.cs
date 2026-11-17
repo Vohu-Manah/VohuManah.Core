@@ -4,7 +4,7 @@ using VohuManah.Application.Library.Settings;
 using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 
-namespace VohuManah.Infrastructure.Library.Seeds;
+namespace VohuManah.Infrastructure.Database.Seeds;
 
 internal static class LibrarySeedData
 {

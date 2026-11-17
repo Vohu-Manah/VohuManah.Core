@@ -1,7 +1,7 @@
 using System;
 using VohuManah.Application.Abstractions.Data;
 using VohuManah.Domain.Library;
-using VohuManah.Infrastructure.Library.Seeds;
+using VohuManah.Infrastructure.Database.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 namespace VohuManah.Infrastructure.Database;

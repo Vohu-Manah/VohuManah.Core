@@ -20,9 +20,9 @@ using VohuManah.SharedKernel;
 using System.Security.Claims;
 using System.Text;
 using VohuManah.Infrastructure.Database.SqlBackup;
-using VohuManah.Infrastructure.Helper.Time;
-using VohuManah.Infrastructure.Helper.HumanVerification;
-using VohuManah.Infrastructure.Helper.PersianCalendar;
+using VohuManah.Infrastructure.Time;
+using VohuManah.Infrastructure.HumanVerification;
+using VohuManah.Infrastructure.Time;
 
 namespace VohuManah.Infrastructure;
 

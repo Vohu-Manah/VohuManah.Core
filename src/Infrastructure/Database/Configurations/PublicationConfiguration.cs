@@ -2,7 +2,7 @@ using VohuManah.Domain.Library;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace VohuManah.Infrastructure.Library.Configurations;
+namespace VohuManah.Infrastructure.Database.Configurations;
 
 internal sealed class PublicationConfiguration : IEntityTypeConfiguration<Publication>
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace VohuManah.Infrastructure.Helper.PersianCalendar;
+namespace VohuManah.Infrastructure.Time;
 
 #pragma warning disable CA1846
 
