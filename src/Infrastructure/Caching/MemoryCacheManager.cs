@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace VohuManah.Infrastructure.Caching;
 
-public sealed class MemoryCacheManager : VohuManah.Application.Abstractions.Caching.ICacheManager
+internal sealed class MemoryCacheManager : VohuManah.Application.Abstractions.Caching.ICacheManager
 {
     private readonly ObjectCache _cache = MemoryCache.Default;
 

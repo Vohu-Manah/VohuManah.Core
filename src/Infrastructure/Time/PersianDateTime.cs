@@ -5,7 +5,7 @@ namespace VohuManah.Infrastructure.Time;
 
 #pragma warning disable CA1846
 
-public class PersianDateTime
+internal sealed class PersianDateTime
 {
     private readonly IPersianCalendar _persianCalendar;
 

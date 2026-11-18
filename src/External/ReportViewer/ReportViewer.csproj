@@ -10,6 +10,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AnalysisMode>None</AnalysisMode>
+    <Nullable>disable</Nullable>
+    <NoWarn>$(NoWarn);CS1591;CS0618;CS3021;CS0649;CS0169;CS0414;CS0219;CS0067;CS0068;CS0628;CS0672;CS0809;CS0162;SYSLIB0014;CS0108</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
@@ -18,6 +20,10 @@
     <AssemblyVersion>10.0.0.0</AssemblyVersion>
     <FileVersion>10.0.0.0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Remove="SonarAnalyzer.CSharp" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="ReportViewer.Common\**\*.cs" />
