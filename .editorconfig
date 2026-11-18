@@ -40,3 +40,27 @@ dotnet_diagnostic.CA1822.severity = suggestion
 dotnet_diagnostic.S3267.severity = suggestion
 dotnet_diagnostic.CA1812.severity = suggestion
 dotnet_diagnostic.CA1515.severity = suggestion
+
+[*.cs]
+dotnet_diagnostic.RS0030.severity = error
+dotnet_diagnostic.ARCH001.severity = error
+dotnet_diagnostic.ARCH002.severity = error
+dotnet_diagnostic.ARCH003.severity = error
+dotnet_diagnostic.ARCH004.severity = error
+dotnet_diagnostic.ARCH005.severity = error
+dotnet_diagnostic.ARCH006.severity = error
+dotnet_diagnostic.ARCH007.severity = error
+dotnet_diagnostic.ARCH008.severity = error
+dotnet_diagnostic.ARCH009.severity = error
+dotnet_diagnostic.ARCH010.severity = error
+dotnet_diagnostic.ARCH011.severity = error
+csharp_style_namespace_declarations = file_scoped:error
+
+# composition root: the only Web.Api files allowed to use Infrastructure
+[src/Web.Api/Program.cs]
+dotnet_diagnostic.RS0030.severity = none
+[src/Web.Api/DependencyInjection.cs]
+dotnet_diagnostic.RS0030.severity = none
+
+[src/Infrastructure/Database/Migrations/**.cs]
+dotnet_diagnostic.IDE0161.severity = none

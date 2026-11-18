@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends fontconfig font
     && ldconfig \
     && rm -rf /var/lib/apt/lists/*
 
-# کپی فونتهای Shabnam پروژه به مسیر فونتهای لینوکس
+
 COPY src/Infrastructure/Reports/Html/Resources/fonts/*.ttf /usr/share/fonts/truetype/
 COPY docker/deploy/fonts/ /opt/vohumanah-fonts/
 COPY docker/deploy/entrypoint-fonts.sh /opt/entrypoint-fonts.sh
@@ -30,6 +30,8 @@ COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 COPY ["src/Application/Application.csproj", "src/Application/"]
 COPY ["src/Domain/Domain.csproj", "src/Domain/"]
 COPY ["src/SharedKernel/SharedKernel.csproj", "src/SharedKernel/"]
+COPY ["src/Analyzers/Analyze.Architecture/Analyze.Architecture.csproj", "src/Analyzers/Analyze.Architecture/"]
+COPY ["src/External/ReportViewer/ReportViewer.csproj", "src/External/ReportViewer/"]
 RUN dotnet restore "./src/Web.Api/Web.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Web.Api"

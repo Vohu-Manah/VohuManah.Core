@@ -1,0 +1,19 @@
+N:VohuManah.Infrastructure;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs (composition root). Depend on an Application abstraction instead.
+N:VohuManah.Infrastructure.Authentication;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Authorization;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Caching;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Database;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Database.Configurations;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Database.DatabaseBackup;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Database.Maintenance;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Database.Seeds;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.FileStorage;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.HumanVerification;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Migrations;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Reports;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Reports.Definition;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Reports.Html;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:VohuManah.Infrastructure.Time;Web.Api may use Infrastructure only in Program.cs and DependencyInjection.cs.
+N:Microsoft.EntityFrameworkCore;Web.Api must not use EF Core. Go through an Application use case.
+N:Microsoft.Data.SqlClient;Web.Api must not use SqlClient. Put database-specific logic behind an Application port implemented in Infrastructure.
+N:System.Data.SqlClient;Web.Api must not use SqlClient. Put database-specific logic behind an Application port implemented in Infrastructure.
