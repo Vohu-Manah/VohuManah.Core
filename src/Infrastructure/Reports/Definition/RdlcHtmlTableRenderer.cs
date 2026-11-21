@@ -16,7 +16,9 @@ internal sealed class RdlcHtmlTableRenderer
 
     public string RenderHtml(ReportDefinition definition, ReportModel reportModel)
     {
-        var evaluator = new RdlcExpressionEvaluator(reportModel.Parameters, pageNumber: 1, totalPages: 1);
+        int pageNumber = GetIntParam(reportModel.Parameters, "Page", 1);
+        int totalPages = GetIntParam(reportModel.Parameters, "TotalPages", 1);
+        var evaluator = new RdlcExpressionEvaluator(reportModel.Parameters, pageNumber, totalPages);
         var sb = new StringBuilder();
 
         sb.Append("<div class='rdlc-report' dir='rtl'>");
@@ -234,6 +236,17 @@ internal sealed class RdlcHtmlTableRenderer
         }
 
         sb.Append("</svg></div>");
+    }
+
+    private static int GetIntParam(Dictionary<string, object> parameters, string key, int fallback)
+    {
+        return parameters.TryGetValue(key, out object? value) && int.TryParse(
+            Convert.ToString(value, CultureInfo.InvariantCulture),
+            NumberStyles.Any,
+            CultureInfo.InvariantCulture,
+            out int parsed)
+            ? parsed
+            : fallback;
     }
 
     private static string Truncate(string value, int max)

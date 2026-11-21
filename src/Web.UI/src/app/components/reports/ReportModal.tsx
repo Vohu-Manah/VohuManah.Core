@@ -183,7 +183,7 @@ export function ReportModal({ opened, onClose, reportRequest, title = 'گزار�
       title={title}
       size="xl"
       fullScreen={fullscreen}
-      className={fullscreen ? 'report-modal-fullscreen' : undefined}
+      className={fullscreen ? 'report-modal-fullscreen' : 'minWidth-button-modal'}
       classNames={{ body: 'report-modal-body', content: 'report-modal-content' }}
     >
       <Stack gap="md" p="md" className="h-100">

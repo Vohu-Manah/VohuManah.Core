@@ -251,8 +251,10 @@ function updatePaginationUI() {
     }
     
     
-    const activePage = serverPaging ? serverPage : currentPage;
-    const lastPage = serverPaging ? serverTotalPages : totalPages;
+    let activePage = serverPaging ? serverPage : currentPage;
+    let lastPage = serverPaging ? serverTotalPages : totalPages;
+    lastPage = Math.max(1, lastPage);
+    activePage = Math.min(Math.max(1, activePage), lastPage);
 
     
     const pageInfo = paginationDiv.querySelector('.pagination-info');
