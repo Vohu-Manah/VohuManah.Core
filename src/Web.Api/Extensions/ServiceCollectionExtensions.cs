@@ -6,7 +6,7 @@ internal static class ServiceCollectionExtensions
     {
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.Limits.MaxRequestBodySize = 100L * 1024 * 1024 * 1024;
+            options.Limits.MaxRequestBodySize = 150L * 1024 * 1024 * 1024;
         });
 
         return builder;
