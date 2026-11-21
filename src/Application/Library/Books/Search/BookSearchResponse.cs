@@ -2,7 +2,8 @@ namespace VohuManah.Application.Library.Books.Search;
 
 public sealed record BookSearchResponse
 {
-    
+    public long RowNumber { get; init; }
+
     public long Id { get; init; }
 
     public string Name { get; init; } = string.Empty;
