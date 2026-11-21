@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -72,10 +72,13 @@ export default function SearchManuscriptPage() {
     }
  }, []);
 
+  const initialLoad = useRef(false);
   useEffect(() => {
-
-    void loadLookups();
-    void loadAllData();
+    if (!initialLoad.current) {
+      initialLoad.current = true;
+      void loadLookups();
+      void loadAllData();
+    }
   }, [loadLookups, loadAllData]);
 
 
