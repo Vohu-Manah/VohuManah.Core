@@ -140,7 +140,7 @@ export default function LoginPage() {
           clickPulse={false}
         >
           <Paper withBorder shadow="md" p={30} radius="md" className="login-paper">
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form noValidate onSubmit={form.onSubmit(handleSubmit)}>
               <SmartTextInput
                 label="نام کاربری یا ایمیل"
                 placeholder="نام کاربری یا ایمیل خود را وارد کنید"

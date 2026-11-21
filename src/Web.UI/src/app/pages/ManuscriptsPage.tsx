@@ -57,6 +57,12 @@ export default function ManuscriptsPage() {
     },
     validate: {
       name: isNotEmpty('نام نسخه خطی الزامی است'),
+      author: isNotEmpty('نام نویسنده الزامی است'),
+      writingPlaceId: (v) => (v > 0 ? null : 'انتخاب محل نگارش الزامی است'),
+      pageCount: (v) => (v > 0 ? null : 'تعداد صفحات باید بزرگتر از صفر باشد'),
+      gapId: (v) => (v > 0 ? null : 'انتخاب فاصله الزامی است'),
+      languageId: (v) => (v > 0 ? null : 'انتخاب زبان الزامی است'),
+      subjectId: (v) => (v > 0 ? null : 'انتخاب موضوع الزامی است'),
     },
   });
 
@@ -276,16 +282,18 @@ export default function ManuscriptsPage() {
           fieldName="name"
           {...form.getInputProps('name')}
         />
-        <SmartTextInput label="نویسنده" fieldName="author" {...form.getInputProps('author')} />
+        <SmartTextInput label="نویسنده" required withAsterisk fieldName="author" {...form.getInputProps('author')} />
         <Group grow>
           <Select
             label="فاصله"
+            required
             data={gaps.map((g) => ({ value: String(g.id), label: g.title }))}
             value={form.values.gapId ? String(form.values.gapId) : null}
             onChange={(v: string | null) => form.setFieldValue('gapId', v ? Number(v) : 0)}
           />
           <Select
             label="محل نگارش"
+            required
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
             value={form.values.writingPlaceId ? String(form.values.writingPlaceId) : null}
             onChange={(v: string | null) => form.setFieldValue('writingPlaceId', v ? Number(v) : 0)}
@@ -293,7 +301,7 @@ export default function ManuscriptsPage() {
         </Group>
         <Group grow>
           <SmartTextInput label="سال" fieldName="year" {...form.getInputProps('year')} />
-          <SmartNumberInput label="تعداد صفحات" min={0} {...form.getInputProps('pageCount')} />
+          <SmartNumberInput label="تعداد صفحات" required min={0} {...form.getInputProps('pageCount')} />
           <SmartTextInput label="اندازه" fieldName="size" {...form.getInputProps('size')} />
         </Group>
         <SmartTextInput
@@ -304,12 +312,14 @@ export default function ManuscriptsPage() {
         <Group grow>
           <Select
             label="زبان"
+            required
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
             value={form.values.languageId ? String(form.values.languageId) : null}
             onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
           />
           <Select
             label="موضوع"
+            required
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
             value={form.values.subjectId ? String(form.values.subjectId) : null}
             onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}

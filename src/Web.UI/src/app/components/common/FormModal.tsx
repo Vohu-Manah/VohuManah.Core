@@ -25,6 +25,7 @@ export function FormModal({
   return (
     <Modal opened={opened} onClose={onClose} title={title} size="lg" centered dir="rtl">
       <form
+        noValidate
         onSubmit={(e) => {
           e.preventDefault();
           onSubmit?.();

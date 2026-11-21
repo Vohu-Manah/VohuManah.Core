@@ -38,6 +38,12 @@ export default function PublishersPage() {
     },
     validate: {
       name: isNotEmpty('نام ناشر الزامی است'),
+      managerName: isNotEmpty('نام مدیر الزامی است'),
+      telephone: isNotEmpty('تلفن الزامی است'),
+      address: isNotEmpty('آدرس الزامی است'),
+      website: isNotEmpty('وبسایت الزامی است'),
+      email: isNotEmpty('ایمیل الزامی است'),
+      cityId: (v) => (v > 0 ? null : 'انتخاب شهر الزامی است'),
     },
   });
 
@@ -203,18 +209,21 @@ export default function PublishersPage() {
         <Group grow>
           <SmartTextInput
             label="نام مدیر"
+            required
+            withAsterisk
             fieldName="managerName"
             {...form.getInputProps('managerName')}
           />
-          <SmartTextInput label="تلفن" fieldName="telephone" {...form.getInputProps('telephone')} />
+          <SmartTextInput label="تلفن" required withAsterisk fieldName="telephone" {...form.getInputProps('telephone')} />
         </Group>
-        <SmartTextInput label="آدرس" fieldName="address" {...form.getInputProps('address')} />
+        <SmartTextInput label="آدرس" required withAsterisk fieldName="address" {...form.getInputProps('address')} />
         <Group grow>
-          <SmartTextInput label="وبسایت" fieldName="website" {...form.getInputProps('website')} />
-          <SmartTextInput label="ایمیل" fieldName="email" type="email" {...form.getInputProps('email')} />
+          <SmartTextInput label="وبسایت" required withAsterisk fieldName="website" {...form.getInputProps('website')} />
+          <SmartTextInput label="ایمیل" required withAsterisk fieldName="email" type="email" {...form.getInputProps('email')} />
         </Group>
         <Select
           label="شهر"
+          required
           data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
           value={form.values.cityId ? String(form.values.cityId) : null}
           onChange={(value) => form.setFieldValue('cityId', value ? Number(value) : 0)}
