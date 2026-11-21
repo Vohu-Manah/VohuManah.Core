@@ -26,10 +26,10 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         
         
-        Database.SetCommandTimeout(TimeSpan.FromMinutes(5));
+        Database.SetCommandTimeout(TimeSpan.FromMinutes(15));
     }
 
-    public DbSet<VohuManah.Domain.Users.User> LibraryUsers { get; set; }
+    public DbSet<User> LibraryUsers { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Language> Languages { get; set; }

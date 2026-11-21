@@ -97,7 +97,10 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(
             options => options
                 .UseSqlServer(connectionString, sqlServerOptions =>
-                    sqlServerOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default)));
+                {
+                    sqlServerOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                    sqlServerOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default);
+                }));
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
