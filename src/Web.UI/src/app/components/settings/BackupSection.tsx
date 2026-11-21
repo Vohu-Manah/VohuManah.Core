@@ -25,6 +25,7 @@ import {
   FaCheck,
   FaTimesCircle,
 } from 'react-icons/fa';
+import { useConfirm } from '@/app/hooks/useConfirm';
 import { backupService } from '@/app/services/library/backupService';
 import type { BackupInfo } from '@/app/services/library/backupService';
 import { appMessage } from '@/app/messages/appMessages';
@@ -45,6 +46,7 @@ const formatSize = (bytes: number): string => {
 type BackupPhase = 'idle' | 'running' | 'downloading' | 'done' | 'error';
 
 export default function BackupSection() {
+  const { confirm, element } = useConfirm();
   const [info, setInfo] = useState<BackupInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [restoring, setRestoring] = useState(false);
@@ -197,7 +199,7 @@ export default function BackupSection() {
 
   const handleRestoreDaily = async () => {
     if (
-      !confirm('دیتابیس به آخرین بکاپ روزانه بازگردانی می‌شود و سیستم ریست می‌شود. ادامه می‌دهید؟')
+      !await confirm('دیتابیس به آخرین بکاپ روزانه بازگردانی می‌شود و سیستم ریست می‌شود. ادامه می‌دهید؟')
     ) {
       return;
     }
@@ -219,7 +221,7 @@ export default function BackupSection() {
       return;
     }
 
-    if (!confirm('دیتابیس با فایل آپلودشده بازگردانی می‌شود و سیستم ریست می‌شود. ادامه می‌دهید؟')) {
+    if (!await confirm('دیتابیس با فایل آپلودشده بازگردانی می‌شود و سیستم ریست می‌شود. ادامه می‌دهید؟')) {
       return;
     }
 
@@ -390,6 +392,7 @@ export default function BackupSection() {
           )}
         </Stack>
       </Modal>
+      {element}
     </Card>
   );
 }

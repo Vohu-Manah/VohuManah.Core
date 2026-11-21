@@ -12,8 +12,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function PublicationTypesPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [publicationTypes, setPublicationTypes] = useState<PublicationType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,7 @@ export default function PublicationTypesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این نوع نشریه مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این نوع نشریه مطمئن هستید؟')) {
       try {
         setLoading(true);
         await publicationTypeService.delete(id);
@@ -162,7 +164,7 @@ export default function PublicationTypesPage() {
       >
         <SmartTextInput label="عنوان" required withAsterisk fieldName="title" {...form.getInputProps('title')} />
       </FormModal>
+      {element}
     </Stack>
   );
 }
-

@@ -24,8 +24,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function ManuscriptsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [loading, setLoading] = useState(false);
@@ -163,7 +165,7 @@ export default function ManuscriptsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این نسخه خطی مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این نسخه خطی مطمئن هستید؟')) {
       try {
         setLoading(true);
         await manuscriptService.delete(id);
@@ -314,6 +316,7 @@ export default function ManuscriptsPage() {
           />
         </Group>
       </FormModal>
+      {element}
     </Stack>
   );
 }

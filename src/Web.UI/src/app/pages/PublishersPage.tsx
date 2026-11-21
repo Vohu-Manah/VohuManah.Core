@@ -15,8 +15,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function PublishersPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [loading, setLoading] = useState(false);
@@ -111,7 +113,7 @@ export default function PublishersPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این ناشر مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این ناشر مطمئن هستید؟')) {
       try {
         setLoading(true);
         await publisherService.delete(id);
@@ -219,6 +221,7 @@ export default function PublishersPage() {
           error={form.errors.cityId}
         />
       </FormModal>
+      {element}
     </Stack>
   );
 }

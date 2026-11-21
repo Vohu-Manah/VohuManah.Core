@@ -16,6 +16,7 @@ import {
   Loader,
   Center,
 } from '@mantine/core';
+import { useConfirm } from '@/app/hooks/useConfirm';
 import { FaUpload, FaTrash, FaEdit, FaDownload, FaPlay, FaCheck, FaTimes } from 'react-icons/fa';
 import { attachmentService } from '@/app/services/library/attachmentService';
 import type { AttachmentResponse } from '@/app/models/attachment';
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export default function BookAttachmentsModal({ opened, onClose, bookId }: Props) {
+  const { confirm, element } = useConfirm();
   const [attachments, setAttachments] = useState<AttachmentResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -116,7 +118,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('آیا از حذف این پیوست مطمئن هستید؟')) {
+    if (!await confirm('آیا از حذف این پیوست مطمئن هستید؟')) {
       return;
     }
 
@@ -349,6 +351,7 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
                         </Group>
                       </Group>
                     </Stack>
+      {element}
                   </Card>
                 );
               })}

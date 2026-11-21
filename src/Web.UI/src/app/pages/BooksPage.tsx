@@ -30,8 +30,10 @@ import { PERM } from '@/app/models/permissions';
 import QrCodePrint from '@/app/components/common/QrCodePrint';
 import BarcodePrintModal from '@/app/components/common/BarcodePrintModal';
 import BookAttachmentsModal from '@/app/components/common/BookAttachmentsModal';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function BooksPage() {
+  const { confirm, element } = useConfirm();
   const navigate = useNavigate();
   const { can } = useAuth();
   const [books, setBooks] = useState<BookList[]>([]);
@@ -296,7 +298,7 @@ export default function BooksPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این کتاب مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این کتاب مطمئن هستید؟')) {
       try {
         setLoading(true);
         await bookService.delete(id);
@@ -607,6 +609,7 @@ export default function BooksPage() {
         opened={barcodeModalOpened}
         onClose={() => setBarcodeModalOpened(false)}
       />
+      {element}
     </Stack>
   );
 }

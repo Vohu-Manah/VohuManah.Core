@@ -23,8 +23,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function PublicationsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [publications, setPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(false);
@@ -177,7 +179,7 @@ export default function PublicationsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این نشریه مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این نشریه مطمئن هستید؟')) {
       try {
         setLoading(true);
         await publicationService.delete(id);
@@ -376,6 +378,7 @@ export default function PublicationsPage() {
           />
         </Group>
       </FormModal>
+      {element}
     </Stack>
   );
 }
