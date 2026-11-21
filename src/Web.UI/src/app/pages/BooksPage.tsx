@@ -206,7 +206,7 @@ export default function BooksPage() {
           await bookService.update(editingBook.id, { ...form.values });
           if (bookImageFile) {
             try {
-              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب', true);
+              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب');
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
               appMessage.error('خطا در آپلود عکس');
@@ -218,7 +218,7 @@ export default function BooksPage() {
           if (bookImageFile) {
             try {
               
-              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب', true);
+              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب');
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
               appMessage.error('خطا در آپلود عکس');
