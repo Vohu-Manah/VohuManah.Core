@@ -619,12 +619,20 @@ main .mantine-Stack-root {
 }
 
 .mantine-Table-thead th {
-  background-color: color-mix(in srgb, var(--mantine-color-gray-0) 70%, var(--mantine-color-body));
+  background-color: color-mix(in srgb, var(--mantine-color-text) 5%, var(--mantine-color-body));
   font-weight: 500;
 }
 
 .mantine-AppShell-navbar .mantine-ScrollArea-viewport > div {
   padding-inline-end: 10px;
+}
+
+.minWidth-button-dashboard {
+  min-width: 89px;
+}
+
+.minWidth-button-modal {
+  min-height: 55vh !important;
 }
 
 .fw-500 {
@@ -735,6 +743,7 @@ main .mantine-Stack-root {
 .w-100-table-auto {
   width: 100%;
   table-layout: auto;
+  min-width: 560px;
 }
 .th-sortable {
   text-align: center;
@@ -744,15 +753,18 @@ main .mantine-Stack-root {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 0;
+  min-width: 90px;
 }
 .td-cell-right {
   text-align: center;
   padding: 8px 7px;
   overflow: hidden;
+  vertical-align: middle;
+  min-width: 90px;
 }
 .truncate-block {
   display: block;
+  text-align: center;
   white-space: normal;
   overflow-wrap: break-word;
   word-break: break-word;

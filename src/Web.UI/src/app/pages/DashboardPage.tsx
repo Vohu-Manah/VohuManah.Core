@@ -134,11 +134,7 @@ export default function DashboardPage() {
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <Card
-            withBorder
-            h="100%"
-            className="card-enter flex-center"
-          >
+          <Card withBorder h="100%" className="card-enter flex-center">
             <AnalogClock size={140} label={nowJalali('HH:mm')} />
           </Card>
         </Grid.Col>
@@ -203,11 +199,15 @@ export default function DashboardPage() {
         <Group justify="space-between" wrap="nowrap">
           <Stack gap={2}>
             <Title order={5}>اسکن بارکد کتاب</Title>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="dimmed" className="justify-text">
               با دوربین یا تصویر، بارکد/QR کتاب را بخوانید و مستقیم به پروفایل آن بروید.
             </Text>
           </Stack>
-          <Button leftSection={<FaQrcode />} onClick={() => navigate('/scan')}>
+          <Button
+            leftSection={<FaQrcode />}
+            onClick={() => navigate('/scan')}
+            className="minWidth-button-dashboard"
+          >
             اسکن
           </Button>
         </Group>
