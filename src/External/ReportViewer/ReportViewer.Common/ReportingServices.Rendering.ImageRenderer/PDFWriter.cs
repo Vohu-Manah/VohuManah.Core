@@ -3951,7 +3951,8 @@ namespace ReportingServices.Rendering.ImageRenderer
 			if (pdfFont.IsComposite)
 			{
 				sb.Append("<");
-				List<ShapedRunItem> items = UnicodeParagraphShaper.Shape(textRun.Text, textRun.CachedFont.SkiaFont);
+				SkiaCachedFont skiaFont = textRun.CachedFont.SkiaFont ?? new SkiaCachedFont(textRun.TextRunProperties.FontFamily, textRun.CachedFont.Font.Size, textRun.TextRunProperties.Bold, textRun.TextRunProperties.Italic);
+				List<ShapedRunItem> items = UnicodeParagraphShaper.Shape(textRun.Text, skiaFont);
 				foreach (ShapedRunItem item in items)
 				{
 					string itemText = textRun.Text.Substring(item.CharPos, item.Length);
@@ -3961,7 +3962,7 @@ namespace ReportingServices.Rendering.ImageRenderer
 					for (int i = 0; i < itemShapeData.GlyphCount; i++)
 					{
 						ushort glyphId = unchecked((ushort)itemShapeData.Glyphs[i]);
-						float width1000 = itemAdvances[i] * 1000f / textRun.CachedFont.SkiaFont.Font.Size;
+						float width1000 = itemAdvances[i] * 1000f / skiaFont.Font.Size;
 						PDFFont.GlyphData added = pdfFont.AddUniqueGlyph(glyphId, width1000);
 						if (added != null && !itemRtl)
 						{
