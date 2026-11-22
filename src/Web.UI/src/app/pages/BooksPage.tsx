@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Stack, Title, Group, ActionIcon, Text } from '@mantine/core';
-import {FaPlus, FaEdit, FaTrash, FaUser, FaPaperclip, FaQrcode, FaCamera } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaUser, FaPaperclip, FaQrcode, FaCamera } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import { ProTable, type ProTableColumn } from '@/app/components/common/ProTable';
@@ -30,8 +30,10 @@ import { PERM } from '@/app/models/permissions';
 import QrCodePrint from '@/app/components/common/QrCodePrint';
 import BarcodePrintModal from '@/app/components/common/BarcodePrintModal';
 import BookAttachmentsModal from '@/app/components/common/BookAttachmentsModal';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function BooksPage() {
+  const { confirm, element } = useConfirm();
   const navigate = useNavigate();
   const { can } = useAuth();
   const [books, setBooks] = useState<BookList[]>([]);
@@ -40,7 +42,11 @@ export default function BooksPage() {
   const [barcodeModalOpened, setBarcodeModalOpened] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [totalCount, setTotalCount] = useState(0);
-  const [filters, setFilters] = useState<TableFilterValues>({ year: '', fromDate: null, toDate: null });
+  const [filters, setFilters] = useState<TableFilterValues>({
+    year: '',
+    fromDate: null,
+    toDate: null,
+  });
   const [modalOpened, setModalOpened] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [cities, setCities] = useState<CityName[]>([]);
@@ -77,6 +83,8 @@ export default function BooksPage() {
       no: isNotEmpty('شماره کتاب الزامی است'),
       publisherId: (value) => (value <= 0 ? 'انتخاب ناشر الزامی است' : null),
       publishPlaceId: (value) => (value <= 0 ? 'انتخاب محل چاپ الزامی است' : null),
+      languageId: (value) => (value <= 0 ? 'انتخاب زبان الزامی است' : null),
+      subjectId: (value) => (value <= 0 ? 'انتخاب موضوع الزامی است' : null),
       volumeCount: (value) => (value <= 0 ? 'تعداد جلد باید بیشتر از صفر باشد' : null),
     },
   });
@@ -118,12 +126,10 @@ export default function BooksPage() {
     }
   }, []);
   useEffect(() => {
-
     void loadData();
   }, [loadData]);
 
   useEffect(() => {
-
     void loadLookups();
   }, [loadLookups]);
 
@@ -135,21 +141,22 @@ export default function BooksPage() {
   useEffect(() => {
     const loadBookImages = async () => {
       const imageMap: Record<number, string> = {};
-      
+
       const imagePromises = books.map(async (book) => {
         try {
           const attachments = await attachmentService.getByEntity('Book', book.id);
-          const isImage = (a: typeof attachments[number]) => {
+          const isImage = (a: (typeof attachments)[number]) => {
             const contentType = a.contentType?.toLowerCase() || '';
             const originalFileName = a.originalFileName?.toLowerCase() || '';
             const fileName = a.fileName?.toLowerCase() || '';
-            return contentType.includes('image') ||
-                   /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
-                   /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+            return (
+              contentType.includes('image') ||
+              /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
+              /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)
+            );
           };
           const mainImageAttachment =
-            attachments.find(a => a.isMain && isImage(a)) ??
-            attachments.find(isImage);
+            attachments.find((a) => a.isMain && isImage(a)) ?? attachments.find(isImage);
           if (mainImageAttachment) {
             const fullUrl = getFullImageUrl(mainImageAttachment.fileUrl);
             if (fullUrl) {
@@ -161,31 +168,31 @@ export default function BooksPage() {
         }
         return null;
       });
-      
+
       const results = await Promise.all(imagePromises);
       results.forEach((result) => {
         if (result) {
           imageMap[result.bookId] = result.url;
         }
       });
-      
+
       setBookImages(imageMap);
     };
-    
+
     if (books.length > 0) {
       loadBookImages();
     }
   }, [books]);
 
-
-
   const handleBookImageChange = (file: File | null) => {
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
       const fileType = file.type.toLowerCase();
-      
+
       if (!allowedTypes.includes(fileType)) {
-        appMessage.error('فرمت فایل مجاز نیست. لطفاً یک فایل تصویری (JPEG, PNG, GIF, WEBP) انتخاب کنید.');
+        appMessage.error(
+          'فرمت فایل مجاز نیست. لطفاً یک فایل تصویری (JPEG, PNG, GIF, WEBP) انتخاب کنید.',
+        );
         return;
       }
 
@@ -206,7 +213,7 @@ export default function BooksPage() {
           await bookService.update(editingBook.id, { ...form.values });
           if (bookImageFile) {
             try {
-              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب', true);
+              await attachmentService.upload('Book', editingBook.id, bookImageFile, 'عکس کتاب');
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
               appMessage.error('خطا در آپلود عکس');
@@ -217,8 +224,7 @@ export default function BooksPage() {
           const newBookId = await bookService.create(form.values);
           if (bookImageFile) {
             try {
-              
-              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب', true);
+              await attachmentService.upload('Book', newBookId, bookImageFile, 'عکس کتاب');
               appMessage.success('عکس کتاب با موفقیت آپلود شد');
             } catch {
               appMessage.error('خطا در آپلود عکس');
@@ -262,21 +268,22 @@ export default function BooksPage() {
         subjectId: book.subjectId,
         bookShelfRow: book.bookShelfRow,
       });
-      
+
       setBookImageFile(null);
       try {
         const attachments = await attachmentService.getByEntity('Book', id);
-        const isImage = (a: typeof attachments[number]) => {
+        const isImage = (a: (typeof attachments)[number]) => {
           const contentType = a.contentType?.toLowerCase() || '';
           const originalFileName = a.originalFileName?.toLowerCase() || '';
           const fileName = a.fileName?.toLowerCase() || '';
-          return contentType.includes('image') ||
-                 /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
-                 /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+          return (
+            contentType.includes('image') ||
+            /\.(jpg|jpeg|png|gif|webp)$/i.test(originalFileName) ||
+            /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)
+          );
         };
         const mainImage =
-          attachments.find(a => a.isMain && isImage(a)) ??
-          attachments.find(isImage);
+          attachments.find((a) => a.isMain && isImage(a)) ?? attachments.find(isImage);
         if (mainImage) {
           const fullUrl = getFullImageUrl(mainImage.fileUrl);
           setBookImagePreview(fullUrl || '');
@@ -286,7 +293,7 @@ export default function BooksPage() {
       } catch {
         setBookImagePreview('');
       }
-      
+
       setModalOpened(true);
     } catch {
       appMessage.error('خطا در بارگذاری اطلاعات کتاب');
@@ -296,7 +303,7 @@ export default function BooksPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این کتاب مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این کتاب مطمئن هستید؟')) {
       try {
         setLoading(true);
         await bookService.delete(id);
@@ -398,19 +405,15 @@ export default function BooksPage() {
         <Title order={2}>مدیریت کتاب‌ها</Title>
         <Group>
           <Button
-          variant="light"
-          color="grape"
-          leftSection={<FaQrcode />}
-          onClick={() => setBarcodeModalOpened(true)}
-        >
-          چاپ بارکد
-        </Button>
-          <Button
             variant="light"
-            leftSection={<FaCamera />}
-            onClick={() => navigate('/scan')}
+            color="grape"
+            leftSection={<FaQrcode />}
+            onClick={() => setBarcodeModalOpened(true)}
           >
-            اسکن
+            چاپ بارکد به صورت یکجا
+          </Button>
+          <Button variant="light" leftSection={<FaCamera />} onClick={() => navigate('/scan')}>
+            اسکن بارکد کتاب
           </Button>
           {can(PERM.Book.create) && (
             <Button
@@ -520,15 +523,21 @@ export default function BooksPage() {
         <Group grow>
           <Select
             label="زبان"
+            required
+            withAsterisk
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
             value={form.values.languageId ? String(form.values.languageId) : null}
             onChange={(value) => form.setFieldValue('languageId', value ? Number(value) : 0)}
+            error={form.errors.languageId}
           />
           <Select
             label="موضوع"
+            required
+            withAsterisk
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
             value={form.values.subjectId ? String(form.values.subjectId) : null}
             onChange={(value) => form.setFieldValue('subjectId', value ? Number(value) : 0)}
+            error={form.errors.subjectId}
           />
         </Group>
         <Group grow>
@@ -603,10 +612,8 @@ export default function BooksPage() {
         bookId={selectedBookId || 0}
       />
 
-      <BarcodePrintModal
-        opened={barcodeModalOpened}
-        onClose={() => setBarcodeModalOpened(false)}
-      />
+      <BarcodePrintModal opened={barcodeModalOpened} onClose={() => setBarcodeModalOpened(false)} />
+      {element}
     </Stack>
   );
 }

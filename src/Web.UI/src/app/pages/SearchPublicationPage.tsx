@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -52,10 +52,9 @@ export default function SearchPublicationPage() {
     },
   });
 
-
   const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
- }, [loadPaged]);
+  }, [loadPaged]);
   const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, typesData] = await Promise.all([
@@ -71,15 +70,16 @@ export default function SearchPublicationPage() {
     } catch (error) {
       handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
     }
- }, []);
+  }, []);
 
+  const initialLoad = useRef(false);
   useEffect(() => {
-
-    void loadLookups();
-    void loadAllData();
+    if (!initialLoad.current) {
+      initialLoad.current = true;
+      void loadLookups();
+      void loadAllData();
+    }
   }, [loadLookups, loadAllData]);
-
-
 
   const buildParams = (): PublicationSearchRequest => {
     const params: PublicationSearchRequest = {};
@@ -157,7 +157,7 @@ export default function SearchPublicationPage() {
               }
             />
             <YearSelect
-              label=""
+              label="سال"
               source="publication"
               value={form.values.year || null}
               onChange={(year) => form.setFieldValue('year', year ?? '')}

@@ -13,8 +13,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function GapsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [gaps, setGaps] = useState<Gap[]>([]);
   const [loading, setLoading] = useState(false);
@@ -90,7 +92,7 @@ export default function GapsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این فاصله مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این فاصله مطمئن هستید؟')) {
       try {
         setLoading(true);
         await gapService.delete(id);
@@ -177,7 +179,7 @@ export default function GapsPage() {
         <Textarea label="یادداشت" dir="rtl" {...form.getInputProps('note')} />
         <Switch label="وضعیت فعال" {...form.getInputProps('state', { type: 'checkbox' })} />
       </FormModal>
+      {element}
     </Stack>
   );
 }
-

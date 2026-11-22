@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button, Card, Stack, Title, Group } from '@mantine/core';
 import { FaSearch, FaFilePdf } from 'react-icons/fa';
 import { useForm } from '@mantine/form';
@@ -17,7 +17,7 @@ import type { SubjectName } from '@/app/models/subject';
 import type { PublisherName } from '@/app/models/publisher';
 import { appMessage } from '@/app/messages/appMessages';
 import { usePagedSearch } from '@/app/hooks/usePagedSearch';
-import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
+import { handleApiError, getErrorMessage } from '@/app/helpers/errorHandler';
 import { ReportModal } from '@/app/components/reports/ReportModal';
 import { YearSelect } from '@/app/components/common/YearSelect';
 
@@ -52,10 +52,9 @@ export default function SearchBookPage() {
     },
   });
 
-
   const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
- }, [loadPaged]);
+  }, [loadPaged]);
   const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
@@ -71,13 +70,15 @@ export default function SearchBookPage() {
     } catch (error) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
- }, []);
+  }, []);
 
+  const initialLoad = useRef(false);
   useEffect(() => {
-    
-    void loadLookups();
-    void loadAllData();
-    
+    if (!initialLoad.current) {
+      initialLoad.current = true;
+      void loadLookups();
+      void loadAllData();
+    }
   }, [loadLookups, loadAllData]);
   const buildFilterParams = (): BookSearchRequest => {
     const params: BookSearchRequest = {};
@@ -149,7 +150,7 @@ export default function SearchBookPage() {
               {...form.getInputProps('subjectId', { type: 'input' })}
             />
             <YearSelect
-              label=""
+              label="سال"
               source="book"
               value={form.values.publishYear || null}
               onChange={(year) => form.setFieldValue('publishYear', year ?? '')}

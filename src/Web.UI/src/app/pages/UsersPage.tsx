@@ -12,8 +12,10 @@ import { isNotEmpty } from '@mantine/form';
 import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function UsersPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [users, setUsers] = useState<LibraryUser[]>([]);
   const [loading, setLoading] = useState(false);
@@ -103,7 +105,7 @@ export default function UsersPage() {
   };
 
   const handleDelete = async (id: number, userName: string) => {
-    if (window.confirm(`آیا از حذف کاربر «${userName}» مطمئن هستید؟`)) {
+    if (await confirm(`آیا از حذف کاربر «${userName}» مطمئن هستید؟`)) {
       try {
         setLoading(true);
         await userService.delete(id);
@@ -214,6 +216,7 @@ export default function UsersPage() {
           />
         </Group>
       </FormModal>
+      {element}
     </Stack>
   );
 }

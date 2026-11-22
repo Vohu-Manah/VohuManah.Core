@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Text;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,7 +25,7 @@ public static class DatabaseMigrationExtensions
 
             dbContext.Database.SetCommandTimeout(TimeSpan.FromMinutes(10));
 
-            dbContext.Database.Migrate();
+            ApplyMigrationsTolerantly(dbContext, logger);
 
             logger.LogInformation("مایگریشن های دیتابیس با موفقیت اعمال شدند.");
 
@@ -59,5 +62,49 @@ public static class DatabaseMigrationExtensions
             logger.LogError("لطفاً اطمینان حاصل کنید که SQL Server در دسترس است و مایگریشن ها را به صورت دستی با دستور زیر اجرا کنید: " +
                             "dotnet ef database update --project src/Infrastructure --startup-project src/Web.Api");
         }
+    }
+
+    private static void ApplyMigrationsTolerantly(ApplicationDbContext dbContext, ILogger logger)
+    {
+        var migrations = dbContext.Database.GetMigrations().ToList();
+
+        foreach (var migration in migrations)
+        {
+            var applied = dbContext.Database.GetAppliedMigrations().ToHashSet();
+            if (applied.Contains(migration))
+                continue;
+
+            try
+            {
+                dbContext.Database.Migrate(migration);
+                logger.LogInformation("مایگریشن {Migration} اعمال شد.", migration);
+            }
+            catch (SqlException ex) when (IsAlreadyExistsError(ex))
+            {
+                RecordMigrationAsApplied(dbContext, migration);
+                logger.LogWarning(ex,
+                    "مایگریشن {Migration} از قبل در بک آپ قدیمی اعمال شده بود؛ به عنوان اعمال شده ثبت شد.",
+                    migration);
+            }
+        }
+    }
+
+    private static bool IsAlreadyExistsError(SqlException ex)
+    {
+        return ex.Errors.Cast<SqlError>().Any(e =>
+            e.Number == 2714 ||   // There is already an object named 'X'
+            e.Number == 2601 ||   // Cannot insert duplicate key row
+            e.Number == 2627);    // Violation of UNIQUE KEY constraint
+    }
+
+    private static void RecordMigrationAsApplied(ApplicationDbContext dbContext, string migrationId)
+    {
+        var sql = new StringBuilder();
+        sql.Append("IF OBJECT_ID(N'dbo.__EFMigrationsHistory', N'U') IS NULL ");
+        sql.Append("CREATE TABLE dbo.__EFMigrationsHistory (MigrationId nvarchar(150) NOT NULL CONSTRAINT PK___EFMigrationsHistory PRIMARY KEY, ProductVersion nvarchar(32) NOT NULL);");
+        sql.Append($"IF NOT EXISTS (SELECT 1 FROM dbo.__EFMigrationsHistory WHERE MigrationId = N'{migrationId}') ");
+        sql.Append($"INSERT INTO dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'{migrationId}', N'9.0.0');");
+
+        dbContext.Database.ExecuteSqlRaw(sql.ToString());
     }
 }

@@ -12,8 +12,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function SubjectsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,7 @@ export default function SubjectsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این موضوع مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این موضوع مطمئن هستید؟')) {
       try {
         setLoading(true);
         await subjectService.delete(id);
@@ -162,7 +164,7 @@ export default function SubjectsPage() {
       >
         <SmartTextInput label="عنوان موضوع" required withAsterisk fieldName="title" {...form.getInputProps('title')} />
       </FormModal>
+      {element}
     </Stack>
   );
 }
-

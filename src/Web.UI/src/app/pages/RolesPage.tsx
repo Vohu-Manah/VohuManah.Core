@@ -12,12 +12,14 @@ import { isNotEmpty } from '@mantine/form';
 import { handleApiError } from '@/app/helpers/errorHandler';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 type PermissionItem = {
   name: string;
 };
 
 export default function RolesPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
@@ -85,7 +87,7 @@ export default function RolesPage() {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('آیا از حذف این نقش اطمینان دارید؟')) {
+    if (await confirm('آیا از حذف این نقش اطمینان دارید؟')) {
       try {
         setLoading(true);
         appMessage.warning('قابلیت حذف نقش به زودی اضافه خواهد شد');
@@ -253,6 +255,7 @@ export default function RolesPage() {
           </Group>
         </Stack>
       </Modal>
+      {element}
     </Stack>
   );
 }

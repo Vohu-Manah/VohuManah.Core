@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Immutable;
 using VohuManah.Application.Abstractions.Authorization;
 using VohuManah.Application.Library.Settings;
@@ -17,7 +17,7 @@ namespace VohuManah.Infrastructure.Database.Seeds;
 
 internal static class LibrarySeedData
 {
-    private const string AdminPasswordHash = "9843417E11AFA30B39EB2E974DC2DCB2E53D4B608E665E478A1686C065107225-71815962DF6849A69BE50976ECA3DA44";
+    private const string AdminPasswordHash = "B72630E65EBAF5703AF3D872A4F008B035986560678A79487AF07CA95E49B32F-B71140CC10ACF98071341D1161E158DB";
 
     public static void SeedData(ModelBuilder modelBuilder)
     {
@@ -181,9 +181,7 @@ internal static class LibrarySeedData
             
             new MenuItem { Id = 21, Label = "کاربران", Icon = "FaUsers", DisplayOrder = 5, IsActive = true, IsSystem = false },
             new MenuItem { Id = 22, Label = "مدیریت کاربران", Path = "/users", ParentId = 21, DisplayOrder = 0, IsActive = true, IsSystem = false },
-            
-            new MenuItem { Id = 23, Label = "پروفایل", Path = "/profile", Icon = "FaUser", DisplayOrder = 6, IsActive = true, IsSystem = false },
-            
+                        
             new MenuItem { Id = 24, Label = "گزارش ها", Icon = "FaFileAlt", DisplayOrder = 7, IsActive = true, IsSystem = false },
             new MenuItem { Id = 25, Label = "جستجوی کتاب", Path = "/books/search", ParentId = 24, DisplayOrder = 0, IsActive = true, IsSystem = false },
             new MenuItem { Id = 26, Label = "جستجوی نسخه خطی", Path = "/manuscripts/search", ParentId = 24, DisplayOrder = 1, IsActive = true, IsSystem = false },

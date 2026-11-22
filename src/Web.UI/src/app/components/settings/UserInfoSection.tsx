@@ -47,7 +47,7 @@ export default function UserInfoSection() {
     } finally {
       setLoadingData(false);
     }
-  }, [form]);
+  }, []);
 
   useEffect(() => {
 

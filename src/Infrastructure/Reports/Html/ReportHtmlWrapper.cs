@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Globalization;
 
 namespace VohuManah.Infrastructure.Reports.Html;
 
@@ -162,12 +163,12 @@ internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
         {
             BuildToolbar(reportName, htmlBuilder);
             BuildReportContainer(reportHtml, htmlBuilder);
-            BuildFooter(htmlBuilder);
+            BuildFooter(parameters, htmlBuilder);
             BuildScripts(reportName, parameters, htmlBuilder);
         }
     }
 
-    private void BuildFooter(IHtmlBuilder htmlBuilder)
+    private void BuildFooter(Dictionary<string, object> parameters, IHtmlBuilder htmlBuilder)
     {
         using (htmlBuilder.OpenTag(ReportConstants.DivTag, new Dictionary<string, string>
         {
@@ -175,7 +176,7 @@ internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
         }))
         {
 
-            BuildPaginationControls(htmlBuilder);
+            BuildPaginationControls(parameters, htmlBuilder);
 
         }
     }
@@ -317,8 +318,10 @@ internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
         }
     }
 
-    private void BuildPaginationControls(IHtmlBuilder htmlBuilder)
+    private void BuildPaginationControls(Dictionary<string, object> parameters, IHtmlBuilder htmlBuilder)
     {
+        int page = GetIntParam(parameters, "Page", 1);
+        int totalPages = GetIntParam(parameters, "TotalPages", 1);
         using (htmlBuilder.OpenTag(ReportConstants.DivTag, new Dictionary<string, string>
         {
             { ReportConstants.ClassAttr, ReportConstants.PaginationControlsClass },
@@ -351,7 +354,7 @@ internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
                 { ReportConstants.ClassAttr, ReportConstants.PaginationInfoClass }
             }))
             {
-                htmlBuilder.Text("صفحه 1 از 1");
+                htmlBuilder.Text($"صفحه {page} از {totalPages}");
             }
 
             
@@ -463,5 +466,16 @@ internal sealed class ReportHtmlWrapper : IReportHtmlWrapper
         const params = {paramsJson};
         
         {_resourceLoader.LoadScripts()}");
+    }
+
+    private static int GetIntParam(Dictionary<string, object> parameters, string key, int fallback)
+    {
+        return parameters.TryGetValue(key, out object? value) && int.TryParse(
+            Convert.ToString(value, CultureInfo.InvariantCulture),
+            NumberStyles.Any,
+            CultureInfo.InvariantCulture,
+            out int parsed)
+            ? parsed
+            : fallback;
     }
 }

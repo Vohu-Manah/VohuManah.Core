@@ -128,8 +128,9 @@ internal sealed class SearchBooksQueryHandler(
         long totalCount = await queryable.LongCountAsync(cancellationToken);
 
         List<BookSearchResponse> items = rows
-            .Select(r => new BookSearchResponse
+            .Select((r, index) => new BookSearchResponse
             {
+                RowNumber = (long)(page - 1) * pageSize + index + 1,
                 Id = r.Id,
                 Name = r.Name,
                 No = r.No,

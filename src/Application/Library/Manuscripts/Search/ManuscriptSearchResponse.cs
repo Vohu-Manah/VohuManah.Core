@@ -2,6 +2,8 @@ namespace VohuManah.Application.Library.Manuscripts.Search;
 
 public sealed record ManuscriptSearchResponse
 {
+    public long RowNumber { get; init; }
+
     public string Name { get; init; } = string.Empty;
     public string Author { get; init; } = string.Empty;
     public string Subject { get; init; } = string.Empty;

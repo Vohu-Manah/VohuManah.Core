@@ -2,6 +2,8 @@ namespace VohuManah.Application.Library.Publications.Search;
 
 public sealed record PublicationSearchResponse
 {
+    public long RowNumber { get; init; }
+
     public string Name { get; init; } = string.Empty;
     public string TypeName { get; init; } = string.Empty;
     public string Concessionaire { get; init; } = string.Empty;

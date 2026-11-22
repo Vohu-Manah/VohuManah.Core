@@ -27,12 +27,12 @@ internal sealed class RestoreBackup : BaseEndpoint
             var restoreBodySizeFeature = request.HttpContext.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpMaxRequestBodySizeFeature>();
             if (restoreBodySizeFeature is not null)
             {
-                restoreBodySizeFeature.MaxRequestBodySize = 100L * 1024 * 1024 * 1024;
+                restoreBodySizeFeature.MaxRequestBodySize = 150L * 1024 * 1024 * 1024;
             }
 
             var formOptions = new Microsoft.AspNetCore.Http.Features.FormOptions
             {
-                MultipartBodyLengthLimit = 100L * 1024 * 1024 * 1024,
+                MultipartBodyLengthLimit = 150L * 1024 * 1024 * 1024,
             };
             IFormCollection form = await request.ReadFormAsync(formOptions, cancellationToken);
 

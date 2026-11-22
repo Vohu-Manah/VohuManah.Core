@@ -12,8 +12,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function CitiesPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,7 @@ export default function CitiesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این شهر مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این شهر مطمئن هستید؟')) {
       try {
         setLoading(true);
         await cityService.delete(id);
@@ -162,7 +164,7 @@ export default function CitiesPage() {
       >
         <SmartTextInput label="نام شهر" required withAsterisk fieldName="name" {...form.getInputProps('name')} />
       </FormModal>
+      {element}
     </Stack>
   );
 }
-

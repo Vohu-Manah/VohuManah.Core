@@ -77,28 +77,45 @@ internal sealed class SearchManuscriptsQueryHandler(
 
         long totalCount = await queryable.LongCountAsync(cancellationToken);
 
-        var results = await queryable
+        var rows = await queryable
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(m => m.Subject)
             .Include(m => m.City)
             .Include(m => m.Language)
             .Include(m => m.Gap)
-            .Select(m => new ManuscriptSearchResponse
+            .Select(m => new
             {
-                Name = m.Name,
-                Author = m.Author,
+                m.Name,
+                m.Author,
                 Subject = m.Subject != null ? m.Subject.Title : string.Empty,
                 WritingPlace = m.City != null ? m.City.Name : string.Empty,
-                Year = m.Year,
+                m.Year,
                 Language = m.Language != null ? m.Language.Name : string.Empty,
-                PageCount = m.PageCount,
-                VersionNo = m.VersionNo,
+                m.PageCount,
+                m.VersionNo,
                 Gap = m.Gap != null ? m.Gap.Title : string.Empty,
                 Size = m.Size ?? string.Empty
             })
             .Take(query.MaxResults)
             .ToListAsync(cancellationToken);
+
+        List<ManuscriptSearchResponse> results = rows
+            .Select((r, index) => new ManuscriptSearchResponse
+            {
+                RowNumber = (long)(page - 1) * pageSize + index + 1,
+                Name = r.Name,
+                Author = r.Author,
+                Subject = r.Subject,
+                WritingPlace = r.WritingPlace,
+                Year = r.Year,
+                Language = r.Language,
+                PageCount = r.PageCount,
+                VersionNo = r.VersionNo,
+                Gap = r.Gap,
+                Size = r.Size
+            })
+            .ToList();
 
         return Result.Success(new PagedList<ManuscriptSearchResponse>
         {

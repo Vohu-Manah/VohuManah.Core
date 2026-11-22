@@ -19,6 +19,7 @@
     "@mantine/hooks": "^9.7.5",
     "@mantine/notifications": "^9.7.5",
     "@tabler/icons-react": "^3.50.0",
+    "arabic-reshaper": "^1.1.0",
     "axios": "^1.21.0",
     "dayjs": "^1.11.23",
     "html5-qrcode": "^2.3.8",

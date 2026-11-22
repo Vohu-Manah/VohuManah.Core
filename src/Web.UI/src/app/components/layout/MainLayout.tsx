@@ -10,7 +10,7 @@ import {
   Switch,
   Image,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -34,6 +34,7 @@ function ThemeColorsApplier() {
 
 export default function MainLayout() {
   const [opened, { toggle, close }] = useDisclosure();
+  const verySmallScreen = useMediaQuery('(min-width: 400px)');
   const { user, isAuthenticated } = useAuth();
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const [version, setVersion] = useState<string>('v1.0.0');
@@ -113,23 +114,25 @@ export default function MainLayout() {
             </Group>
             <Group gap="md">
               <UserMenu />
-              <Switch
-                checked={colorScheme === 'dark'}
-                onChange={(event) => {
-                  if (event.currentTarget.checked !== (colorScheme === 'dark')) {
-                    toggleColorScheme();
+              {verySmallScreen && (
+                <Switch
+                  checked={colorScheme === 'dark'}
+                  onChange={(event) => {
+                    if (event.currentTarget.checked !== (colorScheme === 'dark')) {
+                      toggleColorScheme();
+                    }
+                  }}
+                  size="md"
+                  thumbIcon={
+                    colorScheme === 'dark' ? (
+                      <FaMoon size={12} className="icon-moon" />
+                    ) : (
+                      <FaSun size={12} className="icon-sun" />
+                    )
                   }
-                }}
-                size="md"
-                thumbIcon={
-                  colorScheme === 'dark' ? (
-                    <FaMoon size={12} className="icon-moon" />
-                  ) : (
-                    <FaSun size={12} className="icon-sun" />
-                  )
-                }
-                aria-label="تغییر حالت تم"
-              />
+                  aria-label="تغییر حالت تم"
+                />
+              )}
             </Group>
           </Group>
         </AppShell.Header>

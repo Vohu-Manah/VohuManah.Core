@@ -10,6 +10,7 @@ import { appMessage } from '@/app/messages/appMessages';
 import { handleApiError } from '@/app/helpers/errorHandler';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 type FlatMenuItem = MenuItem & { level: number };
 
@@ -70,6 +71,7 @@ type DraggedItem = {
 };
 
 export default function MenuSettingsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -233,7 +235,7 @@ export default function MenuSettingsPage() {
       return;
     }
 
-    if (!confirm(`آیا از حذف "${item.label}" اطمینان دارید؟`)) {
+    if (!await confirm(`آیا از حذف "${item.label}" اطمینان دارید؟`)) {
       return;
     }
 
@@ -250,7 +252,7 @@ export default function MenuSettingsPage() {
   };
 
   const handleResetToDefault = async () => {
-    if (!confirm('منوی فعلی حذف و منوی پیش‌فرض سیستم بازسازی می‌شود. ادامه می‌دهید؟')) {
+    if (!await confirm('منوی فعلی حذف و منوی پیش‌فرض سیستم بازسازی می‌شود. ادامه می‌دهید؟')) {
       return;
     }
 
@@ -680,6 +682,7 @@ export default function MenuSettingsPage() {
           onChange={setFormData}
         />
       </FormModal>
+      {element}
     </Stack>
   );
 }

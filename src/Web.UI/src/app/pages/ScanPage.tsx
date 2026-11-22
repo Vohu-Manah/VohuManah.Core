@@ -213,7 +213,7 @@ export default function ScanPage() {
       )}
 
       <Card withBorder p="md" radius="md" maw={420} mx="auto" w="100%">
-        <form onSubmit={handleManualSubmit}>
+        <form noValidate onSubmit={handleManualSubmit}>
           <Stack gap="xs">
             <Text fw={600} size="sm">
               <FaKeyboard className="m-i-end-6" />

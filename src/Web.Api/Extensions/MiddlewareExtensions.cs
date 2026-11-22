@@ -17,7 +17,7 @@ public static class MiddlewareExtensions
                 var bodySizeFeature = context.Features.Get<IHttpMaxRequestBodySizeFeature>();
                 if (bodySizeFeature is not null)
                 {
-                    bodySizeFeature.MaxRequestBodySize = 30L * 1024 * 1024;
+                    bodySizeFeature.MaxRequestBodySize = 500L * 1024 * 1024;
                 }
             }
 

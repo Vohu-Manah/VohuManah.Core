@@ -88,31 +88,51 @@ internal sealed class SearchPublicationsQueryHandler(
 
         long totalCount = await queryable.LongCountAsync(cancellationToken);
 
-        var results = await queryable
+        var rows = await queryable
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(p => p.PublicationType)
             .Include(p => p.Language)
             .Include(p => p.Subject)
             .Include(p => p.City)
-            .Select(p => new PublicationSearchResponse
+            .Select(p => new
             {
+                p.Name,
+                p.No,
+                p.Concessionaire,
+                p.Editor,
+                p.ResponsibleDirector,
+                p.JournalNo,
+                Subject = p.Subject != null ? p.Subject.Title : string.Empty,
+                p.PublishDate,
+                PublishPlace = p.City != null ? p.City.Name : string.Empty,
+                p.Year,
+                Language = p.Language != null ? p.Language.Name : string.Empty,
+                TypeName = p.PublicationType != null ? p.PublicationType.Title : string.Empty,
+                p.Period
+            })
+            .Take(query.MaxResults)
+            .ToListAsync(cancellationToken);
+
+        List<PublicationSearchResponse> results = rows
+            .Select((p, index) => new PublicationSearchResponse
+            {
+                RowNumber = (long)(page - 1) * pageSize + index + 1,
                 Name = p.Name,
                 No = p.No,
                 Concessionaire = p.Concessionaire,
                 Editor = p.Editor,
                 ResponsibleDirector = p.ResponsibleDirector,
                 JournalNo = p.JournalNo,
-                Subject = p.Subject != null ? p.Subject.Title : string.Empty,
+                Subject = p.Subject,
                 PublishDate = p.PublishDate,
-                PublishPlace = p.City != null ? p.City.Name : string.Empty,
+                PublishPlace = p.PublishPlace,
                 Year = p.Year,
-                Language = p.Language != null ? p.Language.Name : string.Empty,
-                TypeName = p.PublicationType != null ? p.PublicationType.Title : string.Empty,
+                Language = p.Language,
+                TypeName = p.TypeName,
                 Period = p.Period
             })
-            .Take(query.MaxResults)
-            .ToListAsync(cancellationToken);
+            .ToList();
 
         return Result.Success(new PagedList<PublicationSearchResponse>
         {

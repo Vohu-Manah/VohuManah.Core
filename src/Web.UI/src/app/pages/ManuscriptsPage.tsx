@@ -24,8 +24,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function ManuscriptsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,6 +57,12 @@ export default function ManuscriptsPage() {
     },
     validate: {
       name: isNotEmpty('نام نسخه خطی الزامی است'),
+      author: isNotEmpty('نام نویسنده الزامی است'),
+      writingPlaceId: (v) => (v > 0 ? null : 'انتخاب محل نگارش الزامی است'),
+      pageCount: (v) => (v > 0 ? null : 'تعداد صفحات باید بزرگتر از صفر باشد'),
+      gapId: (v) => (v > 0 ? null : 'انتخاب فاصله الزامی است'),
+      languageId: (v) => (v > 0 ? null : 'انتخاب زبان الزامی است'),
+      subjectId: (v) => (v > 0 ? null : 'انتخاب موضوع الزامی است'),
     },
   });
 
@@ -163,7 +171,7 @@ export default function ManuscriptsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این نسخه خطی مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این نسخه خطی مطمئن هستید؟')) {
       try {
         setLoading(true);
         await manuscriptService.delete(id);
@@ -274,24 +282,30 @@ export default function ManuscriptsPage() {
           fieldName="name"
           {...form.getInputProps('name')}
         />
-        <SmartTextInput label="نویسنده" fieldName="author" {...form.getInputProps('author')} />
+        <SmartTextInput label="نویسنده" required withAsterisk fieldName="author" {...form.getInputProps('author')} />
         <Group grow>
           <Select
             label="فاصله"
+            required
+            withAsterisk
             data={gaps.map((g) => ({ value: String(g.id), label: g.title }))}
             value={form.values.gapId ? String(form.values.gapId) : null}
             onChange={(v: string | null) => form.setFieldValue('gapId', v ? Number(v) : 0)}
+            error={form.errors.gapId}
           />
           <Select
             label="محل نگارش"
+            required
+            withAsterisk
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
             value={form.values.writingPlaceId ? String(form.values.writingPlaceId) : null}
             onChange={(v: string | null) => form.setFieldValue('writingPlaceId', v ? Number(v) : 0)}
+            error={form.errors.writingPlaceId}
           />
         </Group>
         <Group grow>
           <SmartTextInput label="سال" fieldName="year" {...form.getInputProps('year')} />
-          <SmartNumberInput label="تعداد صفحات" min={0} {...form.getInputProps('pageCount')} />
+          <SmartNumberInput label="تعداد صفحات" required min={0} {...form.getInputProps('pageCount')} />
           <SmartTextInput label="اندازه" fieldName="size" {...form.getInputProps('size')} />
         </Group>
         <SmartTextInput
@@ -302,18 +316,25 @@ export default function ManuscriptsPage() {
         <Group grow>
           <Select
             label="زبان"
+            required
+            withAsterisk
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
             value={form.values.languageId ? String(form.values.languageId) : null}
             onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
+            error={form.errors.languageId}
           />
           <Select
             label="موضوع"
+            required
+            withAsterisk
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
             value={form.values.subjectId ? String(form.values.subjectId) : null}
             onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}
+            error={form.errors.subjectId}
           />
         </Group>
       </FormModal>
+      {element}
     </Stack>
   );
 }

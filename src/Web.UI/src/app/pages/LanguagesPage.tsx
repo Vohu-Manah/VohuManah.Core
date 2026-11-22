@@ -12,8 +12,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function LanguagesPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [languages, setLanguages] = useState<Language[]>([]);
   const [loading, setLoading] = useState(false);
@@ -85,7 +87,7 @@ export default function LanguagesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این زبان مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این زبان مطمئن هستید؟')) {
       try {
         setLoading(true);
         await languageService.delete(id);
@@ -166,7 +168,7 @@ export default function LanguagesPage() {
         <SmartTextInput label="نام زبان" required withAsterisk fieldName="name" {...form.getInputProps('name')} />
         <SmartTextInput label="مخفف" required withAsterisk fieldName="abbreviation" {...form.getInputProps('abbreviation')} />
       </FormModal>
+      {element}
     </Stack>
   );
 }
-

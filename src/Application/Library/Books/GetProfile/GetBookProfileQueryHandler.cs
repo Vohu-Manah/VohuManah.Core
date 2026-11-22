@@ -61,8 +61,8 @@ internal sealed class GetBookProfileQueryHandler(
             CreatedAt = a.CreatedAt
         };
 
-        var mainCandidate = bookAttachments.FirstOrDefault(a => a.IsMain)
-            ?? bookAttachments.FirstOrDefault(IsImage);
+        var mainCandidate = bookAttachments.FirstOrDefault(a => a.IsMain && !IsImage(a))
+            ?? bookAttachments.FirstOrDefault(a => !IsImage(a));
 
         AttachmentResponse? mainAttachment = mainCandidate is null ? null : Map(mainCandidate);
 

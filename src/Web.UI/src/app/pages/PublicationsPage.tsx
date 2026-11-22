@@ -23,8 +23,10 @@ import { appMessage } from '@/app/messages/appMessages';
 import { isNotEmpty } from '@mantine/form';
 import { useAuth } from '@/app/context/AuthContext';
 import { PERM } from '@/app/models/permissions';
+import { useConfirm } from '@/app/hooks/useConfirm';
 
 export default function PublicationsPage() {
+  const { confirm, element } = useConfirm();
   const { can } = useAuth();
   const [publications, setPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(false);
@@ -177,7 +179,7 @@ export default function PublicationsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('آیا از حذف این نشریه مطمئن هستید؟')) {
+    if (await confirm('آیا از حذف این نشریه مطمئن هستید؟')) {
       try {
         setLoading(true);
         await publicationService.delete(id);
@@ -290,6 +292,7 @@ export default function PublicationsPage() {
             data={publicationTypes.map((t) => ({ value: String(t.id), label: t.title }))}
             value={form.values.typeId ? String(form.values.typeId) : null}
             onChange={(v: string | null) => form.setFieldValue('typeId', v ? Number(v) : 0)}
+            error={form.errors.typeId}
           />
           <Select
             label="محل چاپ"
@@ -298,6 +301,7 @@ export default function PublicationsPage() {
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
             value={form.values.publishPlaceId ? String(form.values.publishPlaceId) : null}
             onChange={(v: string | null) => form.setFieldValue('publishPlaceId', v ? Number(v) : 0)}
+            error={form.errors.publishPlaceId}
           />
         </Group>
         <Group grow>
@@ -365,6 +369,7 @@ export default function PublicationsPage() {
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
             value={form.values.languageId ? String(form.values.languageId) : null}
             onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
+            error={form.errors.languageId}
           />
           <Select
             label="موضوع"
@@ -373,9 +378,11 @@ export default function PublicationsPage() {
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
             value={form.values.subjectId ? String(form.values.subjectId) : null}
             onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}
+            error={form.errors.subjectId}
           />
         </Group>
       </FormModal>
+      {element}
     </Stack>
   );
 }
