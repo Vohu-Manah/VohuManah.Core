@@ -14,13 +14,15 @@ Digital Library Management System
 
 **VohuManah** is a unified system for libraries, archives and documentation centers. It brings books, manuscripts and publications together in one place — from recording bibliographic details and preparing digital copies to searching, statistics and reporting.
 
-### Core modules
+### Main sections
 
 - **Books** — bibliographic data, volumes, attachments, cover images and digital file archiving
 - **Manuscripts** — managing handwritten manuscripts, place of writing, script gap and attributes of historical documents
 - **Publications** — periodicals and journals with type, place of printing and language
 
-Supporting tools are also built in: publishers, cities, languages, subjects and user management; advanced search with combined filters; and a dashboard for monitoring the data.
+Supporting tools are also built in, and the whole system database can be backed up easily.
+
+For copyright protection, the details of each book and its physical copies are recorded. Only notes, article attachments and other attachments are appended to a book, with no restriction on that. Please respect this clause to protect the rights of publishers and authors.
 
 ---
 
@@ -39,7 +41,7 @@ Supporting tools are also built in: publishers, cities, languages, subjects and 
 ## Key features
 
 - **Advanced search** — search across a combination of criteria: title, subject, language, publisher, city and publication year
-- **Digital files** — upload and keep multiple copies of each book in different formats (PDF, Word, Excel, images)
+- **Digital book attachments** — upload and keep multiple attachments per book in different formats (PDF, Word, Excel, images)
 - **Barcode & QR** — scan a barcode or QR code to find and open a book quickly
 - **Reporting** — export tables and statistics to PDF and Excel
 - **Interactive charts** — visual statistics across books, manuscripts and publications
