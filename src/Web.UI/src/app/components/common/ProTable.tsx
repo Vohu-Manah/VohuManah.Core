@@ -27,6 +27,7 @@ import {
 } from 'react-icons/fa';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import ArabicReshaper from 'arabic-reshaper';
 import vazirFontUrl from '@/assets/fonts/vazir/Vazirmatn-Regular.ttf?url';
 
 let vazirFontLoaded = false;
@@ -277,7 +278,12 @@ export function ProTable<T extends Record<string, unknown>>({
         await vazirFontPromise;
       }
     }
-    const headers = exportableColumns.map((col) => col.title || '');
+    const toPdfRtl = (text: string) =>
+      text.split(/([A-Za-z0-9\/\.\-\s]+)/).reverse().map((p) => {
+        if (!/[\u0600-\u06FF]/.test(p)) return p;
+        return [...ArabicReshaper.convertArabic(p)].reverse().join('');
+      }).join('');
+    const headers = exportableColumns.map((col) => toPdfRtl(col.title || ''));
     const rows = (await resolveExportRows('pdf')).map((row) =>
       exportableColumns.map((col) => {
         try {
@@ -384,11 +390,11 @@ export function ProTable<T extends Record<string, unknown>>({
     if (useVazirFont) {
       doc.setFont('Vazir', 'normal');
     }
-    doc.text(exportFileName, doc.internal.pageSize.getWidth() - 20, 20, {
+    doc.text(toPdfRtl(exportFileName), doc.internal.pageSize.getWidth() - 20, 20, {
       align: 'right',
     });
 
-    const tableData = rows.map((row) => row.map((cell) => cell || ''));
+    const tableData = rows.map((row) => row.map((cell) => toPdfRtl(cell || '')));
 
     autoTable(doc, {
       head: [headers],
