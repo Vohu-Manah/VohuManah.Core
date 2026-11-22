@@ -1,14 +1,20 @@
+<div align="center">
+
+![VohuManah](docs/screenshots/vohumanah-logo.png)
+
 # VohuManah
 
-A digital library management system — a unified solution for libraries, archives and documentation centers to manage books, manuscripts and publications.
+Digital Library Management System
 
-![VohuManah logo](screenshots/vohumanah-logo.png)
+</div>
 
-## What it does
+---
 
-VohuManah brings the full workflow of a library into a single environment — from recording bibliographic details and preparing digital copies to searching, statistics and reporting.
+## About
 
-Its three core modules:
+**VohuManah** is a unified system for libraries, archives and documentation centers — a solution for managing **books**, **manuscripts** and **publications** in a single environment, from recording bibliographic details and preparing digital copies to searching, statistics and reporting.
+
+### Core modules
 
 - **Books** — bibliographic data, volumes, attachments, cover images and digital file archiving
 - **Manuscripts** — managing handwritten manuscripts, place of writing, script gap and attributes of historical documents
@@ -16,26 +22,32 @@ Its three core modules:
 
 Supporting tools are built into the system as well: publishers, cities, languages, subjects and user management; advanced search with combined filters; and a dashboard for monitoring the data.
 
+---
+
 ## Screenshots
 
-Main dashboard — an overview of activity and statistics:
+<div align="center">
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](docs/screenshots/dashboard.png)
 
-Books page — list, search and editing operations:
+![Books](docs/screenshots/books.png)
 
-![Books](screenshots/books.png)
+</div>
+
+---
 
 ## Key features
 
-- **Combined search** — filter simultaneously by title, subject, language, publisher, place and publication year, with full Persian support
-- **Digital files** — upload and manage multiple files per work in various formats (PDF, Word, Excel, images)
-- **Barcode & QR** — scan to reach works quickly
-- **Reporting** — PDF and Excel export from tables and statistics, with full right-to-left layout support
-- **Interactive charts** — statistics across books, manuscripts and publications
+- **Combined search** — filter simultaneously by title, subject, language, publisher, place and publication year
+- **Digital files** — upload and manage multiple copies of a work in various formats (PDF, Word, Excel, images)
+- **Barcode & QR** — scan a barcode or QR code to find works quickly
+- **Reporting** — generate PDF and Excel output from tables and statistics
+- **Interactive charts** — visual statistics across books, manuscripts and publications
+- **Easy backup** — create backup copies of the data with ease
 - **Access control** — roles and permission levels for users across sections
 - **Dynamic menu** — visually arrange and personalize the UI menu
-- **Persian (Shamsi) calendar** — all dates are stored and displayed in Shamsi throughout the system
+
+---
 
 ## Architecture
 
@@ -61,19 +73,21 @@ The project follows **Clean Architecture** with the **CQRS** pattern and a stric
                     └─────────────────────┘
 ```
 
-Layers:
+**Layers:**
 
-- **Domain** — the core: entities, business rules and domain-specific errors, with no external dependencies
+- **Domain** — the core: entities, business rules and domain-specific errors
 - **Application** — CQRS implementation: commands, queries, handlers and validation (FluentValidation)
 - **Infrastructure** — data access (Entity Framework Core), JWT authentication, file storage and the reporting engine
 - **Web.Api** — the presentation layer as a REST API with discoverable endpoints
 - **Web.UI** — the web UI (React), talking to the backend over the API
 
+---
+
 ## Technology stack
 
 | Area | Technology |
 |---|---|
-| Language & platform | C# 13 / .NET 10 |
+| Language & platform | C# / .NET 10 |
 | Architecture pattern | Clean Architecture + CQRS |
 | Data access | Entity Framework Core + SQL Server |
 | Authentication | JWT |
@@ -81,9 +95,10 @@ Layers:
 | Frontend | React 19 + TypeScript 6 |
 | Component library | Mantine 9 |
 | Charts | Recharts |
-| Build tool | Vite (Rolldown) |
-| Reporting/export | jsPDF + RDLC |
+| Reporting | RDLC |
 | Containerization | Docker Compose |
+
+---
 
 ## Quick start
 
@@ -93,27 +108,26 @@ The project runs with Docker Compose:
 docker compose up -d --build
 ```
 
-After startup:
-- UI: `http://localhost:5002`
-- API: `http://localhost:5000`
-- Test login: `admin / admin123`
+---
 
 ## Project structure
 
 ```
 VohuManah.Core/
 ├── src/
-│   ├── Domain/            # entities and domain rules
-│   ├── Application/       # application layer (CQRS)
-│   ├── Infrastructure/    # EF Core, auth, files, reports
-│   ├── SharedKernel/      # shared primitives (Result, Error)
-│   ├── External/          # reporting engine (RDLC)
-│   ├── Web.Api/           # REST API
-│   └── Web.UI/            # React UI
-├── docker/                # Docker Compose setup
-├── docs/                  # documentation and screenshots
+│   ├── Domain/
+│   ├── Application/
+│   ├── Infrastructure/
+│   ├── SharedKernel/
+│   ├── External/
+│   ├── Web.Api/
+│   └── Web.UI/
+├── docker/
+├── docs/
 └── VohuManah.slnx
 ```
+
+---
 
 ## License
 

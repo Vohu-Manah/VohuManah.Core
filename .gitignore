@@ -407,7 +407,7 @@ FodyWeavers.xsd
 
 /src/Web.Api/wwwroot/uploads
 /.docs
-/docs
+
 /.scripts
 
 # SQL Server backups (runtime artifacts)
