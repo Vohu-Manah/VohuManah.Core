@@ -38,15 +38,14 @@ Supporting tools are built into the system as well: publishers, cities, language
 
 ## Key features
 
-- **Combined search** — filter simultaneously by title, subject, language, publisher, place and publication year
-- **Digital files** — upload and manage multiple copies of a work in various formats (PDF, Word, Excel, images)
-- **Barcode & QR** — scan a barcode or QR code to find works quickly
-- **Reporting** — generate PDF and Excel output from tables and statistics
+- **Advanced search** — filter by a combination of criteria: title, subject, language, publisher, city and publication year
+- **Digital files** — upload and keep multiple copies of each book in different formats (PDF, Word, Excel, images)
+- **Barcode & QR** — scan a barcode or QR code to find and open a book quickly
+- **Reporting** — export tables and statistics to PDF and Excel
 - **Interactive charts** — visual statistics across books, manuscripts and publications
-- **Easy backup** — create backup copies of the data with ease
+- **Automatic, graphical backup** — back up your data on a schedule through a simple UI
 - **Access control** — roles and permission levels for users across sections
 - **Dynamic menu** — visually arrange and personalize the UI menu
-
 ---
 
 ## Architecture
