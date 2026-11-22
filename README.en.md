@@ -1,6 +1,6 @@
 <div align="center">
 
-![VohuManah](docs/screenshots/vohumanah-logo.png)
+<img src="docs/screenshots/vohumanah-logo.png" width="260" alt="VohuManah" />
 
 # VohuManah
 
@@ -12,7 +12,7 @@ Digital Library Management System
 
 ## About
 
-**VohuManah** is a unified system for libraries, archives and documentation centers — a solution for managing **books**, **manuscripts** and **publications** in a single environment, from recording bibliographic details and preparing digital copies to searching, statistics and reporting.
+**VohuManah** is a unified system for libraries, archives and documentation centers. It brings books, manuscripts and publications together in one place — from recording bibliographic details and preparing digital copies to searching, statistics and reporting.
 
 ### Core modules
 
@@ -20,7 +20,7 @@ Digital Library Management System
 - **Manuscripts** — managing handwritten manuscripts, place of writing, script gap and attributes of historical documents
 - **Publications** — periodicals and journals with type, place of printing and language
 
-Supporting tools are built into the system as well: publishers, cities, languages, subjects and user management; advanced search with combined filters; and a dashboard for monitoring the data.
+Supporting tools are also built in: publishers, cities, languages, subjects and user management; advanced search with combined filters; and a dashboard for monitoring the data.
 
 ---
 
@@ -38,19 +38,25 @@ Supporting tools are built into the system as well: publishers, cities, language
 
 ## Key features
 
-- **Advanced search** — filter by a combination of criteria: title, subject, language, publisher, city and publication year
+- **Advanced search** — search across a combination of criteria: title, subject, language, publisher, city and publication year
 - **Digital files** — upload and keep multiple copies of each book in different formats (PDF, Word, Excel, images)
 - **Barcode & QR** — scan a barcode or QR code to find and open a book quickly
 - **Reporting** — export tables and statistics to PDF and Excel
 - **Interactive charts** — visual statistics across books, manuscripts and publications
 - **Automatic, graphical backup** — back up your data on a schedule through a simple UI
 - **Access control** — roles and permission levels for users across sections
-- **Dynamic menu** — visually arrange and personalize the UI menu
+
 ---
 
 ## Architecture
 
-The project follows **Clean Architecture** with the **CQRS** pattern and a strict separation of layers:
+The project is built on **Clean Architecture** with the **CQRS** pattern. The layers are clearly separated:
+
+- **Domain** — entities and domain rules
+- **Application** — business logic, commands, queries and validation (FluentValidation)
+- **Infrastructure** — data access (Entity Framework Core), JWT authentication, file storage and the reporting engine
+- **Web.Api** — the REST API
+- **Web.UI** — the React UI
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -71,14 +77,6 @@ The project follows **Clean Architecture** with the **CQRS** pattern and a stric
                     │  SQL Server (DB)    │
                     └─────────────────────┘
 ```
-
-**Layers:**
-
-- **Domain** — the core: entities, business rules and domain-specific errors
-- **Application** — CQRS implementation: commands, queries, handlers and validation (FluentValidation)
-- **Infrastructure** — data access (Entity Framework Core), JWT authentication, file storage and the reporting engine
-- **Web.Api** — the presentation layer as a REST API with discoverable endpoints
-- **Web.UI** — the web UI (React), talking to the backend over the API
 
 ---
 
