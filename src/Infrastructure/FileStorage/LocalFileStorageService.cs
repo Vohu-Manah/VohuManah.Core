@@ -11,7 +11,7 @@ internal sealed class LocalFileStorageService : IFileStorageService
 {
     private readonly string _storagePath;
     private readonly ILogger<LocalFileStorageService> _logger;
-    private const long MaxFileSize = 10 * 1024 * 1024;
+    private const long MaxUploadSize = 500L * 1024 * 1024;
     private static readonly string[] AllowedImageTypes = { "IMAGE/JPEG", "IMAGE/PNG", "IMAGE/GIF", "IMAGE/WEBP" };
     private static readonly string[] AllowedDocumentTypes = { "APPLICATION/PDF", "APPLICATION/VND.OPENXMLFORMATS-OFFICEDOCUMENT.WORDPROCESSINGML.DOCUMENT", "APPLICATION/MSWORD" };
 
@@ -31,9 +31,9 @@ internal sealed class LocalFileStorageService : IFileStorageService
 
     public async Task<string> SaveFileAsync(Stream fileStream, string fileName, string contentType, string? entityType = null, CancellationToken cancellationToken = default)
     {
-        if (fileStream.Length > MaxFileSize)
+        if (fileStream.Length > MaxUploadSize)
         {
-            throw new InvalidOperationException($"محدودیت پیوست فایل  {MaxFileSize / (1024 * 1024)} MB");
+            throw new InvalidOperationException($"محدودیت حجم فایل {MaxUploadSize / (1024 * 1024)} MB است");
         }
 
         string contentTypeUpper = contentType.ToUpperInvariant();

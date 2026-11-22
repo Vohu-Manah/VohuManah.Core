@@ -19,7 +19,7 @@ internal sealed class UploadAttachmentCommandValidator : AbstractValidator<Uploa
             .MaximumLength(100).WithMessage("نوع محتوا باید حداکثر ۱۰۰ کاراکتر باشد");
         RuleFor(c => c.FileSize)
             .GreaterThan(0).WithMessage("حجم فایل باید بزرگتر از صفر باشد")
-            .LessThanOrEqualTo(10 * 1024 * 1024).WithMessage("حجم فایل باید حداکثر ۱۰ مگابایت باشد");
+            .LessThanOrEqualTo(500L * 1024 * 1024).WithMessage("حجم فایل باید حداکثر ۵۰۰ مگابایت باشد");
         RuleFor(c => c.FileStream)
             .NotNull().WithMessage("فایل الزامی است");
         RuleFor(c => c.CreatedBy)

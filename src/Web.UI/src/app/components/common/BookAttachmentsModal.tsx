@@ -237,6 +237,9 @@ export default function BookAttachmentsModal({ opened, onClose, bookId }: Props)
                 value={uploadDescription}
                 onChange={(e) => setUploadDescription(e.currentTarget.value)}
               />
+              <Text size="xs" c="dimmed">
+                فرمت‌های مجاز: PDF, Word, اکسل | حداکثر حجم: ۵۰۰ مگابایت
+              </Text>
               {uploading && (
                 <Stack gap="xs">
                   <Text size="sm">در حال آپلود...</Text>
