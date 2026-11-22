@@ -17,7 +17,7 @@ import type { SubjectName } from '@/app/models/subject';
 import type { PublisherName } from '@/app/models/publisher';
 import { appMessage } from '@/app/messages/appMessages';
 import { usePagedSearch } from '@/app/hooks/usePagedSearch';
-import { handleApiError, getErrorMessage} from '@/app/helpers/errorHandler';
+import { handleApiError, getErrorMessage } from '@/app/helpers/errorHandler';
 import { ReportModal } from '@/app/components/reports/ReportModal';
 import { YearSelect } from '@/app/components/common/YearSelect';
 
@@ -52,10 +52,9 @@ export default function SearchBookPage() {
     },
   });
 
-
   const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
- }, [loadPaged]);
+  }, [loadPaged]);
   const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, publishersData] = await Promise.all([
@@ -71,7 +70,7 @@ export default function SearchBookPage() {
     } catch (error) {
       appMessage.error('خطا در بارگذاری داده‌های کمکی', getErrorMessage(error));
     }
- }, []);
+  }, []);
 
   const initialLoad = useRef(false);
   useEffect(() => {
@@ -151,7 +150,7 @@ export default function SearchBookPage() {
               {...form.getInputProps('subjectId', { type: 'input' })}
             />
             <YearSelect
-              label=""
+              label="سال"
               source="book"
               value={form.values.publishYear || null}
               onChange={(year) => form.setFieldValue('publishYear', year ?? '')}

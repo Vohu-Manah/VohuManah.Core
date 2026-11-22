@@ -51,10 +51,9 @@ export default function SearchManuscriptPage() {
     },
   });
 
-
   const loadAllData = useCallback(async () => {
     await loadPaged({}, true);
- }, [loadPaged]);
+  }, [loadPaged]);
   const loadLookups = useCallback(async () => {
     try {
       const [citiesData, languagesData, subjectsData, gapsData] = await Promise.all([
@@ -70,7 +69,7 @@ export default function SearchManuscriptPage() {
     } catch (error) {
       handleApiError(error, 'خطا در بارگذاری داده‌های کمکی');
     }
- }, []);
+  }, []);
 
   const initialLoad = useRef(false);
   useEffect(() => {
@@ -80,8 +79,6 @@ export default function SearchManuscriptPage() {
       void loadAllData();
     }
   }, [loadLookups, loadAllData]);
-
-
 
   const buildParams = (): ManuscriptSearchRequest => {
     const params: ManuscriptSearchRequest = {};
@@ -163,7 +160,7 @@ export default function SearchManuscriptPage() {
               }
             />
             <YearSelect
-              label=""
+              label="سال"
               source="manuscript"
               value={form.values.year || null}
               onChange={(year) => form.setFieldValue('year', year ?? '')}

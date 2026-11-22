@@ -287,16 +287,20 @@ export default function ManuscriptsPage() {
           <Select
             label="فاصله"
             required
+            withAsterisk
             data={gaps.map((g) => ({ value: String(g.id), label: g.title }))}
             value={form.values.gapId ? String(form.values.gapId) : null}
             onChange={(v: string | null) => form.setFieldValue('gapId', v ? Number(v) : 0)}
+            error={form.errors.gapId}
           />
           <Select
             label="محل نگارش"
             required
+            withAsterisk
             data={cities.map((c) => ({ value: String(c.id), label: c.title }))}
             value={form.values.writingPlaceId ? String(form.values.writingPlaceId) : null}
             onChange={(v: string | null) => form.setFieldValue('writingPlaceId', v ? Number(v) : 0)}
+            error={form.errors.writingPlaceId}
           />
         </Group>
         <Group grow>
@@ -313,16 +317,20 @@ export default function ManuscriptsPage() {
           <Select
             label="زبان"
             required
+            withAsterisk
             data={languages.map((l) => ({ value: String(l.id), label: l.title }))}
             value={form.values.languageId ? String(form.values.languageId) : null}
             onChange={(v: string | null) => form.setFieldValue('languageId', v ? Number(v) : 0)}
+            error={form.errors.languageId}
           />
           <Select
             label="موضوع"
             required
+            withAsterisk
             data={subjects.map((s) => ({ value: String(s.id), label: s.title }))}
             value={form.values.subjectId ? String(form.values.subjectId) : null}
             onChange={(v: string | null) => form.setFieldValue('subjectId', v ? Number(v) : 0)}
+            error={form.errors.subjectId}
           />
         </Group>
       </FormModal>
